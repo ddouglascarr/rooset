@@ -114,17 +114,26 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="tests\MemberAggregateTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aggregates\member\commands\CreateAdminMemberCommand.h" />
+    <ClInclude Include="aggregates\member\commands\CreateUnitCommand.h" />
+    <ClInclude Include="aggregates\member\commands\UpdateMemberDetailsCommand.h" />
+    <ClInclude Include="aggregates\member\commands\UpdateMemberPasswordCommand.h" />
     <ClInclude Include="aggregates\member\MemberAggregate.h" />
     <ClInclude Include="aggregates\member\MemberCommandHandler.h" />
+    <ClInclude Include="enums\ExceptionCodes.h" />
+    <ClInclude Include="exceptions\ConflictException.h" />
+    <ClInclude Include="exceptions\GeneralException.h" />
+    <ClInclude Include="exceptions\ProjectException.h" />
+    <ClInclude Include="exceptions\UnauthorizedException.h" />
     <ClInclude Include="framework\AggregateRepository.h" />
     <ClInclude Include="framework\IdTools.h" />
     <ClInclude Include="framework\IdToolsImpl.h" />
-    <ClInclude Include="framework\ProjectError.h" />
-    <ClInclude Include="framework\ExceptionCodes.h" />
     <ClInclude Include="framework\ProjectEvent.h" />
     <ClInclude Include="framework\uuid.h" />
+    <ClInclude Include="tests\catch.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

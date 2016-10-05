@@ -10,8 +10,8 @@ using namespace std;
 namespace rooset {
   using namespace boost::uuids;
 
-  unique_ptr<IdTools> createIdToolsInstance()
+  /*unique_ptr<IdTools> createIdToolsInstance()
   {
     return make_unique<IdToolsImpl>();
-  }
+  }*/
 }

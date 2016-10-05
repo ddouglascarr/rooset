@@ -9,7 +9,8 @@ namespace rooset {
   class ProjectException : public runtime_error
   {
   public:
-    virtual const char* what() const override = 0;
+    ProjectException(char* msg) : runtime_error(msg) {}
+
     virtual ExceptionCodes getExceptionCode() const = 0;
   };
 

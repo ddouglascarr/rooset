@@ -7,12 +7,12 @@
 using namespace std;
 using namespace rooset;
 
-auto idTools = createIdToolsInstance();
+// auto idTools = createIdToolsInstance();
 
-int main()
+/*int main()
 {
   
   cout << "application running" << "\n";
   cin.get();
   return 0;
-}
+}*/

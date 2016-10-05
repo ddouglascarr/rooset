@@ -10,12 +10,7 @@ namespace rooset {
   private:
     const char* msg;
   public:
-    UnauthorizedException(char* msg) : msg(msg) {}
-
-    const char* what() const override
-    {
-      return msg;
-    }
+    UnauthorizedException(char* msg) : ProjectException(msg) {}
 
     ExceptionCodes getExceptionCode() const override
     {
