@@ -11,6 +11,8 @@ auto idTools = createIdToolsInstance();
 
 int main()
 {
+  
   cout << "application running" << "\n";
+  cin.get();
   return 0;
 }

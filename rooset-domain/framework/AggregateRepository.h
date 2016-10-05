@@ -1,4 +1,7 @@
 #pragma once
+#include "uuid.h"
+
+using namespace rooset;
 
 
 namespace rooset {
@@ -6,6 +9,7 @@ namespace rooset {
   class AggregateRepository
   {
   public:
-    virtual Aggregate load(string id) const = 0;
+    virtual unique_ptr<Aggregate> load(uuid id) const = 0;
+    virtual void assertAggregateDoesNotExist(uuid id) const = 0;
   };
 }
