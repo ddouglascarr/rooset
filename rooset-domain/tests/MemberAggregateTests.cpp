@@ -39,6 +39,9 @@ SCENARIO("CreateNewAdminUserCommand")
       {
         auto e = dynamic_cast<AdminMemberCreatedEvent&>(*pe);
         REQUIRE( e.id == id );
+        AdminMemberCreatedEvent expectedEvent(c);
+        REQUIRE(e.login == "admin");
+
       }
     }
 
