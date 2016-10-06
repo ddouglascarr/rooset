@@ -9,7 +9,7 @@ using namespace rooset;
 
 namespace rooset {
 
-  class MemberDetailsUpdatedEvent : public ProjectEvent
+  class MemberDetailsUpdatedEvent : public ProjectEvent<string>
   {
   public:
     const uuid id;

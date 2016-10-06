@@ -23,13 +23,13 @@ namespace rooset {
       make_unique<MemberAggregateRepositoryImpl>();
 
   public:
-    unique_ptr<ProjectEvent> evaluate(const CreateAdminMemberCommand& c)
+    auto evaluate(const CreateAdminMemberCommand& c)
     {
       repository->assertAggregateDoesNotExist(c.id);
       return make_unique<AdminMemberCreatedEvent>(c);
     }
 
-    unique_ptr<ProjectEvent> evaluate(const rooset::UpdateMemberPasswordCommand& c)
+    auto evaluate(const rooset::UpdateMemberPasswordCommand& c)
     {
       auto member = repository->load(c.id);
       if (member->getPassword() != c.oldPassword) {

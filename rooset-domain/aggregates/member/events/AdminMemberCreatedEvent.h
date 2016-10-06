@@ -16,7 +16,7 @@ using namespace rapidjson;
 
 namespace rooset {
 
-  class AdminMemberCreatedEvent : public ProjectEvent
+  class AdminMemberCreatedEvent : public ProjectEvent<string>
   {
   public:
     const uuid id;
@@ -57,8 +57,13 @@ namespace rooset {
       vPassword.SetString(password.c_str(), password.size(), d.GetAllocator());
       d.AddMember("password", vPassword, d.GetAllocator());
 
-      // event.AddMember("name", name, d.GetAllocator());
-      // event.AddMember("notifyEmail", notifyEmail, d.GetAllocator());
+      Value vName;
+      vName.SetString(name.c_str(), name.size(), d.GetAllocator());
+      d.AddMember("name", vName, d.GetAllocator());
+
+      Value vNotifyEmail;
+      vNotifyEmail.SetString(notifyEmail.c_str(), notifyEmail.size(), d.GetAllocator());
+      d.AddMember("notifyEmail", vNotifyEmail, d.GetAllocator());
       
       StringBuffer buffer;
       Writer<StringBuffer> writer(buffer);

@@ -10,7 +10,7 @@ using namespace rooset;
 
 namespace rooset {
 
-  class MemberPasswordUpdatedEvent : public ProjectEvent
+  class MemberPasswordUpdatedEvent : public ProjectEvent<string>
   {
   public:
     const uuid id;
