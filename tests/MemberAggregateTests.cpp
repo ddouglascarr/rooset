@@ -1,12 +1,11 @@
-#define CATCH_CONFIG_MAIN 
 #include "catch.hpp"
 
 #include <string>
-#include "../framework/AggregateRepository.h"
-#include "../aggregates/member/MemberAggregate.h"
-#include "../aggregates/member/MemberCommandHandler.h"
-#include "../aggregates/member/commands/CreateAdminMemberCommand.h"
-#include "../aggregates/member/events/AdminMemberCreatedEvent.h"
+#include "framework/AggregateRepository.h"
+#include "aggregates/member/MemberAggregate.h"
+#include "aggregates/member/MemberCommandHandler.h"
+#include "aggregates/member/commands/CreateAdminMemberCommand.h"
+#include "aggregates/member/events/AdminMemberCreatedEvent.h"
 
 using namespace rooset;
 using namespace std;

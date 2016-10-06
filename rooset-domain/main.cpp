@@ -1,4 +1,3 @@
-#pragma once
 #include <memory>
 #include <iostream>
 #include "aggregates/member/MemberAggregate.h"
@@ -7,12 +6,9 @@
 using namespace std;
 using namespace rooset;
 
-// auto idTools = createIdToolsInstance();
-
-/*int main()
+int main()
 {
-  
   cout << "application running" << "\n";
   cin.get();
   return 0;
-}*/
+}

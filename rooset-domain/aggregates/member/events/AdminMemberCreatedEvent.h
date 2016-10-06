@@ -1,14 +1,15 @@
 #pragma once
 #include <string>
-#include "../../../framework/uuid.h"
-#include "../../../framework/ProjectEvent.h"
-#include "../../../framework/ProjectEvent.h"
+#include <memory>
+#include "framework/uuid.h"
+#include "framework/ProjectEvent.h"
+#include "framework/ProjectEvent.h"
 #include "../commands/CreateAdminMemberCommand.h"
-#include "../../../deps/rapidjson/document.h"
-#include "../../../deps/rapidjson/allocators.h"
-#include "../../../deps/rapidjson/stringbuffer.h"
-#include "../../../deps/rapidjson/writer.h"
-#include "../../../framework/IdToolsImpl.h"
+#include "rapidjson/document.h"
+#include "rapidjson/allocators.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
+#include "framework/IdToolsImpl.h"
 
 using namespace std;
 using namespace rooset;
