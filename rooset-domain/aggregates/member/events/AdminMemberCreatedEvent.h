@@ -16,7 +16,7 @@ using namespace rapidjson;
 
 namespace rooset {
 
-  class AdminMemberCreatedEvent : public ProjectEvent<string>
+  class AdminMemberCreatedEvent : public ProjectEvent<Document>
   {
   public:
     const uuid id;
@@ -39,37 +39,39 @@ namespace rooset {
       return "ADMIN_MEMBER_CREATED_EVENT";
     }
 
-    string toJson() override
+    unique_ptr<Document> serialize() const override
     {
-      Document d;
-      d.SetObject();
+      auto d = make_unique<Document>();
+      d->SetObject();
 
       Value vId; 
       string sId = idTools->serialize(id);
-      vId.SetString(sId.c_str(), sId.size(), d.GetAllocator());
-      d.AddMember("id", vId, d.GetAllocator());
+      vId.SetString(sId.c_str(), sId.size(), d->GetAllocator());
+      d->AddMember("id", vId, d->GetAllocator());
 
       Value vLogin;
-      vLogin.SetString(login.c_str(), login.size(), d.GetAllocator());
-      d.AddMember("login", vLogin, d.GetAllocator());
+      vLogin.SetString(login.c_str(), login.size(), d->GetAllocator());
+      d->AddMember("login", vLogin, d->GetAllocator());
 
       Value vPassword;
-      vPassword.SetString(password.c_str(), password.size(), d.GetAllocator());
-      d.AddMember("password", vPassword, d.GetAllocator());
+      vPassword.SetString(password.c_str(), password.size(), d->GetAllocator());
+      d->AddMember("password", vPassword, d->GetAllocator());
 
       Value vName;
-      vName.SetString(name.c_str(), name.size(), d.GetAllocator());
-      d.AddMember("name", vName, d.GetAllocator());
+      vName.SetString(name.c_str(), name.size(), d->GetAllocator());
+      d->AddMember("name", vName, d->GetAllocator());
 
       Value vNotifyEmail;
-      vNotifyEmail.SetString(notifyEmail.c_str(), notifyEmail.size(), d.GetAllocator());
-      d.AddMember("notifyEmail", vNotifyEmail, d.GetAllocator());
-      
+      vNotifyEmail.SetString(notifyEmail.c_str(), notifyEmail.size(), d->GetAllocator());
+      d->AddMember("notifyEmail", vNotifyEmail, d->GetAllocator());
+
+      return d;
+      /*
       StringBuffer buffer;
       Writer<StringBuffer> writer(buffer);
       d.Accept(writer);
       auto ret = string(buffer.GetString(), buffer.GetSize());
-      return ret;
+      */
     }
   };
 

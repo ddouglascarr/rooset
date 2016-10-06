@@ -10,7 +10,7 @@ using namespace rooset;
 
 namespace rooset {
 
-  class MemberPasswordUpdatedEvent : public ProjectEvent<string>
+  class MemberPasswordUpdatedEvent : public ProjectEvent<rapidjson::Document>
   {
   public:
     const uuid id;
@@ -28,9 +28,11 @@ namespace rooset {
       return "MEMBER_PASSWORD_UPDATED_EVENT";
     }
 
-    string toJson() override
+    unique_ptr<rapidjson::Document> serialize() const override
     {
-      return "{\"foo\":\"bar\"}";
+      auto d = make_unique<Document>();
+      d->SetObject();
+      return d;
     }
   };
 

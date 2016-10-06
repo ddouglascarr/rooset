@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <memory>
 #include <string>
 #include "uuid.h"
 
@@ -12,7 +13,7 @@ namespace rooset {
   {
   public:
     virtual string getEventType() = 0;
-    virtual SerializationFormat toJson() = 0;
+    virtual unique_ptr<SerializationFormat> serialize() const = 0;
   };
 
 }

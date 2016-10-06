@@ -33,7 +33,8 @@ SCENARIO("CreateNewAdminUserCommand")
     WHEN("CreateAdminMemberCommand")
     {
       boost::uuids::random_generator idgen;
-      auto id = idgen();
+      auto idTools = make_unique<IdToolsImpl>();
+      auto id = idTools->generateUniqueId();
       CreateAdminMemberCommand c(id, "admin", "pw1", "adam admin", "adam@admin.com");
       auto pe = commandHandler.evaluate(c);
 
@@ -45,9 +46,19 @@ SCENARIO("CreateNewAdminUserCommand")
         AdminMemberCreatedEvent expectedEvent(c);
         REQUIRE(e.login == "admin");
         */
-        string expectedJson = "{\"id\":\"foo\"}";
-        string j = pe->toJson();
-        REQUIRE(j == expectedJson);
+        Document expected;
+        expected.SetObject();
+
+        Value vId;
+        string sId = idTools->serialize(id);
+        vId.SetString(sId.c_str(), sId.size(), expected.GetAllocator());
+        expected.AddMember("id", vId, expected.GetAllocator());
+        expected.AddMember("login", "admin", expected.GetAllocator());
+        expected.AddMember("password", "pw1", expected.GetAllocator());
+        expected.AddMember("name", "adam admin", expected.GetAllocator());
+        expected.AddMember("notifyEmail", "adam@admin.com", expected.GetAllocator());
+        auto result = pe->serialize();
+        REQUIRE(*result == expected);
       }
     }
 

@@ -24,9 +24,9 @@ namespace rooset {
       return "MEMBER_DETAILS_UPDATED_EVENT";
     }
     
-    string toJson() override
+    unique_ptr<string> serialize() const override
     {
-      return "{\"foo\":\"bar\"}";
+      return make_unique<string>("{\"foo\":\"bar\"}");
     }
   };
 
