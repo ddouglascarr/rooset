@@ -11,6 +11,7 @@ namespace rooset {
   {
   public:
     virtual string getEventType() = 0;
+    virtual string toJson() = 0;
   };
 
 }

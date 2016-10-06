@@ -11,6 +11,7 @@ namespace rooset {
   public:
     virtual uuid generateNilId() = 0;
     virtual uuid generateUniqueId() = 0;
-    virtual uuid parseStringId(string) = 0;
+    virtual uuid parse(string) = 0;
+    virtual string serialize(uuid) = 0;
   };
 }

@@ -77,5 +77,20 @@
     <ClInclude Include="aggregates\member\commands\UpdateMemberPasswordCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="exceptions\InvalidInputException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="aggregates\member\events\AdminMemberCreatedEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="aggregates\member\events\MemberDetailsUpdatedEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="aggregates\member\events\MemberPasswordUpdatedEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="aggregates\member\events\UnitCreatedEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,6 +27,11 @@ namespace rooset {
     {
       return "UNIT_CREATED_EVENT";
     }
+
+    string toJson() override
+    {
+      return "{\"foo\":\"bar\"}";
+    }
   };
 
 }

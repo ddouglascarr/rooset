@@ -121,11 +121,16 @@
     <ClInclude Include="aggregates\member\commands\CreateUnitCommand.h" />
     <ClInclude Include="aggregates\member\commands\UpdateMemberDetailsCommand.h" />
     <ClInclude Include="aggregates\member\commands\UpdateMemberPasswordCommand.h" />
+    <ClInclude Include="aggregates\member\events\AdminMemberCreatedEvent.h" />
+    <ClInclude Include="aggregates\member\events\MemberDetailsUpdatedEvent.h" />
+    <ClInclude Include="aggregates\member\events\MemberPasswordUpdatedEvent.h" />
+    <ClInclude Include="aggregates\member\events\UnitCreatedEvent.h" />
     <ClInclude Include="aggregates\member\MemberAggregate.h" />
     <ClInclude Include="aggregates\member\MemberCommandHandler.h" />
     <ClInclude Include="enums\ExceptionCodes.h" />
     <ClInclude Include="exceptions\ConflictException.h" />
     <ClInclude Include="exceptions\GeneralException.h" />
+    <ClInclude Include="exceptions\InvalidInputException.h" />
     <ClInclude Include="exceptions\ProjectException.h" />
     <ClInclude Include="exceptions\UnauthorizedException.h" />
     <ClInclude Include="framework\AggregateRepository.h" />

@@ -23,6 +23,11 @@ namespace rooset {
     {
       return "MEMBER_DETAILS_UPDATED_EVENT";
     }
+    
+    string toJson() override
+    {
+      return "{\"foo\":\"bar\"}";
+    }
   };
 
 }

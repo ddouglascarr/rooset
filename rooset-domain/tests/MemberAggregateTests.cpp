@@ -1,5 +1,7 @@
 #define CATCH_CONFIG_MAIN 
 #include "catch.hpp"
+
+#include <string>
 #include "../framework/AggregateRepository.h"
 #include "../aggregates/member/MemberAggregate.h"
 #include "../aggregates/member/MemberCommandHandler.h"
@@ -37,11 +39,15 @@ SCENARIO("CreateNewAdminUserCommand")
 
       THEN("a AdminMemberCreatedEvent is emitted")
       {
+        /*
         auto e = dynamic_cast<AdminMemberCreatedEvent&>(*pe);
         REQUIRE( e.id == id );
         AdminMemberCreatedEvent expectedEvent(c);
         REQUIRE(e.login == "admin");
-
+        */
+        string expectedJson = "{\"id\":\"foo\"}";
+        string j = pe->toJson();
+        REQUIRE(j == expectedJson);
       }
     }
 

@@ -18,7 +18,7 @@ namespace rooset {
     random_generator randomGenerator;
     nil_generator nilGenerator;
     string_generator stringGenerator;
-  
+   
   public:
     uuid generateUniqueId() override
     {
@@ -30,10 +30,16 @@ namespace rooset {
       return nilGenerator();
     }
 
-    uuid parseStringId(string id) override
+    uuid parse(string id) override
     {
       return stringGenerator(id);
     }
+
+    string serialize(uuid id) override
+    {
+      return boost::uuids::to_string(id);
+    }
+
   };
 
 }
