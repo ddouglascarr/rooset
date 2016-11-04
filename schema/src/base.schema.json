@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type":"object",
+  "definitions": {
+    "bool": {
+      "type": "boolean"
+    },
+    "date": {
+      "type": "integer"
+    },
+    "uuid": {
+      "type":"string",
+      "pattern":"[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"
+    },
+    "string": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "exceptionCode": {
+      "type": "string",
+      "enum": [
+        "CONFLICT_EXCEPTION",
+        "GENERAL_PROJECT_EXCEPTION",
+        "ITEM_NOT_FOUND_EXCEPTION",
+        "UNAUTHORIZED_EXCEPTION",
+        "UNPRIVILEGED_EXCEPTION",
+        "INVALID_INPUT_EXCEPTION"
+      ]
+    },
+    "exceptionType": {
+      "type": "string",
+      "enum": [
+        "COMMAND_EVALUATION_EXCEPTION"
+      ]
+    }
+  }
+}

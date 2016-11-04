@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "id": "$uuid",
+    "requesterId": "$uuid",
+    "memberId": "$uuid",
+    "pollingRight": "$bool",
+    "votingRight": "$bool",
+    "initiativeRight": "$bool",
+    "managementRight": "$bool"
+  },
+  "required": [
+    "id",
+    "requesterId",
+    "memberId",
+    "pollingRight",
+    "votingRight",
+    "initiativeRight",
+    "managementRight"
+  ]
+}

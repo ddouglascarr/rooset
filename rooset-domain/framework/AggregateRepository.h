@@ -9,6 +9,7 @@ namespace rooset {
   class AggregateRepository
   {
   public:
+    virtual ~AggregateRepository() {};
     virtual unique_ptr<Aggregate> load(uuid id) const = 0;
     virtual void assertAggregateDoesNotExist(uuid id) const = 0;
   };

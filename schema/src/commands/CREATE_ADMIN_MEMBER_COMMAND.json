@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "id": "$uuid",
+    "login": "$string",
+    "password": "$string",
+    "name": "$string",
+    "notifyEmail": "$email"
+  },
+  "required": ["id", "login", "password", "name", "notifyEmail"]
+}

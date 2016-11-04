@@ -1,0 +1,5 @@
+properties:
+  id: '$uuid'
+  areaId: '$uuid'
+  requesterId: '$uuid'
+  trusteeId: '$uuid'

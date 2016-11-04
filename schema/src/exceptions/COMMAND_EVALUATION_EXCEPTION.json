@@ -1,0 +1,7 @@
+{
+  "properties": {
+    "code": "$exceptionCode",
+    "message": "$string"
+  },
+  "required": ["code", "message"]
+}

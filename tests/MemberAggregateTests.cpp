@@ -1,66 +1,126 @@
-#include "catch.hpp"
+#include "gtest/gtest.h"
 
 #include <string>
-#include "framework/AggregateRepository.h"
-#include "aggregates/member/MemberAggregate.h"
-#include "aggregates/member/MemberCommandHandler.h"
-#include "aggregates/member/commands/CreateAdminMemberCommand.h"
-#include "aggregates/member/events/AdminMemberCreatedEvent.h"
+#include <memory>
+#include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
+#include "aggregates/MemberAggregate.h"
+#include "aggregates/MemberCommandHandler.h"
+#include "commands/CreateAdminMemberCommand.h"
+#include "events/AdminMemberCreatedEvent.h"
+#include "framework/AggregateRepositoryMockImpl.h"
+#include "framework/AggregateRepositoryEmptyMockImpl.h"
+#include "framework/JsonUtils.h"
+#include "framework/IdToolsImpl.h"
 
-using namespace rooset;
+// using namespace rooset;
 using namespace std;
+using namespace boost;
 
-namespace testing {
-  // auto idTools = createIdToolsInstance();
-}
-SCENARIO("CreateNewAdminUserCommand")
-{
-  GIVEN("A Fresh System")
+namespace test {
+
+  auto idTools = make_unique<IdToolsImpl>();
+  auto id = idTools->generateUniqueId();
+  string idString = idTools->serialize(id);
+  CreateAdminMemberCommand c(id, "admin", "pw1", "adam admin", "adam@admin.com");
+
+  TEST(dependencies, boost_posix_time)
   {
-    class MockAggregateRepository : public AggregateRepository<MemberAggregate>
-    {
-    public:
-      unique_ptr<MemberAggregate> load(uuid id) const override
-      {
-        throw string("should not be called");
-      }
-      void assertAggregateDoesNotExist(uuid id) const override {}
+    const auto testTime = 1477705463L;
+    posix_time::ptime testPosixTime = posix_time::from_time_t(time_t(testTime));
+    time_t resultTime = posix_time::to_time_t(testPosixTime);
+    EXPECT_EQ(resultTime, testTime);
+  }
+
+  TEST(dependencies, map_in_struct)
+  {
+    struct Area {
+      uuid id;
+      map<uuid, uuid> delegations;
     };
 
-    MemberCommandHandler<MockAggregateRepository> commandHandler;
+    Area a{ id, map<uuid, uuid>() };
+    a.delegations[id] = id;
+    EXPECT_EQ(id, a.delegations.at(id));
+    const auto isIdPresent = a.delegations.find(id) != a.delegations.end();
+    const auto isAnotherIdPresent = a.delegations.find(idTools->generateUniqueId()) != a.delegations.end();
+    EXPECT_EQ(isIdPresent, true);
+    EXPECT_EQ(isAnotherIdPresent, false);
+  }
 
-    WHEN("CreateAdminMemberCommand")
-    {
-      boost::uuids::random_generator idgen;
-      auto idTools = make_unique<IdToolsImpl>();
-      auto id = idTools->generateUniqueId();
-      CreateAdminMemberCommand c(id, "admin", "pw1", "adam admin", "adam@admin.com");
-      auto pe = commandHandler.evaluate(c);
+  TEST(MemberAggregateTest, AdminMemberCreated)
+  {
+    auto repo = make_unique<AggregateRepositoryEmptyMockImpl<MemberAggregate>>();
+    MemberCommandHandler commandHandler(move(repo));
+    auto pe = commandHandler.evaluate(c);
 
-      THEN("a AdminMemberCreatedEvent is emitted")
-      {
-        /*
-        auto e = dynamic_cast<AdminMemberCreatedEvent&>(*pe);
-        REQUIRE( e.id == id );
-        AdminMemberCreatedEvent expectedEvent(c);
-        REQUIRE(e.login == "admin");
-        */
-        Document expected;
-        expected.SetObject();
+    AdminMemberCreatedEvent expected{ id, "admin", "pw1", "adam admin", "adam@admin.com" };
+    auto result = pe->serialize();
 
-        Value vId;
-        string sId = idTools->serialize(id);
-        vId.SetString(sId.c_str(), sId.size(), expected.GetAllocator());
-        expected.AddMember("id", vId, expected.GetAllocator());
-        expected.AddMember("login", "admin", expected.GetAllocator());
-        expected.AddMember("password", "pw1", expected.GetAllocator());
-        expected.AddMember("name", "adam admin", expected.GetAllocator());
-        expected.AddMember("notifyEmail", "adam@admin.com", expected.GetAllocator());
-        auto result = pe->serialize();
-        REQUIRE(*result == expected);
-      }
+    StringBuffer buffer;
+    Writer<StringBuffer> writer(buffer);
+    result->Accept(writer);
+    auto resultStr = string(buffer.GetString(), buffer.GetSize());
+
+    StringBuffer expectedBuffer;
+    Writer<StringBuffer> expectedWriter(expectedBuffer);
+    auto expectedDoc = expected.serialize();
+    expectedDoc->Accept(expectedWriter);
+    auto expectedStr = string(expectedBuffer.GetString(), expectedBuffer.GetSize());
+
+    EXPECT_EQ(resultStr, expectedStr);
+    EXPECT_EQ(*result, *expected.serialize());
+  }
+
+  TEST(MemberAggregateTest, MemberAggregateCreatedJson)
+  {
+    auto repo = make_unique<AggregateRepositoryEmptyMockImpl<MemberAggregate>>();
+    MemberCommandHandler commandHandler(move(repo));
+    auto pe = commandHandler.evaluate(c);
+
+    const string j = "{\"type\":\"ADMIN_MEMBER_CREATED_EVENT\",\"payload\":{\"id\":\"" + idString + "\",\"login\":\"admin\",\"password\":\"pw1\",\"name\":\"adam admin\",\"notifyEmail\":\"adam@admin.com\"}}";
+    // Document expectedJson;
+    // expectedJson.Parse(j.c_str());
+    auto expectedJson = JsonUtils::parse(j);
+
+    AdminMemberCreatedEvent expected(*expectedJson);
+    auto result = pe->serialize();
+
+    StringBuffer buffer;
+    Writer<StringBuffer> writer(buffer);
+    result->Accept(writer);
+    auto resultStr = string(buffer.GetString(), buffer.GetSize());
+
+    StringBuffer expectedBuffer;
+    Writer<StringBuffer> expectedWriter(expectedBuffer);
+    auto expectedDoc = expected.serialize();
+    expectedDoc->Accept(expectedWriter);
+    auto expectedStr = string(expectedBuffer.GetString(), expectedBuffer.GetSize());
+
+    bool isPass = *result == *expected.serialize();
+    if (isPass) {
+      EXPECT_EQ(*result, *expected.serialize());
+    } else {
+      EXPECT_EQ(resultStr, expectedStr);
     }
+  }
 
+  
+  TEST(MemberAggregateTest, MemberPasswordUpdated)
+  {
+    MemberAggregate mockMember(AdminMemberCreatedEvent{
+        id, "foo", "pw1", "adam admin", "adam@admin.com" });
+    auto repo = make_unique<AggregateRepositoryMockImpl<MemberAggregate>>(mockMember);
+    MemberCommandHandler commandHandler(move(repo));
+    UpdateMemberPasswordCommand cmd{ id, id, "pw1", "pw2" };
+    auto pe = commandHandler.evaluate(cmd);
+    MemberPasswordUpdatedEvent expected{ id, id, "pw2" };
+
+    bool isPass = *pe->serialize() == *expected.serialize();
+    if (isPass) {
+      EXPECT_EQ(*pe->serialize(), *expected.serialize());
+    } else {
+      EXPECT_EQ(*JsonUtils::serialize(*pe->serialize()),
+        *JsonUtils::serialize(*expected.serialize()));
+    }
   }
 }
-

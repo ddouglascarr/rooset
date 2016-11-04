@@ -1,0 +1,7 @@
+{
+  "properties": {
+    "id": "$uuid",
+    "notifyEmail": "$email"
+  },
+  "required": ["id", "notifyEmail"]
+}

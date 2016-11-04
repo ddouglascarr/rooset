@@ -1,0 +1,164 @@
+---
+label: UnitAggregate - Area Delegations
+aggregate: UnitAggregate
+commandHandler: UnitCommandHandler
+
+mocks:
+  - &unitCreatedEvent
+    type: UNIT_CREATED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      name: Test Unit
+      description: The Test Unit
+  - &areaCreatedEvent
+    type: AREA_CREATED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      name: test area
+      description: the test area
+      externalReference: 'area.com'
+  - &privGrantedEvtVoter4
+    type: PRIVILEGE_GRANTED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      memberId: 464b1ebb-32c1-460c-8e9e-444444444444
+      pollingRight: true
+      votingRight: true
+      initiativeRight: true
+      managementRight: true
+  - &privGrantedEvtVoter5
+    type: PRIVILEGE_GRANTED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      memberId: 464b1ebb-32c1-460c-8e9e-555555555555
+      pollingRight: true
+      votingRight: true
+      initiativeRight: true
+      managementRight: true
+  - &delegationSetEvent
+    type: AREA_DELEGATION_SET_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      trusterId: 464b1ebb-32c1-460c-8e9e-444444444444
+      trusteeId: 464b1ebb-32c1-460c-8e9e-555555555555
+
+  - &setDelegationCmd
+    type: SET_AREA_DELEGATION_COMMAND
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
+      trusteeId: 464b1ebb-32c1-460c-8e9e-555555555555
+  - &unsetDelegationCmd
+    type: UNSET_AREA_DELEGATION_COMMAND
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
+
+  - &notFoundErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: ITEM_NOT_FOUND_EXCEPTION
+      message: ''
+  - &unprivilegedErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: UNPRIVILEGED_EXCEPTION
+      message: ''
+
+scenarios:
+
+  -
+    label: Area must exist
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+    when: *setDelegationCmd
+    then: *notFoundErr
+
+  -
+    label: truster must have voting right
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+    when: *setDelegationCmd
+    then: *unprivilegedErr
+
+  -
+    label: trustee must have voting right
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *areaCreatedEvent
+    when: *setDelegationCmd
+    then: *unprivilegedErr
+
+  -
+    label: set delegation
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+    when: *setDelegationCmd
+    then:
+      type: AREA_DELEGATION_SET_EVENT
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+        trusterId: 464b1ebb-32c1-460c-8e9e-444444444444
+        trusteeId: 464b1ebb-32c1-460c-8e9e-555555555555
+
+  -
+    label: unset delegation, delegation must exist
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+    when: *unsetDelegationCmd
+    then: *notFoundErr
+
+  -
+    label: unset delegation
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *delegationSetEvent
+    when: *unsetDelegationCmd
+    then:
+      type: AREA_DELEGATION_UNSET_EVENT
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+        trusterId: 464b1ebb-32c1-460c-8e9e-444444444444
+
+  -
+    label: unset delegation should remove delegation
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *delegationSetEvent
+      -
+        type: AREA_DELEGATION_UNSET_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+          trusterId: 464b1ebb-32c1-460c-8e9e-444444444444
+    when: *unsetDelegationCmd
+    then: *notFoundErr

@@ -1,0 +1,234 @@
+---
+label: Unit Aggregate - Delegations
+aggregate: UnitAggregate
+commandHandler: UnitCommandHandler
+mocks:
+- &unitCreatedEvent
+  type: UNIT_CREATED_EVENT
+  payload:
+    id: 464b1ebb-32c1-460c-8e9e-111111111111
+    requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+    name: Test Unit
+    description: The Test Unit
+scenarios:
+
+  -
+    label: Member must be privileged
+    given:
+      - *unitCreatedEvent
+    when:
+      type: SET_UNIT_DELEGATION_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        trusteeId: 464b1ebb-32c1-460c-8e9e-333333333333
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: UNPRIVILEGED_EXCEPTION
+        message: ''
+
+  -
+    label: Member must have voting right
+    given:
+      - *unitCreatedEvent
+    when:
+      type: SET_UNIT_DELEGATION_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+        trusteeId: 464b1ebb-32c1-460c-8e9e-333333333333
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: UNPRIVILEGED_EXCEPTION
+        message: ''
+
+  -
+    label: trustee must have voting rights
+    given:
+      - *unitCreatedEvent
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          memberId: 464b1ebb-32c1-460c-8e9e-333333333333
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          memberId: 464b1ebb-32c1-460c-8e9e-444444444444
+          pollingRight: true
+          votingRight: false
+          initiativeRight: true
+          managementRight: true
+    when:
+      type: SET_UNIT_DELEGATION_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+        trusteeId: 464b1ebb-32c1-460c-8e9e-333333333333
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: UNPRIVILEGED_EXCEPTION
+        message: ''
+
+  -
+    label: set delegation
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          name: Test Unit
+          description: The Test Unit
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          memberId: 464b1ebb-32c1-460c-8e9e-222222222222
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          memberId: 464b1ebb-32c1-460c-8e9e-333333333333
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+    when:
+      type: SET_UNIT_DELEGATION_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+        trusteeId: 464b1ebb-32c1-460c-8e9e-333333333333
+    then:
+      type: UNIT_DELEGATION_SET_EVENT
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        trusterId: 464b1ebb-32c1-460c-8e9e-222222222222
+        trusteeId: 464b1ebb-32c1-460c-8e9e-333333333333
+
+  -
+    label: requester must have a delegation to unset it
+    given:
+      - *unitCreatedEvent
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          memberId: 464b1ebb-32c1-460c-8e9e-222222222222
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+    when:
+      type: UNSET_UNIT_DELEGATION_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: ITEM_NOT_FOUND_EXCEPTION
+        message: ''
+
+  -
+    label: unset delegation
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          name: Test Unit
+          description: The Test Unit
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          memberId: 464b1ebb-32c1-460c-8e9e-222222222222
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+      -
+        type: UNIT_DELEGATION_SET_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          trusterId: 464b1ebb-32c1-460c-8e9e-222222222222
+          trusteeId: 464b1ebb-32c1-460c-8e9e-333333333333
+    when:
+      type: UNSET_UNIT_DELEGATION_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+    then:
+      type: UNIT_DELEGATION_UNSET_EVENT
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        trusterId: 464b1ebb-32c1-460c-8e9e-222222222222
+
+  -
+    label: unset delegation removes delegation
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          name: Test Unit
+          description: The Test Unit
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          memberId: 464b1ebb-32c1-460c-8e9e-222222222222
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+      -
+        type: UNIT_DELEGATION_SET_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          trusterId: 464b1ebb-32c1-460c-8e9e-222222222222
+          trusteeId: 464b1ebb-32c1-460c-8e9e-333333333333
+      -
+        type: UNIT_DELEGATION_UNSET_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          trusterId: 464b1ebb-32c1-460c-8e9e-222222222222
+    when:
+      type: UNSET_UNIT_DELEGATION_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: ITEM_NOT_FOUND_EXCEPTION
+        message: ''
+

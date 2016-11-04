@@ -9,6 +9,7 @@ namespace rooset {
   class IdTools
   {
   public:
+    virtual ~IdTools() {};
     virtual uuid generateNilId() = 0;
     virtual uuid generateUniqueId() = 0;
     virtual uuid parse(string) = 0;

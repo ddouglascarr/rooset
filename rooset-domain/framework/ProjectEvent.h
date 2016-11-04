@@ -12,6 +12,7 @@ namespace rooset {
   class ProjectEvent
   {
   public:
+    virtual ~ProjectEvent() {};
     virtual string getEventType() = 0;
     virtual unique_ptr<SerializationFormat> serialize() const = 0;
   };

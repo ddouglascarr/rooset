@@ -1,0 +1,157 @@
+{
+  "label": "Member Aggregate Tests",
+  "aggregate": "MemberAggregate",
+  "commandHandler": "MemberCommandHandler",
+  "scenarios": [
+    {
+      "label": "AdminMemberCreatedEvent",
+      "given": [],
+      "when": {
+        "type": "CREATE_ADMIN_MEMBER_COMMAND",
+        "payload": {
+          "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+          "login": "admin",
+          "password": "pw1",
+          "name": "Adam Admin",
+          "notifyEmail": "adam@admin.com"
+        }
+      },
+      "then": {
+        "type": "ADMIN_MEMBER_CREATED_EVENT",
+        "payload": {
+          "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+          "login": "admin",
+          "password": "pw1",
+          "name": "Adam Admin",
+          "notifyEmail": "adam@admin.com"
+        }
+      }
+    }, {
+      "label": "Update Member Password",
+      "given": [
+        {
+          "type": "ADMIN_MEMBER_CREATED_EVENT",
+          "payload": {
+            "id": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+            "login": "admin",
+            "password": "pw1",
+            "name": "Adam Admin",
+            "notifyEmail": "adam@admin.com"
+          }
+        }
+      ],
+      "when": {
+        "type": "UPDATE_MEMBER_PASSWORD_COMMAND",
+        "payload": {
+          "id": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+          "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+          "oldPassword": "pw1",
+          "newPassword": "pw2"
+        }
+      },
+      "then": {
+        "type": "MEMBER_PASSWORD_UPDATED_EVENT",
+        "payload": {
+          "id": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+          "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+          "newPassword": "pw2"
+        }
+      }
+    }, {
+      "label": "Update Member Password should throw on wrong old password",
+      "given": [
+        {
+          "type": "ADMIN_MEMBER_CREATED_EVENT",
+          "payload": {
+            "id": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+            "login": "admin",
+            "password": "pw1",
+            "name": "Adam Admin",
+            "notifyEmail": "adam@admin.com"
+          }
+        }
+      ],
+      "when": {
+        "type": "UPDATE_MEMBER_PASSWORD_COMMAND",
+        "payload": {
+          "id": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+          "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+          "oldPassword": "pw-wrong",
+          "newPassword": "pw2"
+        }
+      },
+      "then": {
+        "type": "COMMAND_EVALUATION_EXCEPTION",
+        "error": true,
+        "payload": {
+          "code": "CONFLICT_EXCEPTION",
+          "message": "The old password does not match"
+        }
+      }
+    }, {
+      "label": "Admin member can create unit",
+      "given": [
+        {
+          "type": "ADMIN_MEMBER_CREATED_EVENT",
+          "payload": {
+            "id": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+            "login": "admin",
+            "password": "pw1",
+            "name": "Adam Admin",
+            "notifyEmail": "adam@admin.com"
+          }
+        }
+      ],
+      "when": {
+        "type": "CREATE_UNIT_COMMAND",
+        "payload": {
+          "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6bec",
+          "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+          "name": "Test Unit",
+          "description": "The Test Unit"
+        }
+      },
+      "then": {
+        "type": "UNIT_CREATED_EVENT",
+        "payload": {
+          "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6bec",
+          "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+          "name": "Test Unit",
+          "description": "The Test Unit"
+        }
+      }
+    }, {
+      "label": "Non-Admin member can not create unit",
+      "given": [
+        {
+          "type": "MEMBER_CREATED_EVENT",
+          "payload": {
+            "id": "54b692a4-77d2-4ce5-b785-3880e2f7a276",
+            "login": "normal",
+            "password": "pw1",
+            "name": "normal user",
+            "notifyEmail": "normal@user.com",
+            "activated": 1477743073
+          }
+        }
+      ],
+      "when": {
+        "type": "CREATE_UNIT_COMMAND",
+        "payload": {
+          "id": "ccb143ff-0427-4cf5-88a0-1b1daf81ef2b",
+          "requesterId": "54b692a4-77d2-4ce5-b785-3880e2f7a276",
+          "name": "Test Unit",
+          "description": "The Test Unit"
+        }
+      },
+      "then": {
+        "type": "COMMAND_EVALUATION_EXCEPTION",
+        "error": true,
+        "payload": {
+          "code": "UNPRIVILEGED_EXCEPTION",
+          "message": "Only admin users can create units"
+        }
+      }
+    }
+  ]
+}

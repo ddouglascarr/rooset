@@ -1,6 +1,6 @@
 #include <memory>
 #include <iostream>
-#include "aggregates/member/MemberAggregate.h"
+#include "aggregates/MemberAggregate.h"
 #include "framework/uuid.h"
 
 using namespace std;
