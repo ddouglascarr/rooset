@@ -1,11 +1,12 @@
 const fs = require('fs');
-const { upperFirst, camelCase, each, pull } = require('lodash');
+const { upperFirst, camelCase, each, pull, pickBy } = require('lodash');
 const schemaTools = require('../../schema');
 const generateEventClass = require('./generators/generateEventClass');
 const generateCommandClass = require('./generators/generateCommandClass');
 const generateTestFile = require('./generators/generateTestFile');
 const generateEnum = require('./generators/generateEnum');
 const generateEnumParser = require('./generators/generateEnumParser');
+const generateEnumUtilsHeader = require('./generators/generateEnumUtilsHeader');
 const generateExceptionClass = require('./generators/generateExceptionClass');
 const generateMessageCpp = require('./generators/generateMessageCpp');
 const {
@@ -39,13 +40,20 @@ commandSchemas.forEach((commandSchema) => {
   stageFile('sources', `${fileName}.cpp`, cppContent);
 });
 
-// exceptionCode enum
-const exceptionCodes = require('../../schema/src/base.schema.json')
-    .definitions.exceptionCode.enum;
-stageFile('enums', `ExceptionCode.h`, generateEnum(
-    'ExceptionCode', exceptionCodes));
-stageFile('sources', `JsonUtilsExceptionCodeParser.cpp`,
-    generateEnumParser('ExceptionCode', exceptionCodes));
+// enums
+const definitions = require('../../schema/src/base.schema.json').definitions;
+const enumDefinitions = pickBy(definitions, (d) => d.type === 'string' && d.enum);
+console.log(enumDefinitions);
+const enumClassnames = [];
+each(enumDefinitions, (enumDefinition, key) => {
+  const enumClassname = upperFirst(key);
+  enumClassnames.push(enumClassname);
+  stageFile('enums', `${enumClassname}.h`, generateEnum(
+      enumClassname, enumDefinition.enum));
+  stageFile('sources', `EnumUtils${enumClassname}Parsers.cpp`,
+      generateEnumParser(enumClassname, enumDefinition.enum));
+});
+stageFile('enums', 'EnumUtils.h', generateEnumUtilsHeader(enumClassnames));
 
 // exceptions
 const exceptionSchemas = schemaTools.generateSchemas('exceptions');
@@ -67,7 +75,7 @@ testDocs.forEach((testDoc) => {
 });
 
 // perform update
-each(filesToWrite, (fileNameMap, path) => updateDir(path, fileNameMap));
+each(filesToWrite, (fileNameMap, path) => schemaTools.updateDir(path, fileNameMap));
 
 function stageFile(_path, filename, content) {
   const path = `${GEN_DIR}/${_path}`;
@@ -76,24 +84,4 @@ function stageFile(_path, filename, content) {
     throw new Error(`attempting to write ${filename} in ${path} more than once`);
   }
   filesToWrite[path][filename] = content;
-}
-
-function updateDir(path, fileNameMap) {
-  console.log(`-- updating ${path}`);
-  let filesToDelete = fs.readdirSync(path);
-  each(fileNameMap, (content, fileName) => {
-    pull(filesToDelete, fileName);
-    const filePath = `${path}/${fileName}`;
-    let isContentDifferent = true;
-    if (fs.existsSync(filePath)) {
-      const oldContent = fs.readFileSync(filePath, 'utf8');
-      isContentDifferent = (oldContent !== content);
-    }
-    if (isContentDifferent) {
-      fs.writeFileSync(filePath, content, 'utf8');
-      console.log(`  -- ${fileName} updated`);
-    }
-  });
-  filesToDelete.forEach((fileName) => fs.unlinkSync(`${path}/${fileName}`));
-  if (filesToDelete.length > 0) console.log(`${filesToDelete} deleted`);
 }

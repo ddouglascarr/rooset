@@ -21,7 +21,7 @@ module.exports = {
     const v_str = `${v}_str`;
     return `
           Value ${v_value};
-          auto ${v_str} = JsonUtils::serializeExceptionCode(${v});
+          auto ${v_str} = EnumUtils::serializeExceptionCode(${v});
           ${v_value}.SetString(${v_str}.c_str(), ${v_str}.size(), d->GetAllocator());
           payload.AddMember("${v}", ${v_value}, d->GetAllocator());    `;
   },

@@ -16,6 +16,7 @@ module.exports = function(exceptionType) {
 #include "rapidjson/document.h"
 #include "rapidjson/allocators.h"
 #include "rapidjson/schema.h"
+#include "enums/EnumUtils.h"
 
 using namespace std;
 using namespace rapidjson;
@@ -44,7 +45,7 @@ namespace rooset {
         msg(string(
           d["payload"]["message"].GetString(),
           d["payload"]["message"].GetStringLength())),
-        exceptionCode(JsonUtils::parseExceptionCode(string(
+        exceptionCode(EnumUtils::parseExceptionCode(string(
           d["payload"]["code"].GetString(),
           d["payload"]["code"].GetStringLength())))
     {}
@@ -71,7 +72,7 @@ namespace rooset {
       payload.AddMember("message", messageValue, d->GetAllocator());
 
       Value codeValue;
-      string codeStr = JsonUtils::serializeExceptionCode(exceptionCode);
+      string codeStr = EnumUtils::serializeExceptionCode(exceptionCode);
       codeValue.SetString(codeStr.c_str(), codeStr.size(), d->GetAllocator());
       payload.AddMember("code", codeValue, d->GetAllocator());
 

@@ -6,18 +6,18 @@ module.exports = function(enumClassname, enums) {
       `if (e == ${enumClassname}::${s}) return "${s}";`)
 
   return `
-#include "framework/JsonUtils.h"
+#include "enums/EnumUtils.h"
 #include "enums/${enumClassname}.h"
 #include <stdexcept>
 
 namespace rooset {
-  ${enumClassname} JsonUtils::parse${enumClassname}(const string& e)
+  ${enumClassname} EnumUtils::parse${enumClassname}(const string& e)
   {
     ${generateParsers().join('\n')}
     throw std::invalid_argument("unknown enum");
   }
 
-  string JsonUtils::serialize${enumClassname}(${enumClassname} e)
+  string EnumUtils::serialize${enumClassname}(${enumClassname} e)
   {
     ${generateSerializers().join('\n')}
     throw std::invalid_argument("unknown enum");

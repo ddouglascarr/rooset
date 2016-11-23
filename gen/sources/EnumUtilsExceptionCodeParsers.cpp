@@ -1,10 +1,10 @@
 
-#include "framework/JsonUtils.h"
+#include "enums/EnumUtils.h"
 #include "enums/ExceptionCode.h"
 #include <stdexcept>
 
 namespace rooset {
-  ExceptionCode JsonUtils::parseExceptionCode(const string& e)
+  ExceptionCode EnumUtils::parseExceptionCode(const string& e)
   {
     if (e == "CONFLICT_EXCEPTION") return ExceptionCode::CONFLICT_EXCEPTION;
 if (e == "GENERAL_PROJECT_EXCEPTION") return ExceptionCode::GENERAL_PROJECT_EXCEPTION;
@@ -15,7 +15,7 @@ if (e == "INVALID_INPUT_EXCEPTION") return ExceptionCode::INVALID_INPUT_EXCEPTIO
     throw std::invalid_argument("unknown enum");
   }
 
-  string JsonUtils::serializeExceptionCode(ExceptionCode e)
+  string EnumUtils::serializeExceptionCode(ExceptionCode e)
   {
     if (e == ExceptionCode::CONFLICT_EXCEPTION) return "CONFLICT_EXCEPTION";
 if (e == ExceptionCode::GENERAL_PROJECT_EXCEPTION) return "GENERAL_PROJECT_EXCEPTION";

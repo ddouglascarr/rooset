@@ -12,6 +12,7 @@
 #include "rapidjson/schema.h"
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
+#include "enums/EnumUtils.h"
 
 using namespace std;
 using namespace rooset;

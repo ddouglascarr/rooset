@@ -8,7 +8,7 @@ module.exports = {
                 d["payload"]["${v}"].GetStringLength()))`,
 
   exceptionCode: (v) => `
-            ${v}(JsonUtils::parseExceptionCode(string(
+            ${v}(EnumUtils::parseExceptionCode(string(
                 d["payload"]["${v}"].GetString(),
                 d["payload"]["${v}"].GetStringLength())))`,
 
