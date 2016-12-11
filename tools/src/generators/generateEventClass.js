@@ -6,8 +6,7 @@ const {
 const generateMessageStatements = require('./generateMessageStatements');
 
 
-module.exports = function(schema) {
-  console.log(JSON.stringify(schema, null, 2));
+module.exports = function(schema, commandConstructorSchema) {
   const messageType = getMsgTypeFromSchema(schema);
   const classTypename = generateClassnameFromMsgType(messageType);
   const payloadProps = schema.properties.payload.properties;
@@ -15,8 +14,10 @@ module.exports = function(schema) {
     declarations,
     stdConstructor,
     jsonConstructor,
-    serializeStatements
-  } = generateMessageStatements(schema);
+    commandConstructor,
+    commandConstructorImportStatement,
+    serializeStatements,
+  } = generateMessageStatements(schema, commandConstructorSchema);
 
   return `
 #pragma once
@@ -33,6 +34,7 @@ module.exports = function(schema) {
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+${commandConstructorImportStatement}
 
 using namespace std;
 using namespace rooset;
@@ -54,6 +56,8 @@ namespace rooset {
     ${stdConstructor}
 
     ${jsonConstructor}
+
+    ${commandConstructor}
 
     unique_ptr<Document> serialize() const override
     {

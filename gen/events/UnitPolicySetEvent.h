@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "commands/SetUnitPolicyCommand.h"
 
 using namespace std;
 using namespace rooset;
@@ -135,6 +136,32 @@ namespace rooset {
             noReverseBeatPath(d["payload"]["noReverseBeatPath"].GetBool()),
             noMultistageMajority(d["payload"]["noMultistageMajority"].GetBool())
         {}
+  
+
+    
+    UnitPolicySetEvent(const SetUnitPolicyCommand& c):
+        id(c.id),
+requesterId(c.requesterId),
+policyId(c.policyId),
+name(c.name),
+description(c.description),
+polling(c.polling),
+maxAdmissionTime(c.maxAdmissionTime),
+minAdmissionTime(c.minAdmissionTime),
+discussionTime(c.discussionTime),
+verificationTime(c.verificationTime),
+votingTime(c.votingTime),
+issueQuorumNum(c.issueQuorumNum),
+issueQuorumDen(c.issueQuorumDen),
+defeatStrength(c.defeatStrength),
+directMajorityNum(c.directMajorityNum),
+directMajorityDen(c.directMajorityDen),
+directMajorityStrict(c.directMajorityStrict),
+directMajorityPositive(c.directMajorityPositive),
+directMajorityNonNegative(c.directMajorityNonNegative),
+noReverseBeatPath(c.noReverseBeatPath),
+noMultistageMajority(c.noMultistageMajority)
+    {}
   
 
     unique_ptr<Document> serialize() const override

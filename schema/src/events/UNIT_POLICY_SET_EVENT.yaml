@@ -21,3 +21,4 @@ properties:
   directMajorityNonNegative: '$int'
   noReverseBeatPath: '$bool'
   noMultistageMajority: '$bool'
+commandConstructor: SET_UNIT_POLICY_COMMAND

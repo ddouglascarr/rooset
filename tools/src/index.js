@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { upperFirst, camelCase, each, pull, pickBy } = require('lodash');
+const { upperFirst, camelCase, each, find, pull, pickBy } = require('lodash');
 const schemaTools = require('../../schema');
 const generateEventClass = require('./generators/generateEventClass');
 const generateCommandClass = require('./generators/generateCommandClass');
@@ -16,19 +16,6 @@ const {
 const GEN_DIR = `${process.cwd()}/${process.env.ROOSET_GEN_DIR}`;
 const filesToWrite = {};
 
-// events
-const eventSchemas = schemaTools.generateSchemas('events');
-const eventClasses = schemaTools.generateSchemas('events')
-    .map((schema) => generateEventClass(schema));
-eventSchemas.forEach((eventSchema) => {
-  const content = generateEventClass(eventSchema);
-  const msgType = getMsgTypeFromSchema(eventSchema);
-  const fileName = generateFilenameFromMsgType(msgType);
-  stageFile('events', `${fileName}.h`, content);
-  const cppContent = generateMessageCpp(eventSchema, 'events');
-  stageFile('sources',`${fileName}.cpp`, cppContent);
-});
-
 // commands
 const commandSchemas = schemaTools.generateSchemas('commands');
 commandSchemas.forEach((commandSchema) => {
@@ -40,10 +27,28 @@ commandSchemas.forEach((commandSchema) => {
   stageFile('sources', `${fileName}.cpp`, cppContent);
 });
 
+// events
+const eventSchemas = schemaTools.generateSchemas('events');
+eventSchemas.forEach((eventSchema) => {
+  let commandConstructorSchema = null;
+  if (eventSchema.commandConstructor) {
+    commandConstructorSchema = find(commandSchemas,
+        (s) => getMsgTypeFromSchema(s) === eventSchema.commandConstructor);
+    if (!commandConstructorSchema) {
+      throw `no commandSchema found: ${eventSchema.commandConstructor}`;
+    }
+  }
+  const content = generateEventClass(eventSchema, commandConstructorSchema);
+  const msgType = getMsgTypeFromSchema(eventSchema);
+  const fileName = generateFilenameFromMsgType(msgType);
+  stageFile('events', `${fileName}.h`, content);
+  const cppContent = generateMessageCpp(eventSchema, 'events');
+  stageFile('sources',`${fileName}.cpp`, cppContent);
+});
+
 // enums
 const definitions = require('../../schema/src/base.schema.json').definitions;
 const enumDefinitions = pickBy(definitions, (d) => d.type === 'string' && d.enum);
-console.log(enumDefinitions);
 const enumClassnames = [];
 each(enumDefinitions, (enumDefinition, key) => {
   const enumClassname = upperFirst(key);

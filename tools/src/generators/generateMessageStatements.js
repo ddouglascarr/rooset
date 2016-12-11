@@ -14,7 +14,7 @@ const {
 } = require('../utils');
 
 
-module.exports = function(schema) {
+module.exports = function(schema, commandConstructorSchema) {
   const messageType = getMsgTypeFromSchema(schema);
   const classTypename = generateClassnameFromMsgType(messageType);
   const payloadProps = schema.properties.payload.properties;
@@ -55,6 +55,12 @@ module.exports = function(schema) {
         {}
   `;
 
+  const commandConstructor = commandConstructorSchema ?
+      generateCommandConstructor(schema, commandConstructorSchema) : '';
+
+  const commandConstructorImportStatement = commandConstructorSchema ?
+      `#include "commands/${generateClassnameFromMsgType(getMsgTypeFromSchema(commandConstructorSchema))}.h"` : '';
+
   const serializeStatements = map(payloadProps, (ref, v) => {
     const typename = getTypenameFromRef(ref);
     return serializeTemplates[typename](v);
@@ -67,6 +73,29 @@ module.exports = function(schema) {
     stdConstructorArgs,
     stdConstructorAssignments,
     stdConstructor,
+    commandConstructor,
+    commandConstructorImportStatement,
     serializeStatements,
   };
+}
+
+function generateCommandConstructor(schema, commandConstructorSchema) {
+  const schemaProps = Object.keys(schema.properties.payload.properties);
+  const cmdProps = Object.keys(commandConstructorSchema.properties.payload.properties);
+  const params = schemaProps.map((prop) => {
+    if (cmdProps.indexOf(prop) === -1) {
+      throw `Event props must be a subset of command props. ${prop} is not in command`;
+    }
+    return `${prop}(c.${prop})`;
+  });
+
+  const messageType = getMsgTypeFromSchema(schema);
+  const evtTypename = generateClassnameFromMsgType(getMsgTypeFromSchema(schema));
+  const cmdTypename = generateClassnameFromMsgType(getMsgTypeFromSchema(commandConstructorSchema));
+  return `
+    ${evtTypename}(const ${cmdTypename}& c):
+        ${params.join(',\n')}
+    {}
+  `;
+
 }

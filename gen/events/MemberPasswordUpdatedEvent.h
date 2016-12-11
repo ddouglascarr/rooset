@@ -14,6 +14,7 @@
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
 
+
 using namespace std;
 using namespace rooset;
 using namespace rapidjson;
@@ -58,6 +59,8 @@ namespace rooset {
                 d["payload"]["newPassword"].GetStringLength()))
         {}
   
+
+    
 
     unique_ptr<Document> serialize() const override
     {

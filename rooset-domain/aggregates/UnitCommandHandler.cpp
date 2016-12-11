@@ -124,8 +124,5 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Se
 {
   auto unit = repository->load(c.id);
   assertManagementRight(*unit, c.requesterId);
-  return unique_ptr<UnitPolicySetEvent>(new UnitPolicySetEvent(c.id, c.requesterId, c.policyId, c.name, c.description,
-      c.polling, c.maxAdmissionTime, c.minAdmissionTime, c.discussionTime, c.verificationTime, c.votingTime,
-      c.issueQuorumNum, c.issueQuorumDen, c.defeatStrength, c.directMajorityNum, c.directMajorityDen, c.directMajorityStrict,
-      c.directMajorityPositive, c.directMajorityNonNegative, c.noReverseBeatPath, c.noMultistageMajority));
+  return unique_ptr<UnitPolicySetEvent>(new UnitPolicySetEvent(c));
 }
