@@ -119,3 +119,13 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Un
   return unique_ptr<AreaDelegationUnsetEvent>(new AreaDelegationUnsetEvent(
     c.id, c.areaId, trusterId));
 }
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const SetUnitPolicyCommand& c)
+{
+  auto unit = repository->load(c.id);
+  assertManagementRight(*unit, c.requesterId);
+  return unique_ptr<UnitPolicySetEvent>(new UnitPolicySetEvent(c.id, c.requesterId, c.policyId, c.name, c.description,
+      c.polling, c.maxAdmissionTime, c.minAdmissionTime, c.discussionTime, c.verificationTime, c.votingTime,
+      c.issueQuorumNum, c.issueQuorumDen, c.defeatStrength, c.directMajorityNum, c.directMajorityDen, c.directMajorityStrict,
+      c.directMajorityPositive, c.directMajorityNonNegative, c.noReverseBeatPath, c.noMultistageMajority));
+}

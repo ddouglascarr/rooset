@@ -26,6 +26,9 @@ module.exports = function(schema) {
 
   const jsonConstructorAssignments = map(payloadProps, (ref, v) => {
     const typename = getTypenameFromRef(ref);
+    if (!jsonConstructorAssignmentTemplates[typename]) {
+      throw `jsonConstructorAssignmentTemplates.${typename} does not exist`;
+    }
     return jsonConstructorAssignmentTemplates[typename](v);
   });
 

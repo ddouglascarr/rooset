@@ -19,6 +19,8 @@
 #include "events/AreaDelegationSetEvent.h"
 #include "commands/UnsetAreaDelegationCommand.h"
 #include "events/AreaDelegationUnsetEvent.h"
+#include "commands/SetUnitPolicyCommand.h"
+#include "events/UnitPolicySetEvent.h"
 
 
 namespace rooset {
@@ -44,5 +46,6 @@ namespace rooset {
     unique_ptr<ProjectEvent<Document>> evaluate(const UnsetUnitDelegationCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const SetAreaDelegationCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const UnsetAreaDelegationCommand& c);
+    unique_ptr<ProjectEvent<Document>> evaluate(const SetUnitPolicyCommand& c);
   };
 }

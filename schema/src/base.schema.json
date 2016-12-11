@@ -9,7 +9,8 @@
       "type": "integer"
     },
     "duration": {
-      "type": "integer"
+      "type": "integer",
+      "description": "Length of duration in seconds"
     },
     "uuid": {
       "type":"string",
@@ -39,6 +40,9 @@
         "TUPLE",
         "SIMPLE"
       ]
+    },
+    "int": {
+      "type": "integer"
     },
     "tieBreaking": {
       "type": "string",

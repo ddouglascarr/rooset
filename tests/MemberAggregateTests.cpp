@@ -31,6 +31,12 @@ namespace test {
     EXPECT_EQ(resultTime, testTime);
   }
 
+  TEST(dependencies, boost_posix_duration)
+  {
+    const posix_time::time_duration testDuration = posix_time::seconds(600L);
+    EXPECT_EQ(testDuration.minutes(), 10);
+  }
+
   TEST(dependencies, map_in_struct)
   {
     struct Area {

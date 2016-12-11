@@ -1,4 +1,5 @@
 #include "UnitAggregate.h"
+#include "UnitAggregate.h"
 
 rooset::UnitAggregate::UnitAggregate(const UnitCreatedEvent & e)
 {
@@ -41,4 +42,10 @@ void rooset::UnitAggregate::handleEvent(const AreaDelegationUnsetEvent & e)
   if (it != areaDelegations.end()) {
     areaDelegations.erase(it);
   }
+}
+
+void rooset::UnitAggregate::handleEvent(const UnitPolicySetEvent & e)
+{
+  Policy policy{ e.name, true };
+  policies[e.policyId] = policy;
 }

@@ -7,6 +7,7 @@ const generateMessageStatements = require('./generateMessageStatements');
 
 
 module.exports = function(schema) {
+  console.log(JSON.stringify(schema, null, 2));
   const messageType = getMsgTypeFromSchema(schema);
   const classTypename = generateClassnameFromMsgType(messageType);
   const payloadProps = schema.properties.payload.properties;

@@ -1,6 +1,7 @@
 ---
 properties:
   id: '$uuid'
+  requesterId: '$uuid'
   policyId: '$uuid'
   name: '$string'
   description: '$string'

@@ -74,6 +74,7 @@ function mapSchemaFiles(destDir) {
       },
       required: isException ?
           ['payload', 'error', 'type'] : ['payload', 'type'],
+      commandConstructor: messageSchema.commandConstructor,
     });
   };
 }
