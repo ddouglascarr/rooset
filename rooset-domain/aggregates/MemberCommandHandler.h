@@ -26,14 +26,14 @@ namespace rooset {
     MemberCommandHandler(unique_ptr<AggregateRepository<MemberAggregate>> r) : repository(move(r))
     { }
 
-    auto evaluate(const CreateAdminMemberCommand& c)
+    unique_ptr<ProjectEvent<Document>> evaluate(const CreateAdminMemberCommand& c)
     {
       repository->assertAggregateDoesNotExist(c.id);
       return make_unique<AdminMemberCreatedEvent>(
           c.id, c.login, c.password, c.name, c.notifyEmail);
     }
 
-    auto evaluate(const rooset::UpdateMemberPasswordCommand& c)
+    unique_ptr<ProjectEvent<Document>> evaluate(const rooset::UpdateMemberPasswordCommand& c)
     {
       auto member = repository->load(c.id);
       if (member->getPassword() != c.oldPassword) {
@@ -48,7 +48,7 @@ namespace rooset {
           c.id, c.requesterId, c.newPassword });
     }
 
-    auto evaluate(const rooset::CreateUnitCommand& c)
+    unique_ptr<ProjectEvent<Document>> evaluate(const rooset::CreateUnitCommand& c)
     {
       auto requestingMember = repository->load(c.requesterId);
       if (!requestingMember->getIsAdmin()) {

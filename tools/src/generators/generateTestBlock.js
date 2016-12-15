@@ -24,44 +24,27 @@ module.exports = function(
   ${classname} ${instanceName}(*${instanceName}_doc);`;
   };
 
-  const instantiateMockAggregate = () => {
-    const firstEvent = head(scenario.given);
-    const otherEvents = tail(scenario.given);
-    const instantiation = `
-  ${instantiateMessage('firstEvent', firstEvent)}
-  ${aggregateClassname} mockAggregate(firstEvent);`;
-
-    return otherEvents.reduce((result, evt, idx) => {
-      const instanceName = `evt${idx}`;
-      return `
-  ${result}
-  ${instantiateMessage(instanceName, evt)}
-  mockAggregate.handleEvent(${instanceName});
-  `;
-    }, instantiation);
-  };
-
   const stripMsgFromExpectedErr = () => {
     if (isExceptionExpected && doIgnoreMsg) {
       return `
-        (*expectedDoc)["payload"].RemoveMember("message");
-        (*resultDoc)["payload"].RemoveMember("message");
+  // ignore the message from the test
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
       `;
     }
     return '';
   };
 
-  const instantiateMockRepo = () => {
-    if (hasGivenEvents) {
-      return `
-  ${instantiateMockAggregate()}
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      ${aggregateClassname}>>(mockAggregate);`;
-    }
-    return `
-  auto repo = make_unique<AggregateRepositoryEmptyMockImpl<
-      ${aggregateClassname}>>();`;
+  const pushGivenEvents = () => {
+    const statements = scenario.given.map((event) => `
+  givenEvents.push_back(JsonUtils::parse(${JSON.stringify(JSON.stringify(event))}));`);
+    return statements.join('');
   };
+
+  const buildCommandHandler = () => `
+  vector<unique_ptr<Document>> givenEvents;
+  ${pushGivenEvents()}
+  CommandHandlerTestImpl commandHandler(givenEvents); `;
 
   const generateAssertion = () => {
     return `
@@ -99,12 +82,10 @@ module.exports = function(
   return `
 TEST(${testCategoryLabel}, ${generateTestLabel(scenario.label)})
 {
-  ${instantiateMockRepo()}
-  ${commandHandlerClassname} commandHandler(move(repo));
+  ${buildCommandHandler()}
   ${instantiateMessage('expected', scenario.then)}
   ${instantiateMessage('cmd', scenario.when)}
   ${isExceptionExpected ? generateExpectedExceptionBlock() : generateExpectedEventBlock()}
-}
-`;
+}`;
 
 }

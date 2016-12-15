@@ -1,7 +1,5 @@
 {
   "label": "Unit Aggregate Tests",
-  "aggregate": "UnitAggregate",
-  "commandHandler": "UnitCommandHandler",
   "scenarios": [
     {
       "label": "Unit Creator can grant privileges",

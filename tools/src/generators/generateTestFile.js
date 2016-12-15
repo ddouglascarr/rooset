@@ -18,9 +18,8 @@ module.exports = function(testDoc) {
 #include "framework/AggregateRepositoryEmptyMockImpl.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
+#include "framework/CommandHandlerTestImpl.h"
 #include "exceptions/CommandEvaluationException.h"
-#include "aggregates/${aggregateClassname}.h"
-#include "aggregates/${commandHandlerClassname}.h"
 
 using namespace std;
 using namespace rooset;

@@ -1,7 +1,5 @@
 ---
 label: UnitAggregate - Area Delegations
-aggregate: UnitAggregate
-commandHandler: UnitCommandHandler
 
 mocks:
   - &unitCreatedEvent

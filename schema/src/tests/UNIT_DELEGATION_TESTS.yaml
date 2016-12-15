@@ -1,7 +1,5 @@
 ---
 label: Unit Aggregate - Delegations
-aggregate: UnitAggregate
-commandHandler: UnitCommandHandler
 mocks:
 - &unitCreatedEvent
   type: UNIT_CREATED_EVENT

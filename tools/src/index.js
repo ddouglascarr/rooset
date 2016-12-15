@@ -9,6 +9,7 @@ const generateEnumParser = require('./generators/generateEnumParser');
 const generateEnumUtilsHeader = require('./generators/generateEnumUtilsHeader');
 const generateExceptionClass = require('./generators/generateExceptionClass');
 const generateMessageCpp = require('./generators/generateMessageCpp');
+const generateEventUtils = require('./generators/generateEventUtils');
 const {
   generateFilenameFromMsgType,
   getMsgTypeFromSchema,
@@ -45,6 +46,7 @@ eventSchemas.forEach((eventSchema) => {
   const cppContent = generateMessageCpp(eventSchema, 'events');
   stageFile('sources',`${fileName}.cpp`, cppContent);
 });
+stageFile('events', 'EventUtils.h', generateEventUtils(eventSchemas));
 
 // enums
 const definitions = require('../../schema/src/base.schema.json').definitions;

@@ -7,9 +7,8 @@
 #include "framework/AggregateRepositoryEmptyMockImpl.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
+#include "framework/CommandHandlerTestImpl.h"
 #include "exceptions/CommandEvaluationException.h"
-#include "aggregates/MemberAggregate.h"
-#include "aggregates/MemberCommandHandler.h"
 
 using namespace std;
 using namespace rooset;
@@ -20,9 +19,9 @@ namespace rooset_member_aggregate_tests_tests {
 TEST(member_aggregate_tests, admin_member_created_event)
 {
   
-  auto repo = make_unique<AggregateRepositoryEmptyMockImpl<
-      MemberAggregate>>();
-  MemberCommandHandler commandHandler(move(repo));
+  vector<unique_ptr<Document>> givenEvents;
+  
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"ADMIN_MEMBER_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"login\":\"admin\",\"password\":\"pw1\",\"name\":\"Adam Admin\",\"notifyEmail\":\"adam@admin.com\"}}");
   try {
@@ -56,23 +55,13 @@ TEST(member_aggregate_tests, admin_member_created_event)
 }
 
 
-
 TEST(member_aggregate_tests, update_member_password)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"ADMIN_MEMBER_CREATED_EVENT\",\"payload\":{\"id\":\"86998399-3d86-4e0b-a2a5-6490056ce43e\",\"login\":\"admin\",\"password\":\"pw1\",\"name\":\"Adam Admin\",\"notifyEmail\":\"adam@admin.com\"}}");
-  try {
-  JsonUtils::validate(*AdminMemberCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  AdminMemberCreatedEvent firstEvent(*firstEvent_doc);
-  MemberAggregate mockAggregate(firstEvent);
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      MemberAggregate>>(mockAggregate);
-  MemberCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"ADMIN_MEMBER_CREATED_EVENT\",\"payload\":{\"id\":\"86998399-3d86-4e0b-a2a5-6490056ce43e\",\"login\":\"admin\",\"password\":\"pw1\",\"name\":\"Adam Admin\",\"notifyEmail\":\"adam@admin.com\"}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"MEMBER_PASSWORD_UPDATED_EVENT\",\"payload\":{\"id\":\"86998399-3d86-4e0b-a2a5-6490056ce43e\",\"requesterId\":\"86998399-3d86-4e0b-a2a5-6490056ce43e\",\"newPassword\":\"pw2\"}}");
   try {
@@ -106,23 +95,13 @@ TEST(member_aggregate_tests, update_member_password)
 }
 
 
-
 TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_password)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"ADMIN_MEMBER_CREATED_EVENT\",\"payload\":{\"id\":\"86998399-3d86-4e0b-a2a5-6490056ce43e\",\"login\":\"admin\",\"password\":\"pw1\",\"name\":\"Adam Admin\",\"notifyEmail\":\"adam@admin.com\"}}");
-  try {
-  JsonUtils::validate(*AdminMemberCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  AdminMemberCreatedEvent firstEvent(*firstEvent_doc);
-  MemberAggregate mockAggregate(firstEvent);
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      MemberAggregate>>(mockAggregate);
-  MemberCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"ADMIN_MEMBER_CREATED_EVENT\",\"payload\":{\"id\":\"86998399-3d86-4e0b-a2a5-6490056ce43e\",\"login\":\"admin\",\"password\":\"pw1\",\"name\":\"Adam Admin\",\"notifyEmail\":\"adam@admin.com\"}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"CONFLICT_EXCEPTION\",\"message\":\"The old password does not match\"}}");
   try {
@@ -160,23 +139,13 @@ TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_pa
 }
 
 
-
 TEST(member_aggregate_tests, admin_member_can_create_unit)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"ADMIN_MEMBER_CREATED_EVENT\",\"payload\":{\"id\":\"86998399-3d86-4e0b-a2a5-6490056ce43e\",\"login\":\"admin\",\"password\":\"pw1\",\"name\":\"Adam Admin\",\"notifyEmail\":\"adam@admin.com\"}}");
-  try {
-  JsonUtils::validate(*AdminMemberCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  AdminMemberCreatedEvent firstEvent(*firstEvent_doc);
-  MemberAggregate mockAggregate(firstEvent);
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      MemberAggregate>>(mockAggregate);
-  MemberCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"ADMIN_MEMBER_CREATED_EVENT\",\"payload\":{\"id\":\"86998399-3d86-4e0b-a2a5-6490056ce43e\",\"login\":\"admin\",\"password\":\"pw1\",\"name\":\"Adam Admin\",\"notifyEmail\":\"adam@admin.com\"}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"0c1fe645-4f57-4cfa-88d5-b2973f3f6bec\",\"requesterId\":\"86998399-3d86-4e0b-a2a5-6490056ce43e\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}");
   try {
@@ -210,23 +179,13 @@ TEST(member_aggregate_tests, admin_member_can_create_unit)
 }
 
 
-
 TEST(member_aggregate_tests, non_admin_member_can_not_create_unit)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"MEMBER_CREATED_EVENT\",\"payload\":{\"id\":\"54b692a4-77d2-4ce5-b785-3880e2f7a276\",\"login\":\"normal\",\"password\":\"pw1\",\"name\":\"normal user\",\"notifyEmail\":\"normal@user.com\",\"activated\":1477743073}}");
-  try {
-  JsonUtils::validate(*MemberCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  MemberCreatedEvent firstEvent(*firstEvent_doc);
-  MemberAggregate mockAggregate(firstEvent);
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      MemberAggregate>>(mockAggregate);
-  MemberCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"MEMBER_CREATED_EVENT\",\"payload\":{\"id\":\"54b692a4-77d2-4ce5-b785-3880e2f7a276\",\"login\":\"normal\",\"password\":\"pw1\",\"name\":\"normal user\",\"notifyEmail\":\"normal@user.com\",\"activated\":1477743073}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"UNPRIVILEGED_EXCEPTION\",\"message\":\"Only admin users can create units\"}}");
   try {
@@ -262,6 +221,5 @@ TEST(member_aggregate_tests, non_admin_member_can_not_create_unit)
   };
   }
 }
-
 
 }

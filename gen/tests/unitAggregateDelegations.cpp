@@ -7,9 +7,8 @@
 #include "framework/AggregateRepositoryEmptyMockImpl.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
+#include "framework/CommandHandlerTestImpl.h"
 #include "exceptions/CommandEvaluationException.h"
-#include "aggregates/UnitAggregate.h"
-#include "aggregates/UnitCommandHandler.h"
 
 using namespace std;
 using namespace rooset;
@@ -20,19 +19,10 @@ namespace rooset_unit_aggregate_delegations_tests {
 TEST(unit_aggregate_delegations, member_must_be_privileged)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}");
-  try {
-  JsonUtils::validate(*UnitCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  UnitCreatedEvent firstEvent(*firstEvent_doc);
-  UnitAggregate mockAggregate(firstEvent);
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      UnitAggregate>>(mockAggregate);
-  UnitCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"UNPRIVILEGED_EXCEPTION\",\"message\":\"\"}}");
   try {
@@ -59,8 +49,9 @@ TEST(unit_aggregate_delegations, member_must_be_privileged)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-        (*expectedDoc)["payload"].RemoveMember("message");
-        (*resultDoc)["payload"].RemoveMember("message");
+  // ignore the message from the test
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -71,25 +62,15 @@ TEST(unit_aggregate_delegations, member_must_be_privileged)
   };
   }
 }
-
 
 
 TEST(unit_aggregate_delegations, member_must_have_voting_right)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}");
-  try {
-  JsonUtils::validate(*UnitCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  UnitCreatedEvent firstEvent(*firstEvent_doc);
-  UnitAggregate mockAggregate(firstEvent);
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      UnitAggregate>>(mockAggregate);
-  UnitCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"UNPRIVILEGED_EXCEPTION\",\"message\":\"\"}}");
   try {
@@ -116,8 +97,9 @@ TEST(unit_aggregate_delegations, member_must_have_voting_right)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-        (*expectedDoc)["payload"].RemoveMember("message");
-        (*resultDoc)["payload"].RemoveMember("message");
+  // ignore the message from the test
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -128,47 +110,17 @@ TEST(unit_aggregate_delegations, member_must_have_voting_right)
   };
   }
 }
-
 
 
 TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}");
-  try {
-  JsonUtils::validate(*UnitCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  UnitCreatedEvent firstEvent(*firstEvent_doc);
-  UnitAggregate mockAggregate(firstEvent);
-  
-  auto evt0_doc = JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}");
-  try {
-  JsonUtils::validate(*PrivilegeGrantedEvent::schema, *evt0_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("evt0 schema invalid");
-  }
-  PrivilegeGrantedEvent evt0(*evt0_doc);
-  mockAggregate.handleEvent(evt0);
-  
-  
-  auto evt1_doc = JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-444444444444\",\"pollingRight\":true,\"votingRight\":false,\"initiativeRight\":true,\"managementRight\":true}}");
-  try {
-  JsonUtils::validate(*PrivilegeGrantedEvent::schema, *evt1_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("evt1 schema invalid");
-  }
-  PrivilegeGrantedEvent evt1(*evt1_doc);
-  mockAggregate.handleEvent(evt1);
-  
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      UnitAggregate>>(mockAggregate);
-  UnitCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-444444444444\",\"pollingRight\":true,\"votingRight\":false,\"initiativeRight\":true,\"managementRight\":true}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"UNPRIVILEGED_EXCEPTION\",\"message\":\"\"}}");
   try {
@@ -195,8 +147,9 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-        (*expectedDoc)["payload"].RemoveMember("message");
-        (*resultDoc)["payload"].RemoveMember("message");
+  // ignore the message from the test
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -209,45 +162,15 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
 }
 
 
-
 TEST(unit_aggregate_delegations, set_delegation)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}");
-  try {
-  JsonUtils::validate(*UnitCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  UnitCreatedEvent firstEvent(*firstEvent_doc);
-  UnitAggregate mockAggregate(firstEvent);
-  
-  auto evt0_doc = JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}");
-  try {
-  JsonUtils::validate(*PrivilegeGrantedEvent::schema, *evt0_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("evt0 schema invalid");
-  }
-  PrivilegeGrantedEvent evt0(*evt0_doc);
-  mockAggregate.handleEvent(evt0);
-  
-  
-  auto evt1_doc = JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}");
-  try {
-  JsonUtils::validate(*PrivilegeGrantedEvent::schema, *evt1_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("evt1 schema invalid");
-  }
-  PrivilegeGrantedEvent evt1(*evt1_doc);
-  mockAggregate.handleEvent(evt1);
-  
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      UnitAggregate>>(mockAggregate);
-  UnitCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}");
   try {
@@ -281,34 +204,14 @@ TEST(unit_aggregate_delegations, set_delegation)
 }
 
 
-
 TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}");
-  try {
-  JsonUtils::validate(*UnitCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  UnitCreatedEvent firstEvent(*firstEvent_doc);
-  UnitAggregate mockAggregate(firstEvent);
-  
-  auto evt0_doc = JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}");
-  try {
-  JsonUtils::validate(*PrivilegeGrantedEvent::schema, *evt0_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("evt0 schema invalid");
-  }
-  PrivilegeGrantedEvent evt0(*evt0_doc);
-  mockAggregate.handleEvent(evt0);
-  
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      UnitAggregate>>(mockAggregate);
-  UnitCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"ITEM_NOT_FOUND_EXCEPTION\",\"message\":\"\"}}");
   try {
@@ -335,8 +238,9 @@ TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-        (*expectedDoc)["payload"].RemoveMember("message");
-        (*resultDoc)["payload"].RemoveMember("message");
+  // ignore the message from the test
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -349,45 +253,15 @@ TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
 }
 
 
-
 TEST(unit_aggregate_delegations, unset_delegation)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}");
-  try {
-  JsonUtils::validate(*UnitCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  UnitCreatedEvent firstEvent(*firstEvent_doc);
-  UnitAggregate mockAggregate(firstEvent);
-  
-  auto evt0_doc = JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}");
-  try {
-  JsonUtils::validate(*PrivilegeGrantedEvent::schema, *evt0_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("evt0 schema invalid");
-  }
-  PrivilegeGrantedEvent evt0(*evt0_doc);
-  mockAggregate.handleEvent(evt0);
-  
-  
-  auto evt1_doc = JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}");
-  try {
-  JsonUtils::validate(*UnitDelegationSetEvent::schema, *evt1_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("evt1 schema invalid");
-  }
-  UnitDelegationSetEvent evt1(*evt1_doc);
-  mockAggregate.handleEvent(evt1);
-  
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      UnitAggregate>>(mockAggregate);
-  UnitCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_UNSET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\"}}");
   try {
@@ -421,56 +295,16 @@ TEST(unit_aggregate_delegations, unset_delegation)
 }
 
 
-
 TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
 {
   
+  vector<unique_ptr<Document>> givenEvents;
   
-  
-  
-  
-  
-  auto firstEvent_doc = JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}");
-  try {
-  JsonUtils::validate(*UnitCreatedEvent::schema, *firstEvent_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("firstEvent schema invalid");
-  }
-  UnitCreatedEvent firstEvent(*firstEvent_doc);
-  UnitAggregate mockAggregate(firstEvent);
-  
-  auto evt0_doc = JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}");
-  try {
-  JsonUtils::validate(*PrivilegeGrantedEvent::schema, *evt0_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("evt0 schema invalid");
-  }
-  PrivilegeGrantedEvent evt0(*evt0_doc);
-  mockAggregate.handleEvent(evt0);
-  
-  
-  auto evt1_doc = JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}");
-  try {
-  JsonUtils::validate(*UnitDelegationSetEvent::schema, *evt1_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("evt1 schema invalid");
-  }
-  UnitDelegationSetEvent evt1(*evt1_doc);
-  mockAggregate.handleEvent(evt1);
-  
-  
-  auto evt2_doc = JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_UNSET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\"}}");
-  try {
-  JsonUtils::validate(*UnitDelegationUnsetEvent::schema, *evt2_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("evt2 schema invalid");
-  }
-  UnitDelegationUnsetEvent evt2(*evt2_doc);
-  mockAggregate.handleEvent(evt2);
-  
-  auto repo = make_unique<AggregateRepositoryMockImpl<
-      UnitAggregate>>(mockAggregate);
-  UnitCommandHandler commandHandler(move(repo));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_UNSET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\"}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"ITEM_NOT_FOUND_EXCEPTION\",\"message\":\"\"}}");
   try {
@@ -497,8 +331,9 @@ TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-        (*expectedDoc)["payload"].RemoveMember("message");
-        (*resultDoc)["payload"].RemoveMember("message");
+  // ignore the message from the test
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -509,6 +344,5 @@ TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
   };
   }
 }
-
 
 }

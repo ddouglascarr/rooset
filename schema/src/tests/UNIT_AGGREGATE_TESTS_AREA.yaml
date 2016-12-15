@@ -1,6 +1,4 @@
 label: Unit Aggregate Tests - Area
-aggregate: UnitAggregate
-commandHandler: UnitCommandHandler
 scenarios:
 
   -

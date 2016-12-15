@@ -1,6 +1,10 @@
 #pragma once
 #include <memory>
+#include <vector>
 #include "framework/AggregateRepository.h"
+#include "events/EventUtils.h"
+#include "rapidjson/document.h"
+#include "exceptions/CommandEvaluationException.h"
 
 using namespace std;
 
@@ -10,18 +14,40 @@ namespace rooset {
   class AggregateRepositoryMockImpl : public AggregateRepository<Aggregate>
   {
   private:
-    const Aggregate& aggregate;
+    unique_ptr<Aggregate> aggregate;
+    string aggregateId = "";
   public:
-    AggregateRepositoryMockImpl(const Aggregate& aggregate) : aggregate(aggregate) {}
+    AggregateRepositoryMockImpl(const vector<unique_ptr<rapidjson::Document>>& events)
+    {
+      aggregate = nullptr;
+      for (const auto& e : events) {
+        string payloadId = (*e)["payload"]["id"].GetString();
+        if (aggregateId == "") {
+          aggregateId = payloadId;
+        } else {
+          if (aggregateId != payloadId) {
+            throw string("AggregateRepositoryMockImpl only supports one aggregateId per implementation. Check that all ids for an aggregate in your test match");
+          }
+        }
+        EventUtils::applyEvent<Aggregate>(aggregate, *e, []() {});
+      }
+    }
 
     unique_ptr<Aggregate> load(uuid id) const override
     {
-      return make_unique<Aggregate>(aggregate);
+      if (aggregate == nullptr) {
+        throw CommandEvaluationException(ExceptionCode::ITEM_NOT_FOUND_EXCEPTION,
+            "Aggregate has not been initialized");
+      }
+      return make_unique<Aggregate>(*aggregate);
     }
 
     void assertAggregateDoesNotExist(uuid id) const override
     {
-      throw string("aggregate exists");
+      if (aggregate != nullptr) {
+        throw CommandEvaluationException(ExceptionCode::CONFLICT_EXCEPTION,
+            "Aggregate Exists");
+      }
     }
   };
 

@@ -1,7 +1,5 @@
 {
   "label": "Member Aggregate Tests",
-  "aggregate": "MemberAggregate",
-  "commandHandler": "MemberCommandHandler",
   "scenarios": [
     {
       "label": "AdminMemberCreatedEvent",
