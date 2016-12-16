@@ -5,6 +5,8 @@
 
 unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const CreateNewInitiativeCommand& c)
 {
+  issueRepository->assertAggregateDoesNotExist(c.id);
+  cout << "assert should have thrown\n";
   auto unit = unitRepository->load(c.unitId);
   PrivilegeUtils::assertInitiativeRight(*unit, c.requesterId);
   try {

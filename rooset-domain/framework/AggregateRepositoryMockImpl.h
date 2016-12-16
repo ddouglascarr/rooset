@@ -21,15 +21,17 @@ namespace rooset {
     {
       aggregate = nullptr;
       for (const auto& e : events) {
-        string payloadId = (*e)["payload"]["id"].GetString();
-        if (aggregateId == "") {
-          aggregateId = payloadId;
-        } else {
+        bool isForThisAggregate = true;
+        EventUtils::applyEvent<Aggregate>(aggregate, *e, [&]() { isForThisAggregate = false; });
+        if (isForThisAggregate) {
+          string payloadId = (*e)["payload"]["id"].GetString();
+          if (aggregateId == "") {
+            aggregateId = payloadId;
+          } 
           if (aggregateId != payloadId) {
             throw string("AggregateRepositoryMockImpl only supports one aggregateId per implementation. Check that all ids for an aggregate in your test match");
           }
         }
-        EventUtils::applyEvent<Aggregate>(aggregate, *e, []() {});
       }
     }
 

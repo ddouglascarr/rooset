@@ -131,3 +131,24 @@ scenarios:
     then:
       type: NEW_INITIATIVE_CREATED_EVENT
       payload: *createNewInitiativeCmdPayload
+
+  -
+    label: Should prevent double creation
+    given:
+      - *unitCreatedEvent
+      - *areaCreatedEvent
+      - *privGrantedEvtVoter4
+      - *unitPolicySetEvent
+      -
+        type: NEW_INITIATIVE_CREATED_EVENT
+        payload: *createNewInitiativeCmdPayload
+    when:
+      type: CREATE_NEW_INITIATIVE_COMMAND
+      payload: *createNewInitiativeCmdPayload
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: CONFLICT_EXCEPTION
+        message: ''
+
