@@ -189,6 +189,7 @@ TEST(unit_aggregate_delegations, set_delegation)
   SetUnitDelegationCommand cmd(*cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
+  if (result == nullptr) throw invalid_argument("command handler returned nullptr");
   auto resultDoc = result->serialize();
   
   // if docs don't match, assess the json output to make useful error report
@@ -280,6 +281,7 @@ TEST(unit_aggregate_delegations, unset_delegation)
   UnsetUnitDelegationCommand cmd(*cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
+  if (result == nullptr) throw invalid_argument("command handler returned nullptr");
   auto resultDoc = result->serialize();
   
   // if docs don't match, assess the json output to make useful error report

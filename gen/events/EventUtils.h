@@ -15,6 +15,7 @@
 #include "events/UnitCreatedEvent.h"
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
+#include "events/CompetingInitiativeCreatedEvent.h"
 #include "events/NewInitiativeCreatedEvent.h"
 #include "events/UnitDelegationSetEvent.h"
 #include "events/UnitDelegationUnsetEvent.h"
@@ -96,6 +97,13 @@ namespace rooset {
         return;
       }
 
+      if (msgType == "COMPETING_INITIATIVE_CREATED_EVENT") {
+        JsonUtils::validate(*CompetingInitiativeCreatedEvent::schema, d);
+        const CompetingInitiativeCreatedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, CompetingInitiativeCreatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
       if (msgType == "NEW_INITIATIVE_CREATED_EVENT") {
         JsonUtils::validate(*NewInitiativeCreatedEvent::schema, d);
         const NewInitiativeCreatedEvent evt(d);
@@ -126,7 +134,7 @@ namespace rooset {
 
       throw CommandEvaluationException(
           ExceptionCode::GENERAL_PROJECT_EXCEPTION,
-          "There is no ifBlock fo this Event. Run make again, and check the generateEventUtils script");
+          "There is no ifBlock for " + msgType + ". Run make again, and check the generateEventUtils script");
     }
 
   };

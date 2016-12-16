@@ -6,6 +6,8 @@
 #include "IssueAggregate.h"
 #include "commands/CreateNewInitiativeCommand.h"
 #include "events/NewInitiativeCreatedEvent.h"
+#include "commands/CreateCompetingInitiativeCommand.h"
+#include "events/CompetingInitiativeCreatedEvent.h"
 
 namespace rooset {
 
@@ -24,6 +26,7 @@ namespace rooset {
     { }
 
     unique_ptr<ProjectEvent<Document>> evaluate(const CreateNewInitiativeCommand& c);
+    unique_ptr<ProjectEvent<Document>> evaluate(const CreateCompetingInitiativeCommand& c);
 
   };
 

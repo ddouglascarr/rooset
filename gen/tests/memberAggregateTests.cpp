@@ -40,6 +40,7 @@ TEST(member_aggregate_tests, admin_member_created_event)
   CreateAdminMemberCommand cmd(*cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
+  if (result == nullptr) throw invalid_argument("command handler returned nullptr");
   auto resultDoc = result->serialize();
   
   // if docs don't match, assess the json output to make useful error report
@@ -80,6 +81,7 @@ TEST(member_aggregate_tests, update_member_password)
   UpdateMemberPasswordCommand cmd(*cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
+  if (result == nullptr) throw invalid_argument("command handler returned nullptr");
   auto resultDoc = result->serialize();
   
   // if docs don't match, assess the json output to make useful error report
@@ -164,6 +166,7 @@ TEST(member_aggregate_tests, admin_member_can_create_unit)
   CreateUnitCommand cmd(*cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
+  if (result == nullptr) throw invalid_argument("command handler returned nullptr");
   auto resultDoc = result->serialize();
   
   // if docs don't match, assess the json output to make useful error report

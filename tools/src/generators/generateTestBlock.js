@@ -63,6 +63,7 @@ module.exports = function(
   const generateExpectedEventBlock = () => {
     return `
   auto result = commandHandler.evaluate(cmd);
+  if (result == nullptr) throw invalid_argument("command handler returned nullptr");
   auto resultDoc = result->serialize();
   ${generateAssertion()}`;
   };

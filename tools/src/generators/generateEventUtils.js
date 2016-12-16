@@ -51,7 +51,7 @@ namespace rooset {
 
       throw CommandEvaluationException(
           ExceptionCode::GENERAL_PROJECT_EXCEPTION,
-          "There is no ifBlock fo this Event. Run make again, and check the generateEventUtils script");
+          "There is no ifBlock for " + msgType + ". Run make again, and check the generateEventUtils script");
     }
 
   };

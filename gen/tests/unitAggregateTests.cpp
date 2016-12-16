@@ -41,6 +41,7 @@ TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
   GrantPrivilegeCommand cmd(*cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
+  if (result == nullptr) throw invalid_argument("command handler returned nullptr");
   auto resultDoc = result->serialize();
   
   // if docs don't match, assess the json output to make useful error report
@@ -179,6 +180,7 @@ TEST(unit_aggregate_tests, member_with_member_privileges_can_grant_privileges)
   GrantPrivilegeCommand cmd(*cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
+  if (result == nullptr) throw invalid_argument("command handler returned nullptr");
   auto resultDoc = result->serialize();
   
   // if docs don't match, assess the json output to make useful error report

@@ -1,0 +1,9 @@
+---
+properties:
+  id: '$uuid'
+  requesterId: '$uuid'
+  initiativeId: '$uuid'
+  name: '$string'
+  externalReference: '$string'
+  content: '$string'
+  textSearchData: '$string'

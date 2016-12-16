@@ -1,0 +1,10 @@
+---
+properties:
+  id: '$uuid'
+  requesterId: '$uuid'
+  initiativeId: '$uuid'
+  name: '$string'
+  externalReference: '$string'
+  content: '$string'
+  textSearchData: '$string'
+commandConstructor: CREATE_COMPETING_INITIATIVE_COMMAND
