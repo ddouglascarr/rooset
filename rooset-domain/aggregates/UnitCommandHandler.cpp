@@ -1,32 +1,5 @@
 #include "UnitCommandHandler.h"
-
-void rooset::UnitCommandHandler::assertManagementRight(const UnitAggregate& unit, const uuid& memberId)
-{
-  try {
-    const auto requesterPrivileges = unit.getPrivileges().at(memberId);
-    if (!requesterPrivileges.managementRight) {
-      throw CommandEvaluationException(ExceptionCode::UNPRIVILEGED_EXCEPTION,
-        "Member does not have management rights");
-    }
-  } catch (const std::out_of_range& e) {
-    throw CommandEvaluationException(ExceptionCode::UNPRIVILEGED_EXCEPTION,
-        "Member is not privilgegd for this unit");
-  }
-}
-
-void rooset::UnitCommandHandler::assertVotingRight(const UnitAggregate & unit, const uuid & memberId)
-{
-  try {
-    const auto requesterPrivileges = unit.getPrivileges().at(memberId);
-    if (!requesterPrivileges.votingRight) {
-      throw CommandEvaluationException(ExceptionCode::UNPRIVILEGED_EXCEPTION,
-        "Member does not have voting rights");
-    }
-  } catch (const std::out_of_range& e) {
-    throw CommandEvaluationException(ExceptionCode::UNPRIVILEGED_EXCEPTION,
-        "Member is not privilgegd for this unit");
-  }
-}
+#include "PrivilegeUtils.h"
 
 uuid rooset::UnitCommandHandler::getUnitDelegation(const UnitAggregate& unit, const uuid& memberId) const
 {
@@ -52,7 +25,7 @@ uuid rooset::UnitCommandHandler::getAreaDelegation(
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const GrantPrivilegeCommand& c)
 {
   const auto unit = repository->load(c.id);
-  assertManagementRight(*unit, c.requesterId);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
   return unique_ptr<PrivilegeGrantedEvent>(new PrivilegeGrantedEvent(
     c.id, c.requesterId, c.memberId, c.pollingRight, c.votingRight,
     c.initiativeRight, c.managementRight));
@@ -61,7 +34,7 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Gr
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const CreateAreaCommand & c)
 {
   const auto unit = repository->load(c.id);
-  assertManagementRight(*unit, c.requesterId);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
 
   const auto areas = unit->getAreas();
   const bool isAreaPresent = areas.find(c.areaId) != areas.end();
@@ -78,8 +51,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Se
 {
   const auto trusterId = c.requesterId;
   const auto unit = repository->load(c.id);
-  assertVotingRight(*unit, trusterId);
-  assertVotingRight(*unit, c.trusteeId);
+  PrivilegeUtils::assertVotingRight(*unit, trusterId);
+  PrivilegeUtils::assertVotingRight(*unit, c.trusteeId);
 
   return unique_ptr<UnitDelegationSetEvent>(new UnitDelegationSetEvent(
     c.id, trusterId, c.trusteeId));
@@ -100,8 +73,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Se
   try {
     const auto unit = repository->load(c.id);
     unit->getAreas().at(c.areaId); // check area exists
-    assertVotingRight(*unit, trusterId);
-    assertVotingRight(*unit, c.trusteeId);
+    PrivilegeUtils::assertVotingRight(*unit, trusterId);
+    PrivilegeUtils::assertVotingRight(*unit, c.trusteeId);
 
     return unique_ptr<AreaDelegationSetEvent>(new AreaDelegationSetEvent(
       c.id, c.areaId, trusterId, c.trusteeId));
@@ -123,6 +96,6 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Un
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const SetUnitPolicyCommand& c)
 {
   auto unit = repository->load(c.id);
-  assertManagementRight(*unit, c.requesterId);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
   return unique_ptr<UnitPolicySetEvent>(new UnitPolicySetEvent(c));
 }

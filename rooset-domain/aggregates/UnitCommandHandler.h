@@ -29,8 +29,6 @@ namespace rooset {
   {
   private:
     unique_ptr<AggregateRepository<UnitAggregate>> repository;
-    void assertManagementRight(const UnitAggregate& unit, const uuid& memberId);
-    void assertVotingRight(const UnitAggregate& unit, const uuid& memberId);
     uuid getUnitDelegation(const UnitAggregate& unit, const uuid& memberId) const;
     uuid getAreaDelegation(
         const UnitAggregate& unit, const uuid& areaId, const uuid& trusterId) const;

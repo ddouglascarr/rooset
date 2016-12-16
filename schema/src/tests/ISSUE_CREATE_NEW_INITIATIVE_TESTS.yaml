@@ -1,0 +1,133 @@
+---
+label: Issue Aggregate - Create Initiatives
+
+mocks:
+  - &unitCreatedEvent
+    type: UNIT_CREATED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      name: Test Unit
+      description: The Test Unit
+  - &areaCreatedEvent
+    type: AREA_CREATED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      name: test area
+      description: the test area
+      externalReference: 'area.com'
+  - &unitPolicySetEvent
+    type: UNIT_POLICY_SET_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+      policyId: 464b1ebb-32c1-460c-8e9e-888888888888
+      name: Test Policy
+      description: The Test Policy
+      polling: false
+      maxAdmissionTime: 604800000
+      minAdmissionTime: 0
+      discussionTime: 604800000
+      verificationTime: 604800000
+      votingTime: 604800000
+      issueQuorumNum: 1
+      issueQuorumDen: 10
+      defeatStrength: SIMPLE
+      directMajorityNum: 1
+      directMajorityDen: 2
+      directMajorityStrict: true
+      directMajorityPositive: 1
+      directMajorityNonNegative: 1
+      noReverseBeatPath: false
+      noMultistageMajority: false
+  - &privGrantedEvtVoter4
+    type: PRIVILEGE_GRANTED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      memberId: 464b1ebb-32c1-460c-8e9e-444444444444
+      pollingRight: true
+      votingRight: true
+      initiativeRight: true
+      managementRight: true
+  - &privGrantedEvtVoter5
+    type: PRIVILEGE_GRANTED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      memberId: 464b1ebb-32c1-460c-8e9e-555555555555
+      pollingRight: true
+      votingRight: true
+      initiativeRight: false
+      managementRight: true
+
+  - &createNewInitiativeCmdPayload
+    id: 464b1ebb-32c1-460c-8e9e-666666666666
+    requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
+    initiativeId: 464b1ebb-32c1-460c-8e9e-777777777777
+    unitId: 464b1ebb-32c1-460c-8e9e-111111111111
+    areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+    policyId: 464b1ebb-32c1-460c-8e9e-888888888888
+    name: 'Test Initiative'
+    polling: false
+    externalReference: ''
+    content: 'mock content'
+    textSearchData: 'foo, bar'
+
+
+  - &notFoundErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: ITEM_NOT_FOUND_EXCEPTION
+      message: ''
+  - &unprivilegedErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: UNPRIVILEGED_EXCEPTION
+      message: ''
+
+
+scenarios:
+
+  -
+    label: Member must have initiative rights
+    given:
+      - *unitCreatedEvent
+      - *areaCreatedEvent
+      - *privGrantedEvtVoter5
+      - *unitPolicySetEvent
+    when:
+      type: CREATE_NEW_INITIATIVE_COMMAND
+      payload:
+        <<: *createNewInitiativeCmdPayload
+        requesterId: 464b1ebb-32c1-460c-8e9e-555555555555
+    then: *unprivilegedErr
+
+  -
+    label: Area Must Exsist
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *unitPolicySetEvent
+    when:
+      type: CREATE_NEW_INITIATIVE_COMMAND
+      payload: *createNewInitiativeCmdPayload
+    then: *notFoundErr
+
+  -
+    label: Create New Initiative
+    given:
+      - *unitCreatedEvent
+      - *areaCreatedEvent
+      - *privGrantedEvtVoter4
+      - *unitPolicySetEvent
+    when:
+      type: CREATE_NEW_INITIATIVE_COMMAND
+      payload: *createNewInitiativeCmdPayload
+    then:
+      type: NEW_INITIATIVE_CREATED_EVENT
+      payload: *createNewInitiativeCmdPayload

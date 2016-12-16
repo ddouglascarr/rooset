@@ -1,0 +1,14 @@
+---
+properties:
+  id: '$uuid'
+  requesterId: '$uuid'
+  initiativeId: '$uuid'
+  unitId: '$uuid'
+  areaId: '$uuid'
+  policyId: '$uuid'
+  name: '$string'
+  polling: '$bool'
+  externalReference: '$string'
+  content: '$string'
+  textSearchData: '$string'
+commandConstructor: CREATE_NEW_INITIATIVE_COMMAND

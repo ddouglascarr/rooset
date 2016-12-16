@@ -40,7 +40,7 @@ namespace rooset {
       std::cout << validator.GetInvalidSchemaKeyword() << "\n";
       rapidjson::StringBuffer sb;
       validator.GetInvalidSchemaPointer().StringifyUriFragment(sb);
-      cout << "Invalid schema: " <<  sb.GetString() << "\n";
+      cout << "Invalid schema: " <<  sb.GetString() << " in " << d["type"].GetString() << "\n";
       sb.Clear();
       validator.GetInvalidDocumentPointer().StringifyUriFragment(sb);
       cout << "Invalid document" << sb.GetString() << "\n";
