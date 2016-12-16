@@ -1,5 +1,4 @@
 #include "IssueAggregate.h"
-#include "IssueAggregate.h"
 
 rooset::IssueAggregate::IssueAggregate(const NewInitiativeCreatedEvent& e) :
     id(e.id), unitId(e.unitId), areaId(e.areaId)
