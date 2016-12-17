@@ -1,5 +1,6 @@
 #include "UnitCommandHandler.h"
 #include "PrivilegeUtils.h"
+#include "CommandHandlerUtils.h"
 
 uuid rooset::UnitCommandHandler::getUnitDelegation(const UnitAggregate& unit, const uuid& memberId) const
 {
@@ -35,13 +36,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Cr
 {
   const auto unit = repository->load(c.id);
   PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
-
-  const auto areas = unit->getAreas();
-  const bool isAreaPresent = areas.find(c.areaId) != areas.end();
-  if (isAreaPresent) {
-    throw CommandEvaluationException(ExceptionCode::CONFLICT_EXCEPTION,
-      "Area already exists");
-  }
+  CommandHandlerUtils::assertMapExcludes<decltype(unit->getAreas()), uuid>(
+      unit->getAreas(), c.areaId, "Area already exists");
   
   return unique_ptr<AreaCreatedEvent>(new AreaCreatedEvent(
     c.id, c.areaId, c.requesterId, c.name, c.description, c.externalReference));
@@ -70,18 +66,14 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Un
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const SetAreaDelegationCommand & c)
 {
   const auto trusterId = c.requesterId;
-  try {
-    const auto unit = repository->load(c.id);
-    unit->getAreas().at(c.areaId); // check area exists
-    PrivilegeUtils::assertVotingRight(*unit, trusterId);
-    PrivilegeUtils::assertVotingRight(*unit, c.trusteeId);
+  const auto unit = repository->load(c.id);
+  CommandHandlerUtils::assertMapContains<decltype(unit->getAreas()), uuid>(
+      unit->getAreas(), c.areaId, "Area does not exists");
+  PrivilegeUtils::assertVotingRight(*unit, trusterId);
+  PrivilegeUtils::assertVotingRight(*unit, c.trusteeId);
 
-    return unique_ptr<AreaDelegationSetEvent>(new AreaDelegationSetEvent(
+  return unique_ptr<AreaDelegationSetEvent>(new AreaDelegationSetEvent(
       c.id, c.areaId, trusterId, c.trusteeId));
-  } catch (const std::out_of_range& e) {
-    throw CommandEvaluationException(ExceptionCode::ITEM_NOT_FOUND_EXCEPTION,
-      "Area does not exist");
-  }
 }
 
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const UnsetAreaDelegationCommand & c)
