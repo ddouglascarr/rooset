@@ -47,6 +47,7 @@ scenarios:
           votingRight: true
           initiativeRight: true
           managementRight: false
+          weight: 1
     when:
       type: CREATE_AREA_COMMAND
       payload:
@@ -83,6 +84,7 @@ scenarios:
           votingRight: true
           initiativeRight: true
           managementRight: true
+          weight: 1
     when:
       type: CREATE_AREA_COMMAND
       payload:
@@ -122,6 +124,7 @@ scenarios:
           votingRight: true
           initiativeRight: true
           managementRight: true
+          weight: 1
       -
         type: AREA_CREATED_EVENT
         payload:

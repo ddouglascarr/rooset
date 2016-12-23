@@ -27,9 +27,11 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Gr
 {
   const auto unit = repository->load(c.id);
   PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
-  return unique_ptr<PrivilegeGrantedEvent>(new PrivilegeGrantedEvent(
-    c.id, c.requesterId, c.memberId, c.pollingRight, c.votingRight,
-    c.initiativeRight, c.managementRight));
+  if (c.weight != 1) {
+    throw CommandEvaluationException(ExceptionCode::INVALID_INPUT_EXCEPTION,
+        "Only Privilege Weights of 1 are currently supported. The weight option is there for future implentation");
+  }
+  return make_unique<PrivilegeGrantedEvent>(c);
 }
 
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const CreateAreaCommand & c)

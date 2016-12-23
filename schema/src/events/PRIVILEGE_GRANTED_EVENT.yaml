@@ -1,0 +1,11 @@
+---
+properties:
+  id: '$uuid'
+  requesterId: '$uuid'
+  memberId: '$uuid'
+  pollingRight: '$bool'
+  votingRight: '$bool'
+  initiativeRight: '$bool'
+  managementRight: '$bool'
+  weight: '$int'
+commandConstructor: GRANT_PRIVILEGE_COMMAND

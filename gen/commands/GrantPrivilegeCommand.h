@@ -37,6 +37,7 @@ namespace rooset {
         const bool votingRight;
         const bool initiativeRight;
         const bool managementRight;
+        const int weight;
 
     
         GrantPrivilegeCommand(
@@ -46,14 +47,16 @@ namespace rooset {
             bool pollingRight,
             bool votingRight,
             bool initiativeRight,
-            bool managementRight) :
+            bool managementRight,
+            int weight) :
             id(id) ,
             requesterId(requesterId) ,
             memberId(memberId) ,
             pollingRight(pollingRight),
             votingRight(votingRight),
             initiativeRight(initiativeRight),
-            managementRight(managementRight)
+            managementRight(managementRight),
+            weight(weight) 
         {}
   
 
@@ -72,7 +75,8 @@ namespace rooset {
             pollingRight(d["payload"]["pollingRight"].GetBool()),
             votingRight(d["payload"]["votingRight"].GetBool()),
             initiativeRight(d["payload"]["initiativeRight"].GetBool()),
-            managementRight(d["payload"]["managementRight"].GetBool())
+            managementRight(d["payload"]["managementRight"].GetBool()),
+            weight(d["payload"]["weight"].GetInt())
         {}
   
 
@@ -120,6 +124,10 @@ namespace rooset {
           Value managementRight_value;
           managementRight_value.SetBool(managementRight);
           payload.AddMember("managementRight", managementRight_value, d->GetAllocator());
+
+          Value weight_value;
+          weight_value.SetInt(weight);
+          payload.AddMember("weight", weight_value, d->GetAllocator());     
 
       d->AddMember("payload", payload, d->GetAllocator());
 

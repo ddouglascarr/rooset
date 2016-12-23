@@ -118,8 +118,8 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
   vector<unique_ptr<Document>> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-444444444444\",\"pollingRight\":true,\"votingRight\":false,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-444444444444\",\"pollingRight\":true,\"votingRight\":false,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"UNPRIVILEGED_EXCEPTION\",\"message\":\"\"}}");
@@ -168,8 +168,8 @@ TEST(unit_aggregate_delegations, set_delegation)
   vector<unique_ptr<Document>> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}");
@@ -211,7 +211,7 @@ TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
   vector<unique_ptr<Document>> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
   auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"ITEM_NOT_FOUND_EXCEPTION\",\"message\":\"\"}}");
@@ -260,7 +260,7 @@ TEST(unit_aggregate_delegations, unset_delegation)
   vector<unique_ptr<Document>> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
   givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
@@ -303,7 +303,7 @@ TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
   vector<unique_ptr<Document>> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
   givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}"));
   givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_UNSET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\"}}"));
   CommandHandlerTestImpl commandHandler(givenEvents); 

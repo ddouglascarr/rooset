@@ -56,6 +56,7 @@ mocks:
       votingRight: true
       initiativeRight: true
       managementRight: true
+      weight: 1
 
   - &privGrantedEvtVoter5
     type: PRIVILEGE_GRANTED_EVENT
@@ -67,6 +68,7 @@ mocks:
       votingRight: true
       initiativeRight: false
       managementRight: true
+      weight: 1
 
   - &createNewInitiativeCmdPayload
     id: 464b1ebb-32c1-460c-8e9e-666666666666

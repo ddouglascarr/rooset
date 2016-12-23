@@ -11,7 +11,6 @@
 #include "events/MemberCreatedEvent.h"
 #include "events/MemberDetailsUpdatedEvent.h"
 #include "events/MemberPasswordUpdatedEvent.h"
-#include "events/PrivilegeGrantedEvent.h"
 #include "events/UnitCreatedEvent.h"
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
@@ -27,6 +26,7 @@
 #include "events/IssueVerificationPhaseCompletedEvent.h"
 #include "events/IssueVotingPhaseCompletedEvent.h"
 #include "events/NewInitiativeCreatedEvent.h"
+#include "events/PrivilegeGrantedEvent.h"
 #include "events/UnitDelegationSetEvent.h"
 #include "events/UnitDelegationUnsetEvent.h"
 #include "events/UnitPolicySetEvent.h"
@@ -76,13 +76,6 @@ namespace rooset {
         JsonUtils::validate(*MemberPasswordUpdatedEvent::schema, d);
         const MemberPasswordUpdatedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, MemberPasswordUpdatedEvent>(aggregate, evt, onMethodMissing);
-        return;
-      }
-
-      if (msgType == "PRIVILEGE_GRANTED_EVENT") {
-        JsonUtils::validate(*PrivilegeGrantedEvent::schema, d);
-        const PrivilegeGrantedEvent evt(d);
-        MessageUtils::applyEvent<Aggregate, PrivilegeGrantedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 
@@ -188,6 +181,13 @@ namespace rooset {
         JsonUtils::validate(*NewInitiativeCreatedEvent::schema, d);
         const NewInitiativeCreatedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, NewInitiativeCreatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "PRIVILEGE_GRANTED_EVENT") {
+        JsonUtils::validate(*PrivilegeGrantedEvent::schema, d);
+        const PrivilegeGrantedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, PrivilegeGrantedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 

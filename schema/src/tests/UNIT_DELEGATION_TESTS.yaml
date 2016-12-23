@@ -58,6 +58,7 @@ scenarios:
           votingRight: true
           initiativeRight: true
           managementRight: true
+          weight: 1
       -
         type: PRIVILEGE_GRANTED_EVENT
         payload:
@@ -68,6 +69,7 @@ scenarios:
           votingRight: false
           initiativeRight: true
           managementRight: true
+          weight: 1
     when:
       type: SET_UNIT_DELEGATION_COMMAND
       payload:
@@ -101,6 +103,7 @@ scenarios:
           votingRight: true
           initiativeRight: true
           managementRight: true
+          weight: 1
       -
         type: PRIVILEGE_GRANTED_EVENT
         payload:
@@ -111,6 +114,7 @@ scenarios:
           votingRight: true
           initiativeRight: true
           managementRight: true
+          weight: 1
     when:
       type: SET_UNIT_DELEGATION_COMMAND
       payload:
@@ -138,6 +142,7 @@ scenarios:
           votingRight: true
           initiativeRight: true
           managementRight: true
+          weight: 1
     when:
       type: UNSET_UNIT_DELEGATION_COMMAND
       payload:
@@ -170,6 +175,7 @@ scenarios:
           votingRight: true
           initiativeRight: true
           managementRight: true
+          weight: 1
       -
         type: UNIT_DELEGATION_SET_EVENT
         payload:
@@ -207,6 +213,7 @@ scenarios:
           votingRight: true
           initiativeRight: true
           managementRight: true
+          weight: 1
       -
         type: UNIT_DELEGATION_SET_EVENT
         payload:

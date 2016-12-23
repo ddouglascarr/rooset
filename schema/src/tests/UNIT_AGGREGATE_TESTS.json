@@ -23,7 +23,8 @@
           "pollingRight": true,
           "votingRight": true,
           "initiativeRight": true,
-          "managementRight": true
+          "managementRight": true,
+          "weight": 1
         }
       },
       "then": {
@@ -35,7 +36,42 @@
           "pollingRight": true,
           "votingRight": true,
           "initiativeRight": true,
-          "managementRight": true
+          "managementRight": true,
+          "weight": 1
+        }
+      }
+    }, {
+      "label": "Privilege weight restricted to 1",
+      "given": [
+        {
+        "type": "UNIT_CREATED_EVENT",
+          "payload": {
+            "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6bec",
+            "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+            "name": "Test Unit",
+            "description": "The Test Unit"
+          }
+        }
+      ],
+      "when": {
+        "type": "GRANT_PRIVILEGE_COMMAND",
+        "payload": {
+          "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6beb",
+          "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+          "memberId": "f00b6b62-72d1-4c5e-974d-8a678f2c252c",
+          "pollingRight": true,
+          "votingRight": true,
+          "initiativeRight": true,
+          "managementRight": true,
+          "weight": 2
+        }
+      },
+      "then": {
+        "type": "COMMAND_EVALUATION_EXCEPTION",
+        "error": true,
+        "payload": {
+          "code": "INVALID_INPUT_EXCEPTION",
+          "message": ""
         }
       }
     }, {
@@ -60,7 +96,8 @@
           "pollingRight": true,
           "votingRight": true,
           "initiativeRight": true,
-          "managementRight": true
+          "managementRight": true,
+          "weight": 1
         }
       },
       "then": {
@@ -91,7 +128,8 @@
             "pollingRight": true,
             "votingRight": true,
             "initiativeRight": true,
-            "managementRight": false
+            "managementRight": false,
+            "weight": 1
           }
         }
       ],
@@ -104,7 +142,8 @@
           "pollingRight": true,
           "votingRight": true,
           "initiativeRight": true,
-          "managementRight": false
+          "managementRight": false,
+          "weight": 1
         }
       },
       "then": {
@@ -135,7 +174,8 @@
             "pollingRight": true,
             "votingRight": true,
             "initiativeRight": true,
-            "managementRight": true
+            "managementRight": true,
+            "weight": 1
           }
         }
       ],
@@ -148,7 +188,8 @@
           "pollingRight": true,
           "votingRight": true,
           "initiativeRight": true,
-          "managementRight": false
+          "managementRight": false,
+          "weight": 1
         }
       },
       "then": {
@@ -160,8 +201,8 @@
           "pollingRight": true,
           "votingRight": true,
           "initiativeRight": true,
-          "managementRight": false
-
+          "managementRight": false,
+          "weight": 1
         }
       }
     }

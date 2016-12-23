@@ -28,6 +28,7 @@ mocks:
       votingRight: true
       initiativeRight: true
       managementRight: true
+      weight: 1
   - &privGrantedEvtVoter5
     type: PRIVILEGE_GRANTED_EVENT
     payload:
@@ -38,6 +39,7 @@ mocks:
       votingRight: true
       initiativeRight: true
       managementRight: true
+      weight: 1
   - &delegationSetEvent
     type: AREA_DELEGATION_SET_EVENT
     payload:
