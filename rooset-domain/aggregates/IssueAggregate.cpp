@@ -10,3 +10,13 @@ void rooset::IssueAggregate::handleEvent(const CompetingInitiativeCreatedEvent &
 {
   initiatives[e.initiativeId] = Initiative{ e.name, e.requesterId };
 }
+
+void rooset::IssueAggregate::handleEvent(const IssueDelegationSetEvent& e)
+{
+  delegations[e.trusterId] = e.trusteeId;
+}
+
+void rooset::IssueAggregate::handleEvent(const IssueDelegationUnsetEvent& e)
+{
+  delegations.erase(e.trusterId);
+}

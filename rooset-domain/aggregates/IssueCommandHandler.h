@@ -8,6 +8,10 @@
 #include "events/NewInitiativeCreatedEvent.h"
 #include "commands/CreateCompetingInitiativeCommand.h"
 #include "events/CompetingInitiativeCreatedEvent.h"
+#include "commands/SetIssueDelegationCommand.h"
+#include "events/IssueDelegationSetEvent.h"
+#include "commands/UnsetIssueDelegationCommand.h"
+#include "events/IssueDelegationUnsetEvent.h"
 
 namespace rooset {
 
@@ -27,6 +31,8 @@ namespace rooset {
 
     unique_ptr<ProjectEvent<Document>> evaluate(const CreateNewInitiativeCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const CreateCompetingInitiativeCommand& c);
+    unique_ptr<ProjectEvent<Document>> evaluate(const SetIssueDelegationCommand& c);
+    unique_ptr<ProjectEvent<Document>> evaluate(const UnsetIssueDelegationCommand& c);
 
   };
 

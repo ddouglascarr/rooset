@@ -16,6 +16,8 @@
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
 #include "events/CompetingInitiativeCreatedEvent.h"
+#include "events/IssueDelegationSetEvent.h"
+#include "events/IssueDelegationUnsetEvent.h"
 #include "events/NewInitiativeCreatedEvent.h"
 #include "events/UnitDelegationSetEvent.h"
 #include "events/UnitDelegationUnsetEvent.h"
@@ -101,6 +103,20 @@ namespace rooset {
         JsonUtils::validate(*CompetingInitiativeCreatedEvent::schema, d);
         const CompetingInitiativeCreatedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, CompetingInitiativeCreatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "ISSUE_DELEGATION_SET_EVENT") {
+        JsonUtils::validate(*IssueDelegationSetEvent::schema, d);
+        const IssueDelegationSetEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, IssueDelegationSetEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "ISSUE_DELEGATION_UNSET_EVENT") {
+        JsonUtils::validate(*IssueDelegationUnsetEvent::schema, d);
+        const IssueDelegationUnsetEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, IssueDelegationUnsetEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 
