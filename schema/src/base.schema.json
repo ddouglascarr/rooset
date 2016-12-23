@@ -16,6 +16,10 @@
       "type":"string",
       "pattern":"[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"
     },
+    "uuidArray": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/uuid" }
+    },
     "string": {
       "type": "string"
     },
@@ -31,7 +35,8 @@
         "ITEM_NOT_FOUND_EXCEPTION",
         "UNAUTHORIZED_EXCEPTION",
         "UNPRIVILEGED_EXCEPTION",
-        "INVALID_INPUT_EXCEPTION"
+        "INVALID_INPUT_EXCEPTION",
+        "ISSUE_STATE_EXCEPTION"
       ]
     },
     "defeatStrength": {
@@ -39,6 +44,24 @@
       "enum": [
         "TUPLE",
         "SIMPLE"
+      ]
+    },
+    "issueState": {
+      "type": "string",
+      "enum": [
+        "ADMISSION",
+        "DISCUSSION",
+        "VERIFICATION",
+        "VOTING",
+        "CANCELED_BY_ADMIN",
+        "CANCELED_REVOKED_BEFORE_ACCEPTED",
+        "CANCELED_ISSUE_NOT_ACCEPTED",
+        "CANCELED_AFTER_REVOCATION_DURING_DISCUSSION",
+        "CANCELED_AFTER_REVOCATION_DURING_VERIFICATION",
+        "CANCELED_NO_INITIATIVE_ADMITTED",
+        "FINISHED_TABULATING_RESULTS",
+        "FINISHED_WITHOUT_WINNER",
+        "FINISHED_WITH_WINNER"
       ]
     },
     "int": {

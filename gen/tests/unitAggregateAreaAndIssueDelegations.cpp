@@ -13,10 +13,10 @@
 using namespace std;
 using namespace rooset;
 
-namespace rooset_unit_aggregate_area_delegations_tests {
+namespace rooset_unit_aggregate_area_and_issue_delegations_tests {
 
 
-TEST(unit_aggregate_area_delegations, area_must_exist)
+TEST(unit_aggregate_area_and_issue_delegations, area_must_exist)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -44,7 +44,7 @@ TEST(unit_aggregate_area_delegations, area_must_exist)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -66,7 +66,7 @@ TEST(unit_aggregate_area_delegations, area_must_exist)
 }
 
 
-TEST(unit_aggregate_area_delegations, truster_must_have_voting_right)
+TEST(unit_aggregate_area_and_issue_delegations, truster_must_have_voting_right)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -94,7 +94,7 @@ TEST(unit_aggregate_area_delegations, truster_must_have_voting_right)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -116,7 +116,7 @@ TEST(unit_aggregate_area_delegations, truster_must_have_voting_right)
 }
 
 
-TEST(unit_aggregate_area_delegations, trustee_must_have_voting_right)
+TEST(unit_aggregate_area_and_issue_delegations, trustee_must_have_voting_right)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -144,7 +144,7 @@ TEST(unit_aggregate_area_delegations, trustee_must_have_voting_right)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -166,7 +166,7 @@ TEST(unit_aggregate_area_delegations, trustee_must_have_voting_right)
 }
 
 
-TEST(unit_aggregate_area_delegations, set_delegation)
+TEST(unit_aggregate_area_and_issue_delegations, set_delegation)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -210,7 +210,7 @@ TEST(unit_aggregate_area_delegations, set_delegation)
 }
 
 
-TEST(unit_aggregate_area_delegations, unset_delegation_delegation_must_exist)
+TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_delegation_must_exist)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -239,7 +239,7 @@ TEST(unit_aggregate_area_delegations, unset_delegation_delegation_must_exist)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -261,7 +261,7 @@ TEST(unit_aggregate_area_delegations, unset_delegation_delegation_must_exist)
 }
 
 
-TEST(unit_aggregate_area_delegations, unset_delegation)
+TEST(unit_aggregate_area_and_issue_delegations, unset_delegation)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -306,7 +306,7 @@ TEST(unit_aggregate_area_delegations, unset_delegation)
 }
 
 
-TEST(unit_aggregate_area_delegations, unset_delegation_should_remove_delegation)
+TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_should_remove_delegation)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -337,7 +337,7 @@ TEST(unit_aggregate_area_delegations, unset_delegation_should_remove_delegation)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -359,7 +359,7 @@ TEST(unit_aggregate_area_delegations, unset_delegation_should_remove_delegation)
 }
 
 
-TEST(unit_aggregate_area_delegations, set_issue_delegation_should_require_voting_privilege_of_trustee)
+TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_require_voting_privilege_of_trustee)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -389,7 +389,7 @@ TEST(unit_aggregate_area_delegations, set_issue_delegation_should_require_voting
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -411,7 +411,7 @@ TEST(unit_aggregate_area_delegations, set_issue_delegation_should_require_voting
 }
 
 
-TEST(unit_aggregate_area_delegations, set_issue_delegation_should_require_voting_privilege_of_truster)
+TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_require_voting_privilege_of_truster)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -440,7 +440,7 @@ TEST(unit_aggregate_area_delegations, set_issue_delegation_should_require_voting
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -462,7 +462,7 @@ TEST(unit_aggregate_area_delegations, set_issue_delegation_should_require_voting
 }
 
 
-TEST(unit_aggregate_area_delegations, set_issue_delegation)
+TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -507,7 +507,7 @@ TEST(unit_aggregate_area_delegations, set_issue_delegation)
 }
 
 
-TEST(unit_aggregate_area_delegations, unset_issue_delegation_should_fail_if_no_delegation_set)
+TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fail_if_no_delegation_set)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -537,7 +537,7 @@ TEST(unit_aggregate_area_delegations, unset_issue_delegation_should_fail_if_no_d
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -559,7 +559,7 @@ TEST(unit_aggregate_area_delegations, unset_issue_delegation_should_fail_if_no_d
 }
 
 
-TEST(unit_aggregate_area_delegations, unset_issue_delegation)
+TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -605,7 +605,7 @@ TEST(unit_aggregate_area_delegations, unset_issue_delegation)
 }
 
 
-TEST(unit_aggregate_area_delegations, unset_issue_delegation_should_fail_on_duplicate)
+TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fail_on_duplicate)
 {
   
   vector<unique_ptr<Document>> givenEvents;
@@ -637,7 +637,114 @@ TEST(unit_aggregate_area_delegations, unset_issue_delegation_should_fail_on_dupl
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
+  } catch(CommandEvaluationException e) {
+    auto resultDoc = e.serialize();
+    
+  // if docs don't match, assess the json output to make useful error report
+  auto expectedDoc = expected.serialize();
+  
+  // ignore the message from the test
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
+      
+  bool isPass = *resultDoc == *expectedDoc;
+  if (isPass) {
+    EXPECT_EQ(*resultDoc, *expectedDoc);
+  }  else {
+    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
+        *JsonUtils::serialize(*expectedDoc));
+  };
+  }
+}
+
+
+TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_fail_if_issue_not_open)
+{
+  
+  vector<unique_ptr<Document>> givenEvents;
+  
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-444444444444\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-555555555555\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"AREA_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"areaId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"name\":\"test area\",\"description\":\"the test area\",\"externalReference\":\"area.com\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"NEW_INITIATIVE_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-666666666666\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-444444444444\",\"initiativeId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"unitId\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"areaId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"policyId\":\"464b1ebb-32c1-460c-8e9e-888888888888\",\"name\":\"Test Initiative\",\"polling\":false,\"externalReference\":\"\",\"content\":\"mock content\",\"textSearchData\":\"foo, bar\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"ISSUE_ADMISSION_QUORUM_FAILED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-666666666666\"}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
+  
+  auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"ISSUE_STATE_EXCEPTION\",\"message\":\"\"}}");
+  try {
+  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("expected schema invalid");
+  }
+  CommandEvaluationException expected(*expected_doc);
+  
+  auto cmd_doc = JsonUtils::parse("{\"type\":\"SET_ISSUE_DELEGATION_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-666666666666\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-555555555555\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-444444444444\"}}");
+  try {
+  JsonUtils::validate(*SetIssueDelegationCommand::schema, *cmd_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("cmd schema invalid");
+  }
+  SetIssueDelegationCommand cmd(*cmd_doc);
+  
+  try {
+    commandHandler.evaluate(cmd);
+    throw invalid_argument("An exception was expected");
+  } catch(CommandEvaluationException e) {
+    auto resultDoc = e.serialize();
+    
+  // if docs don't match, assess the json output to make useful error report
+  auto expectedDoc = expected.serialize();
+  
+  // ignore the message from the test
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
+      
+  bool isPass = *resultDoc == *expectedDoc;
+  if (isPass) {
+    EXPECT_EQ(*resultDoc, *expectedDoc);
+  }  else {
+    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
+        *JsonUtils::serialize(*expectedDoc));
+  };
+  }
+}
+
+
+TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fail_if_issue_not_open)
+{
+  
+  vector<unique_ptr<Document>> givenEvents;
+  
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-444444444444\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-555555555555\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"AREA_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"areaId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"name\":\"test area\",\"description\":\"the test area\",\"externalReference\":\"area.com\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"NEW_INITIATIVE_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-666666666666\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-444444444444\",\"initiativeId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"unitId\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"areaId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"policyId\":\"464b1ebb-32c1-460c-8e9e-888888888888\",\"name\":\"Test Initiative\",\"polling\":false,\"externalReference\":\"\",\"content\":\"mock content\",\"textSearchData\":\"foo, bar\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"ISSUE_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-666666666666\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-555555555555\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-444444444444\"}}"));
+  givenEvents.push_back(JsonUtils::parse("{\"type\":\"ISSUE_ADMISSION_QUORUM_FAILED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-666666666666\"}}"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
+  
+  auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"ISSUE_STATE_EXCEPTION\",\"message\":\"\"}}");
+  try {
+  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("expected schema invalid");
+  }
+  CommandEvaluationException expected(*expected_doc);
+  
+  auto cmd_doc = JsonUtils::parse("{\"type\":\"UNSET_ISSUE_DELEGATION_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-666666666666\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-555555555555\"}}");
+  try {
+  JsonUtils::validate(*UnsetIssueDelegationCommand::schema, *cmd_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("cmd schema invalid");
+  }
+  UnsetIssueDelegationCommand cmd(*cmd_doc);
+  
+  try {
+    commandHandler.evaluate(cmd);
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     

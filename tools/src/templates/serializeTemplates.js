@@ -54,6 +54,23 @@ module.exports = {
           payload.AddMember("${v}", ${v_value}, d->GetAllocator());    `;
   },
 
+  uuidArray: (v) => {
+    const v_value = `${v}_value`;
+    const v_str = `${v}_str`;
+    return `
+          auto ${v_value} = JsonUtils::serializeArray<uuid>(
+              ${v},
+              [&](const uuid& id) {
+                Value v;
+                auto str = idTools->serialize(id);
+                v.SetString(str.c_str(), str.size(), d->GetAllocator());
+                return v;
+              },
+              d->GetAllocator());
+          payload.AddMember("${v}", ${v_value}, d->GetAllocator());
+    `;
+  },
+
   date: (v) => {
     const v_value = `${v}_value`;
     return `

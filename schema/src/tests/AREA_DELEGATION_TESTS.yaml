@@ -1,5 +1,5 @@
 ---
-label: UnitAggregate - Area Delegations
+label: UnitAggregate - Area and Issue Delegations
 
 mocks:
   - &unitCreatedEvent
@@ -99,6 +99,11 @@ mocks:
       id: 464b1ebb-32c1-460c-8e9e-666666666666
       trusterId: 464b1ebb-32c1-460c-8e9e-555555555555
 
+  - &issueQuorumFailedEvt
+    type: ISSUE_ADMISSION_QUORUM_FAILED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+
   - &notFoundErr
     type: COMMAND_EVALUATION_EXCEPTION
     error: true
@@ -110,6 +115,12 @@ mocks:
     error: true
     payload:
       code: UNPRIVILEGED_EXCEPTION
+      message: ''
+  - &issueStateErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: ISSUE_STATE_EXCEPTION
       message: ''
 
 scenarios:
@@ -276,4 +287,30 @@ scenarios:
     when: *unsetIssueDelegationCmd
     then: *notFoundErr
 
+  -
+    label: set issue delegation should fail if issue not open
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+      - *issueQuorumFailedEvt
+    when:
+      type: SET_ISSUE_DELEGATION_COMMAND
+      payload: *setIssueDelegationCmdPayload
+    then: *issueStateErr
+
+  -
+    label: unset issue delegation should fail if issue not open
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+      - *issueDelegationSetEvt
+      - *issueQuorumFailedEvt
+    when: *unsetIssueDelegationCmd
+    then: *issueStateErr
 

@@ -1,0 +1,4 @@
+---
+properties:
+  id: '$uuid'
+commandSchema: ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND

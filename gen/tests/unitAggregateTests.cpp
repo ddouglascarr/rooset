@@ -83,7 +83,7 @@ TEST(unit_aggregate_tests, unprivileged_member_cannot_create_unit)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -132,7 +132,7 @@ TEST(unit_aggregate_tests, member_without_member_privileges_cannot_grant_privile
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     

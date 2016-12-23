@@ -42,7 +42,7 @@ TEST(unit_aggregate_tests_area, unprivileged_member_cannot_create_area)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -91,7 +91,7 @@ TEST(unit_aggregate_tests_area, member_without_management_rights_cannot_create_a
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -183,7 +183,7 @@ TEST(unit_aggregate_tests_area, area_must_not_already_exist)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     

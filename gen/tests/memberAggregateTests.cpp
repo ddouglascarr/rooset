@@ -123,7 +123,7 @@ TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_pa
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -208,7 +208,7 @@ TEST(member_aggregate_tests, non_admin_member_can_not_create_unit)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     

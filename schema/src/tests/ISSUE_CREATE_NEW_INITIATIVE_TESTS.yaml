@@ -95,6 +95,12 @@ mocks:
     content: 'mock competing content'
     textSearchData: 'bing, bong'
 
+  - &issueVerificationPhaseCompletedEvt
+    type: ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+      passingInitiatives:
+        - 464b1ebb-32c1-460c-8e9e-777777777777
 
   - &notFoundErr
     type: COMMAND_EVALUATION_EXCEPTION
@@ -113,6 +119,12 @@ mocks:
     error: true
     payload:
       code: CONFLICT_EXCEPTION
+      message: ''
+  - &issueStateErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: ISSUE_STATE_EXCEPTION
       message: ''
 
 
@@ -231,3 +243,20 @@ scenarios:
       type: CREATE_COMPETING_INITIATIVE_COMMAND
       payload: *createCompetingInitiativeCmdPayload
     then: *conflictErr
+
+  -
+    label: Can not create competing initiatives after VERIFICATION phase
+    given:
+      - *unitCreatedEvent
+      - *areaCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter9
+      - *unitPolicySetEvent
+      -
+        type: NEW_INITIATIVE_CREATED_EVENT
+        payload: *createNewInitiativeCmdPayload
+      - *issueVerificationPhaseCompletedEvt
+    when:
+      type: CREATE_COMPETING_INITIATIVE_COMMAND
+      payload: *createCompetingInitiativeCmdPayload
+    then: *issueStateErr

@@ -27,6 +27,11 @@ module.exports = {
                 d["payload"]["${v}"].GetString(),
                 d["payload"]["${v}"].GetStringLength())))`,
 
+  uuidArray: (v) => `
+            ${v}(JsonUtils::parseArray<uuid>(
+                d["payload"]["${v}"],
+                [&](const rapidjson::Value& v) { return idTools->parse(string(v.GetString(), v.GetStringLength())); }))`,
+
   date: (v) => `
             ${v}(boost::posix_time::from_time_t(
                 time_t(d["payload"]["${v}"].GetDouble())))`,

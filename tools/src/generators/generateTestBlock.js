@@ -72,7 +72,7 @@ module.exports = function(
     return `
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     ${generateAssertion()}

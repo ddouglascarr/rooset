@@ -42,7 +42,7 @@ TEST(unit_aggregate_delegations, member_must_be_privileged)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -90,7 +90,7 @@ TEST(unit_aggregate_delegations, member_must_have_voting_right)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -140,7 +140,7 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -232,7 +232,7 @@ TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     
@@ -326,7 +326,7 @@ TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     

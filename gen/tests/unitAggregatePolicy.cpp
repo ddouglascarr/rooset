@@ -83,7 +83,7 @@ TEST(unit_aggregate_policy, requester_must_have_managment_rights)
   
   try {
     commandHandler.evaluate(cmd);
-    throw string("An exception was expected");
+    throw invalid_argument("An exception was expected");
   } catch(CommandEvaluationException e) {
     auto resultDoc = e.serialize();
     

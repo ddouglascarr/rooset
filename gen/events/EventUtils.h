@@ -16,8 +16,16 @@
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
 #include "events/CompetingInitiativeCreatedEvent.h"
+#include "events/InitiativeSupportGivenEvent.h"
+#include "events/InitiativeSupportRevokedEvent.h"
+#include "events/IssueAdmissionQuorumContinuedEvent.h"
+#include "events/IssueAdmissionQuorumFailedEvent.h"
+#include "events/IssueAdmissionQuorumPassedEvent.h"
 #include "events/IssueDelegationSetEvent.h"
 #include "events/IssueDelegationUnsetEvent.h"
+#include "events/IssueDiscussionPhaseCompletedEvent.h"
+#include "events/IssueVerificationPhaseCompletedEvent.h"
+#include "events/IssueVotingPhaseCompletedEvent.h"
 #include "events/NewInitiativeCreatedEvent.h"
 #include "events/UnitDelegationSetEvent.h"
 #include "events/UnitDelegationUnsetEvent.h"
@@ -106,6 +114,41 @@ namespace rooset {
         return;
       }
 
+      if (msgType == "INITIATIVE_SUPPORT_GIVEN_EVENT") {
+        JsonUtils::validate(*InitiativeSupportGivenEvent::schema, d);
+        const InitiativeSupportGivenEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, InitiativeSupportGivenEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "INITIATIVE_SUPPORT_REVOKED_EVENT") {
+        JsonUtils::validate(*InitiativeSupportRevokedEvent::schema, d);
+        const InitiativeSupportRevokedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, InitiativeSupportRevokedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "ISSUE_ADMISSION_QUORUM_CONTINUED_EVENT") {
+        JsonUtils::validate(*IssueAdmissionQuorumContinuedEvent::schema, d);
+        const IssueAdmissionQuorumContinuedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, IssueAdmissionQuorumContinuedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "ISSUE_ADMISSION_QUORUM_FAILED_EVENT") {
+        JsonUtils::validate(*IssueAdmissionQuorumFailedEvent::schema, d);
+        const IssueAdmissionQuorumFailedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, IssueAdmissionQuorumFailedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "ISSUE_ADMISSION_QUORUM_PASSED_EVENT") {
+        JsonUtils::validate(*IssueAdmissionQuorumPassedEvent::schema, d);
+        const IssueAdmissionQuorumPassedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, IssueAdmissionQuorumPassedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
       if (msgType == "ISSUE_DELEGATION_SET_EVENT") {
         JsonUtils::validate(*IssueDelegationSetEvent::schema, d);
         const IssueDelegationSetEvent evt(d);
@@ -117,6 +160,27 @@ namespace rooset {
         JsonUtils::validate(*IssueDelegationUnsetEvent::schema, d);
         const IssueDelegationUnsetEvent evt(d);
         MessageUtils::applyEvent<Aggregate, IssueDelegationUnsetEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "ISSUE_DISCUSSION_PHASE_COMPLETED_EVENT") {
+        JsonUtils::validate(*IssueDiscussionPhaseCompletedEvent::schema, d);
+        const IssueDiscussionPhaseCompletedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, IssueDiscussionPhaseCompletedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT") {
+        JsonUtils::validate(*IssueVerificationPhaseCompletedEvent::schema, d);
+        const IssueVerificationPhaseCompletedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, IssueVerificationPhaseCompletedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "ISSUE_VOTING_PHASE_COMPLETED_EVENT") {
+        JsonUtils::validate(*IssueVotingPhaseCompletedEvent::schema, d);
+        const IssueVotingPhaseCompletedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, IssueVotingPhaseCompletedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 

@@ -1,0 +1,4 @@
+---
+  properties:
+    id: '$uuid'
+  commandConstructor: COMPLETE_ISSUE_DISCUSSION_PHASE_COMMAND

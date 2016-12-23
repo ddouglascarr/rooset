@@ -12,6 +12,7 @@ if (e == "ITEM_NOT_FOUND_EXCEPTION") return ExceptionCode::ITEM_NOT_FOUND_EXCEPT
 if (e == "UNAUTHORIZED_EXCEPTION") return ExceptionCode::UNAUTHORIZED_EXCEPTION;
 if (e == "UNPRIVILEGED_EXCEPTION") return ExceptionCode::UNPRIVILEGED_EXCEPTION;
 if (e == "INVALID_INPUT_EXCEPTION") return ExceptionCode::INVALID_INPUT_EXCEPTION;
+if (e == "ISSUE_STATE_EXCEPTION") return ExceptionCode::ISSUE_STATE_EXCEPTION;
     throw std::invalid_argument("unknown enum");
   }
 
@@ -23,6 +24,7 @@ if (e == ExceptionCode::ITEM_NOT_FOUND_EXCEPTION) return "ITEM_NOT_FOUND_EXCEPTI
 if (e == ExceptionCode::UNAUTHORIZED_EXCEPTION) return "UNAUTHORIZED_EXCEPTION";
 if (e == ExceptionCode::UNPRIVILEGED_EXCEPTION) return "UNPRIVILEGED_EXCEPTION";
 if (e == ExceptionCode::INVALID_INPUT_EXCEPTION) return "INVALID_INPUT_EXCEPTION";
+if (e == ExceptionCode::ISSUE_STATE_EXCEPTION) return "ISSUE_STATE_EXCEPTION";
     throw std::invalid_argument("unknown enum");
   }
 
