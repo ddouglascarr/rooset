@@ -21,10 +21,43 @@ TEST(unit_aggregate_policy, set_policy)
   
   vector<unique_ptr<Document>> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
-  auto expected_doc = JsonUtils::parse("{\"type\":\"UNIT_POLICY_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"policyId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Policy\",\"description\":\"The Test Policy\",\"polling\":false,\"maxAdmissionTime\":604800000,\"minAdmissionTime\":0,\"discussionTime\":604800000,\"verificationTime\":604800000,\"votingTime\":604800000,\"issueQuorumNum\":1,\"issueQuorumDen\":10,\"defeatStrength\":\"SIMPLE\",\"directMajorityNum\":1,\"directMajorityDen\":2,\"directMajorityStrict\":true,\"directMajorityPositive\":1,\"directMajorityNonNegative\":1,\"noReverseBeatPath\":false,\"noMultistageMajority\":false}}");
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "UNIT_POLICY_SET_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test Policy",
+    "description": "The Test Policy",
+    "polling": false,
+    "maxAdmissionTime": 604800000,
+    "minAdmissionTime": 0,
+    "discussionTime": 604800000,
+    "verificationTime": 604800000,
+    "votingTime": 604800000,
+    "issueQuorumNum": 1,
+    "issueQuorumDen": 10,
+    "defeatStrength": "SIMPLE",
+    "directMajorityNum": 1,
+    "directMajorityDen": 2,
+    "directMajorityStrict": true,
+    "directMajorityPositive": 1,
+    "directMajorityNonNegative": 1,
+    "noReverseBeatPath": false,
+    "noMultistageMajority": false
+  }
+})json");
   try {
   JsonUtils::validate(*UnitPolicySetEvent::schema, *expected_doc);
   } catch (invalid_argument e) {
@@ -32,7 +65,32 @@ TEST(unit_aggregate_policy, set_policy)
   }
   UnitPolicySetEvent expected(*expected_doc);
   
-  auto cmd_doc = JsonUtils::parse("{\"type\":\"SET_UNIT_POLICY_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"policyId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Policy\",\"description\":\"The Test Policy\",\"polling\":false,\"maxAdmissionTime\":604800000,\"minAdmissionTime\":0,\"discussionTime\":604800000,\"verificationTime\":604800000,\"votingTime\":604800000,\"issueQuorumNum\":1,\"issueQuorumDen\":10,\"defeatStrength\":\"SIMPLE\",\"directMajorityNum\":1,\"directMajorityDen\":2,\"directMajorityStrict\":true,\"directMajorityPositive\":1,\"directMajorityNonNegative\":1,\"noReverseBeatPath\":false,\"noMultistageMajority\":false}}");
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "SET_UNIT_POLICY_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test Policy",
+    "description": "The Test Policy",
+    "polling": false,
+    "maxAdmissionTime": 604800000,
+    "minAdmissionTime": 0,
+    "discussionTime": 604800000,
+    "verificationTime": 604800000,
+    "votingTime": 604800000,
+    "issueQuorumNum": 1,
+    "issueQuorumDen": 10,
+    "defeatStrength": "SIMPLE",
+    "directMajorityNum": 1,
+    "directMajorityDen": 2,
+    "directMajorityStrict": true,
+    "directMajorityPositive": 1,
+    "directMajorityNonNegative": 1,
+    "noReverseBeatPath": false,
+    "noMultistageMajority": false
+  }
+})json");
   try {
   JsonUtils::validate(*SetUnitPolicyCommand::schema, *cmd_doc);
   } catch (invalid_argument e) {
@@ -62,10 +120,25 @@ TEST(unit_aggregate_policy, requester_must_have_managment_rights)
   
   vector<unique_ptr<Document>> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
-  auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"UNPRIVILEGED_EXCEPTION\",\"message\":\"\"}}");
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "COMMAND_EVALUATION_EXCEPTION",
+  "error": true,
+  "payload": {
+    "code": "UNPRIVILEGED_EXCEPTION",
+    "message": ""
+  }
+})json");
   try {
   JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
   } catch (invalid_argument e) {
@@ -73,7 +146,32 @@ TEST(unit_aggregate_policy, requester_must_have_managment_rights)
   }
   CommandEvaluationException expected(*expected_doc);
   
-  auto cmd_doc = JsonUtils::parse("{\"type\":\"SET_UNIT_POLICY_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"policyId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Policy\",\"description\":\"The Test Policy\",\"polling\":false,\"maxAdmissionTime\":604800000,\"minAdmissionTime\":0,\"discussionTime\":604800000,\"verificationTime\":604800000,\"votingTime\":604800000,\"issueQuorumNum\":1,\"issueQuorumDen\":10,\"defeatStrength\":\"SIMPLE\",\"directMajorityNum\":1,\"directMajorityDen\":2,\"directMajorityStrict\":true,\"directMajorityPositive\":1,\"directMajorityNonNegative\":1,\"noReverseBeatPath\":false,\"noMultistageMajority\":false}}");
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "SET_UNIT_POLICY_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test Policy",
+    "description": "The Test Policy",
+    "polling": false,
+    "maxAdmissionTime": 604800000,
+    "minAdmissionTime": 0,
+    "discussionTime": 604800000,
+    "verificationTime": 604800000,
+    "votingTime": 604800000,
+    "issueQuorumNum": 1,
+    "issueQuorumDen": 10,
+    "defeatStrength": "SIMPLE",
+    "directMajorityNum": 1,
+    "directMajorityDen": 2,
+    "directMajorityStrict": true,
+    "directMajorityPositive": 1,
+    "directMajorityNonNegative": 1,
+    "noReverseBeatPath": false,
+    "noMultistageMajority": false
+  }
+})json");
   try {
   JsonUtils::validate(*SetUnitPolicyCommand::schema, *cmd_doc);
   } catch (invalid_argument e) {

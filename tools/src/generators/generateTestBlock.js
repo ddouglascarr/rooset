@@ -12,10 +12,10 @@ module.exports = function(
 
   const instantiateMessage = (instanceName, msgJson) => {
     const classname = generateClassnameFromMsgType(msgJson.type);
-    const jsonStr = JSON.stringify(JSON.stringify(msgJson));
+    const jsonStr = JSON.stringify(msgJson, null, 2);
 
     return `
-  auto ${instanceName}_doc = JsonUtils::parse(${jsonStr});
+  auto ${instanceName}_doc = JsonUtils::parse(u8R"json(${jsonStr})json");
   try {
   JsonUtils::validate(*${classname}::schema, *${instanceName}_doc);
   } catch (invalid_argument e) {
@@ -37,7 +37,7 @@ module.exports = function(
 
   const pushGivenEvents = () => {
     const statements = scenario.given.map((event) => `
-  givenEvents.push_back(JsonUtils::parse(${JSON.stringify(JSON.stringify(event))}));`);
+  givenEvents.push_back(JsonUtils::parse(u8R"json(${JSON.stringify(event, null, 2)})json"));`);
     return statements.join('');
   };
 

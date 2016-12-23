@@ -21,10 +21,25 @@ TEST(unit_aggregate_delegations, member_must_be_privileged)
   
   vector<unique_ptr<Document>> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
-  auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"UNPRIVILEGED_EXCEPTION\",\"message\":\"\"}}");
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "COMMAND_EVALUATION_EXCEPTION",
+  "error": true,
+  "payload": {
+    "code": "UNPRIVILEGED_EXCEPTION",
+    "message": ""
+  }
+})json");
   try {
   JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
   } catch (invalid_argument e) {
@@ -32,7 +47,14 @@ TEST(unit_aggregate_delegations, member_must_be_privileged)
   }
   CommandEvaluationException expected(*expected_doc);
   
-  auto cmd_doc = JsonUtils::parse("{\"type\":\"SET_UNIT_DELEGATION_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}");
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "SET_UNIT_DELEGATION_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "trusteeId": "464b1ebb-32c1-460c-8e9e-333333333333"
+  }
+})json");
   try {
   JsonUtils::validate(*SetUnitDelegationCommand::schema, *cmd_doc);
   } catch (invalid_argument e) {
@@ -69,10 +91,25 @@ TEST(unit_aggregate_delegations, member_must_have_voting_right)
   
   vector<unique_ptr<Document>> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
-  auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"UNPRIVILEGED_EXCEPTION\",\"message\":\"\"}}");
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "COMMAND_EVALUATION_EXCEPTION",
+  "error": true,
+  "payload": {
+    "code": "UNPRIVILEGED_EXCEPTION",
+    "message": ""
+  }
+})json");
   try {
   JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
   } catch (invalid_argument e) {
@@ -80,7 +117,14 @@ TEST(unit_aggregate_delegations, member_must_have_voting_right)
   }
   CommandEvaluationException expected(*expected_doc);
   
-  auto cmd_doc = JsonUtils::parse("{\"type\":\"SET_UNIT_DELEGATION_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}");
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "SET_UNIT_DELEGATION_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "trusteeId": "464b1ebb-32c1-460c-8e9e-333333333333"
+  }
+})json");
   try {
   JsonUtils::validate(*SetUnitDelegationCommand::schema, *cmd_doc);
   } catch (invalid_argument e) {
@@ -117,12 +161,51 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
   
   vector<unique_ptr<Document>> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-444444444444\",\"pollingRight\":true,\"votingRight\":false,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "memberId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "memberId": "464b1ebb-32c1-460c-8e9e-444444444444",
+    "pollingRight": true,
+    "votingRight": false,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
-  auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"UNPRIVILEGED_EXCEPTION\",\"message\":\"\"}}");
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "COMMAND_EVALUATION_EXCEPTION",
+  "error": true,
+  "payload": {
+    "code": "UNPRIVILEGED_EXCEPTION",
+    "message": ""
+  }
+})json");
   try {
   JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
   } catch (invalid_argument e) {
@@ -130,7 +213,14 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
   }
   CommandEvaluationException expected(*expected_doc);
   
-  auto cmd_doc = JsonUtils::parse("{\"type\":\"SET_UNIT_DELEGATION_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}");
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "SET_UNIT_DELEGATION_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "trusteeId": "464b1ebb-32c1-460c-8e9e-333333333333"
+  }
+})json");
   try {
   JsonUtils::validate(*SetUnitDelegationCommand::schema, *cmd_doc);
   } catch (invalid_argument e) {
@@ -167,12 +257,51 @@ TEST(unit_aggregate_delegations, set_delegation)
   
   vector<unique_ptr<Document>> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-333333333333\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "memberId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "memberId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
-  auto expected_doc = JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}");
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "UNIT_DELEGATION_SET_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "trusterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "trusteeId": "464b1ebb-32c1-460c-8e9e-333333333333"
+  }
+})json");
   try {
   JsonUtils::validate(*UnitDelegationSetEvent::schema, *expected_doc);
   } catch (invalid_argument e) {
@@ -180,7 +309,14 @@ TEST(unit_aggregate_delegations, set_delegation)
   }
   UnitDelegationSetEvent expected(*expected_doc);
   
-  auto cmd_doc = JsonUtils::parse("{\"type\":\"SET_UNIT_DELEGATION_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}");
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "SET_UNIT_DELEGATION_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "trusteeId": "464b1ebb-32c1-460c-8e9e-333333333333"
+  }
+})json");
   try {
   JsonUtils::validate(*SetUnitDelegationCommand::schema, *cmd_doc);
   } catch (invalid_argument e) {
@@ -210,11 +346,38 @@ TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
   
   vector<unique_ptr<Document>> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "memberId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
-  auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"ITEM_NOT_FOUND_EXCEPTION\",\"message\":\"\"}}");
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "COMMAND_EVALUATION_EXCEPTION",
+  "error": true,
+  "payload": {
+    "code": "ITEM_NOT_FOUND_EXCEPTION",
+    "message": ""
+  }
+})json");
   try {
   JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
   } catch (invalid_argument e) {
@@ -222,7 +385,13 @@ TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
   }
   CommandEvaluationException expected(*expected_doc);
   
-  auto cmd_doc = JsonUtils::parse("{\"type\":\"UNSET_UNIT_DELEGATION_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\"}}");
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "UNSET_UNIT_DELEGATION_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222"
+  }
+})json");
   try {
   JsonUtils::validate(*UnsetUnitDelegationCommand::schema, *cmd_doc);
   } catch (invalid_argument e) {
@@ -259,12 +428,45 @@ TEST(unit_aggregate_delegations, unset_delegation)
   
   vector<unique_ptr<Document>> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "memberId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_DELEGATION_SET_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "trusterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "trusteeId": "464b1ebb-32c1-460c-8e9e-333333333333"
+  }
+})json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
-  auto expected_doc = JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_UNSET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\"}}");
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "UNIT_DELEGATION_UNSET_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "trusterId": "464b1ebb-32c1-460c-8e9e-222222222222"
+  }
+})json");
   try {
   JsonUtils::validate(*UnitDelegationUnsetEvent::schema, *expected_doc);
   } catch (invalid_argument e) {
@@ -272,7 +474,13 @@ TEST(unit_aggregate_delegations, unset_delegation)
   }
   UnitDelegationUnsetEvent expected(*expected_doc);
   
-  auto cmd_doc = JsonUtils::parse("{\"type\":\"UNSET_UNIT_DELEGATION_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\"}}");
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "UNSET_UNIT_DELEGATION_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222"
+  }
+})json");
   try {
   JsonUtils::validate(*UnsetUnitDelegationCommand::schema, *cmd_doc);
   } catch (invalid_argument e) {
@@ -302,13 +510,53 @@ TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
   
   vector<unique_ptr<Document>> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_CREATED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"name\":\"Test Unit\",\"description\":\"The Test Unit\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"PRIVILEGE_GRANTED_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-777777777777\",\"memberId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"pollingRight\":true,\"votingRight\":true,\"initiativeRight\":true,\"managementRight\":true,\"weight\":1}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_SET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\",\"trusteeId\":\"464b1ebb-32c1-460c-8e9e-333333333333\"}}"));
-  givenEvents.push_back(JsonUtils::parse("{\"type\":\"UNIT_DELEGATION_UNSET_EVENT\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"trusterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\"}}"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "memberId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_DELEGATION_SET_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "trusterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "trusteeId": "464b1ebb-32c1-460c-8e9e-333333333333"
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_DELEGATION_UNSET_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "trusterId": "464b1ebb-32c1-460c-8e9e-222222222222"
+  }
+})json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
-  auto expected_doc = JsonUtils::parse("{\"type\":\"COMMAND_EVALUATION_EXCEPTION\",\"error\":true,\"payload\":{\"code\":\"ITEM_NOT_FOUND_EXCEPTION\",\"message\":\"\"}}");
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "COMMAND_EVALUATION_EXCEPTION",
+  "error": true,
+  "payload": {
+    "code": "ITEM_NOT_FOUND_EXCEPTION",
+    "message": ""
+  }
+})json");
   try {
   JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
   } catch (invalid_argument e) {
@@ -316,7 +564,13 @@ TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
   }
   CommandEvaluationException expected(*expected_doc);
   
-  auto cmd_doc = JsonUtils::parse("{\"type\":\"UNSET_UNIT_DELEGATION_COMMAND\",\"payload\":{\"id\":\"464b1ebb-32c1-460c-8e9e-111111111111\",\"requesterId\":\"464b1ebb-32c1-460c-8e9e-222222222222\"}}");
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "UNSET_UNIT_DELEGATION_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222"
+  }
+})json");
   try {
   JsonUtils::validate(*UnsetUnitDelegationCommand::schema, *cmd_doc);
   } catch (invalid_argument e) {
