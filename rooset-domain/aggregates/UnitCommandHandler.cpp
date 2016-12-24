@@ -78,6 +78,32 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Se
       c.id, c.areaId, trusterId, c.trusteeId));
 }
 
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const BlockDelegationForAreaCommand& c)
+{
+  const auto trusterId = c.requesterId;
+  const auto unit = repository->load(c.id);
+  CommandHandlerUtils::assertMapContains<decltype(unit->getAreas()), uuid>(
+      unit->getAreas(), c.areaId, "Area does not exist");
+  const auto area = unit->getAreas().at(c.areaId);
+  CommandHandlerUtils::assertVectorExcludes<uuid>(area.blockedDelegations, trusterId,
+      "Delegations already blocked for this area");
+  return unique_ptr<DelegationBlockedForAreaEvent>(new DelegationBlockedForAreaEvent(
+      c.id, c.areaId, trusterId));
+}
+    
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const UnblockDelegationForAreaCommand& c)
+{
+  const auto trusterId = c.requesterId;
+  const auto unit = repository->load(c.id);
+  CommandHandlerUtils::assertMapContains<decltype(unit->getAreas()), uuid>(
+      unit->getAreas(), c.areaId, "Area does not exist");
+  const auto area = unit->getAreas().at(c.areaId);
+  CommandHandlerUtils::assertVectorContains<uuid>(area.blockedDelegations, trusterId,
+      "Delegations are not blocked in this area");
+  return unique_ptr<DelegationUnblockedForAreaEvent>(new DelegationUnblockedForAreaEvent(
+      c.id, c.areaId, trusterId));
+}
+
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const UnsetAreaDelegationCommand & c)
 {
   const auto trusterId = c.requesterId;

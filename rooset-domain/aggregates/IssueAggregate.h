@@ -7,6 +7,8 @@
 #include "events/CompetingInitiativeCreatedEvent.h"
 #include "events/IssueDelegationSetEvent.h"
 #include "events/IssueDelegationUnsetEvent.h"
+#include "events/DelegationBlockedForIssueEvent.h"
+#include "events/DelegationUnblockedForIssueEvent.h"
 #include "events/IssueAdmissionQuorumPassedEvent.h"
 #include "events/IssueAdmissionQuorumFailedEvent.h"
 #include "events/IssueDiscussionPhaseCompletedEvent.h"
@@ -35,12 +37,15 @@ namespace rooset {
     IssueState issueState;
     map<uuid, Initiative> initiatives;
     map<uuid, uuid> delegations;
+    vector<uuid> blockedDelegations;
 
   public:
     IssueAggregate(const NewInitiativeCreatedEvent& e);
     void handleEvent(const CompetingInitiativeCreatedEvent& e);
     void handleEvent(const IssueDelegationSetEvent& e);
     void handleEvent(const IssueDelegationUnsetEvent& e);
+    void handleEvent(const DelegationBlockedForIssueEvent& e);
+    void handleEvent(const DelegationUnblockedForIssueEvent& e);
     void handleEvent(const InitiativeSupportGivenEvent& e);
     void handleEvent(const InitiativeSupportRevokedEvent& e);
 
@@ -57,5 +62,6 @@ namespace rooset {
     inline auto getIssueState() const { return issueState; }
     inline auto getInitiatives() const { return initiatives; }
     inline auto getDelegations() const { return delegations; }
+    inline auto getBlockedDelegations() const { return blockedDelegations; }
   };
 }

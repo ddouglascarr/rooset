@@ -11,6 +11,8 @@
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
 #include "events/UnitPolicySetEvent.h"
+#include "events/DelegationBlockedForAreaEvent.h"
+#include "events/DelegationUnblockedForAreaEvent.h"
 
 using namespace std;
 
@@ -27,6 +29,7 @@ namespace rooset {
   struct Area {
     string name;
     map<uuid, uuid> delegations;
+    vector<uuid> blockedDelegations;
   };
 
   struct Policy {
@@ -50,6 +53,9 @@ namespace rooset {
     void handleEvent(const UnitDelegationUnsetEvent& e);
     void handleEvent(const AreaDelegationSetEvent& e);
     void handleEvent(const AreaDelegationUnsetEvent& e);
+    void handleEvent(const DelegationBlockedForAreaEvent& e);
+    void handleEvent(const DelegationUnblockedForAreaEvent& e);
+
     void handleEvent(const UnitPolicySetEvent& e);
 
     inline auto getPrivileges() const { return privileges; }

@@ -14,11 +14,28 @@ void rooset::IssueAggregate::handleEvent(const CompetingInitiativeCreatedEvent &
 void rooset::IssueAggregate::handleEvent(const IssueDelegationSetEvent& e)
 {
   delegations[e.trusterId] = e.trusteeId;
+  // remove block if present
+  auto i = find(blockedDelegations.begin(), blockedDelegations.end(), e.trusterId);
+  if (i != blockedDelegations.end()) blockedDelegations.erase(i);
 }
 
 void rooset::IssueAggregate::handleEvent(const IssueDelegationUnsetEvent& e)
 {
   delegations.erase(e.trusterId);
+}
+
+void rooset::IssueAggregate::handleEvent(const DelegationBlockedForIssueEvent& e)
+{
+  blockedDelegations.push_back(e.trusterId);
+  // remove delegation if present
+  auto i = delegations.find(e.trusterId);
+  if (i != delegations.end()) delegations.erase(i);
+}
+
+void rooset::IssueAggregate::handleEvent(const DelegationUnblockedForIssueEvent& e)
+{
+  auto i = find(blockedDelegations.begin(), blockedDelegations.end(), e.trusterId);
+  if (i != blockedDelegations.end()) blockedDelegations.erase(i);
 }
 
 void rooset::IssueAggregate::handleEvent(const InitiativeSupportGivenEvent& e)

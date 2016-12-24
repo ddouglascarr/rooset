@@ -1,4 +1,4 @@
-#include "UnitAggregate.h"
+#include <vector>
 #include "UnitAggregate.h"
 
 rooset::UnitAggregate::UnitAggregate(const UnitCreatedEvent & e)
@@ -32,7 +32,11 @@ void rooset::UnitAggregate::handleEvent(const UnitDelegationUnsetEvent & e)
 
 void rooset::UnitAggregate::handleEvent(const AreaDelegationSetEvent & e)
 {
-  areas.at(e.areaId).delegations[e.trusterId] = e.trusteeId;
+  auto& area = areas.at(e.areaId);
+  area.delegations[e.trusterId] = e.trusteeId;
+  // remove block if present
+  auto i = find(area.blockedDelegations.begin(), area.blockedDelegations.end(), e.trusterId);
+  if (i != area.blockedDelegations.end()) area.blockedDelegations.erase(i);
 }
 
 void rooset::UnitAggregate::handleEvent(const AreaDelegationUnsetEvent & e)
@@ -41,6 +45,26 @@ void rooset::UnitAggregate::handleEvent(const AreaDelegationUnsetEvent & e)
   auto it = areaDelegations.find(e.trusterId);
   if (it != areaDelegations.end()) {
     areaDelegations.erase(it);
+  }
+}
+
+void rooset::UnitAggregate::handleEvent(const DelegationBlockedForAreaEvent& e)
+{
+  auto& area = areas.at(e.areaId);
+  area.blockedDelegations.push_back(e.trusterId);
+  // remove delegation if present
+  auto i = area.delegations.find(e.trusterId);
+  if (i != area.delegations.end()) {
+    area.delegations.erase(i);
+  }
+}
+
+void rooset::UnitAggregate::handleEvent(const DelegationUnblockedForAreaEvent& e)
+{
+  auto& blockedAreaDelegations = areas.at(e.areaId).blockedDelegations;
+  auto it = find(blockedAreaDelegations.begin(), blockedAreaDelegations.end(), e.trusterId);
+  if (it != blockedAreaDelegations.end()) {
+    blockedAreaDelegations.erase(it);
   }
 }
 

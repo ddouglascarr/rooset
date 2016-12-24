@@ -63,6 +63,41 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const U
       c.id, c.requesterId));
 }
 
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const BlockDelegationForIssueCommand& c)
+{
+  const auto trusterId = c.requesterId;
+  const auto issue = issueRepository->load(c.id);
+  const auto unit = unitRepository->load(issue->getUnitId());
+
+  assertIssueState(*issue, {
+    IssueState::ADMISSION,
+    IssueState::DISCUSSION,
+    IssueState::VERIFICATION,
+    IssueState::VOTING,
+  });
+  PrivilegeUtils::assertVotingRight(*unit, trusterId);
+  CommandHandlerUtils::assertVectorExcludes<uuid>(issue->getBlockedDelegations(), trusterId,
+      "Delegations are already blocked for this issue");
+  return unique_ptr<DelegationBlockedForIssueEvent>(new DelegationBlockedForIssueEvent(
+      c.id, trusterId));
+ }
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const UnblockDelegationForIssueCommand& c)
+{
+  const auto trusterId = c.requesterId;
+  const auto issue = issueRepository->load(c.id);
+  assertIssueState(*issue, {
+    IssueState::ADMISSION,
+    IssueState::DISCUSSION,
+    IssueState::VERIFICATION,
+    IssueState::VOTING,
+  });
+  CommandHandlerUtils::assertVectorContains<uuid>(issue->getBlockedDelegations(), trusterId,
+      "Delegations are not blocked for this issue");
+  return unique_ptr<DelegationUnblockedForIssueEvent>(new DelegationUnblockedForIssueEvent(
+      c.id, trusterId));
+}
+
 unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const GiveInitiativeSupportCommand& c)
 {
   auto issue = issueRepository->load(c.id);

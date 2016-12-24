@@ -14,6 +14,10 @@
 #include "events/IssueDelegationSetEvent.h"
 #include "commands/UnsetIssueDelegationCommand.h"
 #include "events/IssueDelegationUnsetEvent.h"
+#include "commands/BlockDelegationForIssueCommand.h"
+#include "events/DelegationBlockedForIssueEvent.h"
+#include "commands/UnblockDelegationForIssueCommand.h"
+#include "events/DelegationUnblockedForIssueEvent.h"
 #include "commands/GiveInitiativeSupportCommand.h"
 #include "events/InitiativeSupportGivenEvent.h"
 #include "commands/RevokeInitiativeSupportCommand.h"
@@ -48,6 +52,8 @@ namespace rooset {
     unique_ptr<ProjectEvent<Document>> evaluate(const CreateCompetingInitiativeCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const SetIssueDelegationCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const UnsetIssueDelegationCommand& c);
+    unique_ptr<ProjectEvent<Document>> evaluate(const BlockDelegationForIssueCommand& c);
+    unique_ptr<ProjectEvent<Document>> evaluate(const UnblockDelegationForIssueCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const GiveInitiativeSupportCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const RevokeInitiativeSupportCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const AssessIssueAdmissionQuorumCommand& c);

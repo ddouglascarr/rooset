@@ -15,6 +15,10 @@
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
 #include "events/CompetingInitiativeCreatedEvent.h"
+#include "events/DelegationBlockedForAreaEvent.h"
+#include "events/DelegationBlockedForIssueEvent.h"
+#include "events/DelegationUnblockedForAreaEvent.h"
+#include "events/DelegationUnblockedForIssueEvent.h"
 #include "events/InitiativeSupportGivenEvent.h"
 #include "events/InitiativeSupportRevokedEvent.h"
 #include "events/IssueAdmissionQuorumContinuedEvent.h"
@@ -104,6 +108,34 @@ namespace rooset {
         JsonUtils::validate(*CompetingInitiativeCreatedEvent::schema, d);
         const CompetingInitiativeCreatedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, CompetingInitiativeCreatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "DELEGATION_BLOCKED_FOR_AREA_EVENT") {
+        JsonUtils::validate(*DelegationBlockedForAreaEvent::schema, d);
+        const DelegationBlockedForAreaEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, DelegationBlockedForAreaEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "DELEGATION_BLOCKED_FOR_ISSUE_EVENT") {
+        JsonUtils::validate(*DelegationBlockedForIssueEvent::schema, d);
+        const DelegationBlockedForIssueEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, DelegationBlockedForIssueEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "DELEGATION_UNBLOCKED_FOR_AREA_EVENT") {
+        JsonUtils::validate(*DelegationUnblockedForAreaEvent::schema, d);
+        const DelegationUnblockedForAreaEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, DelegationUnblockedForAreaEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "DELEGATION_UNBLOCKED_FOR_ISSUE_EVENT") {
+        JsonUtils::validate(*DelegationUnblockedForIssueEvent::schema, d);
+        const DelegationUnblockedForIssueEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, DelegationUnblockedForIssueEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 

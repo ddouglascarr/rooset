@@ -1,0 +1,4 @@
+properties:
+  id: '$uuid'
+  areaId: '$uuid'
+  requesterId: '$uuid'
