@@ -8,23 +8,14 @@
 #include "enums/ExceptionCode.h"
 #include "UnitAggregate.h"
 #include "commands/GrantPrivilegeCommand.h"
-#include "events/PrivilegeGrantedEvent.h"
 #include "commands/CreateAreaCommand.h"
-#include "events/AreaCreatedEvent.h"
 #include "commands/SetUnitDelegationCommand.h"
-#include "events/UnitDelegationSetEvent.h"
 #include "commands/UnsetUnitDelegationCommand.h"
-#include "events/UnitDelegationUnsetEvent.h"
 #include "commands/SetAreaDelegationCommand.h"
-#include "events/AreaDelegationSetEvent.h"
 #include "commands/UnsetAreaDelegationCommand.h"
-#include "events/AreaDelegationUnsetEvent.h"
 #include "commands/BlockDelegationForAreaCommand.h"
-#include "events/DelegationBlockedForAreaEvent.h"
 #include "commands/UnblockDelegationForAreaCommand.h"
-#include "events/DelegationUnblockedForAreaEvent.h"
 #include "commands/SetUnitPolicyCommand.h"
-#include "events/UnitPolicySetEvent.h"
 
 
 namespace rooset {

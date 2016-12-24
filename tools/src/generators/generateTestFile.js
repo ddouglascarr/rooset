@@ -15,7 +15,6 @@ module.exports = function(testDoc) {
 #include <string>
 #include <memory>
 #include "framework/AggregateRepositoryMockImpl.h"
-#include "framework/AggregateRepositoryEmptyMockImpl.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
 #include "framework/CommandHandlerTestImpl.h"
