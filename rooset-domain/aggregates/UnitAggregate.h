@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include <map>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include "framework/uuid.h"
 #include "events/UnitCreatedEvent.h"
 #include "events/AreaCreatedEvent.h"
@@ -24,6 +25,7 @@ namespace rooset {
     bool votingRight;
     bool initiativeRight;
     bool managementRight;
+    int weight;
   };
 
   struct Area {
@@ -35,6 +37,8 @@ namespace rooset {
   struct Policy {
     string name;
     bool active;
+    int issueQuorumNum;
+    int issueQuorumDen;
   };
 
   class UnitAggregate
@@ -61,5 +65,6 @@ namespace rooset {
     inline auto getPrivileges() const { return privileges; }
     inline auto getDelegations() const { return delegations; }
     inline auto getAreas() const { return areas; }
+    inline auto getPolicies() const { return policies; }
   };
 }

@@ -14,7 +14,7 @@ void rooset::UnitAggregate::handleEvent(const AreaCreatedEvent & e)
 void rooset::UnitAggregate::handleEvent(const PrivilegeGrantedEvent & e)
 {
   privileges[e.memberId] = MemberPrivilege{ 
-      e.pollingRight, e.votingRight, e.initiativeRight, e.managementRight };
+      e.pollingRight, e.votingRight, e.initiativeRight, e.managementRight, e.weight };
 }
 
 void rooset::UnitAggregate::handleEvent(const UnitDelegationSetEvent & e)
@@ -70,6 +70,10 @@ void rooset::UnitAggregate::handleEvent(const DelegationUnblockedForAreaEvent& e
 
 void rooset::UnitAggregate::handleEvent(const UnitPolicySetEvent & e)
 {
-  Policy policy{ e.name, true };
-  policies[e.policyId] = policy;
+  policies[e.policyId] = {
+    e.name,
+    true,
+    e.issueQuorumNum,
+    e.issueQuorumDen,
+  };
 }

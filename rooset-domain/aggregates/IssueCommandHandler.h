@@ -28,6 +28,7 @@ namespace rooset {
     unique_ptr<AggregateRepository<UnitAggregate>> unitRepository;
 
     void assertIssueState(const IssueAggregate& issue, const vector<IssueState>& acceptable);
+    bool isAdmissionQuorumPassed(const IssueAggregate& issue, const UnitAggregate& unit);
 
   public:
     inline IssueCommandHandler(

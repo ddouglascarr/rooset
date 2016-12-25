@@ -5,7 +5,7 @@ project (rooset-domain)
 # cmake -DCMAKE_C_COMPILER=/usr/bin/clang-3.8 -DCMAKE_CXX_COMPILER=/usr/bin/clang++-3.8 -DBOOST_ROOT=/usr/local/boost_1_62_0 /mnt/c/src/rooset-domain
 
 SET(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++14 -stdlib=libc++ -Wall")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++14 -Wall")
 IF(MSVC)
 	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /EHsc /MTd")
 ENDIF(MSVC)
@@ -18,12 +18,12 @@ include_directories(${PROJECT_SOURCE_DIR}/gen)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # Boost: needs boost::posix_time::from_time_t
-set(Boost_USE_STATIC_LIBS OFF) 
-set(Boost_USE_MULTITHREADED ON)  
-set(Boost_USE_STATIC_RUNTIME OFF) 
-find_package(Boost 1.62 REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
-message(status "** Boost Include: ${Boost_INCLUDE_DIR}")
+# set(Boost_USE_STATIC_LIBS OFF) 
+# set(Boost_USE_MULTITHREADED ON)  
+# set(Boost_USE_STATIC_RUNTIME OFF) 
+include_directories(${BOOST_ROOT})
+# find_package(Boost 1.62 REQUIRED)
+# message(status "** Boost Include: ${Boost_INCLUDE_DIR}")
 
 FILE(GLOB project_h rooset-domain/**/*.h)
 FILE(GLOB project_cpp rooset-domain/**/*.cpp)

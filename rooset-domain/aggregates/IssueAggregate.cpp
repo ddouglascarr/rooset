@@ -1,7 +1,8 @@
 #include "IssueAggregate.h"
 
 rooset::IssueAggregate::IssueAggregate(const NewInitiativeCreatedEvent& e) :
-    id(e.id), unitId(e.unitId), areaId(e.areaId), issueState(IssueState::ADMISSION)
+    id(e.id), unitId(e.unitId), areaId(e.areaId),
+    policyId(e.policyId), issueState(IssueState::ADMISSION)
 {
   initiatives[e.initiativeId] = Initiative{ e.name, e.requesterId };
 }

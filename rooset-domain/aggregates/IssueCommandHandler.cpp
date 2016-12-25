@@ -1,9 +1,11 @@
 #include "IssueCommandHandler.h"
 #include <stdexcept>
+#include <algorithm>
 #include "IssueCommandHandler.h"
 #include "exceptions/CommandEvaluationException.h"
 #include "PrivilegeUtils.h"
 #include "CommandHandlerUtils.h"
+#include "VoteUtils.h"
 
 
 void rooset::IssueCommandHandler::assertIssueState(
@@ -124,12 +126,44 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const R
   return unique_ptr<InitiativeSupportRevokedEvent>(new InitiativeSupportRevokedEvent(c));
 }
 
-unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const AssessIssueAdmissionQuorumCommand& c)
+bool rooset::IssueCommandHandler::isAdmissionQuorumPassed(
+    const IssueAggregate& issue, const UnitAggregate& unit)
 {
-  return nullptr;
+  assertIssueState(issue, { IssueState::ADMISSION });
+  auto area = unit.getAreas().at(issue.getAreaId());
+  const auto totalVoteWeight = VoteUtils::calcTotalVoteWeight(unit.getPrivileges());
+  const auto policy = unit.getPolicies().at(issue.getPolicyId());
+  const auto initiatives = issue.getInitiatives();
+  for (auto it : initiatives) {
+    const auto initiative = it.second;
+    int support = 0;
+    for_each(initiative.supporters.begin(), initiative.supporters.end(),
+        [&](uuid supporterId) { support = support + VoteUtils::calcSupportWeight(
+            supporterId, initiative, issue, area, unit); });
+    if (VoteUtils::isAdmissionQuorumPassed(policy, totalVoteWeight, support)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const AssessIssueAdmissionQuorumCommand& c)
+{
+  auto issue = issueRepository->load(c.id);
+  auto unit = unitRepository->load(issue->getUnitId());
+  if (isAdmissionQuorumPassed(*issue, *unit)) {
+    return make_unique<IssueAdmissionQuorumPassedEvent>(c.id);
+  }
+  return make_unique<IssueAdmissionQuorumContinuedEvent>(c.id);
 }
 
 unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const CompleteIssueAdmissionPhaseCommand& c)
 {
-  return nullptr;
+  auto issue = issueRepository->load(c.id);
+  auto unit = unitRepository->load(issue->getUnitId());
+  if (isAdmissionQuorumPassed(*issue, *unit)) {
+    return make_unique<IssueAdmissionQuorumPassedEvent>(c.id);
+  }
+  return make_unique<IssueAdmissionQuorumFailedEvent>(c.id);
 }

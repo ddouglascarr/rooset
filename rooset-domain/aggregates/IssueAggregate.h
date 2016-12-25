@@ -11,6 +11,7 @@
 #include "events/DelegationUnblockedForIssueEvent.h"
 #include "events/IssueAdmissionQuorumPassedEvent.h"
 #include "events/IssueAdmissionQuorumFailedEvent.h"
+#include "events/IssueAdmissionQuorumContinuedEvent.h"
 #include "events/IssueDiscussionPhaseCompletedEvent.h"
 #include "events/IssueVerificationPhaseCompletedEvent.h"
 #include "events/IssueVotingPhaseCompletedEvent.h"
@@ -33,6 +34,7 @@ namespace rooset {
     const uuid id;
     const uuid unitId;
     const uuid areaId;
+    const uuid policyId;
 
     IssueState issueState;
     map<uuid, Initiative> initiatives;
@@ -59,6 +61,7 @@ namespace rooset {
     inline uuid getId() const { return id; }
     inline uuid getUnitId() const { return unitId; }
     inline uuid getAreaId() const { return areaId; }
+    inline uuid getPolicyId() const { return policyId; }
     inline auto getIssueState() const { return issueState; }
     inline auto getInitiatives() const { return initiatives; }
     inline auto getDelegations() const { return delegations; }

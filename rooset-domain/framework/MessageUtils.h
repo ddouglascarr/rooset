@@ -2,7 +2,6 @@
 #include <functional>
 #include <type_traits>
 #include <typeinfo>
-#include <boost/type_traits.hpp>
 #include "exceptions/CommandEvaluationException.h"
 
 
@@ -45,7 +44,7 @@ namespace rooset {
 
     template<typename Aggregate, typename Event>
     static unique_ptr<Aggregate> instantiateAggregate(
-      const typename enable_if<boost::is_constructible<Aggregate, Event>::value, Event>::type& e,
+      const typename enable_if<is_constructible<Aggregate, Event>::value, Event>::type& e,
       std::function<void()> onMissingMethod)
     {
       return make_unique<Aggregate>(e);
@@ -53,7 +52,7 @@ namespace rooset {
 
     template<typename Aggregate, typename Event>
     static unique_ptr<Aggregate> instantiateAggregate(
-      const typename enable_if<!boost::is_constructible<Aggregate, Event>::value, Event>::type& e,
+      const typename enable_if<!is_constructible<Aggregate, Event>::value, Event>::type& e,
       std::function<void()> onMissingMethod)
     {
       onMissingMethod();
@@ -74,7 +73,7 @@ namespace rooset {
         a = instantiateAggregate<Aggregate, Event>(e, onMissingMethod);
         return;
       }
-      if (boost::is_constructible<Aggregate, Event>::value) {
+      if (is_constructible<Aggregate, Event>::value) {
         throw CommandEvaluationException(ExceptionCode::CONFLICT_EXCEPTION,
           "A constructor event has been called after another constructor event");
       }
