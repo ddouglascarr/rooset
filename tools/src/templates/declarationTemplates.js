@@ -8,5 +8,6 @@ module.exports = {
   uuidArray: (v) => `const vector<uuid> ${v};`,
   date: (v) => `const boost::posix_time::ptime ${v};`,
   int: (v) => `const int ${v};`,
+  uint: (v) => `const unsigned int ${v};`,
   duration: (v) => `const boost::posix_time::time_duration ${v};`,
 };

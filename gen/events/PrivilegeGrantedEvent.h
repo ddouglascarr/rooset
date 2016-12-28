@@ -37,7 +37,7 @@ namespace rooset {
         const bool votingRight;
         const bool initiativeRight;
         const bool managementRight;
-        const int weight;
+        const unsigned int weight;
 
     
         PrivilegeGrantedEvent(
@@ -48,7 +48,7 @@ namespace rooset {
             bool votingRight,
             bool initiativeRight,
             bool managementRight,
-            int weight) :
+            unsigned int weight) :
             id(id) ,
             requesterId(requesterId) ,
             memberId(memberId) ,
@@ -56,7 +56,7 @@ namespace rooset {
             votingRight(votingRight),
             initiativeRight(initiativeRight),
             managementRight(managementRight),
-            weight(weight) 
+            weight(weight)
         {}
   
 
@@ -76,7 +76,7 @@ namespace rooset {
             votingRight(d["payload"]["votingRight"].GetBool()),
             initiativeRight(d["payload"]["initiativeRight"].GetBool()),
             managementRight(d["payload"]["managementRight"].GetBool()),
-            weight(d["payload"]["weight"].GetInt())
+            weight(d["payload"]["weight"].GetUint())
         {}
   
 
@@ -139,7 +139,7 @@ weight(c.weight)
           payload.AddMember("managementRight", managementRight_value, d->GetAllocator());
 
           Value weight_value;
-          weight_value.SetInt(weight);
+          weight_value.SetUint(weight);
           payload.AddMember("weight", weight_value, d->GetAllocator());     
 
       d->AddMember("payload", payload, d->GetAllocator());

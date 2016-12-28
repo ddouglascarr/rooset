@@ -41,14 +41,14 @@ namespace rooset {
         const boost::posix_time::time_duration discussionTime;
         const boost::posix_time::time_duration verificationTime;
         const boost::posix_time::time_duration votingTime;
-        const int issueQuorumNum;
-        const int issueQuorumDen;
+        const unsigned int issueQuorumNum;
+        const unsigned int issueQuorumDen;
         const rooset::DefeatStrength defeatStrength;
-        const int directMajorityNum;
-        const int directMajorityDen;
+        const unsigned int directMajorityNum;
+        const unsigned int directMajorityDen;
         const bool directMajorityStrict;
-        const int directMajorityPositive;
-        const int directMajorityNonNegative;
+        const unsigned int directMajorityPositive;
+        const unsigned int directMajorityNonNegative;
         const bool noReverseBeatPath;
         const bool noMultistageMajority;
 
@@ -65,14 +65,14 @@ namespace rooset {
             boost::posix_time::time_duration discussionTime,
             boost::posix_time::time_duration verificationTime,
             boost::posix_time::time_duration votingTime,
-            int issueQuorumNum,
-            int issueQuorumDen,
+            unsigned int issueQuorumNum,
+            unsigned int issueQuorumDen,
             rooset::DefeatStrength defeatStrength,
-            int directMajorityNum,
-            int directMajorityDen,
+            unsigned int directMajorityNum,
+            unsigned int directMajorityDen,
             bool directMajorityStrict,
-            int directMajorityPositive,
-            int directMajorityNonNegative,
+            unsigned int directMajorityPositive,
+            unsigned int directMajorityNonNegative,
             bool noReverseBeatPath,
             bool noMultistageMajority) :
             id(id) ,
@@ -86,14 +86,14 @@ namespace rooset {
             discussionTime(discussionTime) ,
             verificationTime(verificationTime) ,
             votingTime(votingTime) ,
-            issueQuorumNum(issueQuorumNum) ,
-            issueQuorumDen(issueQuorumDen) ,
+            issueQuorumNum(issueQuorumNum),
+            issueQuorumDen(issueQuorumDen),
             defeatStrength(defeatStrength),
-            directMajorityNum(directMajorityNum) ,
-            directMajorityDen(directMajorityDen) ,
+            directMajorityNum(directMajorityNum),
+            directMajorityDen(directMajorityDen),
             directMajorityStrict(directMajorityStrict),
-            directMajorityPositive(directMajorityPositive) ,
-            directMajorityNonNegative(directMajorityNonNegative) ,
+            directMajorityPositive(directMajorityPositive),
+            directMajorityNonNegative(directMajorityNonNegative),
             noReverseBeatPath(noReverseBeatPath),
             noMultistageMajority(noMultistageMajority)
         {}
@@ -123,16 +123,16 @@ namespace rooset {
             discussionTime(boost::posix_time::seconds(d["payload"]["discussionTime"].GetDouble())),
             verificationTime(boost::posix_time::seconds(d["payload"]["verificationTime"].GetDouble())),
             votingTime(boost::posix_time::seconds(d["payload"]["votingTime"].GetDouble())),
-            issueQuorumNum(d["payload"]["issueQuorumNum"].GetInt()),
-            issueQuorumDen(d["payload"]["issueQuorumDen"].GetInt()),
+            issueQuorumNum(d["payload"]["issueQuorumNum"].GetUint()),
+            issueQuorumDen(d["payload"]["issueQuorumDen"].GetUint()),
             defeatStrength(EnumUtils::parseDefeatStrength(string(
                 d["payload"]["defeatStrength"].GetString(),
                 d["payload"]["defeatStrength"].GetStringLength()))),
-            directMajorityNum(d["payload"]["directMajorityNum"].GetInt()),
-            directMajorityDen(d["payload"]["directMajorityDen"].GetInt()),
+            directMajorityNum(d["payload"]["directMajorityNum"].GetUint()),
+            directMajorityDen(d["payload"]["directMajorityDen"].GetUint()),
             directMajorityStrict(d["payload"]["directMajorityStrict"].GetBool()),
-            directMajorityPositive(d["payload"]["directMajorityPositive"].GetInt()),
-            directMajorityNonNegative(d["payload"]["directMajorityNonNegative"].GetInt()),
+            directMajorityPositive(d["payload"]["directMajorityPositive"].GetUint()),
+            directMajorityNonNegative(d["payload"]["directMajorityNonNegative"].GetUint()),
             noReverseBeatPath(d["payload"]["noReverseBeatPath"].GetBool()),
             noMultistageMajority(d["payload"]["noMultistageMajority"].GetBool())
         {}
@@ -200,11 +200,11 @@ namespace rooset {
           payload.AddMember("votingTime", votingTime_value, d->GetAllocator());    
 
           Value issueQuorumNum_value;
-          issueQuorumNum_value.SetInt(issueQuorumNum);
+          issueQuorumNum_value.SetUint(issueQuorumNum);
           payload.AddMember("issueQuorumNum", issueQuorumNum_value, d->GetAllocator());     
 
           Value issueQuorumDen_value;
-          issueQuorumDen_value.SetInt(issueQuorumDen);
+          issueQuorumDen_value.SetUint(issueQuorumDen);
           payload.AddMember("issueQuorumDen", issueQuorumDen_value, d->GetAllocator());     
 
           Value defeatStrength_value;
@@ -213,11 +213,11 @@ namespace rooset {
           payload.AddMember("defeatStrength", defeatStrength_value, d->GetAllocator());    
 
           Value directMajorityNum_value;
-          directMajorityNum_value.SetInt(directMajorityNum);
+          directMajorityNum_value.SetUint(directMajorityNum);
           payload.AddMember("directMajorityNum", directMajorityNum_value, d->GetAllocator());     
 
           Value directMajorityDen_value;
-          directMajorityDen_value.SetInt(directMajorityDen);
+          directMajorityDen_value.SetUint(directMajorityDen);
           payload.AddMember("directMajorityDen", directMajorityDen_value, d->GetAllocator());     
 
           Value directMajorityStrict_value;
@@ -225,11 +225,11 @@ namespace rooset {
           payload.AddMember("directMajorityStrict", directMajorityStrict_value, d->GetAllocator());
 
           Value directMajorityPositive_value;
-          directMajorityPositive_value.SetInt(directMajorityPositive);
+          directMajorityPositive_value.SetUint(directMajorityPositive);
           payload.AddMember("directMajorityPositive", directMajorityPositive_value, d->GetAllocator());     
 
           Value directMajorityNonNegative_value;
-          directMajorityNonNegative_value.SetInt(directMajorityNonNegative);
+          directMajorityNonNegative_value.SetUint(directMajorityNonNegative);
           payload.AddMember("directMajorityNonNegative", directMajorityNonNegative_value, d->GetAllocator());     
 
           Value noReverseBeatPath_value;

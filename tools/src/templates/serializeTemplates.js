@@ -88,6 +88,14 @@ module.exports = {
           payload.AddMember("${v}", ${v_value}, d->GetAllocator());     `;
   },
 
+  uint: (v) => {
+    const v_value = `${v}_value`;
+    return `
+          Value ${v_value};
+          ${v_value}.SetUint(${v});
+          payload.AddMember("${v}", ${v_value}, d->GetAllocator());     `;
+  },
+
   duration: (v) => {
     const v_value = `${v}_value`;
     return `

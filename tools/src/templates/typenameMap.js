@@ -9,6 +9,7 @@ module.exports = {
   uuidArray: 'vector<uuid>',
   date: 'boost::posix_time::ptime',
   int: 'int',
+  uint: 'unsigned int',
   duration: 'boost::posix_time::time_duration',
 
 };

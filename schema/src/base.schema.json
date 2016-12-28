@@ -65,7 +65,19 @@
       ]
     },
     "int": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": -32767,
+      "maximum": 32767
+    },
+    "uint": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 65535
+    },
+    "ullong": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 18446744073709551615
     },
     "tieBreaking": {
       "type": "string",

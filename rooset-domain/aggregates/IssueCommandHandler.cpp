@@ -136,7 +136,7 @@ bool rooset::IssueCommandHandler::isAdmissionQuorumPassed(
   const auto initiatives = issue.getInitiatives();
   for (auto it : initiatives) {
     const auto initiative = it.second;
-    int support = 0;
+    auto support = 0;
     for_each(initiative.supporters.begin(), initiative.supporters.end(),
         [&](uuid supporterId) { support = support + VoteUtils::calcSupportWeight(
             supporterId, initiative, issue, area, unit); });

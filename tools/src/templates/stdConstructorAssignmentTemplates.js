@@ -9,6 +9,7 @@ module.exports = {
   uuidArray: (v, prefix) => `${v}(${prefix}${v})`,
   date: (v, prefix) => `${v}(${prefix}${v}) `,
   int: (v, prefix) => `${v}(${prefix}${v}) `,
+  uint: (v, prefix) => `${v}(${prefix}${v})`,
   duration: (v, prefix) => `${v}(${prefix}${v}) `,
 
 };

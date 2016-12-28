@@ -52,4 +52,37 @@ namespace roosetTesting {
     EXPECT_EQ(isAnotherIdPresent, false);
   }
 
+  class MyTestFixture : public ::testing::Test
+  {
+  protected:
+    const string d1 = "foo";
+    string setByConstructor;
+    string setBySetUp;
+    string setMe;
+
+    MyTestFixture()
+    {
+      setByConstructor = "bar";
+    }
+
+    virtual void SetUp()
+    {
+      setBySetUp = "bing";
+    }
+  };
+  
+
+  TEST_F(MyTestFixture, getDataFromFixture)
+  {
+    EXPECT_EQ(d1, "foo");
+    EXPECT_EQ(setByConstructor, "bar");
+    EXPECT_EQ(setBySetUp, "bing");
+    setMe = "foobar";
+  }
+
+  TEST_F(MyTestFixture, dataIsNotSharedBetweenTests)
+  {
+    EXPECT_EQ(setMe, "");
+  }
+
 }

@@ -25,7 +25,7 @@ namespace rooset {
     bool votingRight;
     bool initiativeRight;
     bool managementRight;
-    int weight;
+    unsigned long long weight;
   };
 
   struct Area {
@@ -37,8 +37,8 @@ namespace rooset {
   struct Policy {
     string name;
     bool active;
-    int issueQuorumNum;
-    int issueQuorumDen;
+    unsigned int issueQuorumNum;
+    unsigned int issueQuorumDen;
   };
 
   class UnitAggregate

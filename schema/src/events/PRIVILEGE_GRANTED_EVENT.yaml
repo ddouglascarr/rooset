@@ -7,5 +7,5 @@ properties:
   votingRight: '$bool'
   initiativeRight: '$bool'
   managementRight: '$bool'
-  weight: '$int'
+  weight: '$uint'
 commandConstructor: GRANT_PRIVILEGE_COMMAND

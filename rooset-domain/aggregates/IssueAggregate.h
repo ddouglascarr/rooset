@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <map>
+#include "framework/IdToolsImpl.h"
 #include "framework/uuid.h"
 #include "enums/IssueState.h"
 #include "events/NewInitiativeCreatedEvent.h"
@@ -26,6 +27,22 @@ namespace rooset {
     string name;
     uuid initiatorId;
     vector<uuid> supporters;
+  };
+
+  class SchulzeBallot {
+  private:
+    IdToolsImpl idTools;
+    vector<vector<uuid>> schulzeRanking;
+    unsigned long long weight = 0;
+  public:
+    SchulzeBallot(
+        const vector<vector<uuid>>& approve,
+        const vector<uuid>& abstain,
+        const vector<vector<uuid>>& disapprove);
+
+    inline auto getSchulzeRanking() const { return schulzeRanking; }
+    inline void setWeight(unsigned long long w) { weight = w; }
+    inline auto getWeight() const { return weight; }
   };
   
   class IssueAggregate

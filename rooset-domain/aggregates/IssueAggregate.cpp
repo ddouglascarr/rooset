@@ -1,5 +1,19 @@
 #include "IssueAggregate.h"
 
+
+rooset::SchulzeBallot::SchulzeBallot(
+    const vector<vector<uuid>>& approve,
+    const vector<uuid>& inAbstain,
+    const vector<vector<uuid>>& disapprove)
+{
+  schulzeRanking.insert(schulzeRanking.end(), approve.begin(), approve.end());
+  auto abstain = inAbstain;
+  abstain.push_back(idTools.generateNilId());
+  schulzeRanking.push_back({ abstain });
+  schulzeRanking.insert(schulzeRanking.end(), disapprove.begin(), disapprove.end());
+}
+  
+
 rooset::IssueAggregate::IssueAggregate(const NewInitiativeCreatedEvent& e) :
     id(e.id), unitId(e.unitId), areaId(e.areaId),
     policyId(e.policyId), issueState(IssueState::ADMISSION)
