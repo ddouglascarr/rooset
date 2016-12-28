@@ -2,302 +2,10 @@
 
 #include <vector>
 #include <memory>
-#include <tuple>
-#include "rapidjson/document.h"
 #include "aggregates/UnitAggregate.h"
 #include "aggregates/IssueAggregate.h"
-#include "events/EventUtils.h"
-#include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
-#include "aggregates/VoteUtils.h"
-
-using namespace std;
-using namespace rooset;
-
-namespace roosetVoteUtilsTests {
-
-  TEST(VoteUtils, calcSupportWeight)
-  {
-  // pasted from supportCalculationTests.cpp
-  vector<unique_ptr<rapidjson::Document>> givenEvents;
-
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "UNIT_CREATED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "name": "Test Unit",
-    "description": "The Test Unit"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "AREA_CREATED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
-    "name": "test area",
-    "description": "the test area",
-    "externalReference": "area.com"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "PRIVILEGE_GRANTED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "memberId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa",
-    "pollingRight": true,
-    "votingRight": true,
-    "initiativeRight": true,
-    "managementRight": false,
-    "weight": 2
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "PRIVILEGE_GRANTED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "memberId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb",
-    "pollingRight": true,
-    "votingRight": true,
-    "initiativeRight": true,
-    "managementRight": false,
-    "weight": 1
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "PRIVILEGE_GRANTED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "memberId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
-    "pollingRight": true,
-    "votingRight": true,
-    "initiativeRight": true,
-    "managementRight": false,
-    "weight": 3
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "PRIVILEGE_GRANTED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "memberId": "464b1ebb-32c1-460c-8e9e-dddddddddddd",
-    "pollingRight": true,
-    "votingRight": true,
-    "initiativeRight": true,
-    "managementRight": false,
-    "weight": 4
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "PRIVILEGE_GRANTED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "memberId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
-    "pollingRight": true,
-    "votingRight": true,
-    "initiativeRight": true,
-    "managementRight": false,
-    "weight": 1
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "PRIVILEGE_GRANTED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "memberId": "464b1ebb-32c1-460c-8e9e-ffffffffffff",
-    "pollingRight": true,
-    "votingRight": true,
-    "initiativeRight": true,
-    "managementRight": false,
-    "weight": 2
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "NEW_INITIATIVE_CREATED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-666666666666",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
-    "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
-    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
-    "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
-    "content": "mock content",
-    "textSearchData": "foo, bar"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "UNIT_DELEGATION_SET_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "trusterId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb",
-    "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "UNIT_DELEGATION_SET_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
-    "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "UNIT_DELEGATION_SET_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd",
-    "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "UNIT_DELEGATION_SET_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
-    "trusteeId": "464b1ebb-32c1-460c-8e9e-cccccccccccc"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "AREA_DELEGATION_SET_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
-    "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
-    "trusteeId": "464b1ebb-32c1-460c-8e9e-ffffffffffff"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "DELEGATION_BLOCKED_FOR_AREA_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
-    "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "ISSUE_DELEGATION_SET_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-666666666666",
-    "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
-    "trusteeId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "DELEGATION_BLOCKED_FOR_ISSUE_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-666666666666",
-    "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-666666666666",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-666666666666",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
-  }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
-  "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-666666666666",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-ffffffffffff",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
-  }
-})json"));
-
-    IdToolsImpl idTools;
-
-    // apply events to aggregates
-    unique_ptr<UnitAggregate> unit = nullptr;
-    unique_ptr<IssueAggregate> issue = nullptr;
-    for (const auto& e : givenEvents) {
-      EventUtils::applyEvent<UnitAggregate>(unit, *e, []() {});
-      EventUtils::applyEvent<IssueAggregate>(issue, *e, []() {});
-    }
-
-    auto supportWeightA = VoteUtils::calcSupportWeight(
-      idTools.parse("464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"),
-      issue->getInitiatives().at(idTools.parse("464b1ebb-32c1-460c-8e9e-777777777777")),
-      *issue,
-      unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
-      *unit);
-
-    auto supportWeightC = VoteUtils::calcSupportWeight(
-      idTools.parse("464b1ebb-32c1-460c-8e9e-cccccccccccc"),
-      issue->getInitiatives().at(idTools.parse("464b1ebb-32c1-460c-8e9e-777777777777")),
-      *issue,
-      unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
-      *unit);
-
-    auto supportWeightF = VoteUtils::calcSupportWeight(
-      idTools.parse("464b1ebb-32c1-460c-8e9e-ffffffffffff"),
-      issue->getInitiatives().at(idTools.parse("464b1ebb-32c1-460c-8e9e-777777777777")),
-      *issue,
-      unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
-      *unit);
-
-    auto supportWeightE = VoteUtils::calcSupportWeight(
-      idTools.parse("464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee"),
-      issue->getInitiatives().at(idTools.parse("464b1ebb-32c1-460c-8e9e-777777777777")),
-      *issue,
-      unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
-      *unit);
-
-    EXPECT_EQ(supportWeightA, 3);
-    EXPECT_EQ(supportWeightC, 3);
-    EXPECT_EQ(supportWeightF, 2);
-    EXPECT_EQ(supportWeightE, 1);
-  }
-
-  TEST(VoteUtils, calcTotalVoteWeight)
-  {
-    IdToolsImpl idTools;
-    map<uuid, rooset::MemberPrivilege> privileges;
-    privileges[idTools.generateUniqueId()] = { true, true, true, true, 1 };
-    privileges[idTools.generateUniqueId()] = { true, true, true, true, 2 };
-    privileges[idTools.generateUniqueId()] = { true, true, true, true, 3 };
-    privileges[idTools.generateUniqueId()] = { true, true, true, true, 4 };
-    privileges[idTools.generateUniqueId()] = { true, true, true, true, 5 };
-    privileges[idTools.generateUniqueId()] = { true, false, true, true, 15 };
-
-    const auto totalVoteWeight = VoteUtils::calcTotalVoteWeight(privileges);
-    EXPECT_EQ(totalVoteWeight, 15);
-  }
-}
-
-TEST(VoteUtils, isAdmissionQuorumPassed)
-{
-  rooset::Policy policy{
-    "test policy",
-    true,
-    1,
-    10
-  };
-
-  EXPECT_EQ(VoteUtils::isAdmissionQuorumPassed(policy, 100, 10), true);
-  EXPECT_EQ(VoteUtils::isAdmissionQuorumPassed(policy, 101, 10), false);
-  EXPECT_EQ(VoteUtils::isAdmissionQuorumPassed(policy, 12, 7), true);
-}
-
+#include "aggregates/VoteCalculatorSchulzeImpl.h"
 
 
 TEST(SchulzeBallot, getSchulzeRanking)
@@ -334,9 +42,18 @@ TEST(SchulzeBallot, getSchulzeRanking)
  * 'a' in the text is replaced with statis quo
  */
 
+class VoteCalculatorSchulzeImplTest :
+    protected VoteCalculatorSchulzeImpl,
+    public ::testing::Test
+{
+  public:
+    void SetUp() {}
+
+};
 
 
-TEST(VoteUtils_SchulzeExamples, example_1)
+
+TEST_F(VoteCalculatorSchulzeImplTest, example1)
 {
   IdToolsImpl idTools;
   uuid a = idTools.generateNilId(); 
@@ -369,13 +86,13 @@ TEST(VoteUtils_SchulzeExamples, example_1)
     { 11, 19,  9,  0 },
   };
 
-  const auto pairwiseMatrix = VoteUtils::calcPairwiseMatrix(
+  const auto pairwiseMatrix = calcPairwiseMatrix(
       { p1, p2, p3, p4, p5, p6, p7 }, initiativeIds);
   EXPECT_EQ(pairwiseMatrix, expectedPairwiseMatrix);
 
   vector<vector<vector<unsigned long long>>> strongestPathMatrix;
   vector<vector<int>> winningPairs;
-  auto winners = VoteUtils::calcWinners(
+  auto winners = calcWinners(
     strongestPathMatrix, winningPairs, pairwiseMatrix);
 
   vector<vector<vector<unsigned long long>>> expectedstrongestPathMatrix {
@@ -395,7 +112,7 @@ TEST(VoteUtils_SchulzeExamples, example_1)
 
 
 
-TEST(VoteUtils_SchulzeExamples, example_2)
+TEST_F(VoteCalculatorSchulzeImplTest, example_2)
 {
   IdToolsImpl idTools;
   uuid a = idTools.generateNilId(); 
@@ -424,13 +141,13 @@ TEST(VoteUtils_SchulzeExamples, example_2)
     {  6,  4,  4,  0 },
   };
 
-  const auto pairwiseMatrix = VoteUtils::calcPairwiseMatrix(
+  const auto pairwiseMatrix = calcPairwiseMatrix(
       { p1, p2, p3, p4, p5}, initiativeIds);
   EXPECT_EQ(pairwiseMatrix, expectedPairwiseMatrix);
 
   vector<vector<vector<unsigned long long>>> strongestPathMatrix;
   vector<vector<int>> winningPairs;
-  auto winners = VoteUtils::calcWinners(
+  auto winners = calcWinners(
     strongestPathMatrix, winningPairs, pairwiseMatrix);
 
   vector<vector<vector<unsigned long long>>> expectedstrongestPathMatrix {
@@ -450,7 +167,9 @@ TEST(VoteUtils_SchulzeExamples, example_2)
 
 
 
-class SchulzeExample5 : public ::testing::Test
+class VoteCalculatorSchulzeImplTestExample5 :
+    public ::testing::Test,
+    protected VoteCalculatorSchulzeImpl
 {
 protected:
   IdToolsImpl idTools;
@@ -508,7 +227,7 @@ protected:
     
 
 
-TEST_F(SchulzeExample5, situation1)
+TEST_F(VoteCalculatorSchulzeImplTestExample5, situation1)
 {
 
   vector<SchulzeBallot> ballots;
@@ -527,13 +246,13 @@ TEST_F(SchulzeExample5, situation1)
     { 12,  6,  9,  9,  9,  0 }
   };
 
-  auto pairwiseMatrix = VoteUtils::calcPairwiseMatrix(
+  auto pairwiseMatrix = calcPairwiseMatrix(
       ballots, initiativeIds);
   EXPECT_EQ(pairwiseMatrix, expectedPairwiseMatrix);
 
   vector<vector<vector<unsigned long long>>> strongestPathMatrix;
   vector<vector<int>> winningPairs;
-  auto winners = VoteUtils::calcWinners(
+  auto winners = calcWinners(
     strongestPathMatrix, winningPairs, pairwiseMatrix);
 
   vector<vector<vector<unsigned long long>>> expectedstrongestPathMatrix {
@@ -560,7 +279,7 @@ TEST_F(SchulzeExample5, situation1)
 
 
 
-TEST_F(SchulzeExample5, situation2)
+TEST_F(VoteCalculatorSchulzeImplTestExample5, situation2)
 {
   pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({}, {}, { {e}, {f}, {c}, {b}, {d} })));
   pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({}, {}, { {e}, {f}, {c}, {b}, {d} })));
@@ -581,7 +300,7 @@ TEST_F(SchulzeExample5, situation2)
     { 12,  8, 11, 11,  9,  0 },
   };
 
-  auto pairwiseMatrix = VoteUtils::calcPairwiseMatrix(
+  auto pairwiseMatrix = calcPairwiseMatrix(
       ballots, initiativeIds);
   EXPECT_EQ(pairwiseMatrix, expectedPairwiseMatrix);
 
@@ -603,7 +322,7 @@ TEST_F(SchulzeExample5, situation2)
 
   vector<vector<vector<unsigned long long>>> strongestPathMatrix;
   vector<vector<int>> winningPairs;
-  auto winners = VoteUtils::calcWinners(
+  auto winners = calcWinners(
     strongestPathMatrix, winningPairs, pairwiseMatrix);
 
   EXPECT_EQ(strongestPathMatrix, expectedstrongestPathMatrix);
@@ -613,10 +332,10 @@ TEST_F(SchulzeExample5, situation2)
 
 
 
-TEST(VoteUtils, comparePairwiseBattle)
+TEST_F(VoteCalculatorSchulzeImplTest, comparePairwiseBattle)
 {
-  EXPECT_EQ(VoteUtils::comparePairwiseBattle({5,4}, {4,0}), 1);
-  EXPECT_EQ(VoteUtils::comparePairwiseBattle({4,3}, {4,2}), -1);
-  EXPECT_EQ(VoteUtils::comparePairwiseBattle({4,3}, {4,3}), 0);
+  EXPECT_EQ(comparePairwiseBattle({5,4}, {4,0}), 1);
+  EXPECT_EQ(comparePairwiseBattle({4,3}, {4,2}), -1);
+  EXPECT_EQ(comparePairwiseBattle({4,3}, {4,3}), 0);
 
 }

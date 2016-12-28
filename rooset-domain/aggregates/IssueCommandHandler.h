@@ -6,6 +6,7 @@
 #include "UnitAggregate.h"
 #include "IssueAggregate.h"
 #include "enums/IssueState.h"
+#include "MemberWeightCalculatorImpl.h"
 #include "commands/CreateNewInitiativeCommand.h"
 #include "commands/CreateCompetingInitiativeCommand.h"
 #include "commands/SetIssueDelegationCommand.h"
@@ -26,9 +27,8 @@ namespace rooset {
   private:
     unique_ptr<AggregateRepository<IssueAggregate>> issueRepository;
     unique_ptr<AggregateRepository<UnitAggregate>> unitRepository;
-
-    void assertIssueState(const IssueAggregate& issue, const vector<IssueState>& acceptable);
-    bool isAdmissionQuorumPassed(const IssueAggregate& issue, const UnitAggregate& unit);
+    unique_ptr<MemberWeightCalculator> memberWeightCalculator = make_unique<
+        MemberWeightCalculatorImpl>();
 
   public:
     inline IssueCommandHandler(
@@ -49,6 +49,16 @@ namespace rooset {
     unique_ptr<ProjectEvent<Document>> evaluate(const AssessIssueAdmissionQuorumCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const CompleteIssueAdmissionPhaseCommand& c);
 
+  protected:
+    void assertIssueState(const IssueAggregate& issue, const vector<IssueState>& acceptable);
+    bool isAdmissionQuorumPassed(const IssueAggregate& issue, const UnitAggregate& unit);
+    bool isAdmissionQuorumPassed(
+        const rooset::Policy& policy,
+        const unsigned long long totalVoteWeight,
+        const unsigned long long support);
+
+    static unsigned long long calcTotalVoteWeight(
+        const map<uuid, rooset::MemberPrivilege>& privileges);
   };
 
 }

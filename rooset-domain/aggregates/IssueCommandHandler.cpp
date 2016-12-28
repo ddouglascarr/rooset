@@ -5,21 +5,11 @@
 #include "exceptions/CommandEvaluationException.h"
 #include "PrivilegeUtils.h"
 #include "CommandHandlerUtils.h"
-#include "VoteUtils.h"
 
 
-void rooset::IssueCommandHandler::assertIssueState(
-    const IssueAggregate& issue,
-    const vector<IssueState>& acceptable)
-{
-  auto i = find(acceptable.begin(), acceptable.end(), issue.getIssueState());
-  if (i == acceptable.end()) {
-    throw CommandEvaluationException(ExceptionCode::ISSUE_STATE_EXCEPTION,
-        "Issue is in the wrong state for this command");
-  }
-}
 
-unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const CreateNewInitiativeCommand& c)
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const CreateNewInitiativeCommand& c)
 {
   issueRepository->assertAggregateDoesNotExist(c.id);
   auto unit = unitRepository->load(c.unitId);
@@ -29,7 +19,10 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const C
   return unique_ptr<NewInitiativeCreatedEvent>(new NewInitiativeCreatedEvent(c));
 }
 
-unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const CreateCompetingInitiativeCommand & c)
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const CreateCompetingInitiativeCommand & c)
 {
   auto issue = issueRepository->load(c.id);
   auto unit = unitRepository->load(issue->getUnitId());
@@ -42,7 +35,10 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const C
       new CompetingInitiativeCreatedEvent(c));
 }
 
-unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const SetIssueDelegationCommand& c)
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const SetIssueDelegationCommand& c)
 {
   auto issue = issueRepository->load(c.id);
   auto unit = unitRepository->load(issue->getUnitId());
@@ -54,7 +50,10 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const S
       c.id, c.requesterId, c.trusteeId));
 }
 
-unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const UnsetIssueDelegationCommand& c)
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const UnsetIssueDelegationCommand& c)
 {
   auto issue = issueRepository->load(c.id);
   assertIssueState(*issue,
@@ -65,7 +64,10 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const U
       c.id, c.requesterId));
 }
 
-unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const BlockDelegationForIssueCommand& c)
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const BlockDelegationForIssueCommand& c)
 {
   const auto trusterId = c.requesterId;
   const auto issue = issueRepository->load(c.id);
@@ -84,7 +86,10 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const B
       c.id, trusterId));
  }
 
-unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const UnblockDelegationForIssueCommand& c)
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const UnblockDelegationForIssueCommand& c)
 {
   const auto trusterId = c.requesterId;
   const auto issue = issueRepository->load(c.id);
@@ -100,7 +105,10 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const U
       c.id, trusterId));
 }
 
-unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const GiveInitiativeSupportCommand& c)
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const GiveInitiativeSupportCommand& c)
 {
   auto issue = issueRepository->load(c.id);
   auto unit = unitRepository->load(issue->getUnitId());
@@ -114,7 +122,10 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const G
   return unique_ptr<InitiativeSupportGivenEvent>(new InitiativeSupportGivenEvent(c));
 }
 
-unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const RevokeInitiativeSupportCommand& c)
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const RevokeInitiativeSupportCommand& c)
 {
   auto issue = issueRepository->load(c.id);
   assertIssueState(*issue, { IssueState::ADMISSION, IssueState::DISCUSSION, IssueState::VERIFICATION });
@@ -126,26 +137,7 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const R
   return unique_ptr<InitiativeSupportRevokedEvent>(new InitiativeSupportRevokedEvent(c));
 }
 
-bool rooset::IssueCommandHandler::isAdmissionQuorumPassed(
-    const IssueAggregate& issue, const UnitAggregate& unit)
-{
-  assertIssueState(issue, { IssueState::ADMISSION });
-  auto area = unit.getAreas().at(issue.getAreaId());
-  const auto totalVoteWeight = VoteUtils::calcTotalVoteWeight(unit.getPrivileges());
-  const auto policy = unit.getPolicies().at(issue.getPolicyId());
-  const auto initiatives = issue.getInitiatives();
-  for (auto it : initiatives) {
-    const auto initiative = it.second;
-    auto support = 0;
-    for_each(initiative.supporters.begin(), initiative.supporters.end(),
-        [&](uuid supporterId) { support = support + VoteUtils::calcSupportWeight(
-            supporterId, initiative, issue, area, unit); });
-    if (VoteUtils::isAdmissionQuorumPassed(policy, totalVoteWeight, support)) {
-      return true;
-    }
-  }
-  return false;
-}
+
 
 unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
     const AssessIssueAdmissionQuorumCommand& c)
@@ -158,7 +150,10 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
   return make_unique<IssueAdmissionQuorumContinuedEvent>(c.id);
 }
 
-unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const CompleteIssueAdmissionPhaseCommand& c)
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const CompleteIssueAdmissionPhaseCommand& c)
 {
   auto issue = issueRepository->load(c.id);
   auto unit = unitRepository->load(issue->getUnitId());
@@ -167,3 +162,67 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(const C
   }
   return make_unique<IssueAdmissionQuorumFailedEvent>(c.id);
 }
+
+
+
+void rooset::IssueCommandHandler::assertIssueState(
+    const IssueAggregate& issue,
+    const vector<IssueState>& acceptable)
+{
+  auto i = find(acceptable.begin(), acceptable.end(), issue.getIssueState());
+  if (i == acceptable.end()) {
+    throw CommandEvaluationException(ExceptionCode::ISSUE_STATE_EXCEPTION,
+        "Issue is in the wrong state for this command");
+  }
+}
+
+
+
+bool rooset::IssueCommandHandler::isAdmissionQuorumPassed(
+    const IssueAggregate& issue, const UnitAggregate& unit)
+{
+  assertIssueState(issue, { IssueState::ADMISSION });
+  auto area = unit.getAreas().at(issue.getAreaId());
+  const auto totalVoteWeight = calcTotalVoteWeight(unit.getPrivileges());
+  const auto policy = unit.getPolicies().at(issue.getPolicyId());
+  const auto initiatives = issue.getInitiatives();
+  for (auto it : initiatives) {
+    const auto initiative = it.second;
+    auto support = 0;
+    for_each(initiative.supporters.begin(), initiative.supporters.end(),
+        [&](uuid supporterId) { support = support + memberWeightCalculator->calcSupportWeight(
+            supporterId, initiative, issue, area, unit); });
+    if (isAdmissionQuorumPassed(policy, totalVoteWeight, support)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
+
+bool rooset::IssueCommandHandler::isAdmissionQuorumPassed(
+    const rooset::Policy& policy, 
+    const unsigned long long totalVoteWeight,
+    const unsigned long long support)
+{
+  return (support * policy.issueQuorumDen) >= (policy.issueQuorumNum * totalVoteWeight);
+}
+
+
+
+unsigned long long rooset::IssueCommandHandler::calcTotalVoteWeight(
+    const map<uuid, rooset::MemberPrivilege>& privileges)
+{
+  auto totalVoteWeight = 0;
+  for (auto it : privileges) {
+    const auto privilege = it.second;
+    if (privilege.votingRight) {
+      totalVoteWeight += privilege.weight;
+    }
+  }
+  return totalVoteWeight;
+}
+
+
+

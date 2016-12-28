@@ -1,48 +1,19 @@
-#pragma once
-#import <vector>
-#import <map>
-#import <set>
-#import <tuple>
-#import "IssueAggregate.h"
-#import "UnitAggregate.h"
+#include "MemberWeightCalculator.h"
 
 using namespace std;
 namespace rooset {
 
-  class VoteUtils
+  class MemberWeightCalculatorImpl : public MemberWeightCalculator
   {
   public:
-    
-    static unsigned long long calcSupportWeight(
+    unsigned long long calcSupportWeight(
         const uuid& trusteeId,
         const Initiative& initiative,
         const IssueAggregate& issue,
         const Area& area,
-        const UnitAggregate& unit);
+        const UnitAggregate& unit) override;
 
-    static unsigned long long calcTotalVoteWeight(
-        const map<uuid, rooset::MemberPrivilege>& privileges);
-
-    static bool isAdmissionQuorumPassed(
-        const rooset::Policy& policy,
-        const unsigned long long totalVoteWeight,
-        const unsigned long long support);
-
-    static vector<vector<unsigned long long>> calcPairwiseMatrix(
-        const vector<SchulzeBallot>& ballots,
-        const vector<uuid>& initiativeIds);
-    
-    static set<int> calcWinners(
-        vector<vector<vector<unsigned long long>>>& strogestPathMatrix,
-        vector<vector<int>>& winningPairs,
-        const vector<vector<unsigned long long>>& pairwiseMatrix);
-
-    static int comparePairwiseBattle(
-        const vector<unsigned long long> a,
-        const vector<unsigned long long> b);
-
-  private:
-    
+  protected:
     static unsigned long long calcIssueSupportWeight(
         const uuid& trusteeId,
         const unsigned long long weight,
@@ -78,7 +49,5 @@ namespace rooset {
     
     static bool isDelegated(
         const map<uuid, uuid>& delegations, const uuid& trusterId);
-
   };
-
 }
