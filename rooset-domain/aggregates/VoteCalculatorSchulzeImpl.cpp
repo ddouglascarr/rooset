@@ -1,37 +1,26 @@
 #include <stdexcept>
+#include <memory>
 #include "VoteCalculatorSchulzeImpl.h"
 #include "framework/IdToolsImpl.h"
 
 
 
-vector<vector<unsigned long long>> rooset::VoteCalculatorSchulzeImpl::calcPairwiseMatrix(
+set<uuid> rooset::VoteCalculatorSchulzeImpl::calcWinners(
     const vector<SchulzeBallot>& ballots,
     const vector<uuid>& initiativeIds)
 {
-  vector<vector<unsigned long long>> matrix(initiativeIds.size(), vector<unsigned long long>(
-      initiativeIds.size(), 0));
+  auto pairwiseMatrix = calcPairwiseMatrix(ballots, initiativeIds);
+  vector<vector<vector<unsigned long long>>> strongestPathMatrix;
+  vector<vector<int>> winningPairs;
+
+  auto schulzeWinners = calcSchulzeWinners(
+    strongestPathMatrix, winningPairs, pairwiseMatrix);
   
-  map<uuid, int> idPos;
-  for (int i = 0; i < initiativeIds.size(); ++i) {
-    idPos[initiativeIds[i]] = i;
+  set<uuid> winners;
+  for (auto i : schulzeWinners) {
+    winners.insert(initiativeIds.at(i));
   }
-
-  for (auto ballot : ballots) {
-    auto schulzeRanking = ballot.getSchulzeRanking();
-    for (int iRank = 0; iRank < schulzeRanking.size(); ++iRank) {
-      for (uuid iId : schulzeRanking[iRank]) {
-        for (int jRank = 0; jRank < schulzeRanking.size(); ++jRank) {
-          for (uuid jId : schulzeRanking[jRank]) {
-            if (iRank < jRank) {
-              matrix[idPos[iId]][idPos[jId]] += ballot.getWeight();
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return matrix;
+  return winners;
 }
 
 
@@ -40,7 +29,7 @@ vector<vector<unsigned long long>> rooset::VoteCalculatorSchulzeImpl::calcPairwi
  * Described in S2.3 of Schulze (draft, 23 December 2016) (pp.12-14)
  * at http://m-schulze.9mail.de/schulze1.pdf
  */
-set<int> rooset::VoteCalculatorSchulzeImpl::calcWinners(
+set<int> rooset::VoteCalculatorSchulzeImpl::calcSchulzeWinners(
     vector<vector<vector<unsigned long long>>>& strogestPathMatrix,
     vector<vector<int>>& winningPairs,
     const vector<vector<unsigned long long>>& pairwiseMatrix)
@@ -96,6 +85,38 @@ set<int> rooset::VoteCalculatorSchulzeImpl::calcWinners(
   }
 
   return winners;
+}
+
+
+
+vector<vector<unsigned long long>> rooset::VoteCalculatorSchulzeImpl::calcPairwiseMatrix(
+    const vector<SchulzeBallot>& ballots,
+    const vector<uuid>& initiativeIds)
+{
+  vector<vector<unsigned long long>> matrix(initiativeIds.size(), vector<unsigned long long>(
+      initiativeIds.size(), 0));
+  
+  map<uuid, int> idPos;
+  for (int i = 0; i < initiativeIds.size(); ++i) {
+    idPos[initiativeIds[i]] = i;
+  }
+
+  for (auto ballot : ballots) {
+    auto schulzeRanking = ballot.getSchulzeRanking();
+    for (int iRank = 0; iRank < schulzeRanking.size(); ++iRank) {
+      for (uuid iId : schulzeRanking[iRank]) {
+        for (int jRank = 0; jRank < schulzeRanking.size(); ++jRank) {
+          for (uuid jId : schulzeRanking[jRank]) {
+            if (iRank < jRank) {
+              matrix[idPos[iId]][idPos[jId]] += ballot.getWeight();
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return matrix;
 }
 
 

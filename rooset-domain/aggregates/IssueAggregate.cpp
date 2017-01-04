@@ -1,18 +1,6 @@
 #include "IssueAggregate.h"
 
 
-rooset::SchulzeBallot::SchulzeBallot(
-    const vector<vector<uuid>>& approve,
-    const vector<uuid>& inAbstain,
-    const vector<vector<uuid>>& disapprove)
-{
-  schulzeRanking.insert(schulzeRanking.end(), approve.begin(), approve.end());
-  auto abstain = inAbstain;
-  abstain.push_back(idTools.generateNilId());
-  schulzeRanking.push_back({ abstain });
-  schulzeRanking.insert(schulzeRanking.end(), disapprove.begin(), disapprove.end());
-}
-  
 
 rooset::IssueAggregate::IssueAggregate(const NewInitiativeCreatedEvent& e) :
     id(e.id), unitId(e.unitId), areaId(e.areaId),
@@ -21,10 +9,14 @@ rooset::IssueAggregate::IssueAggregate(const NewInitiativeCreatedEvent& e) :
   initiatives[e.initiativeId] = Initiative{ e.name, e.requesterId };
 }
 
+
+
 void rooset::IssueAggregate::handleEvent(const CompetingInitiativeCreatedEvent & e)
 {
   initiatives[e.initiativeId] = Initiative{ e.name, e.requesterId };
 }
+
+
 
 void rooset::IssueAggregate::handleEvent(const IssueDelegationSetEvent& e)
 {
@@ -34,10 +26,14 @@ void rooset::IssueAggregate::handleEvent(const IssueDelegationSetEvent& e)
   if (i != blockedDelegations.end()) blockedDelegations.erase(i);
 }
 
+
+
 void rooset::IssueAggregate::handleEvent(const IssueDelegationUnsetEvent& e)
 {
   delegations.erase(e.trusterId);
 }
+
+
 
 void rooset::IssueAggregate::handleEvent(const DelegationBlockedForIssueEvent& e)
 {
@@ -47,16 +43,22 @@ void rooset::IssueAggregate::handleEvent(const DelegationBlockedForIssueEvent& e
   if (i != delegations.end()) delegations.erase(i);
 }
 
+
+
 void rooset::IssueAggregate::handleEvent(const DelegationUnblockedForIssueEvent& e)
 {
   auto i = find(blockedDelegations.begin(), blockedDelegations.end(), e.trusterId);
   if (i != blockedDelegations.end()) blockedDelegations.erase(i);
 }
 
+
+
 void rooset::IssueAggregate::handleEvent(const InitiativeSupportGivenEvent& e)
 {
   initiatives.at(e.initiativeId).supporters.push_back(e.requesterId);
 }
+
+
 
 void rooset::IssueAggregate::handleEvent(const InitiativeSupportRevokedEvent& e)
 {
@@ -65,25 +67,35 @@ void rooset::IssueAggregate::handleEvent(const InitiativeSupportRevokedEvent& e)
   if (i != supporters.end()) supporters.erase(i);
 }
 
+
+
 void rooset::IssueAggregate::handleEvent(const IssueAdmissionQuorumPassedEvent& e)
 {
   issueState = IssueState::DISCUSSION;
 }
+
+
 
 void rooset::IssueAggregate::handleEvent(const IssueAdmissionQuorumFailedEvent& e)
 {
   issueState = IssueState::CANCELED_NO_INITIATIVE_ADMITTED;
 }
 
+
+
 void rooset::IssueAggregate::handleEvent(const IssueDiscussionPhaseCompletedEvent& e)
 {
   issueState = IssueState::VERIFICATION;
 }
 
+
+
 void rooset::IssueAggregate::handleEvent(const IssueVerificationPhaseCompletedEvent& e)
 {
   issueState = IssueState::VOTING;
 }
+
+
 
 void rooset::IssueAggregate::handleEvent(const IssueVotingPhaseCompletedEvent& e)
 {

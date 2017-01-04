@@ -6,12 +6,16 @@ namespace rooset {
   class VoteCalculatorSchulzeImpl : public VoteCalculator
   {
   public:
-    set<int> calcWinners(
-        vector<vector<vector<unsigned long long>>>& strogestPathMatrix,
-        vector<vector<int>>& winningPairs,
-        const vector<vector<unsigned long long>>& pairwiseMatrix) override;
+    set<uuid> calcWinners(
+      const vector<SchulzeBallot>& ballots,
+      const vector<uuid>& initiativeIds) override;
 
   protected:
+    set<int> calcSchulzeWinners(
+        vector<vector<vector<unsigned long long>>>& strogestPathMatrix,
+        vector<vector<int>>& winningPairs,
+        const vector<vector<unsigned long long>>& pairwiseMatrix);
+
     vector<vector<unsigned long long>> calcPairwiseMatrix(
         const vector<SchulzeBallot>& ballots,
         const vector<uuid>& initiativeIds);

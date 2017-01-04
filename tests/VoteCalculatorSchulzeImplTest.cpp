@@ -8,6 +8,8 @@
 #include "aggregates/VoteCalculatorSchulzeImpl.h"
 
 
+using namespace rooset;
+
 TEST(SchulzeBallot, getSchulzeRanking)
 {
   IdToolsImpl idTools;
@@ -16,10 +18,10 @@ TEST(SchulzeBallot, getSchulzeRanking)
   uuid c = idTools.parse("464b1ebb-32c1-460c-8e9e-cccccccccccc");
   uuid sq = idTools.generateNilId();
 
-  SchulzeBallot p1({ {a} }, {}, { {b,c} });
-  SchulzeBallot p3({ {a}, {b}, {c} }, {}, {});
-  SchulzeBallot p4({ {c}, {b}, {a} }, {}, {});
-  SchulzeBallot p5({ {c}, {b} }, {a}, {});
+  VoteCalculator::SchulzeBallot p1({ {a} }, {}, { {b,c} });
+  VoteCalculator::SchulzeBallot p3({ {a}, {b}, {c} }, {}, {});
+  VoteCalculator::SchulzeBallot p4({ {c}, {b}, {a} }, {}, {});
+  VoteCalculator::SchulzeBallot p5({ {c}, {b} }, {a}, {});
 
   vector<vector<uuid>> p1Ranking { {a}, {sq}, {b,c} };
   EXPECT_EQ(p1.getSchulzeRanking(), p1Ranking);
@@ -62,23 +64,25 @@ TEST_F(VoteCalculatorSchulzeImplTest, example1)
   uuid d = idTools.parse("464b1ebb-32c1-460c-8e9e-dddddddddddd");
   const vector<uuid> initiativeIds { a, b, c, d };
   
-  SchulzeBallot p1({}, {}, { {c}, {d}, {b} });
+  VoteCalculator::SchulzeBallot p1({}, {}, { {c}, {d}, {b} });
   p1.setWeight(8);
-  SchulzeBallot p2({ {b} }, {}, { {d} , {c} });
+  VoteCalculator::SchulzeBallot p2({ {b} }, {}, { {d} , {c} });
   p2.setWeight(2);
-  SchulzeBallot p3({ {c}, {d}, {b} }, {}, {});
+  VoteCalculator::SchulzeBallot p3({ {c}, {d}, {b} }, {}, {});
   p3.setWeight(4);
-  SchulzeBallot p4({ {d}, {b}, }, {}, { {c} });
+  VoteCalculator::SchulzeBallot p4({ {d}, {b}, }, {}, { {c} });
   p4.setWeight(4);
 
   // the rest are one line in the text, split up to make sure adding works
-  SchulzeBallot p5({ {d}, {c}, {b}, }, {}, {});
+  VoteCalculator::SchulzeBallot p5({ {d}, {c}, {b}, }, {}, {});
   p5.setWeight(1);
-  SchulzeBallot p6({ {d}, {c}, {b}, }, {}, {});
+  VoteCalculator::SchulzeBallot p6({ {d}, {c}, {b}, }, {}, {});
   p6.setWeight(1);
-  SchulzeBallot p7({ {d}, {c}, {b}, }, {}, {});
+  VoteCalculator::SchulzeBallot p7({ {d}, {c}, {b}, }, {}, {});
   p7.setWeight(1);
 
+  const auto ballots = { p1, p2, p3, p4, p5, p6, p7 };
+  
   const vector<vector<unsigned long long>> expectedPairwiseMatrix {
     {  0,  8, 14, 10 },
     { 13,  0,  6,  2 },
@@ -87,13 +91,14 @@ TEST_F(VoteCalculatorSchulzeImplTest, example1)
   };
 
   const auto pairwiseMatrix = calcPairwiseMatrix(
-      { p1, p2, p3, p4, p5, p6, p7 }, initiativeIds);
+      ballots, initiativeIds);
   EXPECT_EQ(pairwiseMatrix, expectedPairwiseMatrix);
 
   vector<vector<vector<unsigned long long>>> strongestPathMatrix;
   vector<vector<int>> winningPairs;
-  auto winners = calcWinners(
+  auto schulzeWinners = calcSchulzeWinners(
     strongestPathMatrix, winningPairs, pairwiseMatrix);
+  auto winners = calcWinners(ballots, initiativeIds);
 
   vector<vector<vector<unsigned long long>>> expectedstrongestPathMatrix {
     {    {  0,  0 },   { 14,  7 },   { 14,  7 },   { 12,  9 }    },
@@ -103,10 +108,12 @@ TEST_F(VoteCalculatorSchulzeImplTest, example1)
   };
   const vector<vector<int>> expectedWinningPairs {
       {0,1}, {0,2}, {2,1}, {3,0}, {3,1}, {3,2} };
-  const set<int> expectedWinners { 3 };
+  const set<int> expectedSchulzeWinners { 3 };
+  const set<uuid> expectedWinners { d };
 
   EXPECT_EQ(strongestPathMatrix, expectedstrongestPathMatrix);
   EXPECT_THAT(winningPairs, testing::WhenSorted(testing::ElementsAreArray(expectedWinningPairs)));
+  EXPECT_EQ(schulzeWinners, expectedSchulzeWinners);
   EXPECT_EQ(winners, expectedWinners);
 }
 
@@ -121,19 +128,20 @@ TEST_F(VoteCalculatorSchulzeImplTest, example_2)
   uuid d = idTools.parse("464b1ebb-32c1-460c-8e9e-dddddddddddd");
   const vector<uuid> initiativeIds { a, b, c, d };
   
-  SchulzeBallot p1({}, {}, { {b}, {c}, {d} });
+  VoteCalculator::SchulzeBallot p1({}, {}, { {b}, {c}, {d} });
   p1.setWeight(3);
-  SchulzeBallot p2({ {c}, {b}, {d} }, {}, {});
+  VoteCalculator::SchulzeBallot p2({ {c}, {b}, {d} }, {}, {});
   p2.setWeight(2);
   
-  SchulzeBallot p3({ {d} }, {}, { {b}, {c} });
+  VoteCalculator::SchulzeBallot p3({ {d} }, {}, { {b}, {c} });
   p3.setWeight(1);
-  SchulzeBallot p4({ {d} }, {}, { {b}, {c} });
+  VoteCalculator::SchulzeBallot p4({ {d} }, {}, { {b}, {c} });
   p4.setWeight(1);
   
-  SchulzeBallot p5({ {d}, {b}, {c} }, {}, {});
+  VoteCalculator::SchulzeBallot p5({ {d}, {b}, {c} }, {}, {});
   p5.setWeight(2);
 
+  const auto ballots = { p1, p2, p3, p4, p5};
   const vector<vector<unsigned long long>> expectedPairwiseMatrix {
     {  0,  5,  5,  3 },
     {  4,  0,  7,  5 },
@@ -142,13 +150,14 @@ TEST_F(VoteCalculatorSchulzeImplTest, example_2)
   };
 
   const auto pairwiseMatrix = calcPairwiseMatrix(
-      { p1, p2, p3, p4, p5}, initiativeIds);
+      ballots, initiativeIds);
   EXPECT_EQ(pairwiseMatrix, expectedPairwiseMatrix);
 
   vector<vector<vector<unsigned long long>>> strongestPathMatrix;
   vector<vector<int>> winningPairs;
-  auto winners = calcWinners(
+  auto schulzeWinners = calcSchulzeWinners(
     strongestPathMatrix, winningPairs, pairwiseMatrix);
+  auto winners = calcWinners(ballots, initiativeIds);
 
   vector<vector<vector<unsigned long long>>> expectedstrongestPathMatrix {
     {    {  0,  0 },  {  5,  4 },  {  5,  4 },  {  5,  4 }    },
@@ -158,10 +167,12 @@ TEST_F(VoteCalculatorSchulzeImplTest, example_2)
   };
   const vector<vector<int>> expectedWinningPairs {
       {1,2}, {3,0} };
-  const set<int> expectedWinners { 1, 3 };
+  const set<int> expectedSchulzeWinners { 1, 3 };
+  const set<uuid> expectedWinners { b, d };
 
   EXPECT_EQ(strongestPathMatrix, expectedstrongestPathMatrix);
   EXPECT_THAT(winningPairs, testing::WhenSorted(testing::ElementsAreArray(expectedWinningPairs)));
+  EXPECT_EQ(schulzeWinners, expectedSchulzeWinners);
   EXPECT_EQ(winners, expectedWinners);
 }
 
@@ -180,7 +191,7 @@ protected:
   uuid e;
   uuid f;
   vector<uuid> initiativeIds;
-  vector<unique_ptr<SchulzeBallot>> pBallots;
+  vector<unique_ptr<VoteCalculator::SchulzeBallot>> pBallots;
       
   virtual void SetUp()
   {
@@ -192,31 +203,31 @@ protected:
     f = idTools.parse("464b1ebb-32c1-460c-8e9e-ffffffffffff");
     initiativeIds = { a, b, c, d, e, f };
 
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({}, {}, { {d}, {e}, {b}, {c}, {f} })));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({}, {}, { {d}, {e}, {b}, {c}, {f} })));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({}, {}, { {d}, {e}, {b}, {c}, {f} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({}, {}, { {d}, {e}, {b}, {c}, {f} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({}, {}, { {d}, {e}, {b}, {c}, {f} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({}, {}, { {d}, {e}, {b}, {c}, {f} })));
     
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {b}, {f}, {e}, {c}, {d} }, {}, {})));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {b}, {f}, {e}, {c}, {d} }, {}, {})));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {b}, {f}, {e}, {c}, {d} }, {}, {})));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {b}, {f}, {e}, {c}, {d} }, {}, {})));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {b}, {f}, {e}, {c}, {d} }, {}, {})));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {b}, {f}, {e}, {c}, {d} }, {}, {})));
     
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {c} }, {}, { {b}, {f}, {d}, {e} })));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {c} }, {}, { {b}, {f}, {d}, {e} })));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {c} }, {}, { {b}, {f}, {d}, {e} })));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {c} }, {}, { {b}, {f}, {d}, {e} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {c} }, {}, { {b}, {f}, {d}, {e} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {c} }, {}, { {b}, {f}, {d}, {e} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {c} }, {}, { {b}, {f}, {d}, {e} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {c} }, {}, { {b}, {f}, {d}, {e} })));
 
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {d}, {b}, {c}, {e}, {f} }, {}, {})));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {d}, {b}, {c}, {e}, {f} }, {}, {})));
 
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {d}, {e}, {f} }, {}, { {b}, {c} })));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {d}, {e}, {f} }, {}, { {b}, {c} })));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {d}, {e}, {f} }, {}, { {b}, {c} })));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {d}, {e}, {f} }, {}, { {b}, {c} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {d}, {e}, {f} }, {}, { {b}, {c} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {d}, {e}, {f} }, {}, { {b}, {c} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {d}, {e}, {f} }, {}, { {b}, {c} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {d}, {e}, {f} }, {}, { {b}, {c} })));
 
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {e}, {c}, {b}, {d}, {f} }, {}, {})));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {e}, {c}, {b}, {d}, {f} }, {}, {})));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {e}, {c}, {b}, {d}, {f} }, {}, {})));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {e}, {c}, {b}, {d}, {f} }, {}, {})));
     
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {f} }, {}, { {c}, {d}, {b}, {e} })));
-    pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({ {f} }, {}, { {c}, {d}, {b}, {e} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {f} }, {}, { {c}, {d}, {b}, {e} })));
+    pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({ {f} }, {}, { {c}, {d}, {b}, {e} })));
 
     for (auto& b : pBallots) {
       b->setWeight(1);
@@ -230,7 +241,7 @@ protected:
 TEST_F(VoteCalculatorSchulzeImplTestExample5, situation1)
 {
 
-  vector<SchulzeBallot> ballots;
+  vector<VoteCalculator::SchulzeBallot> ballots;
   for (auto& b : pBallots) {
     ballots.push_back(*b);
   }
@@ -252,8 +263,9 @@ TEST_F(VoteCalculatorSchulzeImplTestExample5, situation1)
 
   vector<vector<vector<unsigned long long>>> strongestPathMatrix;
   vector<vector<int>> winningPairs;
-  auto winners = calcWinners(
+  auto schulzeWinners = calcSchulzeWinners(
     strongestPathMatrix, winningPairs, pairwiseMatrix);
+  auto winners = calcWinners(ballots, initiativeIds);
 
   vector<vector<vector<unsigned long long>>> expectedstrongestPathMatrix {
     {    {  0,  0 },  { 13,  6 },  { 11,  8 },  { 11,  8 },  { 11,  8 },  { 13,  6 }    },
@@ -270,10 +282,12 @@ TEST_F(VoteCalculatorSchulzeImplTestExample5, situation1)
       {4,2},
       {5,2}, {5,3}, {5,4}
       };
-  const set<int> expectedWinners { 0 };
+  const set<int> expectedSchulzeWinners { 0 };
+  const set<uuid> expectedWinners { a };
 
   EXPECT_EQ(strongestPathMatrix, expectedstrongestPathMatrix);
   EXPECT_THAT(winningPairs, testing::WhenSorted(testing::ElementsAreArray(expectedWinningPairs)));
+  EXPECT_EQ(schulzeWinners, expectedSchulzeWinners);
   EXPECT_EQ(winners, expectedWinners);
 }
 
@@ -281,10 +295,10 @@ TEST_F(VoteCalculatorSchulzeImplTestExample5, situation1)
 
 TEST_F(VoteCalculatorSchulzeImplTestExample5, situation2)
 {
-  pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({}, {}, { {e}, {f}, {c}, {b}, {d} })));
-  pBallots.push_back(unique_ptr<SchulzeBallot>(new SchulzeBallot({}, {}, { {e}, {f}, {c}, {b}, {d} })));
+  pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({}, {}, { {e}, {f}, {c}, {b}, {d} })));
+  pBallots.push_back(unique_ptr<VoteCalculator::SchulzeBallot>(new VoteCalculator::SchulzeBallot({}, {}, { {e}, {f}, {c}, {b}, {d} })));
 
-  vector<SchulzeBallot> ballots;
+  vector<VoteCalculator::SchulzeBallot> ballots;
   for (auto& b : pBallots) {
     b->setWeight(1);
     ballots.push_back(*b);
@@ -318,15 +332,18 @@ TEST_F(VoteCalculatorSchulzeImplTestExample5, situation2)
       {2,0}, {2,1}, {2,5},
       {3,0}, {3,1}, {3,2}, {3,4}, {3,5},
       {4,0}, {4,1}, {4,2}, {4,5}   };
-  const set<int> expectedWinners { 3 };
+  const set<int> expectedSchulzeWinners { 3 };
+  const set<uuid> expectedWinners { d };
 
   vector<vector<vector<unsigned long long>>> strongestPathMatrix;
   vector<vector<int>> winningPairs;
-  auto winners = calcWinners(
+  auto schulzeWinners = calcSchulzeWinners(
     strongestPathMatrix, winningPairs, pairwiseMatrix);
+  auto winners = calcWinners(ballots, initiativeIds);
 
   EXPECT_EQ(strongestPathMatrix, expectedstrongestPathMatrix);
   EXPECT_THAT(winningPairs, testing::WhenSorted(testing::ElementsAreArray(expectedWinningPairs)));
+  EXPECT_EQ(schulzeWinners, expectedSchulzeWinners);
   EXPECT_EQ(winners, expectedWinners);
 }
 
