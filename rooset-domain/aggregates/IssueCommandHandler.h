@@ -6,7 +6,7 @@
 #include "UnitAggregate.h"
 #include "IssueAggregate.h"
 #include "enums/IssueState.h"
-#include "MemberWeightCalculatorImpl.h"
+#include "DelegationCalculatorImpl.h"
 #include "commands/CreateNewInitiativeCommand.h"
 #include "commands/CreateCompetingInitiativeCommand.h"
 #include "commands/SetIssueDelegationCommand.h"
@@ -27,8 +27,8 @@ namespace rooset {
   private:
     unique_ptr<AggregateRepository<IssueAggregate>> issueRepository;
     unique_ptr<AggregateRepository<UnitAggregate>> unitRepository;
-    unique_ptr<MemberWeightCalculator> memberWeightCalculator = make_unique<
-        MemberWeightCalculatorImpl>();
+    unique_ptr<DelegationCalculator> delegationCalculator = make_unique<
+        DelegationCalculatorImpl>();
 
   public:
     inline IssueCommandHandler(

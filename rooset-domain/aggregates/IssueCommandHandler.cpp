@@ -189,9 +189,12 @@ bool rooset::IssueCommandHandler::isAdmissionQuorumPassed(
   for (auto it : initiatives) {
     const auto initiative = it.second;
     auto support = 0;
-    for_each(initiative.supporters.begin(), initiative.supporters.end(),
-        [&](uuid supporterId) { support = support + memberWeightCalculator->calcSupportWeight(
-            supporterId, initiative, issue, area, unit); });
+    const auto& privileges = unit.getPrivileges();
+    const auto& delegations = delegationCalculator->calcInitiativeDelegations(
+        initiative, issue, area, unit, privileges);
+    for (auto supporterId : initiative.supporters) {
+      support += delegationCalculator->calcMemberWeight(privileges, delegations, supporterId);
+    }
     if (isAdmissionQuorumPassed(policy, totalVoteWeight, support)) {
       return true;
     }

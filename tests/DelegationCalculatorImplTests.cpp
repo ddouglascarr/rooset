@@ -8,7 +8,7 @@
 #include "events/EventUtils.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
-#include "aggregates/MemberWeightCalculatorImpl.h"
+#include "aggregates/DelegationCalculatorImpl.h"
 
 using namespace std;
 using namespace rooset;
@@ -17,11 +17,18 @@ namespace roosetVoteUtilsTests {
 
 
 
-class MemberWeightCalculatorImplTest :
-    protected MemberWeightCalculatorImpl,
+class DelegationCalculatorImplTest :
+    protected DelegationCalculatorImpl,
     public ::testing::Test
 {
 protected:
+  IdToolsImpl idTools;
+  uuid a = idTools.parse("464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa");
+  uuid b = idTools.parse("464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb");
+  uuid c = idTools.parse("464b1ebb-32c1-460c-8e9e-cccccccccccc");
+  uuid d = idTools.parse("464b1ebb-32c1-460c-8e9e-dddddddddddd");
+  uuid e = idTools.parse("464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee");
+  uuid f = idTools.parse("464b1ebb-32c1-460c-8e9e-ffffffffffff");
   vector<unique_ptr<rapidjson::Document>> givenEvents;
   unique_ptr<UnitAggregate> unit = nullptr;
   unique_ptr<IssueAggregate> issue = nullptr;
@@ -242,46 +249,50 @@ protected:
 
 
 
-TEST_F(MemberWeightCalculatorImplTest, calcSupportWeight)
+TEST_F(DelegationCalculatorImplTest, calcInitiativeDelegations)
 {
-
   IdToolsImpl idTools;
-
-
-  auto supportWeightA = calcSupportWeight(
-    idTools.parse("464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"),
-    issue->getInitiatives().at(idTools.parse("464b1ebb-32c1-460c-8e9e-777777777777")),
-    *issue,
-    unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
-    *unit);
-
-  auto supportWeightC = calcSupportWeight(
-    idTools.parse("464b1ebb-32c1-460c-8e9e-cccccccccccc"),
-    issue->getInitiatives().at(idTools.parse("464b1ebb-32c1-460c-8e9e-777777777777")),
-    *issue,
-    unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
-    *unit);
-
-  auto supportWeightF = calcSupportWeight(
-    idTools.parse("464b1ebb-32c1-460c-8e9e-ffffffffffff"),
-    issue->getInitiatives().at(idTools.parse("464b1ebb-32c1-460c-8e9e-777777777777")),
-    *issue,
-    unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
-    *unit);
-
-  auto supportWeightE = calcSupportWeight(
-    idTools.parse("464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee"),
-    issue->getInitiatives().at(idTools.parse("464b1ebb-32c1-460c-8e9e-777777777777")),
-    *issue,
-    unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
-    *unit);
-
-  EXPECT_EQ(supportWeightA, 3);
-  EXPECT_EQ(supportWeightC, 3);
-  EXPECT_EQ(supportWeightF, 2);
-  EXPECT_EQ(supportWeightE, 1);
+  auto delegations = calcInitiativeDelegations(
+      issue->getInitiatives().at(idTools.parse("464b1ebb-32c1-460c-8e9e-777777777777")),
+      *issue,
+      unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
+      *unit,
+      unit->getPrivileges());
+  map<uuid, uuid> expectedDelegations = {
+    { a, a },
+    { b, a },
+    { c, c },
+    { d, d },
+    { e, e },
+    { f, f },
+  };
+  
+  EXPECT_EQ(delegations, expectedDelegations);
 }
 
+
+
+TEST_F(DelegationCalculatorImplTest, calcmemberWeight)
+{
+
+  const auto& privileges = unit->getPrivileges();
+  auto delegations = calcInitiativeDelegations(
+      issue->getInitiatives().at(idTools.parse("464b1ebb-32c1-460c-8e9e-777777777777")),
+      *issue,
+      unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
+      *unit,
+      unit->getPrivileges());
+  
+  auto memberWeightA = calcMemberWeight(privileges, delegations, a);
+  auto memberWeightC = calcMemberWeight(privileges, delegations, c);
+  auto memberWeightF = calcMemberWeight(privileges, delegations, f);
+  auto memberWeightE = calcMemberWeight(privileges, delegations, e);
+    
+  EXPECT_EQ(memberWeightA, 3);
+  EXPECT_EQ(memberWeightC, 3);
+  EXPECT_EQ(memberWeightF, 2);
+  EXPECT_EQ(memberWeightE, 1);
+}
 
 
 }
