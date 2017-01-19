@@ -1,6 +1,9 @@
+#pragma once
 #include <set>
 #include <vector>
+#include <map>
 #include "IssueAggregate.h"
+#include "SchulzeBallot.h"
 #include "framework/uuid.h"
 
 using namespace std;
@@ -9,28 +12,12 @@ namespace rooset {
   class VoteCalculator
   {
   public:
-    class SchulzeBallot {
-    private:
-      IdToolsImpl idTools;
-      vector<vector<uuid>> schulzeRanking;
-      unsigned long long weight = 0;
-    public:
-      SchulzeBallot(
-          const vector<vector<uuid>>& approve,
-          const vector<uuid>& abstain,
-          const vector<vector<uuid>>& disapprove);
-
-      inline auto getSchulzeRanking() const { return schulzeRanking; }
-      inline void setWeight(unsigned long long w) { weight = w; }
-      inline auto getWeight() const { return weight; }
-    };
-
     virtual ~VoteCalculator() {};
 
+    // Will add status quo (NilId) to possible initiatives
     virtual set<uuid> calcWinners(
-      const vector<SchulzeBallot>& ballots,
-      const vector<uuid>& initiativeIds) =0;
-
+        const vector<SchulzeBallot>& ballots,
+        const map<uuid, Initiative>& initiatives) =0;
   };
 
 }

@@ -17,20 +17,19 @@ module.exports = {
                 d["payload"]["${v}"].GetString(),
                 d["payload"]["${v}"].GetStringLength())))`,
 
+  schulzeBallot: (v) => `
+            ${v}(rooset::SchulzeBallot::parse(d["payload"]["${v}"]))`,
+
   string: (v) => `
-            ${v}(string(
-                d["payload"]["${v}"].GetString(),
-                d["payload"]["${v}"].GetStringLength()))`,
+            ${v}(JsonUtils::parseString(d["payload"]["${v}"]))`,
 
   uuid: (v) => `
-            ${v}(idTools->parse(string(
-                d["payload"]["${v}"].GetString(),
-                d["payload"]["${v}"].GetStringLength())))`,
+            ${v}(JsonUtils::parseUuid(d["payload"]["${v}"]))`,
 
   uuidArray: (v) => `
             ${v}(JsonUtils::parseArray<uuid>(
                 d["payload"]["${v}"],
-                [&](const rapidjson::Value& v) { return idTools->parse(string(v.GetString(), v.GetStringLength())); }))`,
+                [&](const rapidjson::Value& v) { return JsonUtils::parseUuid(v); }))`,
 
   date: (v) => `
             ${v}(boost::posix_time::from_time_t(

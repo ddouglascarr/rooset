@@ -1,3 +1,4 @@
+#pragma once
 #include <map>
 #include "UnitAggregate.h"
 #include "IssueAggregate.h"
@@ -12,6 +13,12 @@ namespace rooset {
 
     virtual map<uuid, uuid> calcInitiativeDelegations(
         const Initiative& initiative,
+        const IssueAggregate& issue,
+        const Area& area,
+        const UnitAggregate& unit,
+        const map<uuid, MemberPrivilege>& memberPrivileges) =0;
+
+    virtual map<uuid, uuid> calcIssueDelegations(
         const IssueAggregate& issue,
         const Area& area,
         const UnitAggregate& unit,

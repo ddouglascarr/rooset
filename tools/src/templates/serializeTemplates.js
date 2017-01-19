@@ -36,13 +36,15 @@ module.exports = {
           payload.AddMember("${v}", ${v_value}, d->GetAllocator());    `;
   },
 
-  string: (v) => {
+  schulzeBallot: (v) => {
     const v_value = `${v}_value`;
     return `
-          Value ${v_value};
-          ${v_value}.SetString(${v}.c_str(), ${v}.size(), d->GetAllocator());
+          auto ${v_value} = rooset::SchulzeBallot::serialize(${v}, d->GetAllocator());
           payload.AddMember("${v}", ${v_value}, d->GetAllocator());    `;
   },
+
+  string: (v) => `
+          JsonUtils::serializeString(${v}, d->GetAllocator());`,
 
   uuid: (v) => {
     const v_value = `${v}_value`;
@@ -60,11 +62,8 @@ module.exports = {
     return `
           auto ${v_value} = JsonUtils::serializeArray<uuid>(
               ${v},
-              [&](const uuid& id) {
-                Value v;
-                auto str = idTools->serialize(id);
-                v.SetString(str.c_str(), str.size(), d->GetAllocator());
-                return v;
+              [](const uuid& id, rapidjson::Document::AllocatorType& allocator) {
+                return JsonUtils::serializeUuid(id, allocator);
               },
               d->GetAllocator());
           payload.AddMember("${v}", ${v_value}, d->GetAllocator());

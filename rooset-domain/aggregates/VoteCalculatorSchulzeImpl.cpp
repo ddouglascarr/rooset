@@ -6,6 +6,19 @@
 
 
 set<uuid> rooset::VoteCalculatorSchulzeImpl::calcWinners(
+        const vector<SchulzeBallot>& ballots,
+        const map<uuid, Initiative>& initiatives)
+{
+  vector<uuid> initiativeIds = { idTools->generateNilId() }; // status quo
+  for (auto it = initiatives.begin(); it != initiatives.end(); ++it) {
+    initiativeIds.push_back(it->first);
+  }
+  return calcWinners(ballots, initiativeIds);
+}
+
+
+
+set<uuid> rooset::VoteCalculatorSchulzeImpl::calcWinners(
     const vector<SchulzeBallot>& ballots,
     const vector<uuid>& initiativeIds)
 {
@@ -15,7 +28,7 @@ set<uuid> rooset::VoteCalculatorSchulzeImpl::calcWinners(
 
   auto schulzeWinners = calcSchulzeWinners(
     strongestPathMatrix, winningPairs, pairwiseMatrix);
-  
+
   set<uuid> winners;
   for (auto i : schulzeWinners) {
     winners.insert(initiativeIds.at(i));

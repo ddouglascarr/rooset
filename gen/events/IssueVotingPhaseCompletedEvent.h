@@ -13,7 +13,8 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
-#include "commands/CompleteIssueVotingPhaseCommand.h"
+#include "aggregates/SchulzeBallot.h"
+
 
 using namespace std;
 using namespace rooset;
@@ -31,28 +32,26 @@ namespace rooset {
     const unique_ptr<IdTools> idTools = make_unique<IdToolsImpl>();
 
     const uuid id;
+        const uuid winnerId;
 
     
         IssueVotingPhaseCompletedEvent(
-            uuid id) :
-            id(id) 
+            uuid id,
+            uuid winnerId) :
+            id(id) ,
+            winnerId(winnerId) 
         {}
   
 
     
         IssueVotingPhaseCompletedEvent(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength())))
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
+            winnerId(JsonUtils::parseUuid(d["payload"]["winnerId"]))
         {}
   
 
     
-    IssueVotingPhaseCompletedEvent(const CompleteIssueVotingPhaseCommand& c):
-        id(c.id)
-    {}
-  
 
     unique_ptr<Document> serialize() const override
     {
@@ -72,6 +71,11 @@ namespace rooset {
           string id_str = idTools->serialize(id);
           id_value.SetString(id_str.c_str(), id_str.size(), d->GetAllocator());
           payload.AddMember("id", id_value, d->GetAllocator());    
+
+          Value winnerId_value;
+          string winnerId_str = idTools->serialize(winnerId);
+          winnerId_value.SetString(winnerId_str.c_str(), winnerId_str.size(), d->GetAllocator());
+          payload.AddMember("winnerId", winnerId_value, d->GetAllocator());    
 
       d->AddMember("payload", payload, d->GetAllocator());
 

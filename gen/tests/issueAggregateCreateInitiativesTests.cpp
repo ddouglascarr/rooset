@@ -109,7 +109,8 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json");
   try {
@@ -233,7 +234,8 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
@@ -262,7 +264,8 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json");
   try {
@@ -379,7 +382,8 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json");
   try {
@@ -492,7 +496,8 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json");
   try {
@@ -515,7 +520,8 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json");
   try {
@@ -619,7 +625,8 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
@@ -652,7 +659,8 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json");
   try {
@@ -776,7 +784,8 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
@@ -790,7 +799,8 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json");
   try {
@@ -809,7 +819,8 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json");
   try {
@@ -926,7 +937,8 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -938,7 +950,8 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
@@ -967,7 +980,8 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json");
   try {
@@ -1091,7 +1105,8 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -1129,7 +1144,8 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json");
   try {

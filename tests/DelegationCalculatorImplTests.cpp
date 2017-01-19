@@ -146,7 +146,8 @@ protected:
       "polling": false,
       "externalReference": "",
       "content": "mock content",
-      "textSearchData": "foo, bar"
+      "textSearchData": "foo, bar",
+      "created": 1483586759
     }
   })json"));
     givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -272,7 +273,66 @@ TEST_F(DelegationCalculatorImplTest, calcInitiativeDelegations)
 
 
 
-TEST_F(DelegationCalculatorImplTest, calcmemberWeight)
+TEST_F(DelegationCalculatorImplTest, calcIssueDelegations)
+{
+  auto delegations = calcIssueDelegations(
+      *issue,
+      unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
+      *unit,
+      unit->getPrivileges());
+  map<uuid, uuid> expectedDelegations = {
+    { a, a },
+    { b, a },
+    { c, b },
+    { d, d },
+    { e, e },
+    { f, f },
+  };
+
+  EXPECT_EQ(delegations, expectedDelegations);
+}
+
+
+
+TEST_F(DelegationCalculatorImplTest, calcIssueDelegations_votesAdded)
+{
+  unique_ptr<IssueAggregate> lIssue = nullptr;
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+    "type": "ISSUE_BALLOT_SET_EVENT",
+    "payload": {
+      "id": "464b1ebb-32c1-460c-8e9e-666666666666",
+      "requesterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
+      "ballot": {
+        "approve": [["464b1ebb-32c1-460c-8e9e-777777777777"]],
+        "abstain": [],
+        "disapprove": []
+      }
+    }
+  })json"));
+  for (const auto& e : givenEvents) {
+    EventUtils::applyEvent<IssueAggregate>(lIssue, *e, []() {});
+  }
+  
+  auto delegations = calcIssueDelegations(
+      *lIssue,
+      unit->getAreas().at(idTools.parse("464b1ebb-32c1-460c-8e9e-333333333333")),
+      *unit,
+      unit->getPrivileges());
+  map<uuid, uuid> expectedDelegations = {
+    { a, a },
+    { b, a },
+    { c, c },
+    { d, d },
+    { e, e },
+    { f, f },
+  };
+
+  EXPECT_EQ(delegations, expectedDelegations);
+}
+
+
+
+TEST_F(DelegationCalculatorImplTest, calcMemberWeight)
 {
 
   const auto& privileges = unit->getPrivileges();

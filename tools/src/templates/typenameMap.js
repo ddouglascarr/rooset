@@ -4,6 +4,7 @@ module.exports = {
   email: 'string',
   defeatStrength: 'rooset::DefeatStrength',
   exceptionCode: 'rooset::ExceptionCode',
+  schulzeBallot: 'rooset::SchulzeBallot',
   string: 'string',
   uuid: 'uuid',
   uuidArray: 'vector<uuid>',

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <stdexcept>
 #include "framework/AggregateRepository.h"
 #include "events/EventUtils.h"
 #include "rapidjson/document.h"
@@ -29,12 +30,14 @@ namespace rooset {
             aggregateId = payloadId;
           } 
           if (aggregateId != payloadId) {
-            throw string("AggregateRepositoryMockImpl only supports one aggregateId per implementation. Check that all ids for an aggregate in your test match");
+            throw std::invalid_argument(R"err(
+  AggregateRepositoryMockImpl only supports one aggregateId per implementation.
+  Check that all ids for an aggregate in your test match
+)err"           );
           }
         }
       }
     }
-
     unique_ptr<Aggregate> load(uuid id) const override
     {
       if (aggregate == nullptr) {

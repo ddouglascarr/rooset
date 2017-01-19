@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 
 
 using namespace std;
@@ -42,9 +43,7 @@ namespace rooset {
     
         IssueAdmissionQuorumPassedEvent(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength())))
+            id(JsonUtils::parseUuid(d["payload"]["id"]))
         {}
   
 

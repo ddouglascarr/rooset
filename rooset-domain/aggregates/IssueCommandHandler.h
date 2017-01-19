@@ -17,6 +17,11 @@
 #include "commands/RevokeInitiativeSupportCommand.h"
 #include "commands/AssessIssueAdmissionQuorumCommand.h"
 #include "commands/CompleteIssueAdmissionPhaseCommand.h"
+#include "commands/CompleteIssueVotingPhaseCommand.h"
+#include "commands/SetIssueBallotCommand.h"
+#include "commands/UnsetIssueBallotCommand.h"
+#include "VoteCalculatorSchulzeImpl.h"
+
 
 using namespace std;
 
@@ -29,6 +34,9 @@ namespace rooset {
     unique_ptr<AggregateRepository<UnitAggregate>> unitRepository;
     unique_ptr<DelegationCalculator> delegationCalculator = make_unique<
         DelegationCalculatorImpl>();
+    unique_ptr<VoteCalculator> voteCalculator = make_unique<
+        VoteCalculatorSchulzeImpl>();
+    unique_ptr<IdTools> idTools = make_unique<IdToolsImpl>();
 
   public:
     inline IssueCommandHandler(
@@ -48,6 +56,9 @@ namespace rooset {
     unique_ptr<ProjectEvent<Document>> evaluate(const RevokeInitiativeSupportCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const AssessIssueAdmissionQuorumCommand& c);
     unique_ptr<ProjectEvent<Document>> evaluate(const CompleteIssueAdmissionPhaseCommand& c);
+    unique_ptr<ProjectEvent<Document>> evaluate(const SetIssueBallotCommand& c);
+    unique_ptr<ProjectEvent<Document>> evaluate(const UnsetIssueBallotCommand& c);
+    unique_ptr<ProjectEvent<Document>> evaluate(const CompleteIssueVotingPhaseCommand& c);
 
   protected:
     void assertIssueState(const IssueAggregate& issue, const vector<IssueState>& acceptable);

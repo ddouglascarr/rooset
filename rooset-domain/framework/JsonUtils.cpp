@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "framework/JsonUtils.h"
+#include "framework/IdToolsImpl.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
@@ -10,7 +11,9 @@ using namespace std;
 
 namespace rooset {
 
-  unique_ptr<string> JsonUtils::serialize(const rapidjson::Document& d)
+
+
+  unique_ptr<string> rooset::JsonUtils::serialize(const rapidjson::Document& d)
   {
     rapidjson::StringBuffer buffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
@@ -18,7 +21,9 @@ namespace rooset {
     return make_unique<string>(buffer.GetString(), buffer.GetSize());
   }
 
-  unique_ptr<rapidjson::Document> JsonUtils::parse(const string& json)
+
+
+  unique_ptr<rapidjson::Document> rooset::JsonUtils::parse(const string& json)
   {
     auto d = make_unique<rapidjson::Document>();
     if (d->Parse(json.c_str(), json.size()).HasParseError()) {
@@ -27,13 +32,17 @@ namespace rooset {
     return d;
   }
 
-  unique_ptr<rapidjson::SchemaDocument> JsonUtils::parseSchema(const string& json)
+
+
+  unique_ptr<rapidjson::SchemaDocument> rooset::JsonUtils::parseSchema(const string& json)
   {
     auto sd = parse(json);
     return make_unique<rapidjson::SchemaDocument>(*sd);
   }
 
-  void JsonUtils::validate(const rapidjson::SchemaDocument& schema, const rapidjson::Document& d)
+
+
+  void rooset::JsonUtils::validate(const rapidjson::SchemaDocument& schema, const rapidjson::Document& d)
   {
     rapidjson::SchemaValidator validator(schema);
     if (!d.Accept(validator)) {
@@ -47,4 +56,45 @@ namespace rooset {
       throw invalid_argument("json does not comply with schema");
     }
   }
+
+
+  
+  string rooset::JsonUtils::parseString(const rapidjson::Value& v)
+  {
+    return v.GetString();
+  } 
+
+
+
+  rapidjson::Value rooset::JsonUtils::serializeString(
+      const string& s, rapidjson::Document::AllocatorType& allocator)
+  {
+    rapidjson::Value v;
+    v.SetString(s.c_str(), s.size(), allocator);
+    return v;
+  }
+
+
+
+  uuid rooset::JsonUtils::parseUuid(const rapidjson::Value& v)
+  {
+    IdToolsImpl idTools;
+    return idTools.parse(JsonUtils::parseString(v));
+  }
+
+
+
+  rapidjson::Value rooset::JsonUtils::serializeUuid(
+      const rooset::uuid& id, rapidjson::Document::AllocatorType& allocator)
+  {
+    IdToolsImpl idTools;
+    auto s = idTools.serialize(id);
+    return JsonUtils::serializeString(s, allocator);
+  }
+
+
+
 }
+
+
+

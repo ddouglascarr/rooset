@@ -104,6 +104,7 @@ mocks:
       externalReference: ''
       content: 'mock content'
       textSearchData: 'foo, bar'
+      created: 1483586759
 
   - &setIssueDelegationCmdPayload
     id: 464b1ebb-32c1-460c-8e9e-666666666666

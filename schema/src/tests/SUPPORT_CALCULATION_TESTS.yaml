@@ -60,6 +60,7 @@ mocks:
       externalReference: ''
       content: 'mock content'
       textSearchData: 'foo, bar'
+      created: 1483586759
 
 
 # Privileges

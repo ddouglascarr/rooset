@@ -92,7 +92,8 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -104,7 +105,8 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
@@ -253,7 +255,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
@@ -402,7 +405,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -414,7 +418,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -572,7 +577,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -584,7 +590,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
@@ -726,7 +733,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -738,7 +746,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -895,7 +904,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
@@ -1044,7 +1054,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -1056,7 +1067,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -1222,7 +1234,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -1234,7 +1247,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json"));
   CommandHandlerTestImpl commandHandler(givenEvents); 
@@ -1383,7 +1397,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -1395,7 +1410,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -1545,7 +1561,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -1557,7 +1574,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "name": "Test Competing Initiative",
     "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong"
+    "textSearchData": "bing, bong",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({

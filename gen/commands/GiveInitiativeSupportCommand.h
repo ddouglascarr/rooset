@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 
 using namespace std;
 using namespace rooset;
@@ -48,15 +49,9 @@ namespace rooset {
     
         GiveInitiativeSupportCommand(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength()))),
-            requesterId(idTools->parse(string(
-                d["payload"]["requesterId"].GetString(),
-                d["payload"]["requesterId"].GetStringLength()))),
-            initiativeId(idTools->parse(string(
-                d["payload"]["initiativeId"].GetString(),
-                d["payload"]["initiativeId"].GetStringLength())))
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
+            requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
+            initiativeId(JsonUtils::parseUuid(d["payload"]["initiativeId"]))
         {}
   
 

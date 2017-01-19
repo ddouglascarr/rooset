@@ -11,3 +11,4 @@ properties:
   externalReference: '$string'
   content: '$string'
   textSearchData: '$string'
+  created: '$date'

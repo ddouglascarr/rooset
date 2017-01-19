@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 
 
 using namespace std;
@@ -45,12 +46,10 @@ namespace rooset {
     
         IssueVerificationPhaseCompletedEvent(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength()))),
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
             passingInitiatives(JsonUtils::parseArray<uuid>(
                 d["payload"]["passingInitiatives"],
-                [&](const rapidjson::Value& v) { return idTools->parse(string(v.GetString(), v.GetStringLength())); }))
+                [&](const rapidjson::Value& v) { return JsonUtils::parseUuid(v); }))
         {}
   
 
@@ -77,11 +76,8 @@ namespace rooset {
 
           auto passingInitiatives_value = JsonUtils::serializeArray<uuid>(
               passingInitiatives,
-              [&](const uuid& id) {
-                Value v;
-                auto str = idTools->serialize(id);
-                v.SetString(str.c_str(), str.size(), d->GetAllocator());
-                return v;
+              [](const uuid& id, rapidjson::Document::AllocatorType& allocator) {
+                return JsonUtils::serializeUuid(id, allocator);
               },
               d->GetAllocator());
           payload.AddMember("passingInitiatives", passingInitiatives_value, d->GetAllocator());

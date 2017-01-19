@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 
 using namespace std;
 using namespace rooset;
@@ -45,12 +46,8 @@ namespace rooset {
     
         BlockDelegationForIssueCommand(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength()))),
-            requesterId(idTools->parse(string(
-                d["payload"]["requesterId"].GetString(),
-                d["payload"]["requesterId"].GetStringLength())))
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
+            requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"]))
         {}
   
 

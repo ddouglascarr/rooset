@@ -31,6 +31,7 @@ module.exports = function(schema) {
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 
 using namespace std;
 using namespace rooset;

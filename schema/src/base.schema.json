@@ -6,7 +6,9 @@
       "type": "boolean"
     },
     "date": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
     },
     "duration": {
       "type": "integer",
@@ -19,6 +21,21 @@
     "uuidArray": {
       "type": "array",
       "items": { "$ref": "#/definitions/uuid" }
+    },
+    "schulzeBallot": {
+      "type": "object",
+      "required": [ "approve", "abstain", "disapprove" ],
+      "properties": {
+        "approve": {
+          "type": "array",
+          "items": { "$ref": "#definitions/uuidArray" }
+        },
+        "abstain": { "$ref": "#definitions/uuidArray" },
+        "disapprove": {
+          "type": "array",
+          "items": { "$ref": "#definitions/uuidArray" }
+        }
+      }
     },
     "string": {
       "type": "string"

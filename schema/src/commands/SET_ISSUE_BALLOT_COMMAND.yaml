@@ -1,0 +1,4 @@
+properties:
+  id: '$uuid'
+  requesterId: '$uuid'
+  ballot: '$schulzeBallot'

@@ -88,6 +88,7 @@ mocks:
     externalReference: ''
     content: 'mock content'
     textSearchData: 'foo, bar'
+    created: 1483586759
 
   - &createCompetingInitiativeCmdPayload
     id: 464b1ebb-32c1-460c-8e9e-666666666666
@@ -97,6 +98,7 @@ mocks:
     externalReference: 'foobar'
     content: 'mock competing content'
     textSearchData: 'bing, bong'
+    created: 1483586759
 
   - &issueVerificationPhaseCompletedEvt
     type: ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT

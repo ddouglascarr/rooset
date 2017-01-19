@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 
 
 using namespace std;
@@ -51,18 +52,10 @@ namespace rooset {
     
         AreaDelegationSetEvent(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength()))),
-            areaId(idTools->parse(string(
-                d["payload"]["areaId"].GetString(),
-                d["payload"]["areaId"].GetStringLength()))),
-            trusterId(idTools->parse(string(
-                d["payload"]["trusterId"].GetString(),
-                d["payload"]["trusterId"].GetStringLength()))),
-            trusteeId(idTools->parse(string(
-                d["payload"]["trusteeId"].GetString(),
-                d["payload"]["trusteeId"].GetStringLength())))
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
+            areaId(JsonUtils::parseUuid(d["payload"]["areaId"])),
+            trusterId(JsonUtils::parseUuid(d["payload"]["trusterId"])),
+            trusteeId(JsonUtils::parseUuid(d["payload"]["trusteeId"]))
         {}
   
 

@@ -34,6 +34,7 @@ module.exports = function(schema, commandConstructorSchema) {
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 ${commandConstructorImportStatement}
 
 using namespace std;

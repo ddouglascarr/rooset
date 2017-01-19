@@ -1,0 +1,4 @@
+properties:
+  id: '$uuid'
+  requesterId: '$uuid'
+commandConstructor: UNSET_ISSUE_BALLOT_COMMAND

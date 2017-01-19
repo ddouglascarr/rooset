@@ -1,4 +1,6 @@
+#pragma once
 #include "VoteCalculator.h"
+#include "framework/IdToolsImpl.h"
 
 using namespace std;
 namespace rooset {
@@ -6,11 +8,17 @@ namespace rooset {
   class VoteCalculatorSchulzeImpl : public VoteCalculator
   {
   public:
-    set<uuid> calcWinners(
-      const vector<SchulzeBallot>& ballots,
-      const vector<uuid>& initiativeIds) override;
+    virtual set<uuid> calcWinners(
+        const vector<SchulzeBallot>& ballots,
+        const map<uuid, Initiative>& initiatives) override;
 
   protected:
+    unique_ptr<IdTools> idTools = make_unique<IdToolsImpl>();
+
+    set<uuid> calcWinners(
+      const vector<SchulzeBallot>& ballots,
+      const vector<uuid>& initiativeIds);
+
     set<int> calcSchulzeWinners(
         vector<vector<vector<unsigned long long>>>& strogestPathMatrix,
         vector<vector<int>>& winningPairs,

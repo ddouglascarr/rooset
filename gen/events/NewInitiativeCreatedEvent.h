@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 #include "commands/CreateNewInitiativeCommand.h"
 
 using namespace std;
@@ -41,6 +42,7 @@ namespace rooset {
         const string externalReference;
         const string content;
         const string textSearchData;
+        const boost::posix_time::ptime created;
 
     
         NewInitiativeCreatedEvent(
@@ -54,7 +56,8 @@ namespace rooset {
             bool polling,
             string externalReference,
             string content,
-            string textSearchData) :
+            string textSearchData,
+            boost::posix_time::ptime created) :
             id(id) ,
             requesterId(requesterId) ,
             initiativeId(initiativeId) ,
@@ -65,44 +68,27 @@ namespace rooset {
             polling(polling),
             externalReference(externalReference) ,
             content(content) ,
-            textSearchData(textSearchData) 
+            textSearchData(textSearchData) ,
+            created(created) 
         {}
   
 
     
         NewInitiativeCreatedEvent(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength()))),
-            requesterId(idTools->parse(string(
-                d["payload"]["requesterId"].GetString(),
-                d["payload"]["requesterId"].GetStringLength()))),
-            initiativeId(idTools->parse(string(
-                d["payload"]["initiativeId"].GetString(),
-                d["payload"]["initiativeId"].GetStringLength()))),
-            unitId(idTools->parse(string(
-                d["payload"]["unitId"].GetString(),
-                d["payload"]["unitId"].GetStringLength()))),
-            areaId(idTools->parse(string(
-                d["payload"]["areaId"].GetString(),
-                d["payload"]["areaId"].GetStringLength()))),
-            policyId(idTools->parse(string(
-                d["payload"]["policyId"].GetString(),
-                d["payload"]["policyId"].GetStringLength()))),
-            name(string(
-                d["payload"]["name"].GetString(),
-                d["payload"]["name"].GetStringLength())),
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
+            requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
+            initiativeId(JsonUtils::parseUuid(d["payload"]["initiativeId"])),
+            unitId(JsonUtils::parseUuid(d["payload"]["unitId"])),
+            areaId(JsonUtils::parseUuid(d["payload"]["areaId"])),
+            policyId(JsonUtils::parseUuid(d["payload"]["policyId"])),
+            name(JsonUtils::parseString(d["payload"]["name"])),
             polling(d["payload"]["polling"].GetBool()),
-            externalReference(string(
-                d["payload"]["externalReference"].GetString(),
-                d["payload"]["externalReference"].GetStringLength())),
-            content(string(
-                d["payload"]["content"].GetString(),
-                d["payload"]["content"].GetStringLength())),
-            textSearchData(string(
-                d["payload"]["textSearchData"].GetString(),
-                d["payload"]["textSearchData"].GetStringLength()))
+            externalReference(JsonUtils::parseString(d["payload"]["externalReference"])),
+            content(JsonUtils::parseString(d["payload"]["content"])),
+            textSearchData(JsonUtils::parseString(d["payload"]["textSearchData"])),
+            created(boost::posix_time::from_time_t(
+                time_t(d["payload"]["created"].GetDouble())))
         {}
   
 
@@ -118,7 +104,8 @@ name(c.name),
 polling(c.polling),
 externalReference(c.externalReference),
 content(c.content),
-textSearchData(c.textSearchData)
+textSearchData(c.textSearchData),
+created(c.created)
     {}
   
 
@@ -166,25 +153,21 @@ textSearchData(c.textSearchData)
           policyId_value.SetString(policyId_str.c_str(), policyId_str.size(), d->GetAllocator());
           payload.AddMember("policyId", policyId_value, d->GetAllocator());    
 
-          Value name_value;
-          name_value.SetString(name.c_str(), name.size(), d->GetAllocator());
-          payload.AddMember("name", name_value, d->GetAllocator());    
+          JsonUtils::serializeString(name, d->GetAllocator());
 
           Value polling_value;
           polling_value.SetBool(polling);
           payload.AddMember("polling", polling_value, d->GetAllocator());
 
-          Value externalReference_value;
-          externalReference_value.SetString(externalReference.c_str(), externalReference.size(), d->GetAllocator());
-          payload.AddMember("externalReference", externalReference_value, d->GetAllocator());    
+          JsonUtils::serializeString(externalReference, d->GetAllocator());
 
-          Value content_value;
-          content_value.SetString(content.c_str(), content.size(), d->GetAllocator());
-          payload.AddMember("content", content_value, d->GetAllocator());    
+          JsonUtils::serializeString(content, d->GetAllocator());
 
-          Value textSearchData_value;
-          textSearchData_value.SetString(textSearchData.c_str(), textSearchData.size(), d->GetAllocator());
-          payload.AddMember("textSearchData", textSearchData_value, d->GetAllocator());    
+          JsonUtils::serializeString(textSearchData, d->GetAllocator());
+
+          Value created_value;
+          created_value.SetDouble(boost::posix_time::to_time_t(created));
+          payload.AddMember("created", created_value, d->GetAllocator());    
 
       d->AddMember("payload", payload, d->GetAllocator());
 

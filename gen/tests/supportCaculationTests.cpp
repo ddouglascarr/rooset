@@ -157,7 +157,8 @@ TEST(support_caculation_tests, test_compiles)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -441,7 +442,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -646,7 +648,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -851,7 +854,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -1105,7 +1109,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -1359,7 +1364,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({
@@ -1637,7 +1643,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "polling": false,
     "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar"
+    "textSearchData": "foo, bar",
+    "created": 1483586759
   }
 })json"));
   givenEvents.push_back(JsonUtils::parse(u8R"json({

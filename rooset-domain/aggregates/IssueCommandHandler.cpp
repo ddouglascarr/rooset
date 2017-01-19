@@ -165,6 +165,80 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
 
 
 
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const SetIssueBallotCommand& c)
+{
+  auto issue = issueRepository->load(c.id);
+  auto unit = unitRepository->load(issue->getUnitId());
+  assertIssueState(*issue, { IssueState::VOTING });
+  PrivilegeUtils::assertVotingRight(*unit, c.requesterId);
+  return make_unique<IssueBallotSetEvent>(c);
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const UnsetIssueBallotCommand& c)
+{
+  auto issue = issueRepository->load(c.id);
+  CommandHandlerUtils::assertMapContains<map<uuid, SchulzeBallot>, uuid>(
+      issue->getBallots(), c.requesterId, "Member has not set a ballot");
+  return make_unique<IssueBallotUnsetEvent>(c);
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const CompleteIssueVotingPhaseCommand& c)
+{
+  auto issue = issueRepository->load(c.id);
+  auto unit = unitRepository->load(issue->getUnitId());
+
+  const auto& ballotsMap = issue->getBallots();
+  const auto& initiatives = issue->getInitiatives();
+  const auto& privileges = unit->getPrivileges();
+  const auto delegations = delegationCalculator->calcIssueDelegations(
+    *issue,
+    unit->getAreas().at(issue->getAreaId()),
+    *unit,
+    privileges);
+
+  // set ballot weights
+  vector<SchulzeBallot> ballots;
+  for (auto it = ballotsMap.begin(); it != ballotsMap.end(); ++it) {
+    const uuid voterId = it->first;
+    auto ballot = it->second;
+    ballot.setWeight(delegationCalculator->calcMemberWeight(
+        privileges, delegations, voterId));
+    for (auto& a : ballot.approve) {
+      for (auto& b : a) { cout << "    " << b << "\n"; }
+    }
+    for (auto& a : ballot.disapprove) {
+      for (auto& b : a) { cout << "    " << b << "\n"; }
+    }
+    
+    ballots.push_back(ballot);
+  }
+  auto winners = voteCalculator->calcWinners(ballots, initiatives);
+
+  // tie breaker. Pick status quo or the earliest created initiative
+  uuid winnerId = idTools->generateNilId();
+  bool winnerIdSet = false;
+  for (auto& w : winners) {
+    if (!winnerIdSet) {
+      winnerIdSet = true;
+      winnerId = w;
+    } else if (
+        winnerId != idTools->generateNilId() &&
+        initiatives.at(w).created < initiatives.at(winnerId).created) {
+      winnerId = w;
+    }
+  }
+  return make_unique<IssueVotingPhaseCompletedEvent>(c.id, winnerId);
+}
+
+
+
 void rooset::IssueCommandHandler::assertIssueState(
     const IssueAggregate& issue,
     const vector<IssueState>& acceptable)

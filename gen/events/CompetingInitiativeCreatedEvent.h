@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 #include "commands/CreateCompetingInitiativeCommand.h"
 
 using namespace std;
@@ -37,6 +38,7 @@ namespace rooset {
         const string externalReference;
         const string content;
         const string textSearchData;
+        const boost::posix_time::ptime created;
 
     
         CompetingInitiativeCreatedEvent(
@@ -46,41 +48,31 @@ namespace rooset {
             string name,
             string externalReference,
             string content,
-            string textSearchData) :
+            string textSearchData,
+            boost::posix_time::ptime created) :
             id(id) ,
             requesterId(requesterId) ,
             initiativeId(initiativeId) ,
             name(name) ,
             externalReference(externalReference) ,
             content(content) ,
-            textSearchData(textSearchData) 
+            textSearchData(textSearchData) ,
+            created(created) 
         {}
   
 
     
         CompetingInitiativeCreatedEvent(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength()))),
-            requesterId(idTools->parse(string(
-                d["payload"]["requesterId"].GetString(),
-                d["payload"]["requesterId"].GetStringLength()))),
-            initiativeId(idTools->parse(string(
-                d["payload"]["initiativeId"].GetString(),
-                d["payload"]["initiativeId"].GetStringLength()))),
-            name(string(
-                d["payload"]["name"].GetString(),
-                d["payload"]["name"].GetStringLength())),
-            externalReference(string(
-                d["payload"]["externalReference"].GetString(),
-                d["payload"]["externalReference"].GetStringLength())),
-            content(string(
-                d["payload"]["content"].GetString(),
-                d["payload"]["content"].GetStringLength())),
-            textSearchData(string(
-                d["payload"]["textSearchData"].GetString(),
-                d["payload"]["textSearchData"].GetStringLength()))
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
+            requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
+            initiativeId(JsonUtils::parseUuid(d["payload"]["initiativeId"])),
+            name(JsonUtils::parseString(d["payload"]["name"])),
+            externalReference(JsonUtils::parseString(d["payload"]["externalReference"])),
+            content(JsonUtils::parseString(d["payload"]["content"])),
+            textSearchData(JsonUtils::parseString(d["payload"]["textSearchData"])),
+            created(boost::posix_time::from_time_t(
+                time_t(d["payload"]["created"].GetDouble())))
         {}
   
 
@@ -92,7 +84,8 @@ initiativeId(c.initiativeId),
 name(c.name),
 externalReference(c.externalReference),
 content(c.content),
-textSearchData(c.textSearchData)
+textSearchData(c.textSearchData),
+created(c.created)
     {}
   
 
@@ -125,21 +118,17 @@ textSearchData(c.textSearchData)
           initiativeId_value.SetString(initiativeId_str.c_str(), initiativeId_str.size(), d->GetAllocator());
           payload.AddMember("initiativeId", initiativeId_value, d->GetAllocator());    
 
-          Value name_value;
-          name_value.SetString(name.c_str(), name.size(), d->GetAllocator());
-          payload.AddMember("name", name_value, d->GetAllocator());    
+          JsonUtils::serializeString(name, d->GetAllocator());
 
-          Value externalReference_value;
-          externalReference_value.SetString(externalReference.c_str(), externalReference.size(), d->GetAllocator());
-          payload.AddMember("externalReference", externalReference_value, d->GetAllocator());    
+          JsonUtils::serializeString(externalReference, d->GetAllocator());
 
-          Value content_value;
-          content_value.SetString(content.c_str(), content.size(), d->GetAllocator());
-          payload.AddMember("content", content_value, d->GetAllocator());    
+          JsonUtils::serializeString(content, d->GetAllocator());
 
-          Value textSearchData_value;
-          textSearchData_value.SetString(textSearchData.c_str(), textSearchData.size(), d->GetAllocator());
-          payload.AddMember("textSearchData", textSearchData_value, d->GetAllocator());    
+          JsonUtils::serializeString(textSearchData, d->GetAllocator());
+
+          Value created_value;
+          created_value.SetDouble(boost::posix_time::to_time_t(created));
+          payload.AddMember("created", created_value, d->GetAllocator());    
 
       d->AddMember("payload", payload, d->GetAllocator());
 

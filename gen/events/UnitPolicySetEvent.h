@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 #include "commands/SetUnitPolicyCommand.h"
 
 using namespace std;
@@ -102,21 +103,11 @@ namespace rooset {
     
         UnitPolicySetEvent(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength()))),
-            requesterId(idTools->parse(string(
-                d["payload"]["requesterId"].GetString(),
-                d["payload"]["requesterId"].GetStringLength()))),
-            policyId(idTools->parse(string(
-                d["payload"]["policyId"].GetString(),
-                d["payload"]["policyId"].GetStringLength()))),
-            name(string(
-                d["payload"]["name"].GetString(),
-                d["payload"]["name"].GetStringLength())),
-            description(string(
-                d["payload"]["description"].GetString(),
-                d["payload"]["description"].GetStringLength())),
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
+            requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
+            policyId(JsonUtils::parseUuid(d["payload"]["policyId"])),
+            name(JsonUtils::parseString(d["payload"]["name"])),
+            description(JsonUtils::parseString(d["payload"]["description"])),
             polling(d["payload"]["polling"].GetBool()),
             maxAdmissionTime(boost::posix_time::seconds(d["payload"]["maxAdmissionTime"].GetDouble())),
             minAdmissionTime(boost::posix_time::seconds(d["payload"]["minAdmissionTime"].GetDouble())),
@@ -193,13 +184,9 @@ noMultistageMajority(c.noMultistageMajority)
           policyId_value.SetString(policyId_str.c_str(), policyId_str.size(), d->GetAllocator());
           payload.AddMember("policyId", policyId_value, d->GetAllocator());    
 
-          Value name_value;
-          name_value.SetString(name.c_str(), name.size(), d->GetAllocator());
-          payload.AddMember("name", name_value, d->GetAllocator());    
+          JsonUtils::serializeString(name, d->GetAllocator());
 
-          Value description_value;
-          description_value.SetString(description.c_str(), description.size(), d->GetAllocator());
-          payload.AddMember("description", description_value, d->GetAllocator());    
+          JsonUtils::serializeString(description, d->GetAllocator());
 
           Value polling_value;
           polling_value.SetBool(polling);

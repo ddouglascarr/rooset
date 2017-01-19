@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
 #include <map>
+#include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
 #include "framework/IdToolsImpl.h"
 #include "framework/uuid.h"
 #include "enums/IssueState.h"
+#include "aggregates/SchulzeBallot.h"
 #include "events/NewInitiativeCreatedEvent.h"
 #include "events/CompetingInitiativeCreatedEvent.h"
 #include "events/IssueDelegationSetEvent.h"
@@ -18,6 +20,9 @@
 #include "events/IssueVotingPhaseCompletedEvent.h"
 #include "events/InitiativeSupportGivenEvent.h"
 #include "events/InitiativeSupportRevokedEvent.h"
+#include "events/IssueBallotSetEvent.h"
+#include "events/IssueBallotUnsetEvent.h"
+
 
 using namespace std;
 
@@ -26,6 +31,7 @@ namespace rooset {
   struct Initiative {
     string name;
     uuid initiatorId;
+    boost::posix_time::ptime created;
     vector<uuid> supporters;
   };
 
@@ -41,6 +47,7 @@ namespace rooset {
     map<uuid, Initiative> initiatives;
     map<uuid, uuid> delegations;
     vector<uuid> blockedDelegations;
+    map<uuid, SchulzeBallot> ballots;
 
   public:
     IssueAggregate(const NewInitiativeCreatedEvent& e);
@@ -57,6 +64,8 @@ namespace rooset {
     void handleEvent(const IssueDiscussionPhaseCompletedEvent& e);
     void handleEvent(const IssueVerificationPhaseCompletedEvent& e);
     void handleEvent(const IssueVotingPhaseCompletedEvent& e);
+    void handleEvent(const IssueBallotSetEvent& e);
+    void handleEvent(const IssueBallotUnsetEvent& e);
 
 
     inline uuid getId() const { return id; }
@@ -67,5 +76,6 @@ namespace rooset {
     inline auto getInitiatives() const { return initiatives; }
     inline auto getDelegations() const { return delegations; }
     inline auto getBlockedDelegations() const { return blockedDelegations; }
+    inline auto getBallots() const { return ballots; }
   };
 }

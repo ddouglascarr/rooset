@@ -6,14 +6,14 @@ rooset::IssueAggregate::IssueAggregate(const NewInitiativeCreatedEvent& e) :
     id(e.id), unitId(e.unitId), areaId(e.areaId),
     policyId(e.policyId), issueState(IssueState::ADMISSION)
 {
-  initiatives[e.initiativeId] = Initiative{ e.name, e.requesterId };
+  initiatives[e.initiativeId] = Initiative{ e.name, e.requesterId, e.created };
 }
 
 
 
 void rooset::IssueAggregate::handleEvent(const CompetingInitiativeCreatedEvent & e)
 {
-  initiatives[e.initiativeId] = Initiative{ e.name, e.requesterId };
+  initiatives[e.initiativeId] = Initiative{ e.name, e.requesterId, e.created };
 }
 
 
@@ -99,5 +99,20 @@ void rooset::IssueAggregate::handleEvent(const IssueVerificationPhaseCompletedEv
 
 void rooset::IssueAggregate::handleEvent(const IssueVotingPhaseCompletedEvent& e)
 {
-  issueState = IssueState::FINISHED_TABULATING_RESULTS;
+  issueState = IssueState::FINISHED_WITH_WINNER;
+}
+
+
+
+void rooset::IssueAggregate::handleEvent(const IssueBallotSetEvent& e)
+{
+  ballots.emplace(e.requesterId, e.ballot);
+}
+
+
+
+void rooset::IssueAggregate::handleEvent(const IssueBallotUnsetEvent& e)
+{
+  auto it = ballots.find(e.requesterId);
+  if (it != ballots.end()) ballots.erase(it);
 }

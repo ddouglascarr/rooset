@@ -7,4 +7,5 @@ properties:
   externalReference: '$string'
   content: '$string'
   textSearchData: '$string'
+  created: '$date'
 commandConstructor: CREATE_COMPETING_INITIATIVE_COMMAND

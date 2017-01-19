@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 
 using namespace std;
 using namespace rooset;
@@ -57,24 +58,12 @@ namespace rooset {
     
         CreateAreaCommand(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength()))),
-            areaId(idTools->parse(string(
-                d["payload"]["areaId"].GetString(),
-                d["payload"]["areaId"].GetStringLength()))),
-            requesterId(idTools->parse(string(
-                d["payload"]["requesterId"].GetString(),
-                d["payload"]["requesterId"].GetStringLength()))),
-            name(string(
-                d["payload"]["name"].GetString(),
-                d["payload"]["name"].GetStringLength())),
-            description(string(
-                d["payload"]["description"].GetString(),
-                d["payload"]["description"].GetStringLength())),
-            externalReference(string(
-                d["payload"]["externalReference"].GetString(),
-                d["payload"]["externalReference"].GetStringLength()))
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
+            areaId(JsonUtils::parseUuid(d["payload"]["areaId"])),
+            requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
+            name(JsonUtils::parseString(d["payload"]["name"])),
+            description(JsonUtils::parseString(d["payload"]["description"])),
+            externalReference(JsonUtils::parseString(d["payload"]["externalReference"]))
         {}
   
 
@@ -107,17 +96,11 @@ namespace rooset {
           requesterId_value.SetString(requesterId_str.c_str(), requesterId_str.size(), d->GetAllocator());
           payload.AddMember("requesterId", requesterId_value, d->GetAllocator());    
 
-          Value name_value;
-          name_value.SetString(name.c_str(), name.size(), d->GetAllocator());
-          payload.AddMember("name", name_value, d->GetAllocator());    
+          JsonUtils::serializeString(name, d->GetAllocator());
 
-          Value description_value;
-          description_value.SetString(description.c_str(), description.size(), d->GetAllocator());
-          payload.AddMember("description", description_value, d->GetAllocator());    
+          JsonUtils::serializeString(description, d->GetAllocator());
 
-          Value externalReference_value;
-          externalReference_value.SetString(externalReference.c_str(), externalReference.size(), d->GetAllocator());
-          payload.AddMember("externalReference", externalReference_value, d->GetAllocator());    
+          JsonUtils::serializeString(externalReference, d->GetAllocator());
 
       d->AddMember("payload", payload, d->GetAllocator());
 

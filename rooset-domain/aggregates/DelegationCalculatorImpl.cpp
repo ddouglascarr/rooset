@@ -20,8 +20,34 @@ map<uuid, uuid> rooset::DelegationCalculatorImpl::calcInitiativeDelegations(
     delegation = getUnitDelegation(unit, memberId, delegation);
     delegation = getAreaDelegation(area, memberId, delegation);
     delegation = getIssueDelegation(issue, memberId, delegation);
-    delegation = getInitiativeDelegation(initiative, memberId, delegation);
-    
+    if (isMemberSupportingInitiativeDirectly(initiative.supporters, memberId)) {
+      delegation = memberId;
+    }
+
+    delegations[memberId] = delegation;
+  }
+  return delegations;
+}
+
+
+
+map<uuid, uuid> rooset::DelegationCalculatorImpl::calcIssueDelegations(
+        const IssueAggregate& issue,
+        const Area& area,
+        const UnitAggregate& unit,
+        const map<uuid, MemberPrivilege>& memberPrivileges)
+{
+  map<uuid, uuid> delegations;
+  for (auto it = memberPrivileges.begin(); it != memberPrivileges.end(); ++it) {
+    auto memberId = it->first;
+    auto memberPrivilege = it->second;
+    if (!memberPrivilege.votingRight) continue;
+    auto delegation = memberId;
+    delegation = getUnitDelegation(unit, memberId, delegation);
+    delegation = getAreaDelegation(area, memberId, delegation);
+    delegation = getIssueDelegation(issue, memberId, delegation);
+    if (isMemberVotingOnIssueDirectly(memberId, issue.getBallots())) delegation = memberId;
+
     delegations[memberId] = delegation;
   }
   return delegations;
@@ -54,7 +80,7 @@ uuid rooset::DelegationCalculatorImpl::getUnitDelegation(
     const uuid parentDelegation)
 {
   const auto delegations = unit.getDelegations();
-  
+
   if (delegations.find(memberId) != delegations.end()) {
     return delegations.at(memberId);
   }
@@ -99,19 +125,6 @@ uuid rooset::DelegationCalculatorImpl::getIssueDelegation(
 
 
 
-uuid rooset::DelegationCalculatorImpl::getInitiativeDelegation(
-      const Initiative& initiative,
-      const uuid memberId,
-      const uuid parentDelegation)
-{
-  if (isMemberSupportingInitiativeDirectly(initiative.supporters, memberId)) {
-    return memberId;
-  }
-  return parentDelegation;
-}
-
-
-
 bool rooset::DelegationCalculatorImpl::isMemberSupportingInitiativeDirectly(
   const vector<uuid>& supporters, const uuid& trusterId)
 {
@@ -129,3 +142,10 @@ bool rooset::DelegationCalculatorImpl::isDelegationBlocked(
 }
 
 
+
+bool rooset::DelegationCalculatorImpl::isMemberVotingOnIssueDirectly(
+    const uuid& memberId, const map<uuid, SchulzeBallot>& ballots)
+{
+  auto it = ballots.find(memberId);
+  return it != ballots.end();
+}

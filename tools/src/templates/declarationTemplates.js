@@ -4,6 +4,7 @@ module.exports = {
   defeatStrength: (v) => `const rooset::DefeatStrength ${v};`,
   exceptionCode: (v) `const rooset::ExceptionCode ${v};`,
   string: (v) => `const string ${v};`,
+  schulzeBallot: (v) => `const rooset::SchulzeBallot ${v};`,
   uuid: (v) => `const uuid ${v};`,
   uuidArray: (v) => `const vector<uuid> ${v};`,
   date: (v) => `const boost::posix_time::ptime ${v};`,

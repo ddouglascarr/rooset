@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 
 
 using namespace std;
@@ -48,15 +49,9 @@ namespace rooset {
     
         MemberPasswordUpdatedEvent(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength()))),
-            requesterId(idTools->parse(string(
-                d["payload"]["requesterId"].GetString(),
-                d["payload"]["requesterId"].GetStringLength()))),
-            newPassword(string(
-                d["payload"]["newPassword"].GetString(),
-                d["payload"]["newPassword"].GetStringLength()))
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
+            requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
+            newPassword(JsonUtils::parseString(d["payload"]["newPassword"]))
         {}
   
 
@@ -86,9 +81,7 @@ namespace rooset {
           requesterId_value.SetString(requesterId_str.c_str(), requesterId_str.size(), d->GetAllocator());
           payload.AddMember("requesterId", requesterId_value, d->GetAllocator());    
 
-          Value newPassword_value;
-          newPassword_value.SetString(newPassword.c_str(), newPassword.size(), d->GetAllocator());
-          payload.AddMember("newPassword", newPassword_value, d->GetAllocator());    
+          JsonUtils::serializeString(newPassword, d->GetAllocator());
 
       d->AddMember("payload", payload, d->GetAllocator());
 

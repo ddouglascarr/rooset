@@ -13,6 +13,7 @@
 #include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
+#include "aggregates/SchulzeBallot.h"
 #include "commands/GrantPrivilegeCommand.h"
 
 using namespace std;
@@ -63,15 +64,9 @@ namespace rooset {
     
         PrivilegeGrantedEvent(const Document& d) :
         
-            id(idTools->parse(string(
-                d["payload"]["id"].GetString(),
-                d["payload"]["id"].GetStringLength()))),
-            requesterId(idTools->parse(string(
-                d["payload"]["requesterId"].GetString(),
-                d["payload"]["requesterId"].GetStringLength()))),
-            memberId(idTools->parse(string(
-                d["payload"]["memberId"].GetString(),
-                d["payload"]["memberId"].GetStringLength()))),
+            id(JsonUtils::parseUuid(d["payload"]["id"])),
+            requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
+            memberId(JsonUtils::parseUuid(d["payload"]["memberId"])),
             pollingRight(d["payload"]["pollingRight"].GetBool()),
             votingRight(d["payload"]["votingRight"].GetBool()),
             initiativeRight(d["payload"]["initiativeRight"].GetBool()),

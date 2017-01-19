@@ -24,6 +24,8 @@
 #include "events/IssueAdmissionQuorumContinuedEvent.h"
 #include "events/IssueAdmissionQuorumFailedEvent.h"
 #include "events/IssueAdmissionQuorumPassedEvent.h"
+#include "events/IssueBallotSetEvent.h"
+#include "events/IssueBallotUnsetEvent.h"
 #include "events/IssueDelegationSetEvent.h"
 #include "events/IssueDelegationUnsetEvent.h"
 #include "events/IssueDiscussionPhaseCompletedEvent.h"
@@ -171,6 +173,20 @@ namespace rooset {
         JsonUtils::validate(*IssueAdmissionQuorumPassedEvent::schema, d);
         const IssueAdmissionQuorumPassedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, IssueAdmissionQuorumPassedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "ISSUE_BALLOT_SET_EVENT") {
+        JsonUtils::validate(*IssueBallotSetEvent::schema, d);
+        const IssueBallotSetEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, IssueBallotSetEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "ISSUE_BALLOT_UNSET_EVENT") {
+        JsonUtils::validate(*IssueBallotUnsetEvent::schema, d);
+        const IssueBallotUnsetEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, IssueBallotUnsetEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 

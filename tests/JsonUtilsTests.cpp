@@ -45,9 +45,9 @@ TEST(JsonUtils, serializeArray)
   d.SetObject();
   auto items = JsonUtils::serializeArray<string>(
     toSerialize,
-    [&](const string& item) {
+    [](const string& item, auto& allocator) {
         rapidjson::Value v;
-        v.SetString(item.c_str(), item.size(), d.GetAllocator());
+        v.SetString(item.c_str(), item.size(), allocator);
         return v; },
     d.GetAllocator());
   
