@@ -40,9 +40,9 @@ namespace rooset {
             uuid id,
             uuid requesterId,
             string newPassword) :
-            id(id) ,
-            requesterId(requesterId) ,
-            newPassword(newPassword) 
+            id(id),
+            requesterId(requesterId),
+            newPassword(newPassword)
         {}
   
 

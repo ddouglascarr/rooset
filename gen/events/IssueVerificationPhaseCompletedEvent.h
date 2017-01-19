@@ -38,7 +38,7 @@ namespace rooset {
         IssueVerificationPhaseCompletedEvent(
             uuid id,
             vector<uuid> passingInitiatives) :
-            id(id) ,
+            id(id),
             passingInitiatives(passingInitiatives)
         {}
   

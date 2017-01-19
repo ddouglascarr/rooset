@@ -36,7 +36,7 @@ namespace rooset {
     
         CompleteIssueAdmissionPhaseCommand(
             uuid id) :
-            id(id) 
+            id(id)
         {}
   
 

@@ -42,10 +42,10 @@ namespace rooset {
             uuid areaId,
             uuid trusterId,
             uuid trusteeId) :
-            id(id) ,
-            areaId(areaId) ,
-            trusterId(trusterId) ,
-            trusteeId(trusteeId) 
+            id(id),
+            areaId(areaId),
+            trusterId(trusterId),
+            trusteeId(trusteeId)
         {}
   
 

@@ -36,7 +36,7 @@ namespace rooset {
     
         IssueDiscussionPhaseCompletedEvent(
             uuid id) :
-            id(id) 
+            id(id)
         {}
   
 

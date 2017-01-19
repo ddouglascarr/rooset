@@ -38,8 +38,8 @@ namespace rooset {
         UnsetIssueDelegationCommand(
             uuid id,
             uuid requesterId) :
-            id(id) ,
-            requesterId(requesterId) 
+            id(id),
+            requesterId(requesterId)
         {}
   
 

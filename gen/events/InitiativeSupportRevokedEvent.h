@@ -40,9 +40,9 @@ namespace rooset {
             uuid id,
             uuid requesterId,
             uuid initiativeId) :
-            id(id) ,
-            requesterId(requesterId) ,
-            initiativeId(initiativeId) 
+            id(id),
+            requesterId(requesterId),
+            initiativeId(initiativeId)
         {}
   
 

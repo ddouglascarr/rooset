@@ -40,8 +40,8 @@ namespace rooset {
             uuid id,
             uuid requesterId,
             rooset::SchulzeBallot ballot) :
-            id(id) ,
-            requesterId(requesterId) ,
+            id(id),
+            requesterId(requesterId),
             ballot(ballot)
         {}
   

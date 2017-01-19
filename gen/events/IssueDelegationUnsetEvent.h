@@ -38,8 +38,8 @@ namespace rooset {
         IssueDelegationUnsetEvent(
             uuid id,
             uuid trusterId) :
-            id(id) ,
-            trusterId(trusterId) 
+            id(id),
+            trusterId(trusterId)
         {}
   
 

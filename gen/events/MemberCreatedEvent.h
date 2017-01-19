@@ -46,12 +46,12 @@ namespace rooset {
             string name,
             string notifyEmail,
             boost::posix_time::ptime activated) :
-            id(id) ,
-            login(login) ,
-            password(password) ,
-            name(name) ,
-            notifyEmail(notifyEmail) ,
-            activated(activated) 
+            id(id),
+            login(login),
+            password(password),
+            name(name),
+            notifyEmail(notifyEmail),
+            activated(activated)
         {}
   
 

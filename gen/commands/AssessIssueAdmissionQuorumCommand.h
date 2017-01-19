@@ -36,7 +36,7 @@ namespace rooset {
     
         AssessIssueAdmissionQuorumCommand(
             uuid id) :
-            id(id) 
+            id(id)
         {}
   
 

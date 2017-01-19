@@ -36,7 +36,7 @@ namespace rooset {
     
         IssueAdmissionQuorumPassedEvent(
             uuid id) :
-            id(id) 
+            id(id)
         {}
   
 

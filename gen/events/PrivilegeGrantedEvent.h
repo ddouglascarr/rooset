@@ -50,9 +50,9 @@ namespace rooset {
             bool initiativeRight,
             bool managementRight,
             unsigned int weight) :
-            id(id) ,
-            requesterId(requesterId) ,
-            memberId(memberId) ,
+            id(id),
+            requesterId(requesterId),
+            memberId(memberId),
             pollingRight(pollingRight),
             votingRight(votingRight),
             initiativeRight(initiativeRight),

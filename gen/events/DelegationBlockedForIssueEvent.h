@@ -38,8 +38,8 @@ namespace rooset {
         DelegationBlockedForIssueEvent(
             uuid id,
             uuid trusterId) :
-            id(id) ,
-            trusterId(trusterId) 
+            id(id),
+            trusterId(trusterId)
         {}
   
 

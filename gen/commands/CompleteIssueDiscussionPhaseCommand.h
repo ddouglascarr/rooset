@@ -36,7 +36,7 @@ namespace rooset {
     
         CompleteIssueDiscussionPhaseCommand(
             uuid id) :
-            id(id) 
+            id(id)
         {}
   
 

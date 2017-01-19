@@ -38,8 +38,8 @@ namespace rooset {
         MemberDetailsUpdatedEvent(
             uuid id,
             string notifyEmail) :
-            id(id) ,
-            notifyEmail(notifyEmail) 
+            id(id),
+            notifyEmail(notifyEmail)
         {}
   
 

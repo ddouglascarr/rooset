@@ -42,10 +42,10 @@ namespace rooset {
             uuid requesterId,
             string name,
             string description) :
-            id(id) ,
-            requesterId(requesterId) ,
-            name(name) ,
-            description(description) 
+            id(id),
+            requesterId(requesterId),
+            name(name),
+            description(description)
         {}
   
 

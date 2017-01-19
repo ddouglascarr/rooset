@@ -3,8 +3,6 @@ const typenameMap = require(
     '../templates/typenameMap');
 const jsonConstructorAssignmentTemplates = require(
     '../templates/jsonConstructorAssignmentTemplates');
-const stdConstructorAssignmentTemplates = require(
-    '../templates/stdConstructorAssignmentTemplates');
 const serializeTemplates = require(
     '../templates/serializeTemplates');
 const {
@@ -45,7 +43,8 @@ module.exports = function(schema, commandConstructorSchema) {
 
   const stdConstructorAssignments = map(payloadProps, (ref, v) => {
     const typename = getTypenameFromRef(ref);
-    return stdConstructorAssignmentTemplates[typename](v, '');
+    const tmpl = (v, prefix) => `${v}(${prefix}${v})`;
+    return tmpl(v, '');
   });
 
   const stdConstructor = `

@@ -58,18 +58,18 @@ namespace rooset {
             string content,
             string textSearchData,
             boost::posix_time::ptime created) :
-            id(id) ,
-            requesterId(requesterId) ,
-            initiativeId(initiativeId) ,
-            unitId(unitId) ,
-            areaId(areaId) ,
-            policyId(policyId) ,
-            name(name) ,
+            id(id),
+            requesterId(requesterId),
+            initiativeId(initiativeId),
+            unitId(unitId),
+            areaId(areaId),
+            policyId(policyId),
+            name(name),
             polling(polling),
-            externalReference(externalReference) ,
-            content(content) ,
-            textSearchData(textSearchData) ,
-            created(created) 
+            externalReference(externalReference),
+            content(content),
+            textSearchData(textSearchData),
+            created(created)
         {}
   
 

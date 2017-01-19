@@ -38,8 +38,8 @@ namespace rooset {
         IssueVotingPhaseCompletedEvent(
             uuid id,
             uuid winnerId) :
-            id(id) ,
-            winnerId(winnerId) 
+            id(id),
+            winnerId(winnerId)
         {}
   
 

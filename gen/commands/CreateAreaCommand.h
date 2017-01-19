@@ -46,12 +46,12 @@ namespace rooset {
             string name,
             string description,
             string externalReference) :
-            id(id) ,
-            areaId(areaId) ,
-            requesterId(requesterId) ,
-            name(name) ,
-            description(description) ,
-            externalReference(externalReference) 
+            id(id),
+            areaId(areaId),
+            requesterId(requesterId),
+            name(name),
+            description(description),
+            externalReference(externalReference)
         {}
   
 

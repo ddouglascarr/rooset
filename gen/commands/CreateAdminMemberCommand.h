@@ -44,11 +44,11 @@ namespace rooset {
             string password,
             string name,
             string notifyEmail) :
-            id(id) ,
-            login(login) ,
-            password(password) ,
-            name(name) ,
-            notifyEmail(notifyEmail) 
+            id(id),
+            login(login),
+            password(password),
+            name(name),
+            notifyEmail(notifyEmail)
         {}
   
 
