@@ -81,7 +81,10 @@ namespace rooset {
           requesterId_value.SetString(requesterId_str.c_str(), requesterId_str.size(), d->GetAllocator());
           payload.AddMember("requesterId", requesterId_value, d->GetAllocator());    
 
-          JsonUtils::serializeString(newPassword, d->GetAllocator());
+          payload.AddMember(
+              "newPassword",
+              JsonUtils::serializeString(newPassword, d->GetAllocator()),
+              d->GetAllocator());
 
       d->AddMember("payload", payload, d->GetAllocator());
 

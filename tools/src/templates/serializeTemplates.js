@@ -44,7 +44,10 @@ module.exports = {
   },
 
   string: (v) => `
-          JsonUtils::serializeString(${v}, d->GetAllocator());`,
+          payload.AddMember(
+              "${v}",
+              JsonUtils::serializeString(${v}, d->GetAllocator()),
+              d->GetAllocator());`,
 
   uuid: (v) => {
     const v_value = `${v}_value`;

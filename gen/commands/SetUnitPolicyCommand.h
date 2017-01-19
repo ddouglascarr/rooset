@@ -158,9 +158,15 @@ namespace rooset {
           policyId_value.SetString(policyId_str.c_str(), policyId_str.size(), d->GetAllocator());
           payload.AddMember("policyId", policyId_value, d->GetAllocator());    
 
-          JsonUtils::serializeString(name, d->GetAllocator());
+          payload.AddMember(
+              "name",
+              JsonUtils::serializeString(name, d->GetAllocator()),
+              d->GetAllocator());
 
-          JsonUtils::serializeString(description, d->GetAllocator());
+          payload.AddMember(
+              "description",
+              JsonUtils::serializeString(description, d->GetAllocator()),
+              d->GetAllocator());
 
           Value polling_value;
           polling_value.SetBool(polling);

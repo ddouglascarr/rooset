@@ -91,11 +91,20 @@ namespace rooset {
           id_value.SetString(id_str.c_str(), id_str.size(), d->GetAllocator());
           payload.AddMember("id", id_value, d->GetAllocator());    
 
-          JsonUtils::serializeString(login, d->GetAllocator());
+          payload.AddMember(
+              "login",
+              JsonUtils::serializeString(login, d->GetAllocator()),
+              d->GetAllocator());
 
-          JsonUtils::serializeString(password, d->GetAllocator());
+          payload.AddMember(
+              "password",
+              JsonUtils::serializeString(password, d->GetAllocator()),
+              d->GetAllocator());
 
-          JsonUtils::serializeString(name, d->GetAllocator());
+          payload.AddMember(
+              "name",
+              JsonUtils::serializeString(name, d->GetAllocator()),
+              d->GetAllocator());
 
           Value notifyEmail_value;
           notifyEmail_value.SetString(notifyEmail.c_str(), notifyEmail.size(), d->GetAllocator());

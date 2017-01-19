@@ -118,13 +118,25 @@ created(c.created)
           initiativeId_value.SetString(initiativeId_str.c_str(), initiativeId_str.size(), d->GetAllocator());
           payload.AddMember("initiativeId", initiativeId_value, d->GetAllocator());    
 
-          JsonUtils::serializeString(name, d->GetAllocator());
+          payload.AddMember(
+              "name",
+              JsonUtils::serializeString(name, d->GetAllocator()),
+              d->GetAllocator());
 
-          JsonUtils::serializeString(externalReference, d->GetAllocator());
+          payload.AddMember(
+              "externalReference",
+              JsonUtils::serializeString(externalReference, d->GetAllocator()),
+              d->GetAllocator());
 
-          JsonUtils::serializeString(content, d->GetAllocator());
+          payload.AddMember(
+              "content",
+              JsonUtils::serializeString(content, d->GetAllocator()),
+              d->GetAllocator());
 
-          JsonUtils::serializeString(textSearchData, d->GetAllocator());
+          payload.AddMember(
+              "textSearchData",
+              JsonUtils::serializeString(textSearchData, d->GetAllocator()),
+              d->GetAllocator());
 
           Value created_value;
           created_value.SetDouble(boost::posix_time::to_time_t(created));
