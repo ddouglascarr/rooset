@@ -1,4 +1,4 @@
 ---
   properties:
     id: '$uuid'
-    winnerId: '$uuid'
+    winnerId: '$uuidNullable'

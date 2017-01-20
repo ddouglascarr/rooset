@@ -49,15 +49,17 @@ module.exports = {
               JsonUtils::serializeString(${v}, d->GetAllocator()),
               d->GetAllocator());`,
 
-  uuid: (v) => {
-    const v_value = `${v}_value`;
-    const v_str = `${v}_str`;
-    return `
-          Value ${v_value};
-          string ${v_str} = idTools->serialize(${v});
-          ${v_value}.SetString(${v_str}.c_str(), ${v_str}.size(), d->GetAllocator());
-          payload.AddMember("${v}", ${v_value}, d->GetAllocator());    `;
-  },
+  uuid: (v) => `
+          payload.AddMember(
+              "${v}",
+              JsonUtils::serializeUuid(${v}, d->GetAllocator()),
+              d->GetAllocator());`,
+
+  uuidNullable: (v) => `
+          payload.AddMember(
+              "${v}",
+              JsonUtils::serializeUuid(${v}, d->GetAllocator()),
+              d->GetAllocator());`,
 
   uuidArray: (v) => {
     const v_value = `${v}_value`;

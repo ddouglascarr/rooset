@@ -103,20 +103,20 @@ created(c.created)
       d->AddMember("type", messageTypeValue, d->GetAllocator());
 
       
-          Value id_value;
-          string id_str = idTools->serialize(id);
-          id_value.SetString(id_str.c_str(), id_str.size(), d->GetAllocator());
-          payload.AddMember("id", id_value, d->GetAllocator());    
+          payload.AddMember(
+              "id",
+              JsonUtils::serializeUuid(id, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value requesterId_value;
-          string requesterId_str = idTools->serialize(requesterId);
-          requesterId_value.SetString(requesterId_str.c_str(), requesterId_str.size(), d->GetAllocator());
-          payload.AddMember("requesterId", requesterId_value, d->GetAllocator());    
+          payload.AddMember(
+              "requesterId",
+              JsonUtils::serializeUuid(requesterId, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value initiativeId_value;
-          string initiativeId_str = idTools->serialize(initiativeId);
-          initiativeId_value.SetString(initiativeId_str.c_str(), initiativeId_str.size(), d->GetAllocator());
-          payload.AddMember("initiativeId", initiativeId_value, d->GetAllocator());    
+          payload.AddMember(
+              "initiativeId",
+              JsonUtils::serializeUuid(initiativeId, d->GetAllocator()),
+              d->GetAllocator());
 
           payload.AddMember(
               "name",

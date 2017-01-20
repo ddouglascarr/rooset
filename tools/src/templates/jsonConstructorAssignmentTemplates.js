@@ -26,6 +26,9 @@ module.exports = {
   uuid: (v) => `
             ${v}(JsonUtils::parseUuid(d["payload"]["${v}"]))`,
 
+  uuidNullable: (v) => `
+            ${v}(JsonUtils::parseUuid(d["payload"]["${v}"]))`,
+
   uuidArray: (v) => `
             ${v}(JsonUtils::parseArray<uuid>(
                 d["payload"]["${v}"],

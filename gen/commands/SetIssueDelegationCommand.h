@@ -69,20 +69,20 @@ namespace rooset {
       d->AddMember("type", messageTypeValue, d->GetAllocator());
 
       
-          Value id_value;
-          string id_str = idTools->serialize(id);
-          id_value.SetString(id_str.c_str(), id_str.size(), d->GetAllocator());
-          payload.AddMember("id", id_value, d->GetAllocator());    
+          payload.AddMember(
+              "id",
+              JsonUtils::serializeUuid(id, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value requesterId_value;
-          string requesterId_str = idTools->serialize(requesterId);
-          requesterId_value.SetString(requesterId_str.c_str(), requesterId_str.size(), d->GetAllocator());
-          payload.AddMember("requesterId", requesterId_value, d->GetAllocator());    
+          payload.AddMember(
+              "requesterId",
+              JsonUtils::serializeUuid(requesterId, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value trusteeId_value;
-          string trusteeId_str = idTools->serialize(trusteeId);
-          trusteeId_value.SetString(trusteeId_str.c_str(), trusteeId_str.size(), d->GetAllocator());
-          payload.AddMember("trusteeId", trusteeId_value, d->GetAllocator());    
+          payload.AddMember(
+              "trusteeId",
+              JsonUtils::serializeUuid(trusteeId, d->GetAllocator()),
+              d->GetAllocator());
 
       d->AddMember("payload", payload, d->GetAllocator());
 

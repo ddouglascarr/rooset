@@ -1558,4 +1558,158 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
   };
 }
 
+
+TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
+{
+  
+  vector<unique_ptr<Document>> givenEvents;
+  
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "UNIT_POLICY_SET_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "name": "Test Policy",
+    "description": "The Test Policy",
+    "polling": false,
+    "maxAdmissionTime": 604800000,
+    "minAdmissionTime": 0,
+    "discussionTime": 604800000,
+    "verificationTime": 604800000,
+    "votingTime": 604800000,
+    "issueQuorumNum": 1,
+    "issueQuorumDen": 5,
+    "defeatStrength": "SIMPLE",
+    "directMajorityNum": 1,
+    "directMajorityDen": 2,
+    "directMajorityStrict": true,
+    "directMajorityPositive": 1,
+    "directMajorityNonNegative": 1,
+    "noReverseBeatPath": false,
+    "noMultistageMajority": false
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "AREA_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "test area",
+    "description": "the test area",
+    "externalReference": "area.com"
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "NEW_INITIATIVE_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9f-000000000000",
+    "initiativeId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb",
+    "unitId": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "name": "Test Initiative",
+    "polling": false,
+    "externalReference": "",
+    "content": "mock content",
+    "textSearchData": "foo, bar",
+    "created": 1483586759
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "passingInitiatives": [
+      "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb",
+      "464b1ebb-32c1-460c-8e9e-cccccccccccc",
+      "464b1ebb-32c1-460c-8e9e-dddddddddddd"
+    ]
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "memberId": "464b1ebb-32c1-460c-8e9f-000000000000",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json"));
+  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  "type": "ISSUE_BALLOT_SET_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9f-000000000000",
+    "ballot": {
+      "approve": [],
+      "abstain": [],
+      "disapprove": [
+        [
+          "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb"
+        ]
+      ]
+    }
+  }
+})json"));
+  CommandHandlerTestImpl commandHandler(givenEvents); 
+  
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "ISSUE_VOTING_PHASE_COMPLETED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "winnerId": null
+  }
+})json");
+  try {
+  JsonUtils::validate(*IssueVotingPhaseCompletedEvent::schema, *expected_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("expected schema invalid");
+  }
+  IssueVotingPhaseCompletedEvent expected(*expected_doc);
+  
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "COMPLETE_ISSUE_VOTING_PHASE_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-333333333333"
+  }
+})json");
+  try {
+  JsonUtils::validate(*CompleteIssueVotingPhaseCommand::schema, *cmd_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("cmd schema invalid");
+  }
+  CompleteIssueVotingPhaseCommand cmd(*cmd_doc);
+  
+  auto result = commandHandler.evaluate(cmd);
+  if (result == nullptr) throw invalid_argument("command handler returned nullptr");
+  auto resultDoc = result->serialize();
+  
+  // if docs don't match, assess the json output to make useful error report
+  auto expectedDoc = expected.serialize();
+  
+  bool isPass = *resultDoc == *expectedDoc;
+  if (isPass) {
+    EXPECT_EQ(*resultDoc, *expectedDoc);
+  }  else {
+    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
+        *JsonUtils::serialize(*expectedDoc));
+  };
+}
+
 }

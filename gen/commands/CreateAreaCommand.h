@@ -81,20 +81,20 @@ namespace rooset {
       d->AddMember("type", messageTypeValue, d->GetAllocator());
 
       
-          Value id_value;
-          string id_str = idTools->serialize(id);
-          id_value.SetString(id_str.c_str(), id_str.size(), d->GetAllocator());
-          payload.AddMember("id", id_value, d->GetAllocator());    
+          payload.AddMember(
+              "id",
+              JsonUtils::serializeUuid(id, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value areaId_value;
-          string areaId_str = idTools->serialize(areaId);
-          areaId_value.SetString(areaId_str.c_str(), areaId_str.size(), d->GetAllocator());
-          payload.AddMember("areaId", areaId_value, d->GetAllocator());    
+          payload.AddMember(
+              "areaId",
+              JsonUtils::serializeUuid(areaId, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value requesterId_value;
-          string requesterId_str = idTools->serialize(requesterId);
-          requesterId_value.SetString(requesterId_str.c_str(), requesterId_str.size(), d->GetAllocator());
-          payload.AddMember("requesterId", requesterId_value, d->GetAllocator());    
+          payload.AddMember(
+              "requesterId",
+              JsonUtils::serializeUuid(requesterId, d->GetAllocator()),
+              d->GetAllocator());
 
           payload.AddMember(
               "name",

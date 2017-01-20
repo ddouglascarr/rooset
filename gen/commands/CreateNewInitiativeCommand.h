@@ -106,35 +106,35 @@ namespace rooset {
       d->AddMember("type", messageTypeValue, d->GetAllocator());
 
       
-          Value id_value;
-          string id_str = idTools->serialize(id);
-          id_value.SetString(id_str.c_str(), id_str.size(), d->GetAllocator());
-          payload.AddMember("id", id_value, d->GetAllocator());    
+          payload.AddMember(
+              "id",
+              JsonUtils::serializeUuid(id, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value requesterId_value;
-          string requesterId_str = idTools->serialize(requesterId);
-          requesterId_value.SetString(requesterId_str.c_str(), requesterId_str.size(), d->GetAllocator());
-          payload.AddMember("requesterId", requesterId_value, d->GetAllocator());    
+          payload.AddMember(
+              "requesterId",
+              JsonUtils::serializeUuid(requesterId, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value initiativeId_value;
-          string initiativeId_str = idTools->serialize(initiativeId);
-          initiativeId_value.SetString(initiativeId_str.c_str(), initiativeId_str.size(), d->GetAllocator());
-          payload.AddMember("initiativeId", initiativeId_value, d->GetAllocator());    
+          payload.AddMember(
+              "initiativeId",
+              JsonUtils::serializeUuid(initiativeId, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value unitId_value;
-          string unitId_str = idTools->serialize(unitId);
-          unitId_value.SetString(unitId_str.c_str(), unitId_str.size(), d->GetAllocator());
-          payload.AddMember("unitId", unitId_value, d->GetAllocator());    
+          payload.AddMember(
+              "unitId",
+              JsonUtils::serializeUuid(unitId, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value areaId_value;
-          string areaId_str = idTools->serialize(areaId);
-          areaId_value.SetString(areaId_str.c_str(), areaId_str.size(), d->GetAllocator());
-          payload.AddMember("areaId", areaId_value, d->GetAllocator());    
+          payload.AddMember(
+              "areaId",
+              JsonUtils::serializeUuid(areaId, d->GetAllocator()),
+              d->GetAllocator());
 
-          Value policyId_value;
-          string policyId_str = idTools->serialize(policyId);
-          policyId_value.SetString(policyId_str.c_str(), policyId_str.size(), d->GetAllocator());
-          payload.AddMember("policyId", policyId_value, d->GetAllocator());    
+          payload.AddMember(
+              "policyId",
+              JsonUtils::serializeUuid(policyId, d->GetAllocator()),
+              d->GetAllocator());
 
           payload.AddMember(
               "name",

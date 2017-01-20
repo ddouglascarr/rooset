@@ -79,6 +79,9 @@ namespace rooset {
   uuid rooset::JsonUtils::parseUuid(const rapidjson::Value& v)
   {
     IdToolsImpl idTools;
+    if (v.IsNull()) {
+      return idTools.generateNilId();
+    }
     return idTools.parse(JsonUtils::parseString(v));
   }
 
@@ -88,8 +91,14 @@ namespace rooset {
       const rooset::uuid& id, rapidjson::Document::AllocatorType& allocator)
   {
     IdToolsImpl idTools;
-    auto s = idTools.serialize(id);
-    return JsonUtils::serializeString(s, allocator);
+    rapidjson::Value v; // null
+
+    if (!id.is_nil()) {
+      auto s = idTools.serialize(id);
+      v = JsonUtils::serializeString(s, allocator);
+    }
+
+    return v;
   }
 
 

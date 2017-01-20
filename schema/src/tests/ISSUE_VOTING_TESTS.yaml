@@ -629,3 +629,38 @@ scenarios:
         id: *issueId
         winnerId: *initiativeB
 
+
+  - label: Status quo should be able to be winner
+    given:
+      - *unitCreatedEvt
+      - *unitPolicySetEvt
+      - *areaCreatedEvt
+      - *newInitiativeCreatedEvt
+      - *issueVerificationPhaseCompletedEvt
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          <<: *privGrantedPayload
+          memberId: *voter0
+          weight: 1
+      -
+        <<: *issueBallotSetEvt
+        payload:
+          id: *issueId
+          requesterId: *voter0
+          ballot:
+            approve: []
+            abstain: []
+            disapprove:
+              -
+                - *initiativeB
+    when:
+      type: COMPLETE_ISSUE_VOTING_PHASE_COMMAND
+      payload:
+        id: *issueId
+    then:
+      type: ISSUE_VOTING_PHASE_COMPLETED_EVENT
+      payload:
+        id: *issueId
+        winnerId: null
+

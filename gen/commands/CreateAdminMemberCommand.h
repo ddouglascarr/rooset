@@ -79,10 +79,10 @@ namespace rooset {
       d->AddMember("type", messageTypeValue, d->GetAllocator());
 
       
-          Value id_value;
-          string id_str = idTools->serialize(id);
-          id_value.SetString(id_str.c_str(), id_str.size(), d->GetAllocator());
-          payload.AddMember("id", id_value, d->GetAllocator());    
+          payload.AddMember(
+              "id",
+              JsonUtils::serializeUuid(id, d->GetAllocator()),
+              d->GetAllocator());
 
           payload.AddMember(
               "login",

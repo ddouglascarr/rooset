@@ -210,13 +210,6 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
     auto ballot = it->second;
     ballot.setWeight(delegationCalculator->calcMemberWeight(
         privileges, delegations, voterId));
-    for (auto& a : ballot.approve) {
-      for (auto& b : a) { cout << "    " << b << "\n"; }
-    }
-    for (auto& a : ballot.disapprove) {
-      for (auto& b : a) { cout << "    " << b << "\n"; }
-    }
-    
     ballots.push_back(ballot);
   }
   auto winners = voteCalculator->calcWinners(ballots, initiatives);
