@@ -33,14 +33,16 @@ namespace rooset {
       repository(move(r))
     { }
 
-    unique_ptr<ProjectEvent<Document>> evaluate(const GrantPrivilegeCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const CreateAreaCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const SetUnitDelegationCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const UnsetUnitDelegationCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const SetAreaDelegationCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const UnsetAreaDelegationCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const BlockDelegationForAreaCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const UnblockDelegationForAreaCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const SetUnitPolicyCommand& c);
+    inline virtual ~UnitCommandHandler() {}
+
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const GrantPrivilegeCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const CreateAreaCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const SetUnitDelegationCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const UnsetUnitDelegationCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const SetAreaDelegationCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const UnsetAreaDelegationCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const BlockDelegationForAreaCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const UnblockDelegationForAreaCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const SetUnitPolicyCommand& c);
   };
 }

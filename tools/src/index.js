@@ -10,6 +10,7 @@ const generateEnumUtilsHeader = require('./generators/generateEnumUtilsHeader');
 const generateExceptionClass = require('./generators/generateExceptionClass');
 const generateMessageCpp = require('./generators/generateMessageCpp');
 const generateEventUtils = require('./generators/generateEventUtils');
+const generateCommandUtils = require('./generators/generateCommandUtils');
 const {
   generateFilenameFromMsgType,
   getMsgTypeFromSchema,
@@ -27,6 +28,7 @@ commandSchemas.forEach((commandSchema) => {
   const cppContent = generateMessageCpp(commandSchema, 'commands');
   stageFile('sources', `${fileName}.cpp`, cppContent);
 });
+stageFile('commands', 'CommandUtils.h', generateCommandUtils(commandSchemas));
 
 // events
 const eventSchemas = schemaTools.generateSchemas('events');

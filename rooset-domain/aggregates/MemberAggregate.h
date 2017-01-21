@@ -4,7 +4,6 @@
 #include "events/MemberCreatedEvent.h"
 #include "events/AdminMemberCreatedEvent.h"
 #include "events/MemberPasswordUpdatedEvent.h"
-#include "events/MemberDetailsUpdatedEvent.h"
 
 using namespace std;
 using namespace rooset;
@@ -34,11 +33,6 @@ namespace rooset {
     void handleEvent(const MemberPasswordUpdatedEvent& e)
     {
       password = e.newPassword;
-    }
-
-    void handleEvent(const MemberDetailsUpdatedEvent& e)
-    {
-      notifyEmail = e.notifyEmail;
     }
 
     uuid getId() const { return id; }

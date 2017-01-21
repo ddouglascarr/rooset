@@ -9,7 +9,6 @@
 #include "events/AdminMemberCreatedEvent.h"
 #include "events/AreaCreatedEvent.h"
 #include "events/MemberCreatedEvent.h"
-#include "events/MemberDetailsUpdatedEvent.h"
 #include "events/MemberPasswordUpdatedEvent.h"
 #include "events/UnitCreatedEvent.h"
 #include "events/AreaDelegationSetEvent.h"
@@ -68,13 +67,6 @@ namespace rooset {
         JsonUtils::validate(*MemberCreatedEvent::schema, d);
         const MemberCreatedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, MemberCreatedEvent>(aggregate, evt, onMethodMissing);
-        return;
-      }
-
-      if (msgType == "MEMBER_DETAILS_UPDATED_EVENT") {
-        JsonUtils::validate(*MemberDetailsUpdatedEvent::schema, d);
-        const MemberDetailsUpdatedEvent evt(d);
-        MessageUtils::applyEvent<Aggregate, MemberDetailsUpdatedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 

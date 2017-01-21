@@ -166,6 +166,22 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
 
 
 unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const CompleteIssueDiscussionPhaseCommand& c)
+{
+  return nullptr;
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
+    const CompleteIssueVerificationPhaseCommand& c)
+{
+  return nullptr;
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
     const SetIssueBallotCommand& c)
 {
   auto issue = issueRepository->load(c.id);

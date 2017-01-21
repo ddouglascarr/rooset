@@ -22,6 +22,8 @@ namespace rooset {
     using UnitCommandHandler::evaluate;
     using MemberCommandHandler::evaluate;
     using IssueCommandHandler::evaluate;
+    
+    virtual ~CommandHandlerTestImpl() {}
 
     CommandHandlerTestImpl(const vector<unique_ptr<rapidjson::Document>>& events) :
         UnitCommandHandler(make_unique<AggregateRepositoryMockImpl<UnitAggregate>>(events)),

@@ -26,6 +26,8 @@ namespace rooset {
     MemberCommandHandler(unique_ptr<AggregateRepository<MemberAggregate>> r) : repository(move(r))
     { }
 
+    virtual ~MemberCommandHandler() {}
+
     unique_ptr<ProjectEvent<Document>> evaluate(const CreateAdminMemberCommand& c)
     {
       repository->assertAggregateDoesNotExist(c.id);

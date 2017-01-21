@@ -31,7 +31,6 @@ module.exports = function(schema, commandConstructorSchema) {
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/schema.h"
-#include "framework/IdToolsImpl.h"
 #include "framework/JsonUtils.h"
 #include "enums/EnumUtils.h"
 #include "aggregates/SchulzeBallot.h"
@@ -50,7 +49,6 @@ namespace rooset {
 
   public:
     static const unique_ptr<SchemaDocument> schema;
-    const unique_ptr<IdTools> idTools = make_unique<IdToolsImpl>();
 
     ${declarations.join('\n        ')}
 

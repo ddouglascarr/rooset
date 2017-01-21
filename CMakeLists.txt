@@ -73,7 +73,7 @@ ADD_TEST(NAME generated COMMAND rooset-generated-tests)
 
 FILE(GLOB framework_tests ${PROJECT_SOURCE_DIR}/tests/*.cpp)
 ADD_EXECUTABLE(rooset-framework-tests ${framework_tests})
-TARGET_LINK_LIBRARIES(rooset-framework-tests rooset-lib gtest gtest_main)
+TARGET_LINK_LIBRARIES(rooset-framework-tests rooset-lib gmock gmock_main)
 set_property(TARGET rooset-framework-tests PROPERTY CXX_STANDARD 14)
 set_property(TARGET rooset-framework-tests PROPERTY CXX_STANDARD_REQUIRED ON)
 ADD_TEST(NAME framework COMMAND rooset-framework-tests)

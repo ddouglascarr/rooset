@@ -18,6 +18,7 @@
 #include "commands/AssessIssueAdmissionQuorumCommand.h"
 #include "commands/CompleteIssueAdmissionPhaseCommand.h"
 #include "commands/CompleteIssueVotingPhaseCommand.h"
+#include "commands/CompleteIssueVerificationPhaseCommand.h"
 #include "commands/SetIssueBallotCommand.h"
 #include "commands/UnsetIssueBallotCommand.h"
 #include "VoteCalculatorSchulzeImpl.h"
@@ -46,19 +47,23 @@ namespace rooset {
       unitRepository(move(unitRepository))
     { }
 
-    unique_ptr<ProjectEvent<Document>> evaluate(const CreateNewInitiativeCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const CreateCompetingInitiativeCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const SetIssueDelegationCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const UnsetIssueDelegationCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const BlockDelegationForIssueCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const UnblockDelegationForIssueCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const GiveInitiativeSupportCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const RevokeInitiativeSupportCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const AssessIssueAdmissionQuorumCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const CompleteIssueAdmissionPhaseCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const SetIssueBallotCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const UnsetIssueBallotCommand& c);
-    unique_ptr<ProjectEvent<Document>> evaluate(const CompleteIssueVotingPhaseCommand& c);
+    inline virtual ~IssueCommandHandler() {}
+
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const CreateNewInitiativeCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const CreateCompetingInitiativeCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const SetIssueDelegationCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const UnsetIssueDelegationCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const BlockDelegationForIssueCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const UnblockDelegationForIssueCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const GiveInitiativeSupportCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const RevokeInitiativeSupportCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const AssessIssueAdmissionQuorumCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const CompleteIssueAdmissionPhaseCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const CompleteIssueDiscussionPhaseCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const CompleteIssueVerificationPhaseCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const SetIssueBallotCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const UnsetIssueBallotCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const CompleteIssueVotingPhaseCommand& c);
 
   protected:
     void assertIssueState(const IssueAggregate& issue, const vector<IssueState>& acceptable);
