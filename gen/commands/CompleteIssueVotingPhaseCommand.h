@@ -28,7 +28,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "COMPLETE_ISSUE_VOTING_PHASE_COMMAND";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     const uuid id;
 

@@ -22,7 +22,7 @@ namespace rooset {
     const ExceptionCode exceptionCode;
     const string MESSAGE_TYPE = "COMMAND_EVALUATION_EXCEPTION";
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     CommandEvaluationException(ExceptionCode code, string msg) :
         ProjectException<Document>(msg),

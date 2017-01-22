@@ -28,7 +28,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "UNBLOCK_DELEGATION_FOR_AREA_COMMAND";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     const uuid id;
         const uuid areaId;

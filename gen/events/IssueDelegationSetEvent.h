@@ -27,7 +27,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "ISSUE_DELEGATION_SET_EVENT";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     const uuid id;
         const uuid trusterId;

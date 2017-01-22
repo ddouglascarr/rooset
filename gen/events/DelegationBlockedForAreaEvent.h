@@ -27,7 +27,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "DELEGATION_BLOCKED_FOR_AREA_EVENT";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     const uuid id;
         const uuid areaId;

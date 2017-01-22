@@ -27,7 +27,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "ADMIN_MEMBER_CREATED_EVENT";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     const uuid id;
         const string login;

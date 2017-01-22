@@ -38,7 +38,7 @@ public:
   using CommandHandlerTestImpl::evaluate;
 
   CommandHandlerMockImpl() :
-      rooset::CommandHandlerTestImpl(vector<unique_ptr<rapidjson::Document>>())
+      rooset::CommandHandlerTestImpl(vector<rapidjson::Document>())
   {}
 
   MOCK_METHOD1(evaluate, unique_ptr<ProjectEvent<Document>>(
@@ -129,6 +129,6 @@ TEST_F(CommandServiceImplTests, shouldSaveEvent)
           .Times(Exactly(1))
       .WillOnce(Return(eventId));
 
-  auto returnedId = commandService.evaluate(*sJson);
+  auto returnedId = commandService.evaluate(sJson);
   EXPECT_EQ(returnedId, eventId);
 }

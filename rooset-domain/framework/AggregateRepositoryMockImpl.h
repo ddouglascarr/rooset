@@ -18,14 +18,14 @@ namespace rooset {
     unique_ptr<Aggregate> aggregate;
     string aggregateId = "";
   public:
-    AggregateRepositoryMockImpl(const vector<unique_ptr<rapidjson::Document>>& events)
+    AggregateRepositoryMockImpl(const vector<rapidjson::Document>& events)
     {
       aggregate = nullptr;
       for (const auto& e : events) {
         bool isForThisAggregate = true;
-        EventUtils::applyEvent<Aggregate>(aggregate, *e, [&]() { isForThisAggregate = false; });
+        EventUtils::applyEvent<Aggregate>(aggregate, e, [&]() { isForThisAggregate = false; });
         if (isForThisAggregate) {
-          string payloadId = (*e)["payload"]["id"].GetString();
+          string payloadId = e["payload"]["id"].GetString();
           if (aggregateId == "") {
             aggregateId = payloadId;
           } 

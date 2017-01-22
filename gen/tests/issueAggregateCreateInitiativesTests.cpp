@@ -18,7 +18,7 @@ namespace rooset_issue_aggregate_create_initiatives_tests_tests {
 TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_must_have_initiative_rights)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -90,11 +90,11 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_NEW_INITIATIVE_COMMAND",
@@ -114,11 +114,11 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
   }
 })json");
   try {
-  JsonUtils::validate(*CreateNewInitiativeCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateNewInitiativeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateNewInitiativeCommand cmd(*cmd_doc);
+  CreateNewInitiativeCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -137,8 +137,8 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -147,7 +147,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
 TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_member_must_have_initiative_rights)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -249,11 +249,11 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_COMPETING_INITIATIVE_COMMAND",
@@ -269,11 +269,11 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
   }
 })json");
   try {
-  JsonUtils::validate(*CreateCompetingInitiativeCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateCompetingInitiativeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateCompetingInitiativeCommand cmd(*cmd_doc);
+  CreateCompetingInitiativeCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -292,8 +292,8 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -302,7 +302,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
 TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -363,11 +363,11 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_NEW_INITIATIVE_COMMAND",
@@ -387,11 +387,11 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
   }
 })json");
   try {
-  JsonUtils::validate(*CreateNewInitiativeCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateNewInitiativeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateNewInitiativeCommand cmd(*cmd_doc);
+  CreateNewInitiativeCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -410,8 +410,8 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -420,7 +420,7 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
 TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -501,11 +501,11 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
   }
 })json");
   try {
-  JsonUtils::validate(*NewInitiativeCreatedEvent::schema, *expected_doc);
+  JsonUtils::validate(NewInitiativeCreatedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  NewInitiativeCreatedEvent expected(*expected_doc);
+  NewInitiativeCreatedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_NEW_INITIATIVE_COMMAND",
@@ -525,11 +525,11 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
   }
 })json");
   try {
-  JsonUtils::validate(*CreateNewInitiativeCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateNewInitiativeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateNewInitiativeCommand cmd(*cmd_doc);
+  CreateNewInitiativeCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -542,8 +542,8 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -551,7 +551,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
 TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of_issues)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -640,11 +640,11 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_NEW_INITIATIVE_COMMAND",
@@ -664,11 +664,11 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   }
 })json");
   try {
-  JsonUtils::validate(*CreateNewInitiativeCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateNewInitiativeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateNewInitiativeCommand cmd(*cmd_doc);
+  CreateNewInitiativeCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -687,8 +687,8 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -697,7 +697,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
 TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -804,11 +804,11 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
   }
 })json");
   try {
-  JsonUtils::validate(*CompetingInitiativeCreatedEvent::schema, *expected_doc);
+  JsonUtils::validate(CompetingInitiativeCreatedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CompetingInitiativeCreatedEvent expected(*expected_doc);
+  CompetingInitiativeCreatedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_COMPETING_INITIATIVE_COMMAND",
@@ -824,11 +824,11 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
   }
 })json");
   try {
-  JsonUtils::validate(*CreateCompetingInitiativeCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateCompetingInitiativeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateCompetingInitiativeCommand cmd(*cmd_doc);
+  CreateCompetingInitiativeCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -841,8 +841,8 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -850,7 +850,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
 TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of_initiatives)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -965,11 +965,11 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_COMPETING_INITIATIVE_COMMAND",
@@ -985,11 +985,11 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   }
 })json");
   try {
-  JsonUtils::validate(*CreateCompetingInitiativeCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateCompetingInitiativeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateCompetingInitiativeCommand cmd(*cmd_doc);
+  CreateCompetingInitiativeCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1008,8 +1008,8 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -1018,7 +1018,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
 TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiatives_after_verification_phase)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1129,11 +1129,11 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_COMPETING_INITIATIVE_COMMAND",
@@ -1149,11 +1149,11 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
   }
 })json");
   try {
-  JsonUtils::validate(*CreateCompetingInitiativeCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateCompetingInitiativeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateCompetingInitiativeCommand cmd(*cmd_doc);
+  CreateCompetingInitiativeCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1172,8 +1172,8 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }

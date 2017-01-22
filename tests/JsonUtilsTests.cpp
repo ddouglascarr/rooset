@@ -21,7 +21,8 @@ namespace roosetJsonUtilsTests {
     })json";
 
     const auto doc = JsonUtils::parse(input);
-    const auto out = JsonUtils::parseArray<string>((*doc)["items"].GetArray(), [](const rapidjson::Value& v) { return v.GetString(); });
+    const auto out = JsonUtils::parseArray<string>(doc["items"],
+        [](const rapidjson::Value& v) { return v.GetString(); });
     const vector<string> expected = { "foo", "bar", "bing", "bong" };
     EXPECT_EQ(out, expected);
   }
@@ -52,5 +53,5 @@ TEST(JsonUtils, serializeArray)
     d.GetAllocator());
   
   d.AddMember("items", items, d.GetAllocator());
-  EXPECT_EQ(d, *expected);
+  EXPECT_EQ(d, expected);
 }

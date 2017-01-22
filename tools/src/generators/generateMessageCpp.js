@@ -17,8 +17,12 @@ using namespace rapidjson;
 
 namespace rooset {
 
-  const unique_ptr<SchemaDocument> ${classTypename}::schema = JsonUtils::parseSchema(
-      ${JSON.stringify(JSON.stringify(schema))});
+
+
+const SchemaDocument ${classTypename}::schema = JsonUtils::parseSchema(
+    ${JSON.stringify(JSON.stringify(schema))});
+
+
 
 }
 

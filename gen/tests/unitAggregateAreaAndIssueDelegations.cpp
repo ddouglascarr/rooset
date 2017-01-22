@@ -18,7 +18,7 @@ namespace rooset_unit_aggregate_area_and_issue_delegations_tests {
 TEST(unit_aggregate_area_and_issue_delegations, area_must_exist)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -66,11 +66,11 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_AREA_DELEGATION_COMMAND",
@@ -82,11 +82,11 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist)
   }
 })json");
   try {
-  JsonUtils::validate(*SetAreaDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetAreaDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetAreaDelegationCommand cmd(*cmd_doc);
+  SetAreaDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -105,8 +105,8 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -115,7 +115,7 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist)
 TEST(unit_aggregate_area_and_issue_delegations, truster_must_have_voting_right)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -161,11 +161,11 @@ TEST(unit_aggregate_area_and_issue_delegations, truster_must_have_voting_right)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_AREA_DELEGATION_COMMAND",
@@ -177,11 +177,11 @@ TEST(unit_aggregate_area_and_issue_delegations, truster_must_have_voting_right)
   }
 })json");
   try {
-  JsonUtils::validate(*SetAreaDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetAreaDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetAreaDelegationCommand cmd(*cmd_doc);
+  SetAreaDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -200,8 +200,8 @@ TEST(unit_aggregate_area_and_issue_delegations, truster_must_have_voting_right)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -210,7 +210,7 @@ TEST(unit_aggregate_area_and_issue_delegations, truster_must_have_voting_right)
 TEST(unit_aggregate_area_and_issue_delegations, trustee_must_have_voting_right)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -256,11 +256,11 @@ TEST(unit_aggregate_area_and_issue_delegations, trustee_must_have_voting_right)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_AREA_DELEGATION_COMMAND",
@@ -272,11 +272,11 @@ TEST(unit_aggregate_area_and_issue_delegations, trustee_must_have_voting_right)
   }
 })json");
   try {
-  JsonUtils::validate(*SetAreaDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetAreaDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetAreaDelegationCommand cmd(*cmd_doc);
+  SetAreaDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -295,8 +295,8 @@ TEST(unit_aggregate_area_and_issue_delegations, trustee_must_have_voting_right)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -305,7 +305,7 @@ TEST(unit_aggregate_area_and_issue_delegations, trustee_must_have_voting_right)
 TEST(unit_aggregate_area_and_issue_delegations, set_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -365,11 +365,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*AreaDelegationSetEvent::schema, *expected_doc);
+  JsonUtils::validate(AreaDelegationSetEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  AreaDelegationSetEvent expected(*expected_doc);
+  AreaDelegationSetEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_AREA_DELEGATION_COMMAND",
@@ -381,11 +381,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*SetAreaDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetAreaDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetAreaDelegationCommand cmd(*cmd_doc);
+  SetAreaDelegationCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -398,8 +398,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_delegation)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -407,7 +407,7 @@ TEST(unit_aggregate_area_and_issue_delegations, set_delegation)
 TEST(unit_aggregate_area_and_issue_delegations, set_area_delegation_should_remove_block)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -483,11 +483,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_area_delegation_should_remov
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNBLOCK_DELEGATION_FOR_AREA_COMMAND",
@@ -498,11 +498,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_area_delegation_should_remov
   }
 })json");
   try {
-  JsonUtils::validate(*UnblockDelegationForAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnblockDelegationForAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnblockDelegationForAreaCommand cmd(*cmd_doc);
+  UnblockDelegationForAreaCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -521,8 +521,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_area_delegation_should_remov
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -531,7 +531,7 @@ TEST(unit_aggregate_area_and_issue_delegations, set_area_delegation_should_remov
 TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_delegation_must_exist)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -590,11 +590,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_delegation_must
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_AREA_DELEGATION_COMMAND",
@@ -605,11 +605,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_delegation_must
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetAreaDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetAreaDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetAreaDelegationCommand cmd(*cmd_doc);
+  UnsetAreaDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -628,8 +628,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_delegation_must
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -638,7 +638,7 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_delegation_must
 TEST(unit_aggregate_area_and_issue_delegations, unset_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -706,11 +706,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*AreaDelegationUnsetEvent::schema, *expected_doc);
+  JsonUtils::validate(AreaDelegationUnsetEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  AreaDelegationUnsetEvent expected(*expected_doc);
+  AreaDelegationUnsetEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_AREA_DELEGATION_COMMAND",
@@ -721,11 +721,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetAreaDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetAreaDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetAreaDelegationCommand cmd(*cmd_doc);
+  UnsetAreaDelegationCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -738,8 +738,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -747,7 +747,7 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation)
 TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_should_remove_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -823,11 +823,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_should_remove_d
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_AREA_DELEGATION_COMMAND",
@@ -838,11 +838,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_should_remove_d
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetAreaDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetAreaDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetAreaDelegationCommand cmd(*cmd_doc);
+  UnsetAreaDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -861,8 +861,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_should_remove_d
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -871,7 +871,7 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_should_remove_d
 TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation_should_unset_area_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -947,11 +947,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation_should_uns
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_AREA_DELEGATION_COMMAND",
@@ -962,11 +962,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation_should_uns
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetAreaDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetAreaDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetAreaDelegationCommand cmd(*cmd_doc);
+  UnsetAreaDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -985,8 +985,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation_should_uns
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -995,7 +995,7 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation_should_uns
 TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_block_area_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1043,11 +1043,11 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_block_area_de
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "BLOCK_DELEGATION_FOR_AREA_COMMAND",
@@ -1058,11 +1058,11 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_block_area_de
   }
 })json");
   try {
-  JsonUtils::validate(*BlockDelegationForAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(BlockDelegationForAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  BlockDelegationForAreaCommand cmd(*cmd_doc);
+  BlockDelegationForAreaCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1081,8 +1081,8 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_block_area_de
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -1091,7 +1091,7 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_block_area_de
 TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1150,11 +1150,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*DelegationBlockedForAreaEvent::schema, *expected_doc);
+  JsonUtils::validate(DelegationBlockedForAreaEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  DelegationBlockedForAreaEvent expected(*expected_doc);
+  DelegationBlockedForAreaEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "BLOCK_DELEGATION_FOR_AREA_COMMAND",
@@ -1165,11 +1165,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*BlockDelegationForAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(BlockDelegationForAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  BlockDelegationForAreaCommand cmd(*cmd_doc);
+  BlockDelegationForAreaCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -1182,8 +1182,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -1191,7 +1191,7 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation)
 TEST(unit_aggregate_area_and_issue_delegations, block_area_for_delegation_should_fail_on_duplicate)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1258,11 +1258,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_for_delegation_should
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "BLOCK_DELEGATION_FOR_AREA_COMMAND",
@@ -1273,11 +1273,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_for_delegation_should
   }
 })json");
   try {
-  JsonUtils::validate(*BlockDelegationForAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(BlockDelegationForAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  BlockDelegationForAreaCommand cmd(*cmd_doc);
+  BlockDelegationForAreaCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1296,8 +1296,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_for_delegation_should
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -1306,7 +1306,7 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_for_delegation_should
 TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_unblock_area_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1354,11 +1354,11 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_unblock_area_
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNBLOCK_DELEGATION_FOR_AREA_COMMAND",
@@ -1369,11 +1369,11 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_unblock_area_
   }
 })json");
   try {
-  JsonUtils::validate(*UnblockDelegationForAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnblockDelegationForAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnblockDelegationForAreaCommand cmd(*cmd_doc);
+  UnblockDelegationForAreaCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1392,8 +1392,8 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_unblock_area_
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -1402,7 +1402,7 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_unblock_area_
 TEST(unit_aggregate_area_and_issue_delegations, block_must_exist_to_unblock_area_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1461,11 +1461,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_must_exist_to_unblock_area
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNBLOCK_DELEGATION_FOR_AREA_COMMAND",
@@ -1476,11 +1476,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_must_exist_to_unblock_area
   }
 })json");
   try {
-  JsonUtils::validate(*UnblockDelegationForAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnblockDelegationForAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnblockDelegationForAreaCommand cmd(*cmd_doc);
+  UnblockDelegationForAreaCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1499,8 +1499,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_must_exist_to_unblock_area
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -1509,7 +1509,7 @@ TEST(unit_aggregate_area_and_issue_delegations, block_must_exist_to_unblock_area
 TEST(unit_aggregate_area_and_issue_delegations, unblock_area_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1576,11 +1576,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_area_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*DelegationUnblockedForAreaEvent::schema, *expected_doc);
+  JsonUtils::validate(DelegationUnblockedForAreaEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  DelegationUnblockedForAreaEvent expected(*expected_doc);
+  DelegationUnblockedForAreaEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNBLOCK_DELEGATION_FOR_AREA_COMMAND",
@@ -1591,11 +1591,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_area_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*UnblockDelegationForAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnblockDelegationForAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnblockDelegationForAreaCommand cmd(*cmd_doc);
+  UnblockDelegationForAreaCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -1608,8 +1608,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_area_delegation)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -1617,7 +1617,7 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_area_delegation)
 TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_require_voting_privilege_of_trustee)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1693,11 +1693,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_requ
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_ISSUE_DELEGATION_COMMAND",
@@ -1708,11 +1708,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_requ
   }
 })json");
   try {
-  JsonUtils::validate(*SetIssueDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetIssueDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetIssueDelegationCommand cmd(*cmd_doc);
+  SetIssueDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1731,8 +1731,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_requ
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -1741,7 +1741,7 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_requ
 TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_require_voting_privilege_of_truster)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1804,11 +1804,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_requ
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_ISSUE_DELEGATION_COMMAND",
@@ -1819,11 +1819,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_requ
   }
 })json");
   try {
-  JsonUtils::validate(*SetIssueDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetIssueDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetIssueDelegationCommand cmd(*cmd_doc);
+  SetIssueDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1842,8 +1842,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_requ
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -1852,7 +1852,7 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_requ
 TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1928,11 +1928,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*IssueDelegationSetEvent::schema, *expected_doc);
+  JsonUtils::validate(IssueDelegationSetEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  IssueDelegationSetEvent expected(*expected_doc);
+  IssueDelegationSetEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_ISSUE_DELEGATION_COMMAND",
@@ -1943,11 +1943,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*SetIssueDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetIssueDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetIssueDelegationCommand cmd(*cmd_doc);
+  SetIssueDelegationCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -1960,8 +1960,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -1969,7 +1969,7 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation)
 TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_remove_conflicting_block)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -2060,11 +2060,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_remo
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNBLOCK_DELEGATION_FOR_ISSUE_COMMAND",
@@ -2074,11 +2074,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_remo
   }
 })json");
   try {
-  JsonUtils::validate(*UnblockDelegationForIssueCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnblockDelegationForIssueCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnblockDelegationForIssueCommand cmd(*cmd_doc);
+  UnblockDelegationForIssueCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -2097,8 +2097,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_remo
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -2107,7 +2107,7 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_remo
 TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fail_if_no_delegation_set)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -2183,11 +2183,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_ISSUE_DELEGATION_COMMAND",
@@ -2197,11 +2197,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetIssueDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetIssueDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetIssueDelegationCommand cmd(*cmd_doc);
+  UnsetIssueDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -2220,8 +2220,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -2230,7 +2230,7 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
 TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -2313,11 +2313,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*IssueDelegationUnsetEvent::schema, *expected_doc);
+  JsonUtils::validate(IssueDelegationUnsetEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  IssueDelegationUnsetEvent expected(*expected_doc);
+  IssueDelegationUnsetEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_ISSUE_DELEGATION_COMMAND",
@@ -2327,11 +2327,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetIssueDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetIssueDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetIssueDelegationCommand cmd(*cmd_doc);
+  UnsetIssueDelegationCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -2344,8 +2344,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -2353,7 +2353,7 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation)
 TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fail_on_duplicate)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -2444,11 +2444,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_ISSUE_DELEGATION_COMMAND",
@@ -2458,11 +2458,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetIssueDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetIssueDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetIssueDelegationCommand cmd(*cmd_doc);
+  UnsetIssueDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -2481,8 +2481,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -2491,7 +2491,7 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
 TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_fail_if_issue_not_open)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -2573,11 +2573,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_fail
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_ISSUE_DELEGATION_COMMAND",
@@ -2588,11 +2588,11 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_fail
   }
 })json");
   try {
-  JsonUtils::validate(*SetIssueDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetIssueDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetIssueDelegationCommand cmd(*cmd_doc);
+  SetIssueDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -2611,8 +2611,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_fail
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -2621,7 +2621,7 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_fail
 TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fail_if_issue_not_open)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -2711,11 +2711,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_ISSUE_DELEGATION_COMMAND",
@@ -2725,11 +2725,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetIssueDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetIssueDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetIssueDelegationCommand cmd(*cmd_doc);
+  UnsetIssueDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -2748,8 +2748,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -2758,7 +2758,7 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
 TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fail_if_issue_not_open)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -2840,11 +2840,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fa
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "BLOCK_DELEGATION_FOR_ISSUE_COMMAND",
@@ -2854,11 +2854,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fa
   }
 })json");
   try {
-  JsonUtils::validate(*BlockDelegationForIssueCommand::schema, *cmd_doc);
+  JsonUtils::validate(BlockDelegationForIssueCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  BlockDelegationForIssueCommand cmd(*cmd_doc);
+  BlockDelegationForIssueCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -2877,8 +2877,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fa
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -2887,7 +2887,7 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fa
 TEST(unit_aggregate_area_and_issue_delegations, member_must_have_voting_rights_to_block_delegation_for_issue)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -2950,11 +2950,11 @@ TEST(unit_aggregate_area_and_issue_delegations, member_must_have_voting_rights_t
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "BLOCK_DELEGATION_FOR_ISSUE_COMMAND",
@@ -2964,11 +2964,11 @@ TEST(unit_aggregate_area_and_issue_delegations, member_must_have_voting_rights_t
   }
 })json");
   try {
-  JsonUtils::validate(*BlockDelegationForIssueCommand::schema, *cmd_doc);
+  JsonUtils::validate(BlockDelegationForIssueCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  BlockDelegationForIssueCommand cmd(*cmd_doc);
+  BlockDelegationForIssueCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -2987,8 +2987,8 @@ TEST(unit_aggregate_area_and_issue_delegations, member_must_have_voting_rights_t
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -2997,7 +2997,7 @@ TEST(unit_aggregate_area_and_issue_delegations, member_must_have_voting_rights_t
 TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -3072,11 +3072,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*DelegationBlockedForIssueEvent::schema, *expected_doc);
+  JsonUtils::validate(DelegationBlockedForIssueEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  DelegationBlockedForIssueEvent expected(*expected_doc);
+  DelegationBlockedForIssueEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "BLOCK_DELEGATION_FOR_ISSUE_COMMAND",
@@ -3086,11 +3086,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*BlockDelegationForIssueCommand::schema, *cmd_doc);
+  JsonUtils::validate(BlockDelegationForIssueCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  BlockDelegationForIssueCommand cmd(*cmd_doc);
+  BlockDelegationForIssueCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -3103,8 +3103,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -3112,7 +3112,7 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation)
 TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fail_on_duplicate)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -3195,11 +3195,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fa
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "BLOCK_DELEGATION_FOR_ISSUE_COMMAND",
@@ -3209,11 +3209,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fa
   }
 })json");
   try {
-  JsonUtils::validate(*BlockDelegationForIssueCommand::schema, *cmd_doc);
+  JsonUtils::validate(BlockDelegationForIssueCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  BlockDelegationForIssueCommand cmd(*cmd_doc);
+  BlockDelegationForIssueCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -3232,8 +3232,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fa
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -3242,7 +3242,7 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fa
 TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_remove_conflicting_area_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -3333,11 +3333,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_re
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_ISSUE_DELEGATION_COMMAND",
@@ -3347,11 +3347,11 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_re
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetIssueDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetIssueDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetIssueDelegationCommand cmd(*cmd_doc);
+  UnsetIssueDelegationCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -3370,8 +3370,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_re
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -3380,7 +3380,7 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_re
 TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_fail_if_issue_not_open)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -3469,11 +3469,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNBLOCK_DELEGATION_FOR_ISSUE_COMMAND",
@@ -3483,11 +3483,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_
   }
 })json");
   try {
-  JsonUtils::validate(*UnblockDelegationForIssueCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnblockDelegationForIssueCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnblockDelegationForIssueCommand cmd(*cmd_doc);
+  UnblockDelegationForIssueCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -3506,8 +3506,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -3516,7 +3516,7 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_
 TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_fail_if_issue_no_block_exists)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -3592,11 +3592,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNBLOCK_DELEGATION_FOR_ISSUE_COMMAND",
@@ -3606,11 +3606,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_
   }
 })json");
   try {
-  JsonUtils::validate(*UnblockDelegationForIssueCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnblockDelegationForIssueCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnblockDelegationForIssueCommand cmd(*cmd_doc);
+  UnblockDelegationForIssueCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -3629,8 +3629,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -3639,7 +3639,7 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_
 TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -3721,11 +3721,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*DelegationUnblockedForIssueEvent::schema, *expected_doc);
+  JsonUtils::validate(DelegationUnblockedForIssueEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  DelegationUnblockedForIssueEvent expected(*expected_doc);
+  DelegationUnblockedForIssueEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNBLOCK_DELEGATION_FOR_ISSUE_COMMAND",
@@ -3735,11 +3735,11 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation)
   }
 })json");
   try {
-  JsonUtils::validate(*UnblockDelegationForIssueCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnblockDelegationForIssueCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnblockDelegationForIssueCommand cmd(*cmd_doc);
+  UnblockDelegationForIssueCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -3752,8 +3752,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 

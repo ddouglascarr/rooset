@@ -18,7 +18,7 @@ namespace rooset_issue_aggregate_lifecycle_tests_tests {
 TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -120,11 +120,11 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GIVE_INITIATIVE_SUPPORT_COMMAND",
@@ -135,11 +135,11 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
   }
 })json");
   try {
-  JsonUtils::validate(*GiveInitiativeSupportCommand::schema, *cmd_doc);
+  JsonUtils::validate(GiveInitiativeSupportCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  GiveInitiativeSupportCommand cmd(*cmd_doc);
+  GiveInitiativeSupportCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -158,8 +158,8 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -168,7 +168,7 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
 TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -270,11 +270,11 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GIVE_INITIATIVE_SUPPORT_COMMAND",
@@ -285,11 +285,11 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
   }
 })json");
   try {
-  JsonUtils::validate(*GiveInitiativeSupportCommand::schema, *cmd_doc);
+  JsonUtils::validate(GiveInitiativeSupportCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  GiveInitiativeSupportCommand cmd(*cmd_doc);
+  GiveInitiativeSupportCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -308,8 +308,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -318,7 +318,7 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
 TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_support)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -442,11 +442,11 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GIVE_INITIATIVE_SUPPORT_COMMAND",
@@ -457,11 +457,11 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
   }
 })json");
   try {
-  JsonUtils::validate(*GiveInitiativeSupportCommand::schema, *cmd_doc);
+  JsonUtils::validate(GiveInitiativeSupportCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  GiveInitiativeSupportCommand cmd(*cmd_doc);
+  GiveInitiativeSupportCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -480,8 +480,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -490,7 +490,7 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
 TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -605,11 +605,11 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
   }
 })json");
   try {
-  JsonUtils::validate(*InitiativeSupportGivenEvent::schema, *expected_doc);
+  JsonUtils::validate(InitiativeSupportGivenEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  InitiativeSupportGivenEvent expected(*expected_doc);
+  InitiativeSupportGivenEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GIVE_INITIATIVE_SUPPORT_COMMAND",
@@ -620,11 +620,11 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
   }
 })json");
   try {
-  JsonUtils::validate(*GiveInitiativeSupportCommand::schema, *cmd_doc);
+  JsonUtils::validate(GiveInitiativeSupportCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  GiveInitiativeSupportCommand cmd(*cmd_doc);
+  GiveInitiativeSupportCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -637,8 +637,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -646,7 +646,7 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
 TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_duplicate)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -769,11 +769,11 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GIVE_INITIATIVE_SUPPORT_COMMAND",
@@ -784,11 +784,11 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
   }
 })json");
   try {
-  JsonUtils::validate(*GiveInitiativeSupportCommand::schema, *cmd_doc);
+  JsonUtils::validate(GiveInitiativeSupportCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  GiveInitiativeSupportCommand cmd(*cmd_doc);
+  GiveInitiativeSupportCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -807,8 +807,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -817,7 +817,7 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
 TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -919,11 +919,11 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "REVOKE_INITIATIVE_SUPPORT_COMMAND",
@@ -934,11 +934,11 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
   }
 })json");
   try {
-  JsonUtils::validate(*RevokeInitiativeSupportCommand::schema, *cmd_doc);
+  JsonUtils::validate(RevokeInitiativeSupportCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  RevokeInitiativeSupportCommand cmd(*cmd_doc);
+  RevokeInitiativeSupportCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -957,8 +957,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -967,7 +967,7 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
 TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_support)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1099,11 +1099,11 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "REVOKE_INITIATIVE_SUPPORT_COMMAND",
@@ -1114,11 +1114,11 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
   }
 })json");
   try {
-  JsonUtils::validate(*RevokeInitiativeSupportCommand::schema, *cmd_doc);
+  JsonUtils::validate(RevokeInitiativeSupportCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  RevokeInitiativeSupportCommand cmd(*cmd_doc);
+  RevokeInitiativeSupportCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1137,8 +1137,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -1147,7 +1147,7 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
 TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_support)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1262,11 +1262,11 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "REVOKE_INITIATIVE_SUPPORT_COMMAND",
@@ -1277,11 +1277,11 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
   }
 })json");
   try {
-  JsonUtils::validate(*RevokeInitiativeSupportCommand::schema, *cmd_doc);
+  JsonUtils::validate(RevokeInitiativeSupportCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  RevokeInitiativeSupportCommand cmd(*cmd_doc);
+  RevokeInitiativeSupportCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1300,8 +1300,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -1310,7 +1310,7 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
 TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1433,11 +1433,11 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
   }
 })json");
   try {
-  JsonUtils::validate(*InitiativeSupportRevokedEvent::schema, *expected_doc);
+  JsonUtils::validate(InitiativeSupportRevokedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  InitiativeSupportRevokedEvent expected(*expected_doc);
+  InitiativeSupportRevokedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "REVOKE_INITIATIVE_SUPPORT_COMMAND",
@@ -1448,11 +1448,11 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
   }
 })json");
   try {
-  JsonUtils::validate(*RevokeInitiativeSupportCommand::schema, *cmd_doc);
+  JsonUtils::validate(RevokeInitiativeSupportCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  RevokeInitiativeSupportCommand cmd(*cmd_doc);
+  RevokeInitiativeSupportCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -1465,8 +1465,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -1474,7 +1474,7 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
 TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_support)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1605,11 +1605,11 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "REVOKE_INITIATIVE_SUPPORT_COMMAND",
@@ -1620,11 +1620,11 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
   }
 })json");
   try {
-  JsonUtils::validate(*RevokeInitiativeSupportCommand::schema, *cmd_doc);
+  JsonUtils::validate(RevokeInitiativeSupportCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  RevokeInitiativeSupportCommand cmd(*cmd_doc);
+  RevokeInitiativeSupportCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -1643,8 +1643,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }

@@ -18,7 +18,7 @@ namespace rooset_support_caculation_tests_tests {
 TEST(support_caculation_tests, test_compiles)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -261,11 +261,11 @@ TEST(support_caculation_tests, test_compiles)
   }
 })json");
   try {
-  JsonUtils::validate(*AreaDelegationSetEvent::schema, *expected_doc);
+  JsonUtils::validate(AreaDelegationSetEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  AreaDelegationSetEvent expected(*expected_doc);
+  AreaDelegationSetEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_AREA_DELEGATION_COMMAND",
@@ -277,11 +277,11 @@ TEST(support_caculation_tests, test_compiles)
   }
 })json");
   try {
-  JsonUtils::validate(*SetAreaDelegationCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetAreaDelegationCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetAreaDelegationCommand cmd(*cmd_doc);
+  SetAreaDelegationCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -294,8 +294,8 @@ TEST(support_caculation_tests, test_compiles)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -303,7 +303,7 @@ TEST(support_caculation_tests, test_compiles)
 TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_assessment)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -463,11 +463,11 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND",
@@ -476,11 +476,11 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
   }
 })json");
   try {
-  JsonUtils::validate(*AssessIssueAdmissionQuorumCommand::schema, *cmd_doc);
+  JsonUtils::validate(AssessIssueAdmissionQuorumCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  AssessIssueAdmissionQuorumCommand cmd(*cmd_doc);
+  AssessIssueAdmissionQuorumCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -499,8 +499,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -509,7 +509,7 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
 TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_complete)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -669,11 +669,11 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "COMPLETE_ISSUE_ADMISSION_PHASE_COMMAND",
@@ -682,11 +682,11 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
   }
 })json");
   try {
-  JsonUtils::validate(*CompleteIssueAdmissionPhaseCommand::schema, *cmd_doc);
+  JsonUtils::validate(CompleteIssueAdmissionPhaseCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CompleteIssueAdmissionPhaseCommand cmd(*cmd_doc);
+  CompleteIssueAdmissionPhaseCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -705,8 +705,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -715,7 +715,7 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
 TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -931,11 +931,11 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
   }
 })json");
   try {
-  JsonUtils::validate(*IssueAdmissionQuorumContinuedEvent::schema, *expected_doc);
+  JsonUtils::validate(IssueAdmissionQuorumContinuedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  IssueAdmissionQuorumContinuedEvent expected(*expected_doc);
+  IssueAdmissionQuorumContinuedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND",
@@ -944,11 +944,11 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
   }
 })json");
   try {
-  JsonUtils::validate(*AssessIssueAdmissionQuorumCommand::schema, *cmd_doc);
+  JsonUtils::validate(AssessIssueAdmissionQuorumCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  AssessIssueAdmissionQuorumCommand cmd(*cmd_doc);
+  AssessIssueAdmissionQuorumCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -961,8 +961,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -970,7 +970,7 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
 TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1186,11 +1186,11 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
   }
 })json");
   try {
-  JsonUtils::validate(*IssueAdmissionQuorumFailedEvent::schema, *expected_doc);
+  JsonUtils::validate(IssueAdmissionQuorumFailedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  IssueAdmissionQuorumFailedEvent expected(*expected_doc);
+  IssueAdmissionQuorumFailedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "COMPLETE_ISSUE_ADMISSION_PHASE_COMMAND",
@@ -1199,11 +1199,11 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
   }
 })json");
   try {
-  JsonUtils::validate(*CompleteIssueAdmissionPhaseCommand::schema, *cmd_doc);
+  JsonUtils::validate(CompleteIssueAdmissionPhaseCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CompleteIssueAdmissionPhaseCommand cmd(*cmd_doc);
+  CompleteIssueAdmissionPhaseCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -1216,8 +1216,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -1225,7 +1225,7 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
 TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1465,11 +1465,11 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
   }
 })json");
   try {
-  JsonUtils::validate(*IssueAdmissionQuorumPassedEvent::schema, *expected_doc);
+  JsonUtils::validate(IssueAdmissionQuorumPassedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  IssueAdmissionQuorumPassedEvent expected(*expected_doc);
+  IssueAdmissionQuorumPassedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND",
@@ -1478,11 +1478,11 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
   }
 })json");
   try {
-  JsonUtils::validate(*AssessIssueAdmissionQuorumCommand::schema, *cmd_doc);
+  JsonUtils::validate(AssessIssueAdmissionQuorumCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  AssessIssueAdmissionQuorumCommand cmd(*cmd_doc);
+  AssessIssueAdmissionQuorumCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -1495,8 +1495,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -1504,7 +1504,7 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
 TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1744,11 +1744,11 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
   }
 })json");
   try {
-  JsonUtils::validate(*IssueAdmissionQuorumPassedEvent::schema, *expected_doc);
+  JsonUtils::validate(IssueAdmissionQuorumPassedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  IssueAdmissionQuorumPassedEvent expected(*expected_doc);
+  IssueAdmissionQuorumPassedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "COMPLETE_ISSUE_ADMISSION_PHASE_COMMAND",
@@ -1757,11 +1757,11 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
   }
 })json");
   try {
-  JsonUtils::validate(*CompleteIssueAdmissionPhaseCommand::schema, *cmd_doc);
+  JsonUtils::validate(CompleteIssueAdmissionPhaseCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CompleteIssueAdmissionPhaseCommand cmd(*cmd_doc);
+  CompleteIssueAdmissionPhaseCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -1774,8 +1774,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 

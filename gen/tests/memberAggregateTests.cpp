@@ -18,7 +18,7 @@ namespace rooset_member_aggregate_tests_tests {
 TEST(member_aggregate_tests, admin_member_created_event)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   CommandHandlerTestImpl commandHandler(givenEvents); 
   
@@ -33,11 +33,11 @@ TEST(member_aggregate_tests, admin_member_created_event)
   }
 })json");
   try {
-  JsonUtils::validate(*AdminMemberCreatedEvent::schema, *expected_doc);
+  JsonUtils::validate(AdminMemberCreatedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  AdminMemberCreatedEvent expected(*expected_doc);
+  AdminMemberCreatedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_ADMIN_MEMBER_COMMAND",
@@ -50,11 +50,11 @@ TEST(member_aggregate_tests, admin_member_created_event)
   }
 })json");
   try {
-  JsonUtils::validate(*CreateAdminMemberCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateAdminMemberCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateAdminMemberCommand cmd(*cmd_doc);
+  CreateAdminMemberCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -67,8 +67,8 @@ TEST(member_aggregate_tests, admin_member_created_event)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -76,7 +76,7 @@ TEST(member_aggregate_tests, admin_member_created_event)
 TEST(member_aggregate_tests, update_member_password)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "ADMIN_MEMBER_CREATED_EVENT",
@@ -99,11 +99,11 @@ TEST(member_aggregate_tests, update_member_password)
   }
 })json");
   try {
-  JsonUtils::validate(*MemberPasswordUpdatedEvent::schema, *expected_doc);
+  JsonUtils::validate(MemberPasswordUpdatedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  MemberPasswordUpdatedEvent expected(*expected_doc);
+  MemberPasswordUpdatedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UPDATE_MEMBER_PASSWORD_COMMAND",
@@ -115,11 +115,11 @@ TEST(member_aggregate_tests, update_member_password)
   }
 })json");
   try {
-  JsonUtils::validate(*UpdateMemberPasswordCommand::schema, *cmd_doc);
+  JsonUtils::validate(UpdateMemberPasswordCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UpdateMemberPasswordCommand cmd(*cmd_doc);
+  UpdateMemberPasswordCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -132,8 +132,8 @@ TEST(member_aggregate_tests, update_member_password)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -141,7 +141,7 @@ TEST(member_aggregate_tests, update_member_password)
 TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_password)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "ADMIN_MEMBER_CREATED_EVENT",
@@ -164,11 +164,11 @@ TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_pa
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UPDATE_MEMBER_PASSWORD_COMMAND",
@@ -180,11 +180,11 @@ TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_pa
   }
 })json");
   try {
-  JsonUtils::validate(*UpdateMemberPasswordCommand::schema, *cmd_doc);
+  JsonUtils::validate(UpdateMemberPasswordCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UpdateMemberPasswordCommand cmd(*cmd_doc);
+  UpdateMemberPasswordCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -199,8 +199,8 @@ TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_pa
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -209,7 +209,7 @@ TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_pa
 TEST(member_aggregate_tests, admin_member_can_create_unit)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "ADMIN_MEMBER_CREATED_EVENT",
@@ -233,11 +233,11 @@ TEST(member_aggregate_tests, admin_member_can_create_unit)
   }
 })json");
   try {
-  JsonUtils::validate(*UnitCreatedEvent::schema, *expected_doc);
+  JsonUtils::validate(UnitCreatedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  UnitCreatedEvent expected(*expected_doc);
+  UnitCreatedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_UNIT_COMMAND",
@@ -249,11 +249,11 @@ TEST(member_aggregate_tests, admin_member_can_create_unit)
   }
 })json");
   try {
-  JsonUtils::validate(*CreateUnitCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateUnitCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateUnitCommand cmd(*cmd_doc);
+  CreateUnitCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -266,8 +266,8 @@ TEST(member_aggregate_tests, admin_member_can_create_unit)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -275,7 +275,7 @@ TEST(member_aggregate_tests, admin_member_can_create_unit)
 TEST(member_aggregate_tests, non_admin_member_can_not_create_unit)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "MEMBER_CREATED_EVENT",
@@ -299,11 +299,11 @@ TEST(member_aggregate_tests, non_admin_member_can_not_create_unit)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_UNIT_COMMAND",
@@ -315,11 +315,11 @@ TEST(member_aggregate_tests, non_admin_member_can_not_create_unit)
   }
 })json");
   try {
-  JsonUtils::validate(*CreateUnitCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateUnitCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateUnitCommand cmd(*cmd_doc);
+  CreateUnitCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -334,8 +334,8 @@ TEST(member_aggregate_tests, non_admin_member_can_not_create_unit)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }

@@ -18,7 +18,7 @@ namespace rooset_issue_aggregate_voting_tests_tests {
 TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -107,11 +107,11 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_ISSUE_BALLOT_COMMAND",
@@ -136,11 +136,11 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
   }
 })json");
   try {
-  JsonUtils::validate(*SetIssueBallotCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetIssueBallotCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetIssueBallotCommand cmd(*cmd_doc);
+  SetIssueBallotCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -159,8 +159,8 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -169,7 +169,7 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
 TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -256,11 +256,11 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_ISSUE_BALLOT_COMMAND",
@@ -285,11 +285,11 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
   }
 })json");
   try {
-  JsonUtils::validate(*SetIssueBallotCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetIssueBallotCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetIssueBallotCommand cmd(*cmd_doc);
+  SetIssueBallotCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -308,8 +308,8 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -318,7 +318,7 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
 TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -405,11 +405,11 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_ISSUE_BALLOT_COMMAND",
@@ -419,11 +419,11 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetIssueBallotCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetIssueBallotCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetIssueBallotCommand cmd(*cmd_doc);
+  UnsetIssueBallotCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -442,8 +442,8 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -452,7 +452,7 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
 TEST(issue_aggregate_voting_tests, unset_ballot)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -560,11 +560,11 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
   }
 })json");
   try {
-  JsonUtils::validate(*IssueBallotUnsetEvent::schema, *expected_doc);
+  JsonUtils::validate(IssueBallotUnsetEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  IssueBallotUnsetEvent expected(*expected_doc);
+  IssueBallotUnsetEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_ISSUE_BALLOT_COMMAND",
@@ -574,11 +574,11 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetIssueBallotCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetIssueBallotCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetIssueBallotCommand cmd(*cmd_doc);
+  UnsetIssueBallotCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -591,8 +591,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -600,7 +600,7 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
 TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -716,11 +716,11 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "UNSET_ISSUE_BALLOT_COMMAND",
@@ -730,11 +730,11 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
   }
 })json");
   try {
-  JsonUtils::validate(*UnsetIssueBallotCommand::schema, *cmd_doc);
+  JsonUtils::validate(UnsetIssueBallotCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  UnsetIssueBallotCommand cmd(*cmd_doc);
+  UnsetIssueBallotCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -753,8 +753,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -763,7 +763,7 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
 TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1122,11 +1122,11 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
   }
 })json");
   try {
-  JsonUtils::validate(*IssueVotingPhaseCompletedEvent::schema, *expected_doc);
+  JsonUtils::validate(IssueVotingPhaseCompletedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  IssueVotingPhaseCompletedEvent expected(*expected_doc);
+  IssueVotingPhaseCompletedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "COMPLETE_ISSUE_VOTING_PHASE_COMMAND",
@@ -1135,11 +1135,11 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
   }
 })json");
   try {
-  JsonUtils::validate(*CompleteIssueVotingPhaseCommand::schema, *cmd_doc);
+  JsonUtils::validate(CompleteIssueVotingPhaseCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CompleteIssueVotingPhaseCommand cmd(*cmd_doc);
+  CompleteIssueVotingPhaseCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -1152,8 +1152,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -1161,7 +1161,7 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
 TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winners_with_delegations)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1523,11 +1523,11 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
   }
 })json");
   try {
-  JsonUtils::validate(*IssueVotingPhaseCompletedEvent::schema, *expected_doc);
+  JsonUtils::validate(IssueVotingPhaseCompletedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  IssueVotingPhaseCompletedEvent expected(*expected_doc);
+  IssueVotingPhaseCompletedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "COMPLETE_ISSUE_VOTING_PHASE_COMMAND",
@@ -1536,11 +1536,11 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
   }
 })json");
   try {
-  JsonUtils::validate(*CompleteIssueVotingPhaseCommand::schema, *cmd_doc);
+  JsonUtils::validate(CompleteIssueVotingPhaseCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CompleteIssueVotingPhaseCommand cmd(*cmd_doc);
+  CompleteIssueVotingPhaseCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -1553,8 +1553,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -1562,7 +1562,7 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
 TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -1677,11 +1677,11 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
   }
 })json");
   try {
-  JsonUtils::validate(*IssueVotingPhaseCompletedEvent::schema, *expected_doc);
+  JsonUtils::validate(IssueVotingPhaseCompletedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  IssueVotingPhaseCompletedEvent expected(*expected_doc);
+  IssueVotingPhaseCompletedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "COMPLETE_ISSUE_VOTING_PHASE_COMMAND",
@@ -1690,11 +1690,11 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
   }
 })json");
   try {
-  JsonUtils::validate(*CompleteIssueVotingPhaseCommand::schema, *cmd_doc);
+  JsonUtils::validate(CompleteIssueVotingPhaseCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CompleteIssueVotingPhaseCommand cmd(*cmd_doc);
+  CompleteIssueVotingPhaseCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -1707,8 +1707,8 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 

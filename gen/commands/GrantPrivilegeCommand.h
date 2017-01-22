@@ -28,7 +28,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "GRANT_PRIVILEGE_COMMAND";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     const uuid id;
         const uuid requesterId;

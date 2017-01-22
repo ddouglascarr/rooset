@@ -28,7 +28,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     const uuid id;
 

@@ -12,7 +12,7 @@ module.exports = function(schemas) {
     const classname = generateClassnameFromMsgType(msgType);
     return `
       if (msgType == "${msgType}") {
-        JsonUtils::validate(*${classname}::schema, d);
+        JsonUtils::validate(${classname}::schema, d);
         const ${classname} evt(d);
         MessageUtils::applyEvent<Aggregate, ${classname}>(aggregate, evt, onMethodMissing);
         return;

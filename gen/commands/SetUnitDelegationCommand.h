@@ -28,7 +28,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "SET_UNIT_DELEGATION_COMMAND";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     const uuid id;
         const uuid requesterId;

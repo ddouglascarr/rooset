@@ -27,7 +27,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "AREA_CREATED_EVENT";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     const uuid id;
         const uuid areaId;

@@ -25,7 +25,7 @@ namespace rooset {
     
     virtual ~CommandHandlerTestImpl() {}
 
-    CommandHandlerTestImpl(const vector<unique_ptr<rapidjson::Document>>& events) :
+    CommandHandlerTestImpl(const vector<rapidjson::Document>& events) :
         UnitCommandHandler(make_unique<AggregateRepositoryMockImpl<UnitAggregate>>(events)),
         MemberCommandHandler(make_unique<AggregateRepositoryMockImpl<MemberAggregate>>(events)),
         IssueCommandHandler(

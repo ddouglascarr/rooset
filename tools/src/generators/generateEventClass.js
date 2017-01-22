@@ -48,7 +48,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "${messageType}";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     ${declarations.join('\n        ')}
 

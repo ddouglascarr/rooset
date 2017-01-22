@@ -29,7 +29,7 @@ protected:
   uuid d = idTools.parse("464b1ebb-32c1-460c-8e9e-dddddddddddd");
   uuid e = idTools.parse("464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee");
   uuid f = idTools.parse("464b1ebb-32c1-460c-8e9e-ffffffffffff");
-  vector<unique_ptr<rapidjson::Document>> givenEvents;
+  vector<rapidjson::Document> givenEvents;
   unique_ptr<UnitAggregate> unit = nullptr;
   unique_ptr<IssueAggregate> issue = nullptr;
 
@@ -241,8 +241,8 @@ protected:
 
     // apply events to aggregates
     for (const auto& e : givenEvents) {
-      EventUtils::applyEvent<UnitAggregate>(unit, *e, []() {});
-      EventUtils::applyEvent<IssueAggregate>(issue, *e, []() {});
+      EventUtils::applyEvent<UnitAggregate>(unit, e, []() {});
+      EventUtils::applyEvent<IssueAggregate>(issue, e, []() {});
     }
   }
 
@@ -310,7 +310,7 @@ TEST_F(DelegationCalculatorImplTest, calcIssueDelegations_votesAdded)
     }
   })json"));
   for (const auto& e : givenEvents) {
-    EventUtils::applyEvent<IssueAggregate>(lIssue, *e, []() {});
+    EventUtils::applyEvent<IssueAggregate>(lIssue, e, []() {});
   }
   
   auto delegations = calcIssueDelegations(

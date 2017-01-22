@@ -31,7 +31,7 @@ namespace rooset {
     {
       try {
         auto json = JsonUtils::parse(sJson);
-        auto evt = CommandUtils::evaluate<CommandHandler>(commandHandler, *json);
+        auto evt = CommandUtils::evaluate<CommandHandler>(commandHandler, json);
         if (evt == nullptr) throw CommandEvaluationException(
             ExceptionCode::GENERAL_PROJECT_EXCEPTION,
             "command handler returned nullptr.\

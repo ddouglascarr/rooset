@@ -17,11 +17,11 @@ module.exports = function(
     return `
   auto ${instanceName}_doc = JsonUtils::parse(u8R"json(${jsonStr})json");
   try {
-  JsonUtils::validate(*${classname}::schema, *${instanceName}_doc);
+  JsonUtils::validate(${classname}::schema, ${instanceName}_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("${instanceName} schema invalid");
   }
-  ${classname} ${instanceName}(*${instanceName}_doc);`;
+  ${classname} ${instanceName}(${instanceName}_doc);`;
   };
 
   const stripMsgFromExpectedErr = () => {
@@ -42,7 +42,7 @@ module.exports = function(
   };
 
   const buildCommandHandler = () => `
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   ${pushGivenEvents()}
   CommandHandlerTestImpl commandHandler(givenEvents); `;
 
@@ -55,8 +55,8 @@ module.exports = function(
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };`;
   };
 

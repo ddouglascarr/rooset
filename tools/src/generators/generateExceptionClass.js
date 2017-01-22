@@ -30,7 +30,7 @@ namespace rooset {
     const ExceptionCode exceptionCode;
     const string MESSAGE_TYPE = "${exceptionType}";
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     ${classTypename}(ExceptionCode code, string msg) :
         ProjectException<Document>(msg),

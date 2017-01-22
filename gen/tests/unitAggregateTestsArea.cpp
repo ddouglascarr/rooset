@@ -18,7 +18,7 @@ namespace rooset_unit_aggregate_tests_area_tests {
 TEST(unit_aggregate_tests_area, unprivileged_member_cannot_create_area)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -40,11 +40,11 @@ TEST(unit_aggregate_tests_area, unprivileged_member_cannot_create_area)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_AREA_COMMAND",
@@ -58,11 +58,11 @@ TEST(unit_aggregate_tests_area, unprivileged_member_cannot_create_area)
   }
 })json");
   try {
-  JsonUtils::validate(*CreateAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateAreaCommand cmd(*cmd_doc);
+  CreateAreaCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -81,8 +81,8 @@ TEST(unit_aggregate_tests_area, unprivileged_member_cannot_create_area)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -91,7 +91,7 @@ TEST(unit_aggregate_tests_area, unprivileged_member_cannot_create_area)
 TEST(unit_aggregate_tests_area, member_without_management_rights_cannot_create_area)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -126,11 +126,11 @@ TEST(unit_aggregate_tests_area, member_without_management_rights_cannot_create_a
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_AREA_COMMAND",
@@ -144,11 +144,11 @@ TEST(unit_aggregate_tests_area, member_without_management_rights_cannot_create_a
   }
 })json");
   try {
-  JsonUtils::validate(*CreateAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateAreaCommand cmd(*cmd_doc);
+  CreateAreaCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -167,8 +167,8 @@ TEST(unit_aggregate_tests_area, member_without_management_rights_cannot_create_a
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -177,7 +177,7 @@ TEST(unit_aggregate_tests_area, member_without_management_rights_cannot_create_a
 TEST(unit_aggregate_tests_area, create_area)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -215,11 +215,11 @@ TEST(unit_aggregate_tests_area, create_area)
   }
 })json");
   try {
-  JsonUtils::validate(*AreaCreatedEvent::schema, *expected_doc);
+  JsonUtils::validate(AreaCreatedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  AreaCreatedEvent expected(*expected_doc);
+  AreaCreatedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_AREA_COMMAND",
@@ -233,11 +233,11 @@ TEST(unit_aggregate_tests_area, create_area)
   }
 })json");
   try {
-  JsonUtils::validate(*CreateAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateAreaCommand cmd(*cmd_doc);
+  CreateAreaCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -250,8 +250,8 @@ TEST(unit_aggregate_tests_area, create_area)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -259,7 +259,7 @@ TEST(unit_aggregate_tests_area, create_area)
 TEST(unit_aggregate_tests_area, area_must_not_already_exist)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -305,11 +305,11 @@ TEST(unit_aggregate_tests_area, area_must_not_already_exist)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "CREATE_AREA_COMMAND",
@@ -323,11 +323,11 @@ TEST(unit_aggregate_tests_area, area_must_not_already_exist)
   }
 })json");
   try {
-  JsonUtils::validate(*CreateAreaCommand::schema, *cmd_doc);
+  JsonUtils::validate(CreateAreaCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  CreateAreaCommand cmd(*cmd_doc);
+  CreateAreaCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -346,8 +346,8 @@ TEST(unit_aggregate_tests_area, area_must_not_already_exist)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }

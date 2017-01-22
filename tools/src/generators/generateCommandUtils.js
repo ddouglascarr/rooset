@@ -10,7 +10,7 @@ module.exports = function(schemas) {
     const classname = generateClassnameFromMsgType(msgType);
     return `
       if (msgType == "${msgType}") {
-        JsonUtils::validate(*${classname}::schema, d);
+        JsonUtils::validate(${classname}::schema, d);
         const ${classname} cmd(d);
         return commandHandler.evaluate(cmd);
       }`;

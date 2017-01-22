@@ -18,7 +18,7 @@ namespace rooset_unit_aggregate_policy_tests {
 TEST(unit_aggregate_policy, set_policy)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -58,11 +58,11 @@ TEST(unit_aggregate_policy, set_policy)
   }
 })json");
   try {
-  JsonUtils::validate(*UnitPolicySetEvent::schema, *expected_doc);
+  JsonUtils::validate(UnitPolicySetEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  UnitPolicySetEvent expected(*expected_doc);
+  UnitPolicySetEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_UNIT_POLICY_COMMAND",
@@ -91,11 +91,11 @@ TEST(unit_aggregate_policy, set_policy)
   }
 })json");
   try {
-  JsonUtils::validate(*SetUnitPolicyCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetUnitPolicyCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetUnitPolicyCommand cmd(*cmd_doc);
+  SetUnitPolicyCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -108,8 +108,8 @@ TEST(unit_aggregate_policy, set_policy)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -117,7 +117,7 @@ TEST(unit_aggregate_policy, set_policy)
 TEST(unit_aggregate_policy, requester_must_have_managment_rights)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -139,11 +139,11 @@ TEST(unit_aggregate_policy, requester_must_have_managment_rights)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_UNIT_POLICY_COMMAND",
@@ -172,11 +172,11 @@ TEST(unit_aggregate_policy, requester_must_have_managment_rights)
   }
 })json");
   try {
-  JsonUtils::validate(*SetUnitPolicyCommand::schema, *cmd_doc);
+  JsonUtils::validate(SetUnitPolicyCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetUnitPolicyCommand cmd(*cmd_doc);
+  SetUnitPolicyCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -195,8 +195,8 @@ TEST(unit_aggregate_policy, requester_must_have_managment_rights)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }

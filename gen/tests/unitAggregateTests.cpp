@@ -18,7 +18,7 @@ namespace rooset_unit_aggregate_tests_tests {
 TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -45,11 +45,11 @@ TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
   }
 })json");
   try {
-  JsonUtils::validate(*PrivilegeGrantedEvent::schema, *expected_doc);
+  JsonUtils::validate(PrivilegeGrantedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  PrivilegeGrantedEvent expected(*expected_doc);
+  PrivilegeGrantedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GRANT_PRIVILEGE_COMMAND",
@@ -65,11 +65,11 @@ TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
   }
 })json");
   try {
-  JsonUtils::validate(*GrantPrivilegeCommand::schema, *cmd_doc);
+  JsonUtils::validate(GrantPrivilegeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  GrantPrivilegeCommand cmd(*cmd_doc);
+  GrantPrivilegeCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -82,8 +82,8 @@ TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 
@@ -91,7 +91,7 @@ TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
 TEST(unit_aggregate_tests, privilege_weight_restricted_to_1)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -113,11 +113,11 @@ TEST(unit_aggregate_tests, privilege_weight_restricted_to_1)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GRANT_PRIVILEGE_COMMAND",
@@ -133,11 +133,11 @@ TEST(unit_aggregate_tests, privilege_weight_restricted_to_1)
   }
 })json");
   try {
-  JsonUtils::validate(*GrantPrivilegeCommand::schema, *cmd_doc);
+  JsonUtils::validate(GrantPrivilegeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  GrantPrivilegeCommand cmd(*cmd_doc);
+  GrantPrivilegeCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -156,8 +156,8 @@ TEST(unit_aggregate_tests, privilege_weight_restricted_to_1)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -166,7 +166,7 @@ TEST(unit_aggregate_tests, privilege_weight_restricted_to_1)
 TEST(unit_aggregate_tests, unprivileged_member_cannot_create_unit)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -188,11 +188,11 @@ TEST(unit_aggregate_tests, unprivileged_member_cannot_create_unit)
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GRANT_PRIVILEGE_COMMAND",
@@ -208,11 +208,11 @@ TEST(unit_aggregate_tests, unprivileged_member_cannot_create_unit)
   }
 })json");
   try {
-  JsonUtils::validate(*GrantPrivilegeCommand::schema, *cmd_doc);
+  JsonUtils::validate(GrantPrivilegeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  GrantPrivilegeCommand cmd(*cmd_doc);
+  GrantPrivilegeCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -231,8 +231,8 @@ TEST(unit_aggregate_tests, unprivileged_member_cannot_create_unit)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -241,7 +241,7 @@ TEST(unit_aggregate_tests, unprivileged_member_cannot_create_unit)
 TEST(unit_aggregate_tests, member_without_member_privileges_cannot_grant_privileges)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -276,11 +276,11 @@ TEST(unit_aggregate_tests, member_without_member_privileges_cannot_grant_privile
   }
 })json");
   try {
-  JsonUtils::validate(*CommandEvaluationException::schema, *expected_doc);
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  CommandEvaluationException expected(*expected_doc);
+  CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GRANT_PRIVILEGE_COMMAND",
@@ -296,11 +296,11 @@ TEST(unit_aggregate_tests, member_without_member_privileges_cannot_grant_privile
   }
 })json");
   try {
-  JsonUtils::validate(*GrantPrivilegeCommand::schema, *cmd_doc);
+  JsonUtils::validate(GrantPrivilegeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  GrantPrivilegeCommand cmd(*cmd_doc);
+  GrantPrivilegeCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -319,8 +319,8 @@ TEST(unit_aggregate_tests, member_without_member_privileges_cannot_grant_privile
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
   }
 }
@@ -329,7 +329,7 @@ TEST(unit_aggregate_tests, member_without_member_privileges_cannot_grant_privile
 TEST(unit_aggregate_tests, member_with_member_privileges_can_grant_privileges)
 {
   
-  vector<unique_ptr<Document>> givenEvents;
+  vector<Document> givenEvents;
   
   givenEvents.push_back(JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -369,11 +369,11 @@ TEST(unit_aggregate_tests, member_with_member_privileges_can_grant_privileges)
   }
 })json");
   try {
-  JsonUtils::validate(*PrivilegeGrantedEvent::schema, *expected_doc);
+  JsonUtils::validate(PrivilegeGrantedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  PrivilegeGrantedEvent expected(*expected_doc);
+  PrivilegeGrantedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GRANT_PRIVILEGE_COMMAND",
@@ -389,11 +389,11 @@ TEST(unit_aggregate_tests, member_with_member_privileges_can_grant_privileges)
   }
 })json");
   try {
-  JsonUtils::validate(*GrantPrivilegeCommand::schema, *cmd_doc);
+  JsonUtils::validate(GrantPrivilegeCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  GrantPrivilegeCommand cmd(*cmd_doc);
+  GrantPrivilegeCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -406,8 +406,8 @@ TEST(unit_aggregate_tests, member_with_member_privileges_can_grant_privileges)
   if (isPass) {
     EXPECT_EQ(*resultDoc, *expectedDoc);
   }  else {
-    EXPECT_EQ(*JsonUtils::serialize(*resultDoc),
-        *JsonUtils::serialize(*expectedDoc));
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
   };
 }
 

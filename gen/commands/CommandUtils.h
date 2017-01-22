@@ -48,163 +48,163 @@ namespace rooset {
 
       
       if (msgType == "CREATE_ADMIN_MEMBER_COMMAND") {
-        JsonUtils::validate(*CreateAdminMemberCommand::schema, d);
+        JsonUtils::validate(CreateAdminMemberCommand::schema, d);
         const CreateAdminMemberCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "CREATE_AREA_COMMAND") {
-        JsonUtils::validate(*CreateAreaCommand::schema, d);
+        JsonUtils::validate(CreateAreaCommand::schema, d);
         const CreateAreaCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "CREATE_UNIT_COMMAND") {
-        JsonUtils::validate(*CreateUnitCommand::schema, d);
+        JsonUtils::validate(CreateUnitCommand::schema, d);
         const CreateUnitCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "UPDATE_MEMBER_PASSWORD_COMMAND") {
-        JsonUtils::validate(*UpdateMemberPasswordCommand::schema, d);
+        JsonUtils::validate(UpdateMemberPasswordCommand::schema, d);
         const UpdateMemberPasswordCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND") {
-        JsonUtils::validate(*AssessIssueAdmissionQuorumCommand::schema, d);
+        JsonUtils::validate(AssessIssueAdmissionQuorumCommand::schema, d);
         const AssessIssueAdmissionQuorumCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "BLOCK_DELEGATION_FOR_AREA_COMMAND") {
-        JsonUtils::validate(*BlockDelegationForAreaCommand::schema, d);
+        JsonUtils::validate(BlockDelegationForAreaCommand::schema, d);
         const BlockDelegationForAreaCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "BLOCK_DELEGATION_FOR_ISSUE_COMMAND") {
-        JsonUtils::validate(*BlockDelegationForIssueCommand::schema, d);
+        JsonUtils::validate(BlockDelegationForIssueCommand::schema, d);
         const BlockDelegationForIssueCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "COMPLETE_ISSUE_ADMISSION_PHASE_COMMAND") {
-        JsonUtils::validate(*CompleteIssueAdmissionPhaseCommand::schema, d);
+        JsonUtils::validate(CompleteIssueAdmissionPhaseCommand::schema, d);
         const CompleteIssueAdmissionPhaseCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "COMPLETE_ISSUE_DISCUSSION_PHASE_COMMAND") {
-        JsonUtils::validate(*CompleteIssueDiscussionPhaseCommand::schema, d);
+        JsonUtils::validate(CompleteIssueDiscussionPhaseCommand::schema, d);
         const CompleteIssueDiscussionPhaseCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "COMPLETE_ISSUE_VERIFICATION_PHASE_COMMAND") {
-        JsonUtils::validate(*CompleteIssueVerificationPhaseCommand::schema, d);
+        JsonUtils::validate(CompleteIssueVerificationPhaseCommand::schema, d);
         const CompleteIssueVerificationPhaseCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "COMPLETE_ISSUE_VOTING_PHASE_COMMAND") {
-        JsonUtils::validate(*CompleteIssueVotingPhaseCommand::schema, d);
+        JsonUtils::validate(CompleteIssueVotingPhaseCommand::schema, d);
         const CompleteIssueVotingPhaseCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "CREATE_COMPETING_INITIATIVE_COMMAND") {
-        JsonUtils::validate(*CreateCompetingInitiativeCommand::schema, d);
+        JsonUtils::validate(CreateCompetingInitiativeCommand::schema, d);
         const CreateCompetingInitiativeCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "CREATE_NEW_INITIATIVE_COMMAND") {
-        JsonUtils::validate(*CreateNewInitiativeCommand::schema, d);
+        JsonUtils::validate(CreateNewInitiativeCommand::schema, d);
         const CreateNewInitiativeCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "GIVE_INITIATIVE_SUPPORT_COMMAND") {
-        JsonUtils::validate(*GiveInitiativeSupportCommand::schema, d);
+        JsonUtils::validate(GiveInitiativeSupportCommand::schema, d);
         const GiveInitiativeSupportCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "GRANT_PRIVILEGE_COMMAND") {
-        JsonUtils::validate(*GrantPrivilegeCommand::schema, d);
+        JsonUtils::validate(GrantPrivilegeCommand::schema, d);
         const GrantPrivilegeCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "REVOKE_INITIATIVE_SUPPORT_COMMAND") {
-        JsonUtils::validate(*RevokeInitiativeSupportCommand::schema, d);
+        JsonUtils::validate(RevokeInitiativeSupportCommand::schema, d);
         const RevokeInitiativeSupportCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "SET_AREA_DELEGATION_COMMAND") {
-        JsonUtils::validate(*SetAreaDelegationCommand::schema, d);
+        JsonUtils::validate(SetAreaDelegationCommand::schema, d);
         const SetAreaDelegationCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "SET_ISSUE_BALLOT_COMMAND") {
-        JsonUtils::validate(*SetIssueBallotCommand::schema, d);
+        JsonUtils::validate(SetIssueBallotCommand::schema, d);
         const SetIssueBallotCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "SET_ISSUE_DELEGATION_COMMAND") {
-        JsonUtils::validate(*SetIssueDelegationCommand::schema, d);
+        JsonUtils::validate(SetIssueDelegationCommand::schema, d);
         const SetIssueDelegationCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "SET_UNIT_DELEGATION_COMMAND") {
-        JsonUtils::validate(*SetUnitDelegationCommand::schema, d);
+        JsonUtils::validate(SetUnitDelegationCommand::schema, d);
         const SetUnitDelegationCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "SET_UNIT_POLICY_COMMAND") {
-        JsonUtils::validate(*SetUnitPolicyCommand::schema, d);
+        JsonUtils::validate(SetUnitPolicyCommand::schema, d);
         const SetUnitPolicyCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "UNBLOCK_DELEGATION_FOR_AREA_COMMAND") {
-        JsonUtils::validate(*UnblockDelegationForAreaCommand::schema, d);
+        JsonUtils::validate(UnblockDelegationForAreaCommand::schema, d);
         const UnblockDelegationForAreaCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "UNBLOCK_DELEGATION_FOR_ISSUE_COMMAND") {
-        JsonUtils::validate(*UnblockDelegationForIssueCommand::schema, d);
+        JsonUtils::validate(UnblockDelegationForIssueCommand::schema, d);
         const UnblockDelegationForIssueCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "UNSET_AREA_DELEGATION_COMMAND") {
-        JsonUtils::validate(*UnsetAreaDelegationCommand::schema, d);
+        JsonUtils::validate(UnsetAreaDelegationCommand::schema, d);
         const UnsetAreaDelegationCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "UNSET_ISSUE_BALLOT_COMMAND") {
-        JsonUtils::validate(*UnsetIssueBallotCommand::schema, d);
+        JsonUtils::validate(UnsetIssueBallotCommand::schema, d);
         const UnsetIssueBallotCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "UNSET_ISSUE_DELEGATION_COMMAND") {
-        JsonUtils::validate(*UnsetIssueDelegationCommand::schema, d);
+        JsonUtils::validate(UnsetIssueDelegationCommand::schema, d);
         const UnsetIssueDelegationCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
       if (msgType == "UNSET_UNIT_DELEGATION_COMMAND") {
-        JsonUtils::validate(*UnsetUnitDelegationCommand::schema, d);
+        JsonUtils::validate(UnsetUnitDelegationCommand::schema, d);
         const UnsetUnitDelegationCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }

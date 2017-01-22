@@ -28,7 +28,7 @@ namespace rooset {
     const string MESSAGE_TYPE = "UPDATE_MEMBER_PASSWORD_COMMAND";
 
   public:
-    static const unique_ptr<SchemaDocument> schema;
+    static const SchemaDocument schema;
 
     const uuid id;
         const uuid requesterId;
