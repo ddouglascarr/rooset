@@ -6,11 +6,13 @@
 #include "framework/AggregateRepositoryMockImpl.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
-#include "framework/CommandHandlerTestImpl.h"
+#include "framework/EventRepositoryMockImpl.h"
+#include "aggregates/CommandHandler.h"
 #include "exceptions/CommandEvaluationException.h"
 
 using namespace std;
 using namespace rooset;
+using ::testing::NiceMock;
 
 namespace rooset_issue_aggregate_voting_tests_tests {
 
@@ -18,9 +20,9 @@ namespace rooset_issue_aggregate_voting_tests_tests {
 TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -28,8 +30,8 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -54,8 +56,8 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -65,8 +67,8 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -82,8 +84,8 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -95,8 +97,11 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -116,7 +121,7 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "SET_ISSUE_BALLOT_COMMAND",
   "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "id": "464b1ebb-32c1-460c-8e9e-333333333333",
     "requesterId": "464b1ebb-32c1-460c-8e9f-000000000000",
     "ballot": {
       "approve": [
@@ -151,9 +156,11 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -169,9 +176,9 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
 TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -179,8 +186,8 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -205,8 +212,8 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -216,8 +223,8 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -233,8 +240,8 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -244,8 +251,11 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
       "464b1ebb-32c1-460c-8e9e-dddddddddddd"
     ]
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -300,9 +310,11 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -318,9 +330,9 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
 TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -328,8 +340,8 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -354,8 +366,8 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -365,8 +377,8 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -382,8 +394,8 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -393,8 +405,11 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
       "464b1ebb-32c1-460c-8e9e-dddddddddddd"
     ]
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -434,9 +449,11 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -452,9 +469,9 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
 TEST(issue_aggregate_voting_tests, unset_ballot)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -462,8 +479,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -488,8 +505,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -499,8 +516,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -516,8 +533,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -527,8 +544,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
       "464b1ebb-32c1-460c-8e9e-dddddddddddd"
     ]
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -549,8 +566,11 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
       ]
     }
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "ISSUE_BALLOT_UNSET_EVENT",
@@ -600,9 +620,9 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
 TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -610,8 +630,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -636,8 +656,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -647,8 +667,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -664,8 +684,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -675,8 +695,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
       "464b1ebb-32c1-460c-8e9e-dddddddddddd"
     ]
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -697,15 +717,18 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
       ]
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_UNSET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
     "requesterId": "464b1ebb-32c1-460c-8e9f-000000000000"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -745,9 +768,11 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -763,9 +788,9 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
 TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -773,8 +798,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -799,8 +824,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -810,8 +835,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -827,8 +852,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -840,8 +865,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "textSearchData": "bing, bong",
     "created": 1484817333
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -853,8 +878,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "textSearchData": "bing, bong",
     "created": 1484817320
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -864,8 +889,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
       "464b1ebb-32c1-460c-8e9e-dddddddddddd"
     ]
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -877,8 +902,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "managementRight": true,
     "weight": 8
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -890,8 +915,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "managementRight": true,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -903,8 +928,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "managementRight": true,
     "weight": 4
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -916,8 +941,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "managementRight": true,
     "weight": 4
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -929,8 +954,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -942,8 +967,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -955,8 +980,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -977,8 +1002,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
       ]
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1000,8 +1025,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
       ]
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1022,8 +1047,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
       "disapprove": []
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1045,8 +1070,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
       ]
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1067,8 +1092,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
       "disapprove": []
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1089,8 +1114,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
       "disapprove": []
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1111,8 +1136,11 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
       "disapprove": []
     }
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "ISSUE_VOTING_PHASE_COMPLETED_EVENT",
@@ -1161,9 +1189,9 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
 TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winners_with_delegations)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1171,8 +1199,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1197,8 +1225,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1208,8 +1236,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1225,8 +1253,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1238,8 +1266,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "textSearchData": "bing, bong",
     "created": 1484817333
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1251,8 +1279,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "textSearchData": "bing, bong",
     "created": 1484817332
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1262,8 +1290,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
       "464b1ebb-32c1-460c-8e9e-dddddddddddd"
     ]
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1275,8 +1303,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1288,8 +1316,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "managementRight": true,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1301,8 +1329,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1314,8 +1342,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1327,8 +1355,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1340,8 +1368,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1353,8 +1381,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1366,8 +1394,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1388,8 +1416,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
       ]
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1410,8 +1438,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
       "disapprove": []
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1433,8 +1461,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
       ]
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1456,8 +1484,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
       ]
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1478,16 +1506,16 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
       "disapprove": []
     }
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "trusterId": "464b1ebb-32c1-460c-8e9f-555555555555",
     "trusteeId": "464b1ebb-32c1-460c-8e9f-444444444444"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1495,8 +1523,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "trusterId": "464b1ebb-32c1-460c-8e9f-666666666666",
     "trusteeId": "464b1ebb-32c1-460c-8e9f-000000000000"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1504,16 +1532,19 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "trusterId": "464b1ebb-32c1-460c-8e9f-333333333333",
     "trusteeId": "464b1ebb-32c1-460c-8e9f-000000000000"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
     "trusterId": "464b1ebb-32c1-460c-8e9f-777777777777",
     "trusteeId": "464b1ebb-32c1-460c-8e9f-000000000000"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "ISSUE_VOTING_PHASE_COMPLETED_EVENT",
@@ -1562,9 +1593,9 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
 TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1572,8 +1603,8 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1598,8 +1629,8 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1609,8 +1640,8 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1626,8 +1657,8 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1637,8 +1668,8 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
       "464b1ebb-32c1-460c-8e9e-dddddddddddd"
     ]
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
@@ -1650,8 +1681,8 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_BALLOT_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1666,8 +1697,11 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
       ]
     }
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "ISSUE_VOTING_PHASE_COMPLETED_EVENT",

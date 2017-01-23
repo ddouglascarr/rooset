@@ -37,6 +37,24 @@ public:
   static rapidjson::Value serializeUuid(
       const rooset::uuid& id, rapidjson::Document::AllocatorType& allocator);
 
+  static void forEach(
+      const rapidjson::Value& array,
+      std::function<void(const rapidjson::Value&)> f);
+
+  static void forEachReverse(
+      const rapidjson::Value& array,
+      std::function<void(const rapidjson::Value&)> f);
+
+  template<typename I>
+  inline static vector<I> map(
+      const rapidjson::Value& array,
+      std::function<I(const rapidjson::Value&)> f)
+  {
+    vector<I> result;
+    forEach(array, [&](const rapidjson::Value& v) { result.push_back(f(v)); });
+    return result;
+  }
+
   template<typename I>
   inline static vector<I> parseArray(
       const rapidjson::Value& a, std::function<I(const rapidjson::Value&)> f)

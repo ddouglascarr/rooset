@@ -6,11 +6,13 @@
 #include "framework/AggregateRepositoryMockImpl.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
-#include "framework/CommandHandlerTestImpl.h"
+#include "framework/EventRepositoryMockImpl.h"
+#include "aggregates/CommandHandler.h"
 #include "exceptions/CommandEvaluationException.h"
 
 using namespace std;
 using namespace rooset;
+using ::testing::NiceMock;
 
 namespace rooset_unit_aggregate_delegations_tests {
 
@@ -18,9 +20,9 @@ namespace rooset_unit_aggregate_delegations_tests {
 TEST(unit_aggregate_delegations, member_must_be_privileged)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -28,8 +30,11 @@ TEST(unit_aggregate_delegations, member_must_be_privileged)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -70,9 +75,11 @@ TEST(unit_aggregate_delegations, member_must_be_privileged)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -88,9 +95,9 @@ TEST(unit_aggregate_delegations, member_must_be_privileged)
 TEST(unit_aggregate_delegations, member_must_have_voting_right)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -98,8 +105,11 @@ TEST(unit_aggregate_delegations, member_must_have_voting_right)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -140,9 +150,11 @@ TEST(unit_aggregate_delegations, member_must_have_voting_right)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -158,9 +170,9 @@ TEST(unit_aggregate_delegations, member_must_have_voting_right)
 TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -168,8 +180,8 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -181,8 +193,8 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -194,8 +206,11 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -236,9 +251,11 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -254,9 +271,9 @@ TEST(unit_aggregate_delegations, trustee_must_have_voting_rights)
 TEST(unit_aggregate_delegations, set_delegation)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -264,8 +281,8 @@ TEST(unit_aggregate_delegations, set_delegation)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -277,8 +294,8 @@ TEST(unit_aggregate_delegations, set_delegation)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -290,8 +307,11 @@ TEST(unit_aggregate_delegations, set_delegation)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
@@ -343,9 +363,9 @@ TEST(unit_aggregate_delegations, set_delegation)
 TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -353,8 +373,8 @@ TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -366,8 +386,11 @@ TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -407,9 +430,11 @@ TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -425,9 +450,9 @@ TEST(unit_aggregate_delegations, requester_must_have_a_delegation_to_unset_it)
 TEST(unit_aggregate_delegations, unset_delegation)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -435,8 +460,8 @@ TEST(unit_aggregate_delegations, unset_delegation)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -448,16 +473,19 @@ TEST(unit_aggregate_delegations, unset_delegation)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-333333333333"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "UNIT_DELEGATION_UNSET_EVENT",
@@ -507,9 +535,9 @@ TEST(unit_aggregate_delegations, unset_delegation)
 TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -517,8 +545,8 @@ TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -530,23 +558,26 @@ TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-333333333333"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_UNSET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-222222222222"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -586,9 +617,11 @@ TEST(unit_aggregate_delegations, unset_delegation_removes_delegation)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {

@@ -6,11 +6,13 @@
 #include "framework/AggregateRepositoryMockImpl.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
-#include "framework/CommandHandlerTestImpl.h"
+#include "framework/EventRepositoryMockImpl.h"
+#include "aggregates/CommandHandler.h"
 #include "exceptions/CommandEvaluationException.h"
 
 using namespace std;
 using namespace rooset;
+using ::testing::NiceMock;
 
 namespace rooset_issue_aggregate_lifecycle_tests_tests {
 
@@ -18,9 +20,9 @@ namespace rooset_issue_aggregate_lifecycle_tests_tests {
 TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -28,8 +30,8 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -39,8 +41,8 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -52,8 +54,8 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -78,8 +80,8 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -95,8 +97,8 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -108,8 +110,11 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
     "textSearchData": "bing, bong",
     "created": 1483586759
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -150,9 +155,11 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -168,9 +175,9 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
 TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -178,8 +185,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -189,8 +196,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -202,8 +209,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -215,8 +222,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -241,8 +248,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -258,8 +265,11 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -300,9 +310,11 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -318,9 +330,9 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
 TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_support)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -328,8 +340,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -339,8 +351,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -352,8 +364,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -365,8 +377,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -391,8 +403,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -408,8 +420,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -421,8 +433,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "textSearchData": "bing, bong",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -430,8 +442,11 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
       "464b1ebb-32c1-460c-8e9e-777777777777"
     ]
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -472,9 +487,11 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -490,9 +507,9 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
 TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -500,8 +517,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -511,8 +528,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -524,8 +541,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -537,8 +554,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -563,8 +580,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -580,8 +597,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -593,8 +610,11 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "textSearchData": "bing, bong",
     "created": 1483586759
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
@@ -646,9 +666,9 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
 TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_duplicate)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -656,8 +676,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -667,8 +687,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -680,8 +700,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -693,8 +713,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -719,8 +739,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -736,8 +756,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -749,16 +769,19 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "textSearchData": "bing, bong",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-555555555555",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -799,9 +822,11 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -817,9 +842,9 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
 TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -827,8 +852,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -838,8 +863,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -851,8 +876,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -864,8 +889,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -890,8 +915,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -907,8 +932,11 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -949,9 +977,11 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -967,9 +997,9 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
 TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_support)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -977,8 +1007,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -988,8 +1018,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1001,8 +1031,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1014,8 +1044,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1040,8 +1070,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1057,8 +1087,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1070,16 +1100,16 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "textSearchData": "bing, bong",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-555555555555",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1087,8 +1117,11 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
       "464b1ebb-32c1-460c-8e9e-777777777777"
     ]
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -1129,9 +1162,11 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -1147,9 +1182,9 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
 TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_support)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1157,8 +1192,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1168,8 +1203,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1181,8 +1216,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1194,8 +1229,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1220,8 +1255,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1237,8 +1272,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1250,8 +1285,11 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "textSearchData": "bing, bong",
     "created": 1483586759
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -1292,9 +1330,11 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -1310,9 +1350,9 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
 TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1320,8 +1360,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1331,8 +1371,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1344,8 +1384,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1357,8 +1397,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1383,8 +1423,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1400,8 +1440,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1413,16 +1453,19 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "textSearchData": "bing, bong",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-555555555555",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "INITIATIVE_SUPPORT_REVOKED_EVENT",
@@ -1474,9 +1517,9 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
 TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_support)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1484,8 +1527,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1495,8 +1538,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1508,8 +1551,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1521,8 +1564,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "managementRight": true,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1547,8 +1590,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1564,8 +1607,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "COMPETING_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1577,24 +1620,27 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "textSearchData": "bing, bong",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-555555555555",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_REVOKED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-555555555555",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -1635,9 +1681,11 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {

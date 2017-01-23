@@ -48,14 +48,18 @@ void rooset::JsonUtils::validate(
 {
   rapidjson::SchemaValidator validator(schema);
   if (!d.Accept(validator)) {
-    std::cout << validator.GetInvalidSchemaKeyword() << "\n";
     rapidjson::StringBuffer sb;
     validator.GetInvalidSchemaPointer().StringifyUriFragment(sb);
-    cout << "Invalid schema: " <<  sb.GetString() << " in " << d["type"].GetString() << "\n";
+    string bMsg = "Invalid schema: " + string(sb.GetString()) + " in " +
+        string(d["type"].GetString());
     sb.Clear();
     validator.GetInvalidDocumentPointer().StringifyUriFragment(sb);
-    cout << "Invalid document" << sb.GetString() << "\n";
-    throw invalid_argument("json does not comply with schema");
+
+    throw invalid_argument(
+        string("json does not comply with schema\n") +
+        string(validator.GetInvalidSchemaKeyword()) + "\n" +
+        bMsg + "\n" +
+        "Invalid document" + string(sb.GetString()) +"\n");
   }
 }
 
@@ -103,6 +107,34 @@ rapidjson::Value rooset::JsonUtils::serializeUuid(
   return v;
 }
 
+
+
+void rooset::JsonUtils::forEach(
+      const rapidjson::Value& array,
+      std::function<void(const rapidjson::Value&)> f)
+{
+  if (!array.IsArray()) throw std::invalid_argument(
+      "JsonUtils::forEach requires an array, but it didnt get one");
+
+  for (auto& item : array.GetArray()) {
+    f(item);
+  }
+}
+
+
+
+void rooset::JsonUtils::forEachReverse(
+    const rapidjson::Value& array_,
+    std::function<void(const rapidjson::Value&)> f)
+{
+  if (!array_.IsArray()) throw std::invalid_argument(
+      "JsonUtils::forEach requires an array, but it didnt get one");
+
+  auto array = array_.GetArray();
+  for (rapidjson::SizeType it = array.Size(); it > 0; it--) {
+    f(array[it - 1]);
+  }
+}
 
 
 }

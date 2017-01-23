@@ -172,7 +172,7 @@ scenarios:
     when:
       <<: *setIssueBallotCmd
       payload:
-        id: *unitId
+        id: *issueId
         requesterId: *voter0
         ballot:
           approve:

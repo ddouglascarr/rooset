@@ -262,9 +262,14 @@ noMultistageMajority(c.noMultistageMajority)
       return d;
     }
 
-    string getEventType() override
+    string getMessageType() const override
     {
       return MESSAGE_TYPE;
+    }
+
+    uuid getAggregateId() const override
+    {
+      return id;
     }
 
   };

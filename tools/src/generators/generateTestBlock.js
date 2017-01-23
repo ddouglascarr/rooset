@@ -27,9 +27,11 @@ module.exports = function(
   const stripMsgFromExpectedErr = () => {
     if (isExceptionExpected && doIgnoreMsg) {
       return `
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       `;
     }
     return '';
@@ -37,14 +39,17 @@ module.exports = function(
 
   const pushGivenEvents = () => {
     const statements = scenario.given.map((event) => `
-  givenEvents.push_back(JsonUtils::parse(u8R"json(${JSON.stringify(event, null, 2)})json"));`);
+  givenEvents.push_back(u8R"json(${JSON.stringify(event, null, 2)})json");`);
     return statements.join('');
   };
 
   const buildCommandHandler = () => `
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   ${pushGivenEvents()}
-  CommandHandlerTestImpl commandHandler(givenEvents); `;
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); `;
 
   const generateAssertion = () => {
     return `

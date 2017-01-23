@@ -6,11 +6,13 @@
 #include "framework/AggregateRepositoryMockImpl.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
-#include "framework/CommandHandlerTestImpl.h"
+#include "framework/EventRepositoryMockImpl.h"
+#include "aggregates/CommandHandler.h"
 #include "exceptions/CommandEvaluationException.h"
 
 using namespace std;
 using namespace rooset;
+using ::testing::NiceMock;
 
 namespace rooset_support_caculation_tests_tests {
 
@@ -18,9 +20,9 @@ namespace rooset_support_caculation_tests_tests {
 TEST(support_caculation_tests, test_compiles)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -28,8 +30,8 @@ TEST(support_caculation_tests, test_compiles)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -39,8 +41,8 @@ TEST(support_caculation_tests, test_compiles)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -65,8 +67,8 @@ TEST(support_caculation_tests, test_compiles)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -78,8 +80,8 @@ TEST(support_caculation_tests, test_compiles)
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -91,8 +93,8 @@ TEST(support_caculation_tests, test_compiles)
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -104,8 +106,8 @@ TEST(support_caculation_tests, test_compiles)
     "managementRight": false,
     "weight": 3
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -117,8 +119,8 @@ TEST(support_caculation_tests, test_compiles)
     "managementRight": false,
     "weight": 4
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -130,8 +132,8 @@ TEST(support_caculation_tests, test_compiles)
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -143,8 +145,8 @@ TEST(support_caculation_tests, test_compiles)
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -160,40 +162,40 @@ TEST(support_caculation_tests, test_compiles)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-cccccccccccc"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -201,55 +203,58 @@ TEST(support_caculation_tests, test_compiles)
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-ffffffffffff"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "DELEGATION_BLOCKED_FOR_AREA_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "DELEGATION_BLOCKED_FOR_ISSUE_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-ffffffffffff",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "AREA_DELEGATION_SET_EVENT",
@@ -303,9 +308,9 @@ TEST(support_caculation_tests, test_compiles)
 TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_assessment)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -313,8 +318,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -324,8 +329,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -350,8 +355,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -363,8 +368,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -376,8 +381,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -389,8 +394,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "managementRight": false,
     "weight": 3
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -402,8 +407,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "managementRight": false,
     "weight": 4
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -415,8 +420,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -428,8 +433,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -445,14 +450,17 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_ADMISSION_QUORUM_PASSED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -491,9 +499,11 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -509,9 +519,9 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
 TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_complete)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -519,8 +529,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -530,8 +540,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -556,8 +566,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -569,8 +579,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -582,8 +592,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -595,8 +605,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "managementRight": false,
     "weight": 3
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -608,8 +618,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "managementRight": false,
     "weight": 4
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -621,8 +631,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -634,8 +644,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -651,14 +661,17 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_ADMISSION_QUORUM_PASSED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -697,9 +710,11 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
   // if docs don't match, assess the json output to make useful error report
   auto expectedDoc = expected.serialize();
   
-  // ignore the message from the test
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
   (*expectedDoc)["payload"].RemoveMember("message");
   (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
       
   bool isPass = *resultDoc == *expectedDoc;
   if (isPass) {
@@ -715,9 +730,9 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
 TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -725,8 +740,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -736,8 +751,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -762,8 +777,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -775,8 +790,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -788,8 +803,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -801,8 +816,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "managementRight": false,
     "weight": 3
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -814,8 +829,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "managementRight": false,
     "weight": 4
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -827,8 +842,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -840,8 +855,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -857,40 +872,40 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-cccccccccccc"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -898,31 +913,34 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-ffffffffffff"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "DELEGATION_BLOCKED_FOR_AREA_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "DELEGATION_BLOCKED_FOR_ISSUE_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "ISSUE_ADMISSION_QUORUM_CONTINUED_EVENT",
@@ -970,9 +988,9 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
 TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -980,8 +998,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -991,8 +1009,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1017,8 +1035,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1030,8 +1048,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1043,8 +1061,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1056,8 +1074,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "managementRight": false,
     "weight": 3
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1069,8 +1087,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "managementRight": false,
     "weight": 4
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1082,8 +1100,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1095,8 +1113,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1112,40 +1130,40 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-cccccccccccc"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1153,31 +1171,34 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-ffffffffffff"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "DELEGATION_BLOCKED_FOR_AREA_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "DELEGATION_BLOCKED_FOR_ISSUE_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "ISSUE_ADMISSION_QUORUM_FAILED_EVENT",
@@ -1225,9 +1246,9 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
 TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1235,8 +1256,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1246,8 +1267,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1272,8 +1293,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1285,8 +1306,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1298,8 +1319,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1311,8 +1332,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "managementRight": false,
     "weight": 3
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1324,8 +1345,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "managementRight": false,
     "weight": 4
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1337,8 +1358,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1350,8 +1371,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1367,40 +1388,40 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-cccccccccccc"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1408,55 +1429,58 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-ffffffffffff"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "DELEGATION_BLOCKED_FOR_AREA_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "DELEGATION_BLOCKED_FOR_ISSUE_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-ffffffffffff",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "ISSUE_ADMISSION_QUORUM_PASSED_EVENT",
@@ -1504,9 +1528,9 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
 TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1514,8 +1538,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "name": "Test Unit",
     "description": "The Test Unit"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1525,8 +1549,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "description": "the test area",
     "externalReference": "area.com"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_POLICY_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1551,8 +1575,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "noReverseBeatPath": false,
     "noMultistageMajority": false
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1564,8 +1588,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1577,8 +1601,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1590,8 +1614,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "managementRight": false,
     "weight": 3
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1603,8 +1627,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "managementRight": false,
     "weight": 4
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1616,8 +1640,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "managementRight": false,
     "weight": 1
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1629,8 +1653,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "managementRight": false,
     "weight": 2
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
@@ -1646,40 +1670,40 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "textSearchData": "foo, bar",
     "created": 1483586759
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "UNIT_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-cccccccccccc"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "AREA_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -1687,55 +1711,58 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-ffffffffffff"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "DELEGATION_BLOCKED_FOR_AREA_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "trusterId": "464b1ebb-32c1-460c-8e9e-dddddddddddd"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "ISSUE_DELEGATION_SET_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "trusterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "trusteeId": "464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "DELEGATION_BLOCKED_FOR_ISSUE_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "trusterId": "464b1ebb-32c1-460c-8e9e-eeeeeeeeeeee"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
   }
-})json"));
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "INITIATIVE_SUPPORT_GIVEN_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-ffffffffffff",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "ISSUE_ADMISSION_QUORUM_PASSED_EVENT",

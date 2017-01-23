@@ -6,11 +6,13 @@
 #include "framework/AggregateRepositoryMockImpl.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
-#include "framework/CommandHandlerTestImpl.h"
+#include "framework/EventRepositoryMockImpl.h"
+#include "aggregates/CommandHandler.h"
 #include "exceptions/CommandEvaluationException.h"
 
 using namespace std;
 using namespace rooset;
+using ::testing::NiceMock;
 
 namespace rooset_member_aggregate_tests_tests {
 
@@ -18,9 +20,12 @@ namespace rooset_member_aggregate_tests_tests {
 TEST(member_aggregate_tests, admin_member_created_event)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "ADMIN_MEMBER_CREATED_EVENT",
@@ -76,9 +81,9 @@ TEST(member_aggregate_tests, admin_member_created_event)
 TEST(member_aggregate_tests, update_member_password)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "ADMIN_MEMBER_CREATED_EVENT",
   "payload": {
     "id": "86998399-3d86-4e0b-a2a5-6490056ce43e",
@@ -87,8 +92,11 @@ TEST(member_aggregate_tests, update_member_password)
     "name": "Adam Admin",
     "notifyEmail": "adam@admin.com"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "MEMBER_PASSWORD_UPDATED_EVENT",
@@ -141,9 +149,9 @@ TEST(member_aggregate_tests, update_member_password)
 TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_password)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "ADMIN_MEMBER_CREATED_EVENT",
   "payload": {
     "id": "86998399-3d86-4e0b-a2a5-6490056ce43e",
@@ -152,8 +160,11 @@ TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_pa
     "name": "Adam Admin",
     "notifyEmail": "adam@admin.com"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",
@@ -209,9 +220,9 @@ TEST(member_aggregate_tests, update_member_password_should_throw_on_wrong_old_pa
 TEST(member_aggregate_tests, admin_member_can_create_unit)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "ADMIN_MEMBER_CREATED_EVENT",
   "payload": {
     "id": "86998399-3d86-4e0b-a2a5-6490056ce43e",
@@ -220,8 +231,11 @@ TEST(member_aggregate_tests, admin_member_can_create_unit)
     "name": "Adam Admin",
     "notifyEmail": "adam@admin.com"
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "UNIT_CREATED_EVENT",
@@ -275,9 +289,9 @@ TEST(member_aggregate_tests, admin_member_can_create_unit)
 TEST(member_aggregate_tests, non_admin_member_can_not_create_unit)
 {
   
-  vector<Document> givenEvents;
+  vector<string> givenEvents;
   
-  givenEvents.push_back(JsonUtils::parse(u8R"json({
+  givenEvents.push_back(u8R"json({
   "type": "MEMBER_CREATED_EVENT",
   "payload": {
     "id": "54b692a4-77d2-4ce5-b785-3880e2f7a276",
@@ -287,8 +301,11 @@ TEST(member_aggregate_tests, non_admin_member_can_not_create_unit)
     "notifyEmail": "normal@user.com",
     "activated": 1477743073
   }
-})json"));
-  CommandHandlerTestImpl commandHandler(givenEvents); 
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "COMMAND_EVALUATION_EXCEPTION",

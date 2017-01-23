@@ -1,14 +1,14 @@
 #include "gmock/gmock.h"
 
 #include <stdexcept>
-#include "framework/EventRepository.h"
+#include "framework/EventRepositoryMockImpl.h"
 #include "framework/IdToolsImpl.h"
 #include "framework/IdUtils.h"
 #include "framework/JsonUtils.h"
 #include "commands/UnsetIssueBallotCommand.h"
 #include "events/IssueBallotUnsetEvent.h"
+#include "aggregates/CommandHandler.h"
 #include "framework/CommandServiceImpl.h"
-#include "framework/CommandHandlerTestImpl.h"
 
 
 using namespace std;
@@ -20,25 +20,14 @@ using ::testing::_;
 
 
 
-class EventRepositoryMockImpl :
-    public rooset::EventRepository
-{
-public:
-  MOCK_METHOD1(save, uuid(const ProjectEvent<rapidjson::Document>& e));
-  MOCK_METHOD1(loadAggregateEvents, vector<ProjectEvent<rapidjson::Document>>(
-      const uuid& aggregateId));
-};
-
-
-
 class CommandHandlerMockImpl :
-    public rooset::CommandHandlerTestImpl
+    public rooset::CommandHandler
 {
 public:
-  using CommandHandlerTestImpl::evaluate;
+  using CommandHandler::evaluate;
 
-  CommandHandlerMockImpl() :
-      rooset::CommandHandlerTestImpl(vector<rapidjson::Document>())
+  CommandHandlerMockImpl(const shared_ptr<EventRepository>& eventRepository) :
+      rooset::CommandHandler(eventRepository)
   {}
 
   MOCK_METHOD1(evaluate, unique_ptr<ProjectEvent<Document>>(
@@ -53,7 +42,8 @@ class CommandServiceImplTests:
 {
 protected:
   shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<EventRepositoryMockImpl>();
-  shared_ptr<CommandHandlerMockImpl> commandHandler = make_shared<CommandHandlerMockImpl>();
+  shared_ptr<CommandHandlerMockImpl> commandHandler = make_shared<CommandHandlerMockImpl>(
+      eventRepository);
   CommandServiceImpl<CommandHandlerMockImpl> commandService;
 
 public:
@@ -79,10 +69,11 @@ TEST(CommandServiceTests, testMocks)
   UnsetIssueBallotCommand cmd0(id, memberId);
   UnsetIssueBallotCommand cmd1(id, memberId);
 
-  EventRepositoryMockImpl eventRepository;
-  CommandHandlerMockImpl commandHandler;
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      EventRepositoryMockImpl>();
+  CommandHandlerMockImpl commandHandler(eventRepository);
 
-  EXPECT_CALL(eventRepository, loadAggregateEvents(id))
+  EXPECT_CALL(*eventRepository, loadAggregateEvents(id))
       .Times(Exactly(1));
 
   EXPECT_CALL(commandHandler, evaluate(_))
@@ -90,9 +81,10 @@ TEST(CommandServiceTests, testMocks)
           .Times(Exactly(1))
       .WillOnce(Return(ByMove(make_unique<IssueBallotUnsetEvent>(id, memberId))));
 
-  eventRepository.loadAggregateEvents(id);
+  eventRepository->loadAggregateEvents(id);
   auto evt = commandHandler.evaluate(cmd0);
   IssueBallotUnsetEvent expectedEvt(id, memberId);
+  cout << JsonUtils::serialize(*evt->serialize());
   EXPECT_EQ(*evt->serialize(), *expectedEvt.serialize());
 }
 

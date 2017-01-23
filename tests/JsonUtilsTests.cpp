@@ -55,3 +55,71 @@ TEST(JsonUtils, serializeArray)
   d.AddMember("items", items, d.GetAllocator());
   EXPECT_EQ(d, expected);
 }
+
+
+
+TEST(JsonUtils, forEach)
+{
+  const string sJson = u8R"json({
+    "items": [
+      "foo",
+      "bar",
+      "bing",
+      "bong"
+    ]
+  })json";
+
+  auto doc = JsonUtils::parse(sJson);
+  const vector<string> expected { "foo", "bar", "bing", "bong" };
+  vector<string> result;
+
+  JsonUtils::forEach(doc["items"],
+      [&](const rapidjson::Value& v) { result.push_back(v.GetString()); });
+
+  EXPECT_EQ(result, expected);
+}
+
+
+
+TEST(JsonUtils, forEachReverse)
+{
+  const string sJson = u8R"json({
+    "items": [
+      "foo",
+      "bar",
+      "bing",
+      "bong"
+    ]
+  })json";
+
+  auto doc = JsonUtils::parse(sJson);
+  const vector<string> expected { "bong", "bing", "bar", "foo" };
+  vector<string> result;
+
+  JsonUtils::forEachReverse(doc["items"],
+      [&](const rapidjson::Value& v) { result.push_back(v.GetString()); });
+
+  EXPECT_EQ(result, expected);
+}
+
+
+
+TEST(JsonUtils, map)
+{
+  const string sJson = u8R"json({
+    "items": [
+      "foo",
+      "bar",
+      "bing",
+      "bong"
+    ]
+  })json";
+
+  auto doc = JsonUtils::parse(sJson);
+  const vector<string> expected { "foo", "bar", "bing", "bong" };
+
+  auto result = JsonUtils::map<string>(doc["items"],
+    [&](const rapidjson::Value& v) { return JsonUtils::parseString(v); });
+
+  EXPECT_EQ(result, expected);
+}
