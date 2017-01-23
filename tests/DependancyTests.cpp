@@ -7,7 +7,6 @@
 #include "aggregates/MemberCommandHandler.h"
 #include "commands/CreateAdminMemberCommand.h"
 #include "events/AdminMemberCreatedEvent.h"
-#include "framework/AggregateRepositoryMockImpl.h"
 #include "framework/JsonUtils.h"
 #include "framework/IdToolsImpl.h"
 
