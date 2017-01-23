@@ -27,6 +27,8 @@ public:
   unique_ptr<Aggregate> load(uuid id) const override
   {
     unique_ptr<Aggregate> aggregate = nullptr;
+
+    // TODO: [OPTIMISATION] eventRepository->forEachAggregateEvent(id, [](Document) { apply(d) })
     vector<rapidjson::Document> events = eventRepository->loadAggregateEvents(
         id);
     for (const auto& e : events) {
@@ -42,6 +44,7 @@ public:
                 )err");
       });
     }
+
     if (aggregate == nullptr) throw runtime_error(
         "aggregate nullptr error");
     return aggregate;
