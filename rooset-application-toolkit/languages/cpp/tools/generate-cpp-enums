@@ -1,0 +1,7 @@
+#!/bin/bash
+
+WORKDIR=`dirname "$(readlink -f "$0")"`
+cd $WORKDIR
+
+mkdir -p ${RATK_GEN_ENUM_CPP_DEST_DIR}
+node src/generateEnumClasses.js
