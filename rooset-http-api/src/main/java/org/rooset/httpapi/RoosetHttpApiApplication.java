@@ -30,9 +30,11 @@ public class RoosetHttpApiApplication {
     return (args) -> {
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
       userRepository.save(new UserModel(
-          "foo", "bar", "foo@bar.com", passwordEncoder.encode("password1")));
+          "foo", "bar", "foo@bar.com",
+          passwordEncoder.encode("password1")));
       userRepository.save(new UserModel(
-          "bing", "bong", "bing@bong.com", "password2"));
+          "bing", "bong", "bing@bong.com",
+          passwordEncoder.encode("password2")));
 
       log.info("Users with findAll():");
       for (UserModel userModel : userRepository.findAll()) {
