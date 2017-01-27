@@ -1,10 +1,7 @@
 package org.rooset.httpapi.models;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import java.util.UUID;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +13,7 @@ public class UserModel
 
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
-  private long id;
+  private UUID id;
 
   private String firstName;
   private String lastName;
@@ -33,12 +30,12 @@ public class UserModel
     this.password = password;
   }
 
-  public long getId()
+  public UUID getId()
   {
     return id;
   }
 
-  public void setId(long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
