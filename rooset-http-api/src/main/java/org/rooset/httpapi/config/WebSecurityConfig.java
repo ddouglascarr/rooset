@@ -1,5 +1,6 @@
 package org.rooset.httpapi.config;
 
+import org.rooset.httpapi.services.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,13 +17,13 @@ import org.springframework.context.annotation.Configuration;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 {
-  // @Autowired
-  // private UserDetailsService userDetailsService;
+  @Autowired
+  private UserDetailsServiceImpl userDetailsService;
 
   @Autowired
   public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception
   {
-    //auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
 
   @Override

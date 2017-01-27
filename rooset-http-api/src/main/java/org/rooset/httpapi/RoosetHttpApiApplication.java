@@ -4,10 +4,12 @@ import org.rooset.httpapi.models.UserModel;
 import org.rooset.httpapi.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class RoosetHttpApiApplication {
@@ -17,6 +19,9 @@ public class RoosetHttpApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RoosetHttpApiApplication.class, args);
 	}
+
+	@Autowired
+  PasswordEncoder passwordEncoder;
 
 	@Bean
   public CommandLineRunner demo(UserRepository userRepository)
@@ -33,7 +38,7 @@ public class RoosetHttpApiApplication {
       }
 
      log.info("find foo by email");
-     UserModel user = userRepository.findByEmail("foo@bar.com");
+     UserModel user = userRepository.findOneByEmail("foo@bar.com");
 
      if (null != user) {
        log.info(user.getFirstName());
