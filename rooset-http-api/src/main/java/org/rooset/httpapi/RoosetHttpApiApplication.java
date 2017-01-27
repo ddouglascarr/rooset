@@ -32,12 +32,14 @@ public class RoosetHttpApiApplication {
         log.info(userModel.getEmail());
       }
 
-    /*  log.info("find foo by email");
-      for (UserModel user : userRepository.findByEmail("foo@bar.com")) {
-        log.info(user.getFirstName());
-        log.info(user.getLastName());
-      }
-      */
+     log.info("find foo by email");
+     UserModel user = userRepository.findByEmail("foo@bar.com");
+
+     if (null != user) {
+       log.info(user.getFirstName());
+       log.info(user.getLastName());
+     }
+
     };
   }
 }
