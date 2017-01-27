@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
@@ -20,21 +21,23 @@ public class RoosetHttpApiApplication {
 		SpringApplication.run(RoosetHttpApiApplication.class, args);
 	}
 
-	@Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
 	@Bean
   public CommandLineRunner demo(UserRepository userRepository)
   {
     return (args) -> {
+      PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
       userRepository.save(new UserModel(
-          "foo", "bar", "foo@bar.com", "password1"));
+          "foo", "bar", "foo@bar.com", passwordEncoder.encode("password1")));
       userRepository.save(new UserModel(
           "bing", "bong", "bing@bong.com", "password2"));
 
       log.info("Users with findAll():");
       for (UserModel userModel : userRepository.findAll()) {
         log.info(userModel.getEmail());
+        log.info(userModel.getPassword());
       }
 
      log.info("find foo by email");
