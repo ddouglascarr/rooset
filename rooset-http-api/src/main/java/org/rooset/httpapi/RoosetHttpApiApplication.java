@@ -1,6 +1,6 @@
 package org.rooset.httpapi;
 
-import org.rooset.httpapi.models.User;
+import org.rooset.httpapi.models.UserModel;
 import org.rooset.httpapi.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,18 +22,18 @@ public class RoosetHttpApiApplication {
   public CommandLineRunner demo(UserRepository userRepository)
   {
     return (args) -> {
-      userRepository.save(new User(
+      userRepository.save(new UserModel(
           "foo", "bar", "foo@bar.com", "password1"));
-      userRepository.save(new User(
+      userRepository.save(new UserModel(
           "bing", "bong", "bing@bong.com", "password2"));
 
       log.info("Users with findAll():");
-      for (User user : userRepository.findAll()) {
-        log.info(user.getEmail());
+      for (UserModel userModel : userRepository.findAll()) {
+        log.info(userModel.getEmail());
       }
 
     /*  log.info("find foo by email");
-      for (User user : userRepository.findByEmail("foo@bar.com")) {
+      for (UserModel user : userRepository.findByEmail("foo@bar.com")) {
         log.info(user.getFirstName());
         log.info(user.getLastName());
       }

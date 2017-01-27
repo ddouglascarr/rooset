@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class User
+public class UserModel
 {
 
   @Id
@@ -23,9 +23,9 @@ public class User
   private String email;
   private String password;
 
-  protected User() {}
+  protected UserModel() {}
 
-  public User(String firstName, String lastName, String email, String password)
+  public UserModel(String firstName, String lastName, String email, String password)
   {
     this.firstName = firstName;
     this.lastName = lastName;
