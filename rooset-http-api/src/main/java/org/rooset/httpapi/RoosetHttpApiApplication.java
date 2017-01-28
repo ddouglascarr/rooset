@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.rooset.httpapi.generated.enums.ExceptionCode;
+
 
 @SpringBootApplication
 public class RoosetHttpApiApplication {
@@ -50,6 +52,17 @@ public class RoosetHttpApiApplication {
        log.info(user.getLastName());
      }
 
+     ExceptionCode r = getExceptionCode("a");
+     if (ExceptionCode.CONFLICT_EXCEPTION.equals(r)) {
+      log.info("ExceptionCode compiles");
+      }
     };
+  }
+
+  private ExceptionCode getExceptionCode(String c) {
+	  if (c == "a") {
+	    return ExceptionCode.CONFLICT_EXCEPTION;
+    }
+    return ExceptionCode.ITEM_NOT_FOUND_EXCEPTION;
   }
 }
