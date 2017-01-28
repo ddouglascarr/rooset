@@ -64,7 +64,29 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution><!-- Run our version calculation script -->
+                        <id>Ratk Enum Generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <RATK_GEN_ENUM_JAVA_DEST_DIR>${project.build.directory}/generated-sources/ratk/src/main/java/org/rooset/httpapi/enums</RATK_GEN_ENUM_JAVA_DEST_DIR>
+                                <RATK_GEN_BASE_SCHEMA_FILE>${basedir}/../rooset-declarations/src/base.schema.json</RATK_GEN_BASE_SCHEMA_FILE>
+                            </environmentVariables>
+                            <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-enums</executable>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
+
 	</build>
 
 
