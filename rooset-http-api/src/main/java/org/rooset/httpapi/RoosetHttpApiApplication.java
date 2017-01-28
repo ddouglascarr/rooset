@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.rooset.httpapi.generated.enums.ExceptionCode;
+import org.rooset.httpapi.enums.ExceptionCode;
 
 
 @SpringBootApplication
