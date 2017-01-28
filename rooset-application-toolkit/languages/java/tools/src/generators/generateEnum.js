@@ -1,7 +1,7 @@
-module.exports = function(enumName, enums) {
+module.exports = function(javaBasePackage, enumName, enums) {
 
   return `
-package org.rooset.httpapi.enums;
+package ${javaBasePackage}.enums;
 
 public enum ${enumName}
 {

@@ -79,6 +79,7 @@
                             <environmentVariables>
                                 <RATK_GEN_ENUM_JAVA_DEST_DIR>${project.build.directory}/generated-sources/ratk/main/java/org/rooset/httpapi/enums</RATK_GEN_ENUM_JAVA_DEST_DIR>
                                 <RATK_GEN_BASE_SCHEMA_FILE>${basedir}/../rooset-declarations/src/base.schema.json</RATK_GEN_BASE_SCHEMA_FILE>
+                                <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
                             </environmentVariables>
                             <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-enums</executable>
                         </configuration>

@@ -56,7 +56,14 @@ public class RoosetHttpApiApplication {
      if (ExceptionCode.CONFLICT_EXCEPTION.equals(r)) {
       log.info("ExceptionCode compiles");
       }
+
+      String eStr = getExceptionCode("foo").toString();
+     log.info("Exception Code toString(): " + eStr);
+      if (ExceptionCode.valueOf("ITEM_NOT_FOUND_EXCEPTION") == ExceptionCode.ITEM_NOT_FOUND_EXCEPTION) {
+        log.info("valueOf works well");
+      }
     };
+
   }
 
   private ExceptionCode getExceptionCode(String c) {
