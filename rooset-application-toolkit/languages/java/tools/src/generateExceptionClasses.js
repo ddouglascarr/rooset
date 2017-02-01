@@ -23,7 +23,6 @@ const exceptionSchemas = generateSchemas(baseSchema, 'exceptions', config.srcPat
 exceptionSchemas.forEach((exceptionSchema) => {
   const exceptionType = getMsgTypeFromSchema(exceptionSchema);
   const content = generateExceptionClass(config.javaBasePackage, exceptionType);
-console.log(content);
   const fileName = generateFilenameFromMsgType(exceptionType);
   files[`${fileName}.java`] = content;
 });

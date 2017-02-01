@@ -12,18 +12,21 @@ import ${javaBasePackage}.exceptions.RatkException;
 import ${javaBasePackage}.enums.ExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.json.JSONObject;
+import com.fasterxml.jackson.datatype.jsonorg.JsonOrgModule;
 
 public class ${className} extends RatkException
 {
   private String message;
   private ExceptionCode exceptionCode;
-  private ObjectMapper objectMapper;
+  private ObjectMapper objectMapper = new ObjectMapper();
 
-  ${className}(ExceptionCode exceptionCode, String message)
+  public ${className}(ExceptionCode exceptionCode, String message)
   {
-    super();
     this.exceptionCode = exceptionCode;
     this.message = message;
+    
+    objectMapper.registerModule(new JsonOrgModule());
   }
 
   @Override
@@ -39,13 +42,9 @@ public class ${className} extends RatkException
   }
 
   @Override
-  public String toString()
+  public JSONObject serialize()
   {
-    try {
-      return objectMapper.writeValueAsString(this);
-    } catch (JsonProcessingException e) {
-      return "{\\"error\\": true, \\"message\\": \\"JsonProcessingException\\"}";
-    }
+    return objectMapper.convertValue(this, JSONObject.class);
   }
 }
 

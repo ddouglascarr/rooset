@@ -1,15 +1,19 @@
 package org.rooset.httpapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.json.JSONObject;
+import com.fasterxml.jackson.datatype.jsonorg.JsonOrgModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.rooset.httpapi.enums.ExceptionCode;
+import org.rooset.httpapi.exceptions.CommandEvaluationException;
 import org.rooset.httpapi.models.UserModel;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -37,5 +41,38 @@ public class DependencyTests
     assertEquals(parsedUser.getEmail(), user.getEmail());
     assertEquals(parsedUser.getLastName(), "bar");
     assertEquals(parsedUser.getId(), id);
+  }
+
+
+  @Test
+  public void JSONObjectMapperTest() throws Exception
+  {
+    UserModel user = new UserModel(
+        "foo", "bar", "foo@bar.com", "Should be encoded");
+
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.registerModule(new JsonOrgModule());
+    JSONObject json = mapper.convertValue(user, JSONObject.class);
+    assertEquals("foo", json.get("firstName"));
+    assertEquals("foo@bar.com", json.get("email"));
+
+    assertEquals(new JSONObject()
+        .put("firstName", "foo")
+        .put("lastName", "bar")
+        .put("email", "foo@bar.com")
+        .put("password", "Should be encoded")
+        .put("id", JSONObject.NULL)
+        .toString(),
+        json.toString());
+  }
+
+
+  @Test
+  public void ExceptionToStringTest() throws Exception
+  {
+    CommandEvaluationException exc = new CommandEvaluationException(
+        ExceptionCode.ITEM_NOT_FOUND_EXCEPTION, "foo bar");
+    JSONObject json = exc.serialize();
+    assertEquals(true, false);
   }
 }
