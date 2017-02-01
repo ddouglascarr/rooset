@@ -15,6 +15,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.JSONObject;
 import com.fasterxml.jackson.datatype.jsonorg.JsonOrgModule;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 
 public class ${className} extends RatkException
 {
@@ -28,7 +30,9 @@ public class ${className} extends RatkException
     this.exceptionCode = exceptionCode;
     this.message = message;
     
-    objectMapper.registerModule(new JsonOrgModule());
+    objectMapper
+        .registerModule(new JsonOrgModule())
+        .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.DEFAULT);
   }
 
   @Override
@@ -46,7 +50,9 @@ public class ${className} extends RatkException
   @Override
   public JSONObject serialize()
   {
-    JSONObject payload = objectMapper.convertValue(this, JSONObject.class);
+    JSONObject payload = new JSONObject()
+        .put("exceptionCode", exceptionCode.toString())
+        .put("message", message);
     return new JSONObject()
         .put("type", type)
         .put("error", true)

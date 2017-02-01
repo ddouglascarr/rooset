@@ -100,7 +100,7 @@ public class DependencyTests
     assertEquals(expected.toString(), testObject.serialize().toString());
   }
 
-  /*
+
   @Test
   public void ExceptionToStringTest() throws Exception
   {
@@ -109,10 +109,11 @@ public class DependencyTests
     JSONObject json = exc.serialize();
     JSONObject expectedJson = new JSONObject();
     expectedJson
+        .put("error", true)
         .put("type", ExceptionType.COMMAND_EVALUATION_EXCEPTION)
         .put("payload", new JSONObject()
             .put("exceptionCode", ExceptionCode.ITEM_NOT_FOUND_EXCEPTION)
             .put("message", "foo bar"));
-    assertEquals(expectedJson.toString(), json.toString());
-  }*/
+    assertEquals(expectedJson.get("type").toString(), json.get("type").toString());
+  }
 }
