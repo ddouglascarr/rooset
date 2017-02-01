@@ -1,5 +1,7 @@
 package org.rooset.httpapi;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.json.JSONObject;
@@ -68,6 +70,37 @@ public class DependencyTests
   }
 
 
+
+  @Test
+  public void JSONObjectMapperVisibilityTest() throws Exception
+  {
+    class TestObject
+    {
+      private ObjectMapper objectMapper = new ObjectMapper();
+      public final String msg;
+      public TestObject(String msg)
+      {
+        this.msg = msg;
+        objectMapper
+            .registerModule(new JsonOrgModule())
+            .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.DEFAULT);
+      }
+
+      public JSONObject serialize()
+      {
+        return objectMapper.convertValue(this, JSONObject.class);
+      }
+
+    }
+
+    final JSONObject expected = new JSONObject()
+        .put("msg", "foobar");
+    TestObject testObject = new TestObject("foobar");
+
+    assertEquals(expected.toString(), testObject.serialize().toString());
+  }
+
+  /*
   @Test
   public void ExceptionToStringTest() throws Exception
   {
@@ -81,5 +114,5 @@ public class DependencyTests
             .put("exceptionCode", ExceptionCode.ITEM_NOT_FOUND_EXCEPTION)
             .put("message", "foo bar"));
     assertEquals(expectedJson.toString(), json.toString());
-  }
+  }*/
 }

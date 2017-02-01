@@ -18,8 +18,8 @@ import com.fasterxml.jackson.datatype.jsonorg.JsonOrgModule;
 
 public class ${className} extends RatkException
 {
-  private String message;
-  private ExceptionCode exceptionCode;
+  public final String message;
+  public final ExceptionCode exceptionCode;
   private ObjectMapper objectMapper = new ObjectMapper();
   private final ExceptionType type = ExceptionType.${exceptionType};
 
