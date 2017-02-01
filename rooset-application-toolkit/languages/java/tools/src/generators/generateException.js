@@ -10,6 +10,7 @@ package ${javaBasePackage}.exceptions;
 
 import ${javaBasePackage}.exceptions.RatkException;
 import ${javaBasePackage}.enums.ExceptionCode;
+import ${javaBasePackage}.enums.ExceptionType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.JSONObject;
@@ -20,6 +21,7 @@ public class ${className} extends RatkException
   private String message;
   private ExceptionCode exceptionCode;
   private ObjectMapper objectMapper = new ObjectMapper();
+  private final ExceptionType type = ExceptionType.${exceptionType};
 
   public ${className}(ExceptionCode exceptionCode, String message)
   {
@@ -44,7 +46,11 @@ public class ${className} extends RatkException
   @Override
   public JSONObject serialize()
   {
-    return objectMapper.convertValue(this, JSONObject.class);
+    JSONObject payload = objectMapper.convertValue(this, JSONObject.class);
+    return new JSONObject()
+        .put("type", type)
+        .put("error", true)
+        .put("payload", payload);
   }
 }
 

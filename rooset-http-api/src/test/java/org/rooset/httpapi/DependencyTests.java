@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rooset.httpapi.enums.ExceptionCode;
+import org.rooset.httpapi.enums.ExceptionType;
 import org.rooset.httpapi.exceptions.CommandEvaluationException;
 import org.rooset.httpapi.models.UserModel;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -73,6 +74,12 @@ public class DependencyTests
     CommandEvaluationException exc = new CommandEvaluationException(
         ExceptionCode.ITEM_NOT_FOUND_EXCEPTION, "foo bar");
     JSONObject json = exc.serialize();
-    assertEquals(true, false);
+    JSONObject expectedJson = new JSONObject();
+    expectedJson
+        .put("type", ExceptionType.COMMAND_EVALUATION_EXCEPTION)
+        .put("payload", new JSONObject()
+            .put("exceptionCode", ExceptionCode.ITEM_NOT_FOUND_EXCEPTION)
+            .put("message", "foo bar"));
+    assertEquals(expectedJson.toString(), json.toString());
   }
 }
