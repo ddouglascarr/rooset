@@ -1,13 +1,12 @@
 const fs = require('fs');
-const path = require('path');
 const glob = require('glob');
 const YAML = require('yamljs');
 
 module.exports = (_srcPath) => {
   const srcPath = `${_srcPath}`;
-  const jsonTests = glob.sync(`${srcPath}/*.json`, { cwd: process.cwd() }) /**/
+  const jsonFiles = glob.sync(`${srcPath}/*.json`, { cwd: process.cwd() }) /**/
       .map((filename) => require(filename));
-  const yamlTests = glob.sync(`${srcPath}/*.yaml`, { cwd: process.cwd() }) /**/
+  const yamlFiles = glob.sync(`${srcPath}/*.yaml`, { cwd: process.cwd() }) /**/
       .map((filename) => {
         try {
           return YAML.load(filename)
@@ -17,5 +16,5 @@ module.exports = (_srcPath) => {
           throw err;
         }
       })
-  return jsonTests.concat(yamlTests);
+  return jsonFiles.concat(yamlFiles);
 }

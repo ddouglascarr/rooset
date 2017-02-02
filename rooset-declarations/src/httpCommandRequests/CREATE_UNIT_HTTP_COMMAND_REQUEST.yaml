@@ -1,0 +1,7 @@
+---
+method: POST
+uri: '/units'
+commandTarget: CREATE_UNIT_COMMAND
+userIdMapping: requesterId
+generate:
+  - id

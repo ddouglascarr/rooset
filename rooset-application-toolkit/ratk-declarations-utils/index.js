@@ -1,6 +1,7 @@
 module.exports = {
   generateSchemas: require('./src/generateSchemas'),
-  getTests: require('./src/getTests'),
+  getDeclarations: require('./src/getDeclarations'),
   updateDir: require('./src/updateDir'),
   getConfigFromEnv: require('./src/getConfigFromEnv'),
+  getPathVariables: require('./src/getPathVariables'),
 };

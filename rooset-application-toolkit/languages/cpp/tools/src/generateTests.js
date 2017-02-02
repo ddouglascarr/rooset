@@ -2,7 +2,7 @@ const { camelCase } = require('lodash');
 const {
   updateDir,
   getConfigFromEnv,
-  getTests,
+  getDeclarations,
 } = require('../../../../ratk-declarations-utils');
 
 const generateTestFile = require('./generators/generateTestFile');
