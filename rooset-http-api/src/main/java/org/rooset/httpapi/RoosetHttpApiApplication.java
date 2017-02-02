@@ -1,7 +1,9 @@
 package org.rooset.httpapi;
 
+import org.json.JSONObject;
 import org.rooset.httpapi.models.UserModel;
 import org.rooset.httpapi.repositories.UserRepository;
+import org.rooset.httpapi.services.CommandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class RoosetHttpApiApplication {
 
   @Autowired
   private PasswordEncoder passwordEncoder;
+	@Autowired
+  CommandService commandService;
 
 	@Bean
   public CommandLineRunner demo(UserRepository userRepository)
@@ -55,13 +59,14 @@ public class RoosetHttpApiApplication {
      ExceptionCode r = getExceptionCode("a");
      if (ExceptionCode.CONFLICT_EXCEPTION.equals(r)) {
       log.info("ExceptionCode compiles");
-      }
+     }
 
       String eStr = getExceptionCode("foo").toString();
      log.info("Exception Code toString(): " + eStr);
       if (ExceptionCode.valueOf("ITEM_NOT_FOUND_EXCEPTION") == ExceptionCode.ITEM_NOT_FOUND_EXCEPTION) {
         log.info("valueOf works well");
       }
+
     };
 
   }

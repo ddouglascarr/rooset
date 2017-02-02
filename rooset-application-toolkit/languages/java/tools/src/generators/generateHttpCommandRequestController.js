@@ -52,6 +52,7 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
 package ${javaBasePackage}.commandcontrollers;
 
 import org.rooset.httpapi.models.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.rooset.httpapi.services.UserDetailsServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,25 +68,30 @@ import ${javaBasePackage}.httpcommandrequestbodies.${requestBodyClassName};
 import ${javaBasePackage}.commands.${commandClassName};
 import org.rooset.httpapi.aop.HandleServiceErrors;
 import org.rooset.httpapi.exceptions.RatkException;
+import org.rooset.httpapi.services.CommandService;
+import org.rooset.httpapi.models.CommandServiceResponse;
 
 
 @RestController
 public class ${className}
 {
 
+  @Autowired
+  CommandService commandService;
 
   @HandleServiceErrors
   @RequestMapping(
       value="${declaration.uri}",
       method=RequestMethod.${declaration.method})
-  public ResponseEntity<${commandClassName}> execute${commandClassName}(
-      ${variableParams.join(',\n      ')})
+  public ResponseEntity<CommandServiceResponse> execute${commandClassName}(
+      ${variableParams.join(',\n    ')})
       throws RatkException
   {
     ${commandClassName} cmd = new ${commandClassName}(
         ${commandConstructorParams.join(', ')});
 
-    return new ResponseEntity<>(cmd, HttpStatus.CREATED);
+    CommandServiceResponse resp = commandService.execute(cmd.serialize());
+    return new ResponseEntity<>(resp, HttpStatus.CREATED);
   }
 
 
