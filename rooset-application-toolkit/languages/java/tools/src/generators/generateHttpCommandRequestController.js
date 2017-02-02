@@ -65,6 +65,8 @@ import java.util.UUID;
 
 import ${javaBasePackage}.httpcommandrequestbodies.${requestBodyClassName};
 import ${javaBasePackage}.commands.${commandClassName};
+import org.rooset.httpapi.aop.HandleServiceErrors;
+import org.rooset.httpapi.exceptions.RatkException;
 
 
 @RestController
@@ -72,11 +74,13 @@ public class ${className}
 {
 
 
+  @HandleServiceErrors
   @RequestMapping(
       value="${declaration.uri}",
       method=RequestMethod.${declaration.method})
   public ResponseEntity<${commandClassName}> execute${commandClassName}(
       ${variableParams.join(',\n      ')})
+      throws RatkException
   {
     ${commandClassName} cmd = new ${commandClassName}(
         ${commandConstructorParams.join(', ')});
