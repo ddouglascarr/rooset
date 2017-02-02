@@ -3,8 +3,6 @@
 #include <string>
 #include <memory>
 #include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
-#include "aggregates/MemberAggregate.h"
-#include "aggregates/MemberCommandHandler.h"
 #include "commands/CreateAdminMemberCommand.h"
 #include "events/AdminMemberCreatedEvent.h"
 #include "ratk/JsonUtils.h"

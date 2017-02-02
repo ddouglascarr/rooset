@@ -238,6 +238,9 @@ endif()
 if(RATK_GEN_EXCEPTIONS)
   add_dependencies(libratk generate-exceptions)
 endif()
+if(RATK_GEN_TESTS)
+  add_dependencies(libratk generate-tests)
+endif()
 
 
 set(RATK_DEP_LIBRARIES ${CURL_LIBRARIES})

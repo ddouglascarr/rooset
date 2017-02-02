@@ -7,10 +7,8 @@
 #include "ratk/MessageUtils.h"
 #include "ratk/JsonUtils.h"
 
-#include "commands/CreateAdminMemberCommand.h"
 #include "commands/CreateAreaCommand.h"
 #include "commands/CreateUnitCommand.h"
-#include "commands/UpdateMemberPasswordCommand.h"
 #include "commands/AssessIssueAdmissionQuorumCommand.h"
 #include "commands/BlockDelegationForAreaCommand.h"
 #include "commands/BlockDelegationForIssueCommand.h"
@@ -47,12 +45,6 @@ namespace rooset {
       const string msgType = d["type"].GetString();
 
       
-      if (msgType == "CREATE_ADMIN_MEMBER_COMMAND") {
-        JsonUtils::validate(CreateAdminMemberCommand::schema, d);
-        const CreateAdminMemberCommand cmd(d);
-        return commandHandler.evaluate(cmd);
-      }
-
       if (msgType == "CREATE_AREA_COMMAND") {
         JsonUtils::validate(CreateAreaCommand::schema, d);
         const CreateAreaCommand cmd(d);
@@ -62,12 +54,6 @@ namespace rooset {
       if (msgType == "CREATE_UNIT_COMMAND") {
         JsonUtils::validate(CreateUnitCommand::schema, d);
         const CreateUnitCommand cmd(d);
-        return commandHandler.evaluate(cmd);
-      }
-
-      if (msgType == "UPDATE_MEMBER_PASSWORD_COMMAND") {
-        JsonUtils::validate(UpdateMemberPasswordCommand::schema, d);
-        const UpdateMemberPasswordCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 

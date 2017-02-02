@@ -16,6 +16,65 @@ using ::testing::NiceMock;
 namespace rooset_unit_aggregate_tests_tests {
 
 
+TEST(unit_aggregate_tests, create_unit)
+{
+  
+  vector<string> givenEvents;
+  
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
+  
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json");
+  try {
+  JsonUtils::validate(UnitCreatedEvent::schema, expected_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("expected schema invalid");
+  }
+  UnitCreatedEvent expected(expected_doc);
+  
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "CREATE_UNIT_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json");
+  try {
+  JsonUtils::validate(CreateUnitCommand::schema, cmd_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("cmd schema invalid");
+  }
+  CreateUnitCommand cmd(cmd_doc);
+  
+  auto result = commandHandler.evaluate(cmd);
+  if (result == nullptr) throw invalid_argument("command handler returned nullptr");
+  auto resultDoc = result->serialize();
+  
+  // if docs don't match, assess the json output to make useful error report
+  auto expectedDoc = expected.serialize();
+  
+  bool isPass = *resultDoc == *expectedDoc;
+  if (isPass) {
+    EXPECT_EQ(*resultDoc, *expectedDoc);
+  }  else {
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
+  };
+}
+
+
 TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
 {
   

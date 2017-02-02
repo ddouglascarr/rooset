@@ -1,10 +1,8 @@
 
 
 set(RATK_GEN_COMMAND_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/CreateAdminMemberCommand.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/CreateAreaCommand.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/CreateAreaCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CreateUnitCommand.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/UpdateMemberPasswordCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/AssessIssueAdmissionQuorumCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/BlockDelegationForAreaCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/BlockDelegationForIssueCommand.cpp
