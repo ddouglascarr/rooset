@@ -27,11 +27,10 @@ public class EchoController
 {
 
 
-
   @HandleServiceErrors
   @RequestMapping(
-      value="/echo/{val}",
-      method= RequestMethod.GET)
+      value = "/echo/{val}",
+      method = RequestMethod.GET)
   public ResponseEntity<Map<String, String>> getEcho(
       @AuthenticationPrincipal UserDetailsImpl user,
       @PathVariable String val)
@@ -46,19 +45,5 @@ public class EchoController
   }
 
 
-
-  @RequestMapping(
-      value="/units/{unitId}/members",
-      method=RequestMethod.POST)
-  public ResponseEntity<String> grantPrivilege(
-      @AuthenticationPrincipal UserDetailsImpl user,
-      @PathVariable UUID unitId,
-      @RequestBody GrantPrivilegeHttpCommandRequest reqBody)
-  {
-    final GrantPrivilegeCommand cmd = new GrantPrivilegeCommand(
-        unitId, user.getId(), reqBody.memberId, reqBody.pollingRight, reqBody.votingRight,
-        reqBody.initiativeRight, reqBody.managementRight, reqBody.weight);
-
-    return new ResponseEntity<>(cmd.serialize().toString(), HttpStatus.CREATED);
-  }
 }
+

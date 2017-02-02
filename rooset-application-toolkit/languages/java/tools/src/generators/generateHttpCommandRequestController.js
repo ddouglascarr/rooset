@@ -7,6 +7,7 @@ const {
 const {
   getPathVariables,
 } = require('../../../../../ratk-declarations-utils');
+const typenameMap = require('../templates/typenameMap');
 const generateMessageStatements = require('./generateMessageStatements');
 
 module.exports = function(javaBasePackage, declaration, commandSchema) {
@@ -23,7 +24,7 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
 
   const pathVariables = getPathVariables(declaration.uri);
   const variableParams = pathVariables.map(
-      (v) => `@PathVariable ${getTypenameFromRef(commandSchemaPayloadProps[v])} ${v}`);
+      (v) => `@PathVariable ${typenameMap[getTypenameFromRef(commandSchemaPayloadProps[v])]} ${v}`);
   variableParams.push(`@AuthenticationPrincipal UserDetailsImpl user`);
   variableParams.push(`@RequestBody ${requestBodyClassName} requestBody`);
 
@@ -40,7 +41,7 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
       return 'user.getId()';
     } else if (pathVariables.indexOf(v) !== -1) {
       return v;
-    } else if (declaration.generate.indexOf(v) !== -1) {
+    } else if (declaration.generate && declaration.generate.indexOf(v) !== -1) {
       return runtimeGenerate(v)
     } else {
       return `requestBody.${v}`;
