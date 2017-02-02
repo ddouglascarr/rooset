@@ -6,6 +6,7 @@ import org.rooset.httpapi.enums.ExceptionType;
 import org.rooset.httpapi.exceptions.CommandEvaluationException;
 import org.rooset.httpapi.exceptions.SystemException;
 import org.rooset.httpapi.models.CommandServiceResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -20,16 +21,18 @@ import java.util.UUID;
 public class CommandServiceImpl implements CommandService
 {
 
+  @Value("${rooset.domain-command-bin}")
+  private String domainCommandBin;
 
 
   @Override
   public CommandServiceResponse execute(JSONObject command)
       throws CommandEvaluationException, SystemException
   {
+
     try {
       String env[] = {"ROOSET_EVENT_STORE_HOST=localhost", "ROOSET_EVENT_STORE_PORT=2113"};
-      Process process = Runtime.getRuntime().exec("./rooset-command", env,
-          new File("/home/daniel/src/rooset/rooset-domain-command-posix/build"));
+      Process process = Runtime.getRuntime().exec(domainCommandBin, env);
       InputStream stdout = process.getInputStream();
       OutputStream stdin = process.getOutputStream();
       BufferedReader reader;
