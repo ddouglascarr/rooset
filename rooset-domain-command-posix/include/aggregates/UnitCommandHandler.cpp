@@ -2,6 +2,8 @@
 #include "PrivilegeUtils.h"
 #include "CommandHandlerUtils.h"
 
+
+
 uuid rooset::UnitCommandHandler::getUnitDelegation(const UnitAggregate& unit, const uuid& memberId) const
 {
   try {
@@ -11,6 +13,8 @@ uuid rooset::UnitCommandHandler::getUnitDelegation(const UnitAggregate& unit, co
       "unit delegation does not exist");
   }
 }
+
+
 
 uuid rooset::UnitCommandHandler::getAreaDelegation(
     const UnitAggregate & unit, const uuid& areaId, const uuid & trusterId) const
@@ -23,6 +27,15 @@ uuid rooset::UnitCommandHandler::getAreaDelegation(
   }
 }
 
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const CreateUnitCommand& c)
+{
+  return make_unique<UnitCreatedEvent>(c.id, c.requesterId, c.name, c.description);
+}
+
+
+
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const GrantPrivilegeCommand& c)
 {
   const auto unit = repository->load(c.id);
@@ -33,6 +46,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Gr
   }
   return make_unique<PrivilegeGrantedEvent>(c);
 }
+
+
 
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const CreateAreaCommand & c)
 {
@@ -45,6 +60,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Cr
     c.id, c.areaId, c.requesterId, c.name, c.description, c.externalReference));
 }
 
+
+
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const SetUnitDelegationCommand & c)
 {
   const auto trusterId = c.requesterId;
@@ -56,6 +73,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Se
     c.id, trusterId, c.trusteeId));
 }
 
+
+
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const UnsetUnitDelegationCommand & c)
 {
   const auto trusterId = c.requesterId;
@@ -64,6 +83,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Un
   return unique_ptr<UnitDelegationUnsetEvent>(new UnitDelegationUnsetEvent(
     c.id, trusterId));
 }
+
+
 
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const SetAreaDelegationCommand & c)
 {
@@ -78,6 +99,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Se
       c.id, c.areaId, trusterId, c.trusteeId));
 }
 
+
+
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const BlockDelegationForAreaCommand& c)
 {
   const auto trusterId = c.requesterId;
@@ -90,7 +113,9 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Bl
   return unique_ptr<DelegationBlockedForAreaEvent>(new DelegationBlockedForAreaEvent(
       c.id, c.areaId, trusterId));
 }
-    
+
+
+
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const UnblockDelegationForAreaCommand& c)
 {
   const auto trusterId = c.requesterId;
@@ -104,6 +129,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Un
       c.id, c.areaId, trusterId));
 }
 
+
+
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const UnsetAreaDelegationCommand & c)
 {
   const auto trusterId = c.requesterId;
@@ -112,6 +139,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Un
   return unique_ptr<AreaDelegationUnsetEvent>(new AreaDelegationUnsetEvent(
     c.id, c.areaId, trusterId));
 }
+
+
 
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const SetUnitPolicyCommand& c)
 {
