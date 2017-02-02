@@ -22,14 +22,14 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
   if (declaration.userIdMapping) omittedPayloadProps.push(declaration.userIdMapping);
   getPathVariables(declaration.uri).forEach((prop) => omittedPayloadProps.push(prop));
 
-  const prunedCommandSchema = cloneDeep(commandSchema);
-  prunedCommandSchema.properties.type.enum = [messageType];
-  prunedCommandSchema.properties.payload.properties = omit(
+  const requestBodySchema = cloneDeep(commandSchema);
+  requestBodySchema.properties.type.enum = [messageType];
+  requestBodySchema.properties.payload.properties = omit(
       commandSchema.properties.payload.properties, omittedPayloadProps);
   const {
     declarations,
     stdConstructor,
-  } = generateMessageStatements(prunedCommandSchema);
+  } = generateMessageStatements(requestBodySchema);
 
   return `
 package ${javaBasePackage}.httpcommandrequestbodies;
