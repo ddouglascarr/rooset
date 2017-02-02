@@ -50,8 +50,8 @@ public class EchoController
       @RequestBody GrantPrivilegeHttpCommandRequest reqBody)
   {
     final GrantPrivilegeCommand cmd = new GrantPrivilegeCommand(
-        unitId, user.getId(), reqBody.getMemberId(), reqBody.getPollingRight(), reqBody.getVotingRight(),
-        reqBody.getInitiativeRight(), reqBody.getManagementRight(), reqBody.getWeight());
+        unitId, user.getId(), reqBody.memberId, reqBody.pollingRight, reqBody.votingRight,
+        reqBody.initiativeRight, reqBody.managementRight, reqBody.weight);
 
     return new ResponseEntity<>(cmd, HttpStatus.CREATED);
   }
