@@ -2,6 +2,7 @@ package org.rooset.httpapi.services;
 
 import org.json.JSONObject;
 import org.rooset.httpapi.enums.ExceptionCode;
+import org.rooset.httpapi.enums.ExceptionType;
 import org.rooset.httpapi.exceptions.CommandEvaluationException;
 import org.rooset.httpapi.exceptions.SystemException;
 import org.rooset.httpapi.models.CommandServiceResponse;
@@ -13,8 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,12 +33,11 @@ public class CommandServiceImpl implements CommandService
       InputStream stdout = process.getInputStream();
       OutputStream stdin = process.getOutputStream();
       BufferedReader reader;
+
       String result = "";
       String line;
-
       stdin.write(command.toString().getBytes("UTF-8"));
       stdin.close();
-
       reader = new BufferedReader(new InputStreamReader(stdout));
       while ((line = reader.readLine()) != null) {
         result += line;
@@ -50,16 +48,17 @@ public class CommandServiceImpl implements CommandService
       if (resp.has("error")) {
         JSONObject payload = resp.getJSONObject("payload");
         ExceptionCode code = ExceptionCode.valueOf(payload.getString("exceptionCode"));
-        throw new CommandEvaluationException(
-            code, payload.getString("message"));
+        if (resp.get("type") == ExceptionType.COMMAND_EVALUATION_EXCEPTION.toString()) {
+          throw new CommandEvaluationException(
+              code, payload.getString("message"));
+        }
+        throw new SystemException(code, payload.getString("message"));
       }
 
       return new CommandServiceResponse(UUID.fromString(resp.getString("eventId")));
 
     } catch(IOException e) {
-      System.out.println("Failed");
-      System.out.println(e.getMessage());
-      return null;
+      throw new SystemException(ExceptionCode.GENERAL_PROJECT_EXCEPTION, e.getMessage());
     }
   }
 
