@@ -80,7 +80,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <version>1.5.0</version>
                 <executions>
-                    <execution><!-- Run our version calculation script -->
+                    <execution>
                         <id>Ratk Enum Generation</id>
                         <phase>generate-sources</phase>
                         <goals>
@@ -95,7 +95,7 @@
                             <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-enums</executable>
                         </configuration>
                     </execution>
-                    <execution><!-- Run our version calculation script -->
+                    <execution>
                         <id>Ratk Exception Generation</id>
                         <phase>generate-sources</phase>
                         <goals>
@@ -109,6 +109,22 @@
                                 <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
                             </environmentVariables>
                             <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-exceptions</executable>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Ratk Command Generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <RATK_GEN_COMMAND_JAVA_DEST_DIR>${project.build.directory}/generated-sources/ratk/org/rooset/httpapi/commands</RATK_GEN_COMMAND_JAVA_DEST_DIR>
+                                <RATK_GEN_COMMAND_DECL_DIR>${basedir}/../rooset-declarations/src/commands</RATK_GEN_COMMAND_DECL_DIR>
+                                <RATK_GEN_BASE_SCHEMA_FILE>${basedir}/../rooset-declarations/src/base.schema.json</RATK_GEN_BASE_SCHEMA_FILE>
+                                <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
+                            </environmentVariables>
+                            <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-commands</executable>
                         </configuration>
                     </execution>
                 </executions>
