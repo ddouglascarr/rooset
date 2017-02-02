@@ -1,5 +1,6 @@
 package org.rooset.httpapi.services;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.rooset.httpapi.enums.ExceptionCode;
 import org.rooset.httpapi.enums.ExceptionType;
@@ -50,7 +51,7 @@ public class CommandServiceImpl implements CommandService
 
       if (resp.has("error")) {
         JSONObject payload = resp.getJSONObject("payload");
-        ExceptionCode code = ExceptionCode.valueOf(payload.getString("exceptionCode"));
+        ExceptionCode code = ExceptionCode.valueOf(payload.getString("code"));
         if (resp.get("type") == ExceptionType.COMMAND_EVALUATION_EXCEPTION.toString()) {
           throw new CommandEvaluationException(
               code, payload.getString("message"));
@@ -61,6 +62,8 @@ public class CommandServiceImpl implements CommandService
       return new CommandServiceResponse(UUID.fromString(resp.getString("eventId")));
 
     } catch(IOException e) {
+      throw new SystemException(ExceptionCode.GENERAL_PROJECT_EXCEPTION, e.getMessage());
+    } catch (JSONException e) {
       throw new SystemException(ExceptionCode.GENERAL_PROJECT_EXCEPTION, e.getMessage());
     }
   }
