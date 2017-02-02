@@ -7,6 +7,7 @@
 #include "exceptions/CommandEvaluationException.h"
 #include "enums/ExceptionCode.h"
 #include "UnitAggregate.h"
+#include "commands/CreateUnitCommand.h"
 #include "commands/GrantPrivilegeCommand.h"
 #include "commands/CreateAreaCommand.h"
 #include "commands/SetUnitDelegationCommand.h"
@@ -35,6 +36,7 @@ namespace rooset {
 
     inline virtual ~UnitCommandHandler() {}
 
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const CreateUnitCommand& );
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const GrantPrivilegeCommand& c);
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const CreateAreaCommand& c);
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const SetUnitDelegationCommand& c);

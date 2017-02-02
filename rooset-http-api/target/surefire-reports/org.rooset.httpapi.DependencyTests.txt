@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.rooset.httpapi.DependencyTests
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.545 sec - in org.rooset.httpapi.DependencyTests
