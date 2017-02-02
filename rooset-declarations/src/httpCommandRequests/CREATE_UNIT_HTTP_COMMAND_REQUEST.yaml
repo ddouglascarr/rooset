@@ -1,4 +1,6 @@
 ---
+type: CREATE_UNIT_HTTP_COMMAND_REQUEST
+description: Create new unit
 method: POST
 uri: '/units'
 commandTarget: CREATE_UNIT_COMMAND

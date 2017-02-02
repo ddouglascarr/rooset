@@ -15,7 +15,7 @@ const config = getConfigFromEnv({
 const files = {};
 
 // tests
-const testDocs = getTests(config.srcPath);
+const testDocs = getDeclarations(config.srcPath);
 testDocs.forEach((testDoc) => {
   const content = generateTestFile(testDoc);
   const fileName = `${camelCase(testDoc.label)}.cpp`;
