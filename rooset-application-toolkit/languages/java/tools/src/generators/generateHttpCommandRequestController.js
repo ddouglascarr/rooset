@@ -1,0 +1,67 @@
+const { each, map } = require('lodash');
+const {
+  getTypenameFromRef,
+  getMsgTypeFromSchema,
+  generateClassnameFromMsgType,
+} = require('../utils');
+const {
+  getPathVariables,
+} = require('../../../../../ratk-declarations-utils');
+const generateMessageStatements = require('./generateMessageStatements');
+
+module.exports = function(javaBasePackage, declaration, commandSchema) {
+  const messageType = `${declaration.type}_CONTROLLER`;
+  const className = generateClassnameFromMsgType(messageType);
+  const requestBodyMessageType = `${declaration.type}_BODY`;
+  const requestBodyClassName = generateClassnameFromMsgType(requestBodyMessageType);
+  const commandMessageType = getMsgTypeFromSchema(commandSchema);
+  const commandClassName = generateClassnameFromMsgType(commandMessageType);
+  
+  const commandSchemaPayloadProps = commandSchema.properties.payload.properties;
+  const commandSchemaPropTypes = map(commandSchemaPayloadProps, (ref, v) => getTypenameFromRef(ref));
+  const commandSchemaPropVariables = Object.keys(commandSchema.properties.payload.properties);
+
+  const variableParams = getPathVariables(declaration.uri)
+      .map((v) => `@PathVariable ${getTypenameFromRef(commandSchemaPayloadProps[v])} ${v}`);
+  variableParams.push(`@AuthenticationPrincipal UserDetailsImpl user`);
+  variableParams.push(`@RequestBody ${requestBodyClassName} requestBody`);
+
+  return `
+package ${javaBasePackage}.commandcontrollers;
+
+import org.rooset.httpapi.models.UserDetailsImpl;
+import org.rooset.httpapi.services.UserDetailsServiceImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import ${javaBasePackage}.httpcommandrequestbodies.${requestBodyClassName};
+import ${javaBasePackage}.commands.${commandClassName};
+
+
+@RestController
+public class ${className}
+{
+
+
+  @RequestMapping(
+      value="${declaration.uri}",
+      method=RequestMethod.${declaration.method})
+  public ResponseEntity<${commandClassName}> execute${commandClassName}(
+      ${variableParams.join(',\n      ')})
+  {
+    return null;
+  }
+
+
+
+}
+
+`;
+
+}

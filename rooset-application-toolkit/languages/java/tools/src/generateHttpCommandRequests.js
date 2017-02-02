@@ -24,6 +24,8 @@ const controllerFiles = {};
 const requestBodyFiles = {};
 
 const generateHttpCommandRequestBody = require('./generators/generateHttpCommandRequestBody');
+const generateHttpCommandRequestController = require(
+    './generators/generateHttpCommandRequestController');
 
 const commandSchemas = generateSchemas(
     baseSchema, 'commands', config.commandSrcPath);
@@ -33,10 +35,17 @@ requestDeclarations.forEach((declaration) => {
       (s) => getMsgTypeFromSchema(s) === declaration.commandTarget);
   if (!commandSchema) throw `
       no commandSchema found: ${declaration.commandTarget}`;
+
   const reqBodyContent = generateHttpCommandRequestBody(
       config.javaBasePackage, declaration, commandSchema);
   const reqBodyFilename = generateFilenameFromMsgType(declaration.type);
   requestBodyFiles[`${reqBodyFilename}Body.java`] = reqBodyContent;
+
+  const controllerContent = generateHttpCommandRequestController(
+      config.javaBasePackage, declaration, commandSchema);
+  const controllerFilename = generateFilenameFromMsgType(`${declaration.type}_CONTROLLER`);
+  controllerFiles[`${controllerFilename}.java`] = controllerContent;
 });
 
 updateDir(config.requestBodyDestPath, requestBodyFiles);
+updateDir(config.controllerDestPath, controllerFiles);
