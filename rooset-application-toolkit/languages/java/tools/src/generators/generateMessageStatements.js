@@ -32,6 +32,10 @@ module.exports = function(schema) {
         ${stdConstructorArgs.join(',\n          ')})
     {
       ${stdConstructorAssignments.join('\n      ')}
+
+      objectMapper
+          .registerModule(new JsonOrgModule())
+          .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.DEFAULT);
     }
   `;
 

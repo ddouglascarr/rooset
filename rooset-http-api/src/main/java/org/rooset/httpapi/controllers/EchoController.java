@@ -1,5 +1,6 @@
 package org.rooset.httpapi.controllers;
 
+import org.json.JSONObject;
 import org.rooset.httpapi.commands.GrantPrivilegeCommand;
 import org.rooset.httpapi.httpcommandrequests.GrantPrivilegeHttpCommandRequest;
 import org.rooset.httpapi.models.UserDetailsImpl;
@@ -44,7 +45,7 @@ public class EchoController
   @RequestMapping(
       value="/units/{unitId}/members",
       method=RequestMethod.POST)
-  public ResponseEntity<GrantPrivilegeCommand> grantPrivilege(
+  public ResponseEntity<String> grantPrivilege(
       @AuthenticationPrincipal UserDetailsImpl user,
       @PathVariable UUID unitId,
       @RequestBody GrantPrivilegeHttpCommandRequest reqBody)
@@ -53,6 +54,6 @@ public class EchoController
         unitId, user.getId(), reqBody.memberId, reqBody.pollingRight, reqBody.votingRight,
         reqBody.initiativeRight, reqBody.managementRight, reqBody.weight);
 
-    return new ResponseEntity<>(cmd, HttpStatus.CREATED);
+    return new ResponseEntity<>(cmd.serialize().toString(), HttpStatus.CREATED);
   }
 }
