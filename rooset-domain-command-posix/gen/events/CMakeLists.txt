@@ -1,10 +1,7 @@
 
 
 set(RATK_GEN_EVENT_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/AdminMemberCreatedEvent.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/AreaCreatedEvent.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/MemberCreatedEvent.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/MemberPasswordUpdatedEvent.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/AreaCreatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnitCreatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/AreaDelegationSetEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/AreaDelegationUnsetEvent.cpp

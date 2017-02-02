@@ -6,10 +6,7 @@
 #include "ratk/MessageUtils.h"
 #include "ratk/JsonUtils.h"
 
-#include "events/AdminMemberCreatedEvent.h"
 #include "events/AreaCreatedEvent.h"
-#include "events/MemberCreatedEvent.h"
-#include "events/MemberPasswordUpdatedEvent.h"
 #include "events/UnitCreatedEvent.h"
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
@@ -49,31 +46,10 @@ namespace rooset {
       const string msgType = d["type"].GetString();
 
       
-      if (msgType == "ADMIN_MEMBER_CREATED_EVENT") {
-        JsonUtils::validate(AdminMemberCreatedEvent::schema, d);
-        const AdminMemberCreatedEvent evt(d);
-        MessageUtils::applyEvent<Aggregate, AdminMemberCreatedEvent>(aggregate, evt, onMethodMissing);
-        return;
-      }
-
       if (msgType == "AREA_CREATED_EVENT") {
         JsonUtils::validate(AreaCreatedEvent::schema, d);
         const AreaCreatedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, AreaCreatedEvent>(aggregate, evt, onMethodMissing);
-        return;
-      }
-
-      if (msgType == "MEMBER_CREATED_EVENT") {
-        JsonUtils::validate(MemberCreatedEvent::schema, d);
-        const MemberCreatedEvent evt(d);
-        MessageUtils::applyEvent<Aggregate, MemberCreatedEvent>(aggregate, evt, onMethodMissing);
-        return;
-      }
-
-      if (msgType == "MEMBER_PASSWORD_UPDATED_EVENT") {
-        JsonUtils::validate(MemberPasswordUpdatedEvent::schema, d);
-        const MemberPasswordUpdatedEvent evt(d);
-        MessageUtils::applyEvent<Aggregate, MemberPasswordUpdatedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 
