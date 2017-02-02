@@ -14,7 +14,7 @@ module.exports = function(schema) {
 
   const declarations = map(payloadProps, (ref, v) => {
     const typename = getTypenameFromRef(ref);
-    return `final ${typenameMap[typename]} ${v};`;
+    return `public final ${typenameMap[typename]} ${v};`;
   });
 
   const stdConstructorArgs = map(payloadProps, (ref, v) => {
