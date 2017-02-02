@@ -27,13 +27,21 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
   variableParams.push(`@AuthenticationPrincipal UserDetailsImpl user`);
   variableParams.push(`@RequestBody ${requestBodyClassName} requestBody`);
 
+  const runtimeGenerate = (v) => {
+    const typename = getTypenameFromRef(commandSchemaPayloadProps[v])
+    if (typename === 'uuid') {
+      return 'UUID.randomUUID()';
+    }
+    throw new Error(`no runtime generation handling for ${typename} ${v}`);
+  }
+
   const commandConstructorParams = commandSchemaPropVariables.map((v) => {
     if (declaration.userIdMapping === v) {
       return 'user.getId()';
     } else if (pathVariables.indexOf(v) !== -1) {
       return v;
     } else if (declaration.generate.indexOf(v) !== -1) {
-      return 'UUID.randomUUID()';
+      return runtimeGenerate(v)
     } else {
       return `requestBody.${v}`;
     }
