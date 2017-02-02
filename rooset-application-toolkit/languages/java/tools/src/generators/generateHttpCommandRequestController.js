@@ -21,10 +21,24 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
   const commandSchemaPropTypes = map(commandSchemaPayloadProps, (ref, v) => getTypenameFromRef(ref));
   const commandSchemaPropVariables = Object.keys(commandSchema.properties.payload.properties);
 
-  const variableParams = getPathVariables(declaration.uri)
-      .map((v) => `@PathVariable ${getTypenameFromRef(commandSchemaPayloadProps[v])} ${v}`);
+  const pathVariables = getPathVariables(declaration.uri);
+  const variableParams = pathVariables.map(
+      (v) => `@PathVariable ${getTypenameFromRef(commandSchemaPayloadProps[v])} ${v}`);
   variableParams.push(`@AuthenticationPrincipal UserDetailsImpl user`);
   variableParams.push(`@RequestBody ${requestBodyClassName} requestBody`);
+
+  const commandConstructorParams = commandSchemaPropVariables.map((v) => {
+    if (declaration.userIdMapping === v) {
+      return 'user.getId()';
+    } else if (pathVariables.indexOf(v) !== -1) {
+      return v;
+    } else if (declaration.generate.indexOf(v) !== -1) {
+      return 'UUID.randomUUID()';
+    } else {
+      return `requestBody.${v}`;
+    }
+  });
+
 
   return `
 package ${javaBasePackage}.commandcontrollers;
@@ -39,6 +53,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.UUID;
 
 import ${javaBasePackage}.httpcommandrequestbodies.${requestBodyClassName};
 import ${javaBasePackage}.commands.${commandClassName};
@@ -55,7 +70,10 @@ public class ${className}
   public ResponseEntity<${commandClassName}> execute${commandClassName}(
       ${variableParams.join(',\n      ')})
   {
-    return null;
+    ${commandClassName} cmd = new ${commandClassName}(
+        ${commandConstructorParams.join(', ')});
+
+    return new ResponseEntity<>(cmd, HttpStatus.CREATED);
   }
 
 
