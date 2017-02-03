@@ -27,48 +27,61 @@ module.exports = (baseSchema, messageCategory, _srcPath) => {
 function mapSchemaFiles(baseSchema, messageCategory) {
   const isException = messageCategory === 'exceptions';
   return (filename) => {
-    const messageSchema = isYamlFilename(filename) ?
-        YAML.load(filename) : require(filename);
-    const type = typeRe.exec(filename)[0];
-    const required = [];
-    const payload = Object.keys(messageSchema.properties)
-        .reduce((memo, key) => {
-          if (messageSchema.properties[key].slice(0,1) !== '$') {
-            throw `${key} property of ${filename} must start with "$"`;
-          }
-          const refKey = messageSchema.properties[key].slice(1);
-          const ref = baseSchema.definitions[refKey];
-          if (!ref) throw `no defintion for ${refKey}`;
-          required.push(key);
-
-          return merge({}, memo, {
-            definitions: {
-              [refKey]: ref,
-            },
-            properties: {
-              [key]: { '$ref': `#/definitions/${refKey}` },
+    try {
+      const messageSchema = isYamlFilename(filename) ?
+          YAML.load(filename) : require(filename);
+      const type = typeRe.exec(filename)[0];
+      const required = [];
+      const payload = Object.keys(messageSchema.properties)
+          .reduce((memo, v) => {
+            const declaration = messageSchema.properties[v];
+            const refKey = declaration.type;
+            if (!refKey) {
+              console.log(messageSchema);
+              throw new Error(`${filename}: ${v} has not type property. It is required`);
             }
-          });
-        }, { definitions: {}, properties: {} });
-    payload.required = required;
+            const ref = baseSchema.definitions[refKey];
+            if (!ref) throw new Error(`${filename}: no defintion for ${refKey}`);
+            required.push(v);
 
-    return Object.assign({}, pick(baseSchema, ['$schema']), {
-      id: `${BASE_URL}/${messageCategory}/${type}.schema.json`,
-      type: 'object',
-      definitions: payload.definitions,
-      properties: {
-        type: { type: 'string', enum: [ type ] },
-        error: isException ?
-            { type: 'boolean', enum: [ true ] } : undefined,
-        payload: {
-          type: 'object',
-          properties: payload.properties,
-          required: payload.required,
+            return merge({}, memo, {
+              definitions: {
+                [refKey]: ref,
+              },
+              properties: {
+                [v]: {
+                  '$ref': `#/definitions/${refKey}`,
+                  description: declaration.description || '',
+                 },
+              }
+            });
+          }, { definitions: {}, properties: {} });
+      payload.required = required;
+
+      return Object.assign({}, pick(baseSchema, ['$schema']), {
+        id: `${BASE_URL}/${messageCategory}/${type}.schema.json`,
+        type: 'object',
+        definitions: payload.definitions,
+        properties: {
+          type: { type: 'string', enum: [ type ] },
+          error: isException ?
+              { type: 'boolean', enum: [ true ] } : undefined,
+          payload: {
+            type: 'object',
+            properties: payload.properties,
+            required: payload.required,
+          },
         },
-      },
-      required: isException ?
-          ['payload', 'error', 'type'] : ['payload', 'type'],
-      commandConstructor: messageSchema.commandConstructor,
-    });
+        required: isException ?
+            ['payload', 'error', 'type'] : ['payload', 'type'],
+        commandConstructor: messageSchema.commandConstructor,
+      });
+    } catch (e) {
+      throw new Error(`
+
+  Unknown Error building message from file: ${filename}
+  ${e}`);
+
+    }
   };
 }

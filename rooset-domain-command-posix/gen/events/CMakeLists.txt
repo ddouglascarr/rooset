@@ -2,7 +2,6 @@
 
 set(RATK_GEN_EVENT_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/AreaCreatedEvent.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/UnitCreatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/AreaDelegationSetEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/AreaDelegationUnsetEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CompetingInitiativeCreatedEvent.cpp
@@ -24,6 +23,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/IssueVerificationPhaseCompletedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/IssueVotingPhaseCompletedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/NewInitiativeCreatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/PrivilegeGrantedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/UnitCreatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnitDelegationSetEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnitDelegationUnsetEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnitPolicySetEvent.cpp

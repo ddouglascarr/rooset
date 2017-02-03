@@ -1,5 +1,9 @@
 properties:
-  id: '$uuid'
-  areaId: '$uuid'
-  trusterId: '$uuid'
-  trusteeId: '$uuid'
+  id:
+    type: uuid
+  areaId:
+    type: uuid
+  trusterId:
+    type: uuid
+  trusteeId:
+    type: uuid

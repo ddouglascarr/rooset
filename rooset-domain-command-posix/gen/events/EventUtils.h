@@ -7,7 +7,6 @@
 #include "ratk/JsonUtils.h"
 
 #include "events/AreaCreatedEvent.h"
-#include "events/UnitCreatedEvent.h"
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
 #include "events/CompetingInitiativeCreatedEvent.h"
@@ -29,6 +28,7 @@
 #include "events/IssueVotingPhaseCompletedEvent.h"
 #include "events/NewInitiativeCreatedEvent.h"
 #include "events/PrivilegeGrantedEvent.h"
+#include "events/UnitCreatedEvent.h"
 #include "events/UnitDelegationSetEvent.h"
 #include "events/UnitDelegationUnsetEvent.h"
 #include "events/UnitPolicySetEvent.h"
@@ -50,13 +50,6 @@ namespace rooset {
         JsonUtils::validate(AreaCreatedEvent::schema, d);
         const AreaCreatedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, AreaCreatedEvent>(aggregate, evt, onMethodMissing);
-        return;
-      }
-
-      if (msgType == "UNIT_CREATED_EVENT") {
-        JsonUtils::validate(UnitCreatedEvent::schema, d);
-        const UnitCreatedEvent evt(d);
-        MessageUtils::applyEvent<Aggregate, UnitCreatedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 
@@ -204,6 +197,13 @@ namespace rooset {
         JsonUtils::validate(PrivilegeGrantedEvent::schema, d);
         const PrivilegeGrantedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, PrivilegeGrantedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "UNIT_CREATED_EVENT") {
+        JsonUtils::validate(UnitCreatedEvent::schema, d);
+        const UnitCreatedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, UnitCreatedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 
