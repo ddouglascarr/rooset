@@ -1,4 +1,7 @@
 properties:
-  id: '$uuid'
-  requesterId: '$uuid'
-  ballot: '$schulzeBallot'
+  id:
+    type: uuid
+  requesterId:
+    type: uuid
+  ballot:
+    type: schulzeBallot

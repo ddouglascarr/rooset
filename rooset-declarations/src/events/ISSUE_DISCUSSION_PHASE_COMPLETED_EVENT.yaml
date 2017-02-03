@@ -1,4 +1,5 @@
 ---
-  properties:
-    id: '$uuid'
-  commandConstructor: COMPLETE_ISSUE_DISCUSSION_PHASE_COMMAND
+properties:
+  id:
+    type: uuid
+commandConstructor: COMPLETE_ISSUE_DISCUSSION_PHASE_COMMAND

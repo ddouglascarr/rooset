@@ -1,4 +1,6 @@
 ---
-  properties:
-    id: '$uuid'
-    winnerId: '$uuidNullable'
+properties:
+  id:
+    type: uuid
+  winnerId:
+    type: uuidNullable

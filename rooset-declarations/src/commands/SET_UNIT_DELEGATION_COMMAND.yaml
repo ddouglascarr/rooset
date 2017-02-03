@@ -1,4 +1,7 @@
 properties:
-  id: '$uuid'
-  requesterId: '$uuid'
-  trusteeId: '$uuid'
+  id:
+    type: uuid
+  requesterId:
+    type: uuid
+  trusteeId:
+    type: uuid

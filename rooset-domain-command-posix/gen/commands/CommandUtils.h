@@ -7,8 +7,6 @@
 #include "ratk/MessageUtils.h"
 #include "ratk/JsonUtils.h"
 
-#include "commands/CreateAreaCommand.h"
-#include "commands/CreateUnitCommand.h"
 #include "commands/AssessIssueAdmissionQuorumCommand.h"
 #include "commands/BlockDelegationForAreaCommand.h"
 #include "commands/BlockDelegationForIssueCommand.h"
@@ -16,8 +14,10 @@
 #include "commands/CompleteIssueDiscussionPhaseCommand.h"
 #include "commands/CompleteIssueVerificationPhaseCommand.h"
 #include "commands/CompleteIssueVotingPhaseCommand.h"
+#include "commands/CreateAreaCommand.h"
 #include "commands/CreateCompetingInitiativeCommand.h"
 #include "commands/CreateNewInitiativeCommand.h"
+#include "commands/CreateUnitCommand.h"
 #include "commands/GiveInitiativeSupportCommand.h"
 #include "commands/GrantPrivilegeCommand.h"
 #include "commands/RevokeInitiativeSupportCommand.h"
@@ -45,18 +45,6 @@ namespace rooset {
       const string msgType = d["type"].GetString();
 
       
-      if (msgType == "CREATE_AREA_COMMAND") {
-        JsonUtils::validate(CreateAreaCommand::schema, d);
-        const CreateAreaCommand cmd(d);
-        return commandHandler.evaluate(cmd);
-      }
-
-      if (msgType == "CREATE_UNIT_COMMAND") {
-        JsonUtils::validate(CreateUnitCommand::schema, d);
-        const CreateUnitCommand cmd(d);
-        return commandHandler.evaluate(cmd);
-      }
-
       if (msgType == "ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND") {
         JsonUtils::validate(AssessIssueAdmissionQuorumCommand::schema, d);
         const AssessIssueAdmissionQuorumCommand cmd(d);
@@ -99,6 +87,12 @@ namespace rooset {
         return commandHandler.evaluate(cmd);
       }
 
+      if (msgType == "CREATE_AREA_COMMAND") {
+        JsonUtils::validate(CreateAreaCommand::schema, d);
+        const CreateAreaCommand cmd(d);
+        return commandHandler.evaluate(cmd);
+      }
+
       if (msgType == "CREATE_COMPETING_INITIATIVE_COMMAND") {
         JsonUtils::validate(CreateCompetingInitiativeCommand::schema, d);
         const CreateCompetingInitiativeCommand cmd(d);
@@ -108,6 +102,12 @@ namespace rooset {
       if (msgType == "CREATE_NEW_INITIATIVE_COMMAND") {
         JsonUtils::validate(CreateNewInitiativeCommand::schema, d);
         const CreateNewInitiativeCommand cmd(d);
+        return commandHandler.evaluate(cmd);
+      }
+
+      if (msgType == "CREATE_UNIT_COMMAND") {
+        JsonUtils::validate(CreateUnitCommand::schema, d);
+        const CreateUnitCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 

@@ -1,3 +1,4 @@
 ---
-  properties:
-    id: '$uuid'
+properties:
+  id:
+    type: uuid

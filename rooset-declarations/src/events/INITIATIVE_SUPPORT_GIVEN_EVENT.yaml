@@ -1,6 +1,9 @@
 ---
 properties:
-  id: '$uuid'
-  requesterId: '$uuid'
-  initiativeId: '$uuid'
+  id:
+    type: uuid
+  requesterId:
+    type: uuid
+  initiativeId:
+    type: uuid
 commandConstructor: GIVE_INITIATIVE_SUPPORT_COMMAND

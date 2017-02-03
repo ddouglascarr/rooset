@@ -1,17 +1,17 @@
 
 
 set(RATK_GEN_COMMAND_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/CreateAreaCommand.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/CreateUnitCommand.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/AssessIssueAdmissionQuorumCommand.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/AssessIssueAdmissionQuorumCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/BlockDelegationForAreaCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/BlockDelegationForIssueCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CompleteIssueAdmissionPhaseCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CompleteIssueDiscussionPhaseCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CompleteIssueVerificationPhaseCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CompleteIssueVotingPhaseCommand.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/CreateAreaCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CreateCompetingInitiativeCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CreateNewInitiativeCommand.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/CreateUnitCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/GiveInitiativeSupportCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/GrantPrivilegeCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/RevokeInitiativeSupportCommand.cpp

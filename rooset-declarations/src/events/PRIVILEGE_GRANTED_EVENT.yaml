@@ -1,11 +1,19 @@
 ---
 properties:
-  id: '$uuid'
-  requesterId: '$uuid'
-  memberId: '$uuid'
-  pollingRight: '$bool'
-  votingRight: '$bool'
-  initiativeRight: '$bool'
-  managementRight: '$bool'
-  weight: '$uint'
+  id:
+    type: uuid
+  requesterId:
+    type: uuid
+  memberId:
+    type: uuid
+  pollingRight:
+    type: bool
+  votingRight:
+    type: bool
+  initiativeRight:
+    type: bool
+  managementRight:
+    type: bool
+  weight:
+    type: uint
 commandConstructor: GRANT_PRIVILEGE_COMMAND
