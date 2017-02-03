@@ -31,6 +31,25 @@ public class CommandServiceImpl implements CommandService
   {
 
     try {
+      JSONObject resp = callDomainCommandBin(command);
+      handleDomainCommandError(resp);
+
+      return new CommandServiceResponse(
+          getAggregateId(command),
+          UUID.fromString(resp.getString("eventId")));
+
+    } catch (JSONException e) {
+      e.printStackTrace();
+      throw new SystemException(ExceptionCode.GENERAL_PROJECT_EXCEPTION, e.getMessage());
+    }
+  }
+
+
+
+  private JSONObject callDomainCommandBin(JSONObject command)
+      throws SystemException, JSONException
+  {
+    try {
       String env[] = {"ROOSET_EVENT_STORE_HOST=localhost", "ROOSET_EVENT_STORE_PORT=2113"};
       Process process = Runtime.getRuntime().exec(domainCommandBin, env);
       InputStream stdout = process.getInputStream();
@@ -46,26 +65,34 @@ public class CommandServiceImpl implements CommandService
         result += line;
       }
 
-      JSONObject resp = new JSONObject(result);
+      return new JSONObject(result);
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new SystemException(ExceptionCode.GENERAL_PROJECT_EXCEPTION, e.getMessage());
+    }
+  }
 
-      if (resp.has("error")) {
-        JSONObject payload = resp.getJSONObject("payload");
-        ExceptionCode code = ExceptionCode.valueOf(payload.getString("code"));
-        if (resp.getString("type").equals(ExceptionType.COMMAND_EVALUATION_EXCEPTION.toString())) {
-          throw new CommandEvaluationException(
-              code, payload.getString("message"));
-        }
-        throw new SystemException(code, payload.getString("message"));
+
+
+  private UUID getAggregateId(JSONObject command)
+      throws JSONException
+  {
+    return UUID.fromString(command.getJSONObject("payload").getString("id"));
+  }
+
+
+
+  private void handleDomainCommandError(JSONObject resp)
+      throws CommandEvaluationException, SystemException, JSONException
+  {
+    if (resp.has("error")) {
+      JSONObject payload = resp.getJSONObject("payload");
+      ExceptionCode code = ExceptionCode.valueOf(payload.getString("code"));
+      if (resp.getString("type").equals(ExceptionType.COMMAND_EVALUATION_EXCEPTION.toString())) {
+        throw new CommandEvaluationException(
+            code, payload.getString("message"));
       }
-
-      return new CommandServiceResponse(
-          UUID.fromString(command.getJSONObject("payload").getString("id")),
-          UUID.fromString(resp.getString("eventId")));
-
-    } catch(IOException e) {
-      throw new SystemException(ExceptionCode.GENERAL_PROJECT_EXCEPTION, e.getMessage());
-    } catch (JSONException e) {
-      throw new SystemException(ExceptionCode.GENERAL_PROJECT_EXCEPTION, e.getMessage());
+      throw new SystemException(code, payload.getString("message"));
     }
   }
 
