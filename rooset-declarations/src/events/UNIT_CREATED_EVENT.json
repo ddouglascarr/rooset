@@ -1,9 +1,0 @@
-{
-  "properties": {
-    "id": "$uuid",
-    "requesterId": "$uuid",
-    "name": "$string",
-    "description": "$string"
-  },
-  "required": ["id", "requesterId", "name", "description"]
-}

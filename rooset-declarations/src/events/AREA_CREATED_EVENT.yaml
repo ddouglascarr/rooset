@@ -1,0 +1,7 @@
+properties:
+  id: '$uuid'
+  areaId: '$uuid'
+  requesterId: '$uuid'
+  name: '$string'
+  description: '$string'
+  externalReference: '$string'

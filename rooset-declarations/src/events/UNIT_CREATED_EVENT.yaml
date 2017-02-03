@@ -1,0 +1,6 @@
+---
+properties:
+  id: '$uuid'
+  requesterId: '$uuid'
+  name: '$string'
+  description: '$string'

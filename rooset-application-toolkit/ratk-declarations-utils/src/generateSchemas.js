@@ -32,13 +32,12 @@ function mapSchemaFiles(baseSchema, messageCategory) {
     const type = typeRe.exec(filename)[0];
     const required = [];
     const payload = Object.keys(messageSchema.properties)
-        .reduce((memo, key) => {
-          if (messageSchema.properties[key].slice(0,1) !== '$') {
-            throw `${key} property of ${filename} must start with "$"`;
-          }
-          const refKey = messageSchema.properties[key].slice(1);
+        .reduce((memo, v) => {
+          const declaration = messageSchema.properties[v];
+          const refKey = declaration.type;
+          if (!refKey) throw new Error(`${v} has not type property. It is required`);
           const ref = baseSchema.definitions[refKey];
-          if (!ref) throw `no defintion for ${refKey}`;
+          if (!ref) throw new Error(`no defintion for ${refKey}`);
           required.push(key);
 
           return merge({}, memo, {
