@@ -1,3 +1,5 @@
 properties:
-  id: '$uuid'
-  trusterId: '$uuid'
+  id:
+    type: uuid
+  trusterId:
+    type: uuid

@@ -1,10 +1,18 @@
 ---
 properties:
-  id: '$uuid'
-  requesterId: '$uuid'
-  initiativeId: '$uuid'
-  name: '$string'
-  externalReference: '$string'
-  content: '$string'
-  textSearchData: '$string'
-  created: '$date'
+  id:
+    type: uuid
+  requesterId:
+    type: uuid
+  initiativeId:
+    type: uuid
+  name:
+    type: string
+  externalReference:
+    type: string
+  content:
+    type: string
+  textSearchData:
+    type: string
+  created:
+    type: date

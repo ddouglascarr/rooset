@@ -1,5 +1,8 @@
 properties:
-  id: '$uuid'
-  requesterId: '$uuid'
-  ballot: '$schulzeBallot'
+  id:
+    type: uuid
+  requesterId:
+    type: uuid
+  ballot:
+    type: schulzeBallot
 commandConstructor: SET_ISSUE_BALLOT_COMMAND

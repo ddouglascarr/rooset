@@ -34,18 +34,22 @@ function mapSchemaFiles(baseSchema, messageCategory) {
     const payload = Object.keys(messageSchema.properties)
         .reduce((memo, v) => {
           const declaration = messageSchema.properties[v];
+          if (!declaration) throw new Error(`${filename}: no declaration`);
           const refKey = declaration.type;
-          if (!refKey) throw new Error(`${v} has not type property. It is required`);
+          if (!refKey) {
+            console.log(messageSchema);
+            throw new Error(`${filename}: ${v} has not type property. It is required`);
+          }
           const ref = baseSchema.definitions[refKey];
-          if (!ref) throw new Error(`no defintion for ${refKey}`);
-          required.push(key);
+          if (!ref) throw new Error(`${filename}: no defintion for ${refKey}`);
+          required.push(v);
 
           return merge({}, memo, {
             definitions: {
               [refKey]: ref,
             },
             properties: {
-              [key]: { '$ref': `#/definitions/${refKey}` },
+              [v]: { '$ref': `#/definitions/${refKey}` },
             }
           });
         }, { definitions: {}, properties: {} });

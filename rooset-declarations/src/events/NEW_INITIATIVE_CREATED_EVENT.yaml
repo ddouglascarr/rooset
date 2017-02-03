@@ -1,15 +1,27 @@
 ---
 properties:
-  id: '$uuid'
-  requesterId: '$uuid'
-  initiativeId: '$uuid'
-  unitId: '$uuid'
-  areaId: '$uuid'
-  policyId: '$uuid'
-  name: '$string'
-  polling: '$bool'
-  externalReference: '$string'
-  content: '$string'
-  textSearchData: '$string'
-  created: '$date'
+  id:
+    type: uuid
+  requesterId:
+    type: uuid
+  initiativeId:
+    type: uuid
+  unitId:
+    type: uuid
+  areaId:
+    type: uuid
+  policyId:
+    type: uuid
+  name:
+    type: string
+  polling:
+    type: bool
+  externalReference:
+    type: string
+  content:
+    type: string
+  textSearchData:
+    type: string
+  created:
+    type: date
 commandConstructor: CREATE_NEW_INITIATIVE_COMMAND

@@ -1,6 +1,10 @@
 ---
 properties:
-  id: '$uuid'
-  requesterId: '$uuid'
-  name: '$string'
-  description: '$string'
+  id:
+    type: uuid
+  requesterId:
+    type: uuid
+  name:
+    type: string
+  description:
+    type: string

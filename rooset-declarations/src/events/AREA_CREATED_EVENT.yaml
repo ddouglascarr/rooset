@@ -1,7 +1,13 @@
 properties:
-  id: '$uuid'
-  areaId: '$uuid'
-  requesterId: '$uuid'
-  name: '$string'
-  description: '$string'
-  externalReference: '$string'
+  id:
+    type: uuid
+  areaId:
+    type: uuid
+  requesterId:
+    type: uuid
+  name:
+    type: string
+  description:
+    type: string
+  externalReference:
+    type: string

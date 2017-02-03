@@ -1,23 +1,44 @@
 ---
 properties:
-  id: '$uuid'
-  requesterId: '$uuid'
-  policyId: '$uuid'
-  name: '$string'
-  description: '$string'
-  polling: '$bool'
-  maxAdmissionTime: '$duration'
-  minAdmissionTime: '$duration'
-  discussionTime: '$duration'
-  verificationTime: '$duration'
-  votingTime: '$duration'
-  issueQuorumNum: '$uint'
-  issueQuorumDen: '$uint'
-  defeatStrength: '$defeatStrength'
-  directMajorityNum: '$uint'
-  directMajorityDen: '$uint'
-  directMajorityStrict: '$bool'
-  directMajorityPositive: '$uint'
-  directMajorityNonNegative: '$uint'
-  noReverseBeatPath: '$bool'
-  noMultistageMajority: '$bool'
+  id:
+    type: uuid
+  requesterId:
+    type: uuid
+  policyId:
+    type: uuid
+  name:
+    type: string
+  description:
+    type: string
+  polling:
+    type: bool
+  maxAdmissionTime:
+    type: duration
+  minAdmissionTime:
+    type: duration
+  discussionTime:
+    type: duration
+  verificationTime:
+    type: duration
+  votingTime:
+    type: duration
+  issueQuorumNum:
+    type: uint
+  issueQuorumDen:
+    type: uint
+  defeatStrength:
+    type: defeatStrength
+  directMajorityNum:
+    type: uint
+  directMajorityDen:
+    type: uint
+  directMajorityStrict:
+    type: bool
+  directMajorityPositive:
+    type: uint
+  directMajorityNonNegative:
+    type: uint
+  noReverseBeatPath:
+    type: bool
+  noMultistageMajority:
+    type: bool
