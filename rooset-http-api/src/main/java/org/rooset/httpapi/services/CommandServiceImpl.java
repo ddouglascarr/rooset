@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -52,7 +51,7 @@ public class CommandServiceImpl implements CommandService
       if (resp.has("error")) {
         JSONObject payload = resp.getJSONObject("payload");
         ExceptionCode code = ExceptionCode.valueOf(payload.getString("code"));
-        if (resp.get("type") == ExceptionType.COMMAND_EVALUATION_EXCEPTION.toString()) {
+        if (resp.getString("type").equals(ExceptionType.COMMAND_EVALUATION_EXCEPTION.toString())) {
           throw new CommandEvaluationException(
               code, payload.getString("message"));
         }
