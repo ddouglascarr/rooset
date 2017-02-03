@@ -49,7 +49,10 @@ function mapSchemaFiles(baseSchema, messageCategory) {
                 [refKey]: ref,
               },
               properties: {
-                [v]: { '$ref': `#/definitions/${refKey}` },
+                [v]: {
+                  '$ref': `#/definitions/${refKey}`,
+                  description: declaration.description || '',
+                 },
               }
             });
           }, { definitions: {}, properties: {} });

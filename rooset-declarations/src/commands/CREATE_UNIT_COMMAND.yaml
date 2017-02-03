@@ -2,9 +2,13 @@
 properties:
   id:
     type: uuid
+    description: Unit id
   requesterId:
     type: uuid
+    description: Creating Member. Will be made admin
   name:
     type: string
+    description: Units short name
   description:
     type: string
+    description: Unit description
