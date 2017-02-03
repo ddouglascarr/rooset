@@ -7,13 +7,20 @@ import java.util.UUID;
 
 public class CommandServiceResponse
 {
+  public final UUID id;
   public final UUID eventId;
+
+
 
   @JsonCreator
   public CommandServiceResponse(
+      @JsonProperty("id") UUID id,
       @JsonProperty("eventId") UUID eventId)
   {
+    this.id = id;
     this.eventId = eventId;
   }
+
+
 
 }

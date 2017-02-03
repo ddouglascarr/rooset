@@ -58,7 +58,9 @@ public class CommandServiceImpl implements CommandService
         throw new SystemException(code, payload.getString("message"));
       }
 
-      return new CommandServiceResponse(UUID.fromString(resp.getString("eventId")));
+      return new CommandServiceResponse(
+          UUID.fromString(command.getJSONObject("payload").getString("id")),
+          UUID.fromString(resp.getString("eventId")));
 
     } catch(IOException e) {
       throw new SystemException(ExceptionCode.GENERAL_PROJECT_EXCEPTION, e.getMessage());
