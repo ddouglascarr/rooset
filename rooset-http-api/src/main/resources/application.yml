@@ -1,0 +1,18 @@
+server:
+  port: 8095
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    'show-sql': true
+    hibernate:
+      'ddl-auto': create-drop
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/rooset_http_api
+    username: daniel
+    password: daniel
+    driveClassName: org.postgresql.Driver
+
+rooset:
+  'domain-command-bin': '@basedir@/../rooset-domain-command-posix/build/rooset-command'
