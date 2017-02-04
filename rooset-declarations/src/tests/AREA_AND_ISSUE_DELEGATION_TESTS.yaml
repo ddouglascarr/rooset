@@ -185,15 +185,23 @@ mocks:
       message: ''
 
 scenarios:
-
   -
-    label: Area must exist
+    label: Area validation scenario
     given:
       - *unitCreatedEvent
       - *privGrantedEvtVoter4
       - *privGrantedEvtVoter5
-    when: *setDelegationCmd
-    then: *notFoundErr
+    when:
+      -
+        label: Area must exist
+        payload: *setDelegationCmd
+      -
+        label: Area must exist to block area delegation 
+        payload: *blockDelegationForAreaCmd
+    then:
+      - *notFoundErr
+      - *notFoundErr
+
 
   -
     label: truster must have voting right
@@ -294,15 +302,6 @@ scenarios:
       - *delegationSetEvent
       - *delegationBlockedForAreaEvt
     when: *unsetDelegationCmd
-    then: *notFoundErr
-
-  -
-    label: Area must exist to block area delegation
-    given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-    when: *blockDelegationForAreaCmd
     then: *notFoundErr
 
   -
