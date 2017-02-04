@@ -66,7 +66,7 @@ public class ManualIntegrationTests
     watchdog = testingEventStoreService.startTestingEventStore();
 
     testUser = new UserModel(
-      "foo", "bar", "foo@bar.com",
+      "no1TestUser420", "foo", "bar", "foo@bar.com",
       passwordEncoder.encode("password1"));
   }
 
@@ -74,8 +74,9 @@ public class ManualIntegrationTests
   public void killGetEventStore() throws Exception
   {
     System.out.println("Killing event store");
-    userRepository.delete(testUser);
     watchdog.destroyProcess();
+
+    userRepository.delete(testUser);
   }
 
   @Test
@@ -157,7 +158,7 @@ public class ManualIntegrationTests
     public RestTemplateBuilder restTemplateBuilder()
     {
       return new RestTemplateBuilder()
-          .basicAuthorization("foo@bar.com", "password1");
+          .basicAuthorization("no1TestUser420", "password1");
     }
   }
 

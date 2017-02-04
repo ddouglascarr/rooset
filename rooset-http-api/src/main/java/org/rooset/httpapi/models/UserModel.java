@@ -16,6 +16,7 @@ public class UserModel
   @Id
   private UUID id;
 
+  @Column(unique = true) private String username;
   private String firstName;
   private String lastName;
   @Column(unique = true) String email;
@@ -23,9 +24,10 @@ public class UserModel
 
   protected UserModel() {}
 
-  public UserModel(String firstName, String lastName, String email, String password)
+  public UserModel(String username, String firstName, String lastName, String email, String password)
   {
     this.id = UUID.randomUUID();
+    this.username = username;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -36,6 +38,7 @@ public class UserModel
   public UserModel(UserModel user)
   {
     this.id = user.id;
+    this.username = user.username;
     this.firstName = user.firstName;
     this.lastName = user.lastName;
     this.email = user.email;
@@ -50,6 +53,16 @@ public class UserModel
   public void setId(UUID id)
   {
     this.id = id;
+  }
+
+  public String getUsername()
+  {
+    return username;
+  }
+
+  public void setUsername(String username)
+  {
+    this.username = username;
   }
 
   public String getFirstName()

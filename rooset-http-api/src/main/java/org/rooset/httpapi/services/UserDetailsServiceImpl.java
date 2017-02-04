@@ -28,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService
   {
     UserModel user;
 
-    user = userRepository.findOneByEmail(login);
+    user = userRepository.findOneByUsername(login);
     if (null == user) {
       throw new UsernameNotFoundException("No user present with login: " + login);
     }

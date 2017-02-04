@@ -43,7 +43,7 @@ public class DependencyTests
   {
     ObjectMapper mapper = new ObjectMapper();
     UserModel user = new UserModel(
-        "foo", "bar", "foo@bar.com", "Should be encoded");
+        "no1TestUser420", "foo", "bar", "foo@bar.com", "Should be encoded");
     final UUID id = UUID.randomUUID();
     user.setId(id);
     String json = mapper.writeValueAsString(user);
@@ -60,7 +60,8 @@ public class DependencyTests
   public void JSONObjectMapperTest() throws Exception
   {
     UserModel user = new UserModel(
-        "foo", "bar", "foo@bar.com", "Should be encoded");
+        "no1TestUser420", "foo", "bar", "foo@bar.com", "Should be encoded");
+    user.setId(UUID.fromString("464b1ebb-32c1-460c-8e9e-444444444444"));
 
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JsonOrgModule());
@@ -69,11 +70,12 @@ public class DependencyTests
     assertEquals("foo@bar.com", json.get("email"));
 
     assertEquals(new JSONObject()
+        .put("username", "no1TestUser420")
         .put("firstName", "foo")
         .put("lastName", "bar")
         .put("email", "foo@bar.com")
         .put("password", "Should be encoded")
-        .put("id", JSONObject.NULL)
+        .put("id", "464b1ebb-32c1-460c-8e9e-444444444444")
         .toString(),
         json.toString());
   }

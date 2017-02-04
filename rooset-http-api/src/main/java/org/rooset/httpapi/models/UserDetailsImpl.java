@@ -26,7 +26,7 @@ public class UserDetailsImpl extends UserModel implements UserDetails
   @Override
   public String getUsername()
   {
-    return super.getEmail();
+    return super.getUsername();
   }
 
   @Override
