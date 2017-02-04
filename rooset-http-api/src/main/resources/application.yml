@@ -21,3 +21,13 @@ get-event-store:
   port: 2113
   host: localhost
 
+---
+
+spring:
+  profiles: integration-tests
+
+get-event-store:
+  port: 2114
+  host: localhost
+  bin: /home/daniel/opt/EventStore-OSS-Ubuntu-14.04-v3.9.3/run-node.sh
+
