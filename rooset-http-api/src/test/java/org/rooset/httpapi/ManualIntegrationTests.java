@@ -2,6 +2,8 @@ package org.rooset.httpapi;
 
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.json.JSONObject;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rooset.httpapi.services.TestingEventStoreService;
@@ -37,7 +39,21 @@ public class ManualIntegrationTests
   @Autowired
   private TestingEventStoreService testingEventStoreService;
 
+  private ExecuteWatchdog watchdog;
 
+  @Before
+  public void startGetEventStore() throws Exception
+  {
+    System.out.println("Starting Event Store");
+    watchdog = testingEventStoreService.startTestingEventStore();
+  }
+
+  @After
+  public void killGetEventStore() throws Exception
+  {
+    System.out.println("Killing event store");
+    watchdog.destroyProcess();
+  }
 
   @Test
   public void createUnitShouldFailOnInvalidBody() throws Exception
@@ -55,9 +71,6 @@ public class ManualIntegrationTests
   @Test
   public void createUnitShouldCreateUnit() throws Exception
   {
-    ExecuteWatchdog eventStoreProcess = testingEventStoreService
-        .startTestingEventStore();
-
     JSONObject reqBody = new JSONObject();
     reqBody.put("name", "Test");
     reqBody.put("description", "The Test");
@@ -75,7 +88,6 @@ public class ManualIntegrationTests
     assertEquals(event.getJSONObject("payload").getString("id"), id.toString());
     assertEquals(event.getJSONObject("payload").getString("name"), "Test");
 
-    eventStoreProcess.destroyProcess();
   }
 
 

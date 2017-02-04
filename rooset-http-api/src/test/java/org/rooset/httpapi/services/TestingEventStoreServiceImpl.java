@@ -50,10 +50,7 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
     final ByteArrayOutputStream bos = new ByteArrayOutputStream();
     final PumpStreamHandler psh = new PumpStreamHandler(bos);
 
-    String LD_LIBRARY_PATH = System.getenv("LD_LIBRARY_PATH");
-    String cmd[] = {"./eventstored", "--mem-db", "--ext-http-port", getEventStorePort};
-
-    CommandLine cmdLine = new CommandLine("./run-node.sh");
+    CommandLine cmdLine = new CommandLine("./eventstored");
     cmdLine.addArgument("--mem-db");
     cmdLine.addArgument("--ext-http-port");
     cmdLine.addArgument(getEventStorePort);
@@ -65,6 +62,8 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
     executor.setWatchdog(watchdog);
     executor.setWorkingDirectory(new File(getEventStoreBinPath));
     Map<String, String> env = new HashMap<>();
+    env.put("EVENTSTORE_DIR", getEventStoreBinPath);
+    env.put("LD_LIBRARY_PATH", getEventStoreBinPath);
     executor.execute(cmdLine, resultHandler);
 
     waitForHttpServer(resultHandler, bos);
