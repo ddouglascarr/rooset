@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import org.rooset.httpapi.exceptions.RatkException;
+import org.rooset.httpapi.enums.ExceptionCode.*;
 
 @Aspect
 @Component
@@ -37,6 +38,9 @@ public class HandleServiceErrorsAspect
                 case UNAUTHORIZED_EXCEPTION:
                     return new ResponseEntity<>(
                         e.serialize().toString(), httpHeaders, HttpStatus.UNAUTHORIZED);
+                case INVALID_INPUT_EXCEPTION:
+                    return new ResponseEntity<>(
+                        e.serialize().toString(), httpHeaders, HttpStatus.BAD_REQUEST);
                 default:
                     return new ResponseEntity<>(
                         e.serialize().toString(), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
