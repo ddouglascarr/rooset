@@ -10,4 +10,5 @@ public interface TestingEventStoreService
   ExecuteWatchdog startTestingEventStore() throws IOException;
   void killTestingEventStore(Process process) throws IOException;
   JSONObject getLastEventForAggregate(UUID aggregateId) throws IOException;
+  void saveEvent(JSONObject event) throws Exception;
 }

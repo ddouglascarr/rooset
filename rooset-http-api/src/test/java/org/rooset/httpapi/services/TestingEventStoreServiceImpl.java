@@ -6,8 +6,12 @@ import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.ProcessDestroyer;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -62,8 +66,6 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
     executor.setWatchdog(watchdog);
     executor.setWorkingDirectory(new File(getEventStoreBinPath));
     Map<String, String> env = new HashMap<>();
-    env.put("EVENTSTORE_DIR", getEventStoreBinPath);
-    env.put("LD_LIBRARY_PATH", getEventStoreBinPath);
     executor.execute(cmdLine, resultHandler);
 
     waitForHttpServer(resultHandler, bos);
@@ -159,5 +161,28 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
   }
 
 
-
+  @Override
+  public void saveEvent(JSONObject event) throws Exception
+  {
+    String aggregateId = event.getJSONObject("payload").getString("id");
+    String eventType = event.getString("type");
+    CloseableHttpClient httpClient = HttpClients.custom().build();
+    try {
+      HttpPost post = new HttpPost("http://" + getEventStoreHost + ":" + getEventStorePort +
+          "/streams/" + aggregateId);
+      post.addHeader("Content-Type", "application/json");
+      post.addHeader("ES-EventType", eventType);
+      post.addHeader("ES-EventId", UUID.randomUUID().toString());
+      post.setEntity(new ByteArrayEntity(event.toString().getBytes("UTF-8")));
+      CloseableHttpResponse resp = httpClient.execute(post);
+      if (201 != resp.getStatusLine().getStatusCode()) {
+        System.out.println(resp.getEntity().getContent().toString());
+        throw new IOException("Could not create Event: \n" +
+            resp.getStatusLine() + "\n" +
+            resp.getEntity().getContent().toString());
+      }
+    } finally {
+      httpClient.close();
+    }
+  }
 }
