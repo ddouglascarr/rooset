@@ -2,7 +2,7 @@ const { camelCase } = require('lodash');
 const {
   updateDir,
   getConfigFromEnv,
-  getDeclarations,
+  getTests,
 } = require('../../../../ratk-declarations-utils');
 
 const generateTestFile = require('./generators/generateTestFile');
@@ -15,7 +15,7 @@ const config = getConfigFromEnv({
 const files = {};
 
 // tests
-const testDocs = getDeclarations(config.srcPath);
+const testDocs = getTests(config.srcPath, 'DOMAIN_COMMAND_TEST');
 testDocs.forEach((testDoc) => {
   const content = generateTestFile(testDoc);
   const fileName = `${camelCase(testDoc.label)}.cpp`;
