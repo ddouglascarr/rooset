@@ -24,6 +24,12 @@ public class CommandServiceImpl implements CommandService
   @Value("${rooset.domain-command-bin}")
   private String domainCommandBin;
 
+  @Value("${get-event-store.host}")
+  private String getEventStoreHost;
+
+  @Value("${get-event-store.port}")
+  private String getEventStorePort;
+
 
   @Override
   public CommandServiceResponse execute(JSONObject command)
@@ -50,7 +56,9 @@ public class CommandServiceImpl implements CommandService
       throws SystemException, JSONException
   {
     try {
-      String env[] = {"ROOSET_EVENT_STORE_HOST=localhost", "ROOSET_EVENT_STORE_PORT=2113"};
+      String env[] = {
+          "ROOSET_EVENT_STORE_HOST=" + getEventStoreHost,
+          "ROOSET_EVENT_STORE_PORT=" + getEventStorePort};
       Process process = Runtime.getRuntime().exec(domainCommandBin, env);
       InputStream stdout = process.getInputStream();
       OutputStream stdin = process.getOutputStream();
