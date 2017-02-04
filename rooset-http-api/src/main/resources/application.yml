@@ -17,4 +17,7 @@ spring:
 rooset:
   'domain-command-bin': '@basedir@/../rooset-domain-command-posix/build/rooset-command'
 
+get-event-store:
+  port: 2113
+  host: localhost
 
