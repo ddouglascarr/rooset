@@ -20,6 +20,8 @@ rooset:
 get-event-store:
   port: 2113
   host: localhost
+  binPath: '' # Not used in production, testing only
+  bin: '' # Not used in production, only for testing
 
 ---
 
@@ -29,5 +31,6 @@ spring:
 get-event-store:
   port: 2114
   host: localhost
-  bin: /home/daniel/opt/EventStore-OSS-Ubuntu-14.04-v3.9.3/run-node.sh
+  binPath: '/home/daniel/opt/EventStore-OSS-Ubuntu-14.04-v3.9.3'
+  bin: '/home/daniel/opt/EventStore-OSS-Ubuntu-14.04-v3.9.3/run-node.sh'
 

@@ -1,5 +1,6 @@
 package org.rooset.httpapi;
 
+import org.apache.commons.exec.ExecuteWatchdog;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,6 +55,9 @@ public class ManualIntegrationTests
   @Test
   public void createUnitShouldCreateUnit() throws Exception
   {
+    ExecuteWatchdog eventStoreProcess = testingEventStoreService
+        .startTestingEventStore();
+
     JSONObject reqBody = new JSONObject();
     reqBody.put("name", "Test");
     reqBody.put("description", "The Test");
@@ -70,6 +74,8 @@ public class ManualIntegrationTests
     JSONObject event = testingEventStoreService.getLastEventForAggregate(id);
     assertEquals(event.getJSONObject("payload").getString("id"), id.toString());
     assertEquals(event.getJSONObject("payload").getString("name"), "Test");
+
+    eventStoreProcess.destroyProcess();
   }
 
 
