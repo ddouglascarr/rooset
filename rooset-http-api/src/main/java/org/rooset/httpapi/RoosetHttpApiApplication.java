@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.rooset.httpapi.enums.ExceptionCode;
 
+import java.util.UUID;
+
 
 @SpringBootApplication
 public class RoosetHttpApiApplication {
@@ -30,14 +32,16 @@ public class RoosetHttpApiApplication {
 	@Autowired
   CommandService commandService;
 
-	@Bean
+	/*@Bean
   public CommandLineRunner demo(UserRepository userRepository)
   {
     return (args) -> {
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-      userRepository.save(new UserModel(
+      UserModel fooUser = new UserModel(
           "foo", "bar", "foo@bar.com",
-          passwordEncoder.encode("password1")));
+          passwordEncoder.encode("password1"));
+      fooUser.setId(UUID.fromString("464b1ebb-32c1-460c-8e9e-333333333333"));
+      userRepository.save(fooUser);
       userRepository.save(new UserModel(
           "bing", "bong", "bing@bong.com",
           passwordEncoder.encode("password2")));
@@ -69,7 +73,7 @@ public class RoosetHttpApiApplication {
 
     };
 
-  }
+  }*/
 
   private ExceptionCode getExceptionCode(String c) {
 	  if (c == "a") {

@@ -6,8 +6,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.rooset.httpapi.models.UserDetailsImpl;
+import org.rooset.httpapi.models.UserModel;
 import org.rooset.httpapi.repositories.UserRepository;
 import org.rooset.httpapi.services.TestingEventStoreService;
+import org.rooset.httpapi.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -19,13 +25,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,25 +53,35 @@ public class ManualIntegrationTests
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
   private ExecuteWatchdog watchdog;
+  private UserModel testUser;
 
   @Before
   public void startGetEventStore() throws Exception
   {
     System.out.println("Starting Event Store");
     watchdog = testingEventStoreService.startTestingEventStore();
+
+    testUser = new UserModel(
+      "foo", "bar", "foo@bar.com",
+      passwordEncoder.encode("password1"));
   }
 
   @After
   public void killGetEventStore() throws Exception
   {
     System.out.println("Killing event store");
+    userRepository.delete(testUser);
     watchdog.destroyProcess();
   }
 
   @Test
   public void createUnitShouldFailOnInvalidBody() throws Exception
   {
+    userRepository.save(testUser);
     Map<String, String> reqBody = new HashMap<>();
     reqBody.put("foo", "bar");
     ResponseEntity<String> resp = this.restTemplate.postForEntity("/units", reqBody, String.class);
@@ -76,6 +95,7 @@ public class ManualIntegrationTests
   @Test
   public void createUnitShouldCreateUnit() throws Exception
   {
+    userRepository.save(testUser);
     JSONObject reqBody = new JSONObject();
     reqBody.put("name", "Test");
     reqBody.put("description", "The Test");
@@ -99,7 +119,8 @@ public class ManualIntegrationTests
   @Test
   public void grantPermissionShouldWork() throws Exception
   {
-    UUID requesterId = userRepository.findOneByEmail("foo@bar.com").getId();
+    testUser.setId(UUID.fromString("464b1ebb-32c1-460c-8e9e-333333333333"));
+    userRepository.save(testUser);
     JSONObject reqBody = new JSONObject()
         .put("memberId", "464b1ebb-32c1-460c-8e9e-222222222222")
         .put("pollingRight", true)
@@ -112,7 +133,7 @@ public class ManualIntegrationTests
     unitCreatedEvt.put("type", "UNIT_CREATED_EVENT");
     unitCreatedEvt.put("payload", new JSONObject()
         .put("id", "464b1ebb-32c1-460c-8e9e-111111111111")
-        .put("requesterId", requesterId.toString())
+        .put("requesterId", UUID.fromString("464b1ebb-32c1-460c-8e9e-333333333333"))
         .put("name", "Test Unit")
         .put("description", "The Test Unit"));
     testingEventStoreService.saveEvent(unitCreatedEvt);

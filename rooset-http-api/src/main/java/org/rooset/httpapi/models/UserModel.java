@@ -14,7 +14,6 @@ public class UserModel
 {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
   private UUID id;
 
   private String firstName;
@@ -26,6 +25,7 @@ public class UserModel
 
   public UserModel(String firstName, String lastName, String email, String password)
   {
+    this.id = UUID.randomUUID();
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
