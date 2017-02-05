@@ -64,21 +64,23 @@ scenarios:
     label: Set policy
     given:
       - *unitCreatedEvent
-    when: *setUnitPolicyCommand
-    then: *unitPolicySetEvent
-
-  -
-    label: requester must have managment rights
-    given:
-      - *unitCreatedEvent
     when:
-      <<: *setUnitPolicyCommand
-      payload:
-        <<: *setUnitPolicyCommandPayload
-        requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+      -
+        label: Set policy should emit event
+        payload: *setUnitPolicyCommand
+      -
+        label: requester must have management rights to set unit policy
+        payload:
+          <<: *setUnitPolicyCommand
+          payload:
+            <<: *setUnitPolicyCommandPayload
+            requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
     then:
-      type: COMMAND_EVALUATION_EXCEPTION
-      error: true
-      payload:
-        code: UNPRIVILEGED_EXCEPTION
-        message: ''
+      - *unitPolicySetEvent
+      - &localErr
+        type: COMMAND_EVALUATION_EXCEPTION
+        error: true
+        payload:
+          code: UNPRIVILEGED_EXCEPTION
+          message: ''
+
