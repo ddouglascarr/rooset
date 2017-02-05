@@ -17,6 +17,12 @@ mocks:
     payload:
       code: INVALID_INPUT_EXCEPTION
       message: ''
+  - &unprivErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: UNPRIVILEGED_EXCEPTION
+      message: ''
 
 
 scenarios:
@@ -117,6 +123,33 @@ scenarios:
             initiativeRight: true
             managementRight: true
             weight: 2
+      -
+        label: Unprivileged member cannot grant privileges
+        payload:
+          type: GRANT_PRIVILEGE_COMMAND
+          payload:
+            id: *unitId
+            requesterId: *memberId
+            memberId: 464b1ebb-32c1-460c-8e9e-666666666666
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: true
+            weight: 1
+      -
+        label: Unprivileged member cannot grant privileges
+        payload:
+          type: HTTP_REQUEST
+          uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/members
+          method: POST
+          requesterId: *memberId
+          body:
+            memberId: 464b1ebb-32c1-460c-8e9e-666666666666
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: true
+            weight: 1
     then:
       - &localThenEvent
         type: PRIVILEGE_GRANTED_EVENT
@@ -132,36 +165,11 @@ scenarios:
       - *invalidInputErr
       - *localThenEvent
       - *invalidInputErr
+      - *unprivErr
+      - *unprivErr
 
 
 
-  -
-    label: Unprivileged member cannot create unit
-    given:
-      -
-        type: UNIT_CREATED_EVENT
-        payload:
-          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
-          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
-          name: Test Unit
-          description: The Test Unit
-    when:
-      type: GRANT_PRIVILEGE_COMMAND
-      payload:
-        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
-        requesterId: 86998399-3d86-4e0b-a2a5-6490056ce000
-        memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
-        pollingRight: true
-        votingRight: true
-        initiativeRight: true
-        managementRight: true
-        weight: 1
-    then:
-      type: COMMAND_EVALUATION_EXCEPTION
-      error: true
-      payload:
-        code: UNPRIVILEGED_EXCEPTION
-        message: ''
   -
     label: Member without member privileges cannot grant privileges
     given:

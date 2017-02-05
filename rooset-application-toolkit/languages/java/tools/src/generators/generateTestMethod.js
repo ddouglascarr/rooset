@@ -39,7 +39,6 @@ ${assessResponse(scenario.then)}
 
 
 function performRequest(scenario) {
-  console.log(JSON.stringify(scenario, null, 2));
   if (scenario.when.method !== 'POST') throw new Error(
       `when.method is ${scenario.when.method} but only POST is supported`);
   return `this.restTemplate.postForEntity(

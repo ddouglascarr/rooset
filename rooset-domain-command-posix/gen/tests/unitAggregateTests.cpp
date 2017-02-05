@@ -231,7 +231,7 @@ TEST(unit_aggregate_tests, member_weight_is_restricted_to_1)
 }
 
 
-TEST(unit_aggregate_tests, unprivileged_member_cannot_create_unit)
+TEST(unit_aggregate_tests, unprivileged_member_cannot_grant_privileges)
 {
   
   vector<string> givenEvents;
@@ -239,8 +239,8 @@ TEST(unit_aggregate_tests, unprivileged_member_cannot_create_unit)
   givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
-    "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6bec",
-    "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Unit",
     "description": "The Test Unit"
   }
@@ -268,9 +268,9 @@ TEST(unit_aggregate_tests, unprivileged_member_cannot_create_unit)
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GRANT_PRIVILEGE_COMMAND",
   "payload": {
-    "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6bec",
-    "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce000",
-    "memberId": "f00b6b62-72d1-4c5e-974d-8a678f2c252c",
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "memberId": "464b1ebb-32c1-460c-8e9e-666666666666",
     "pollingRight": true,
     "votingRight": true,
     "initiativeRight": true,
