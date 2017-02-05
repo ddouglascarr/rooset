@@ -51,7 +51,7 @@ public class ${className} extends RatkException
   public JSONObject serialize()
   {
     JSONObject payload = new JSONObject()
-        .put("exceptionCode", exceptionCode.toString())
+        .put("code", exceptionCode.toString())
         .put("message", message);
     return new JSONObject()
         .put("type", type)

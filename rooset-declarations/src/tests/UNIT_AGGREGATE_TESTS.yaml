@@ -103,6 +103,20 @@ scenarios:
             initiativeRight: true
             managementRight: true
             weight: 1
+      -
+        label: Member weight is restricted to 1
+        payload:
+          type: HTTP_REQUEST
+          uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/members
+          method: POST
+          requesterId: *requesterId
+          body:
+            memberId: *memberId
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: true
+            weight: 2
     then:
       - &localThenEvent
         type: PRIVILEGE_GRANTED_EVENT
@@ -117,6 +131,7 @@ scenarios:
           weight: 1
       - *invalidInputErr
       - *localThenEvent
+      - *invalidInputErr
 
 
 

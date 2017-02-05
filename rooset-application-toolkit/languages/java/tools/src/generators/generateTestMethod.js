@@ -59,8 +59,14 @@ function persistGivenEvents(given) {
 function assessResponse(then) {
   // TODO: implment HTTP_RESPONSE assessment
   if (then.type === 'HTTP_RESPONSE') throw new Error("HTTP_RESPONSE assessment not implmemented");
-  // TODO: implement error HTTP_RESPONSE assessment
-  if (then.error) throw new Error("HTTP_RESPONSE error assessment not implemented");
+
+  if (then.error) {
+    return `
+    assertTrue(response.getStatusCode().is4xxClientError());
+    String expectedEvent = ${JSON.stringify(JSON.stringify(then))};
+    JSONAssert.assertEquals(expectedEvent, responseBody, true);
+    `;
+  }
 
   return `
     assertTrue(response.getStatusCode().is2xxSuccessful());
