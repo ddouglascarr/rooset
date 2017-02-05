@@ -8,18 +8,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.rooset.httpapi.models.UserDetailsImpl;
 import org.rooset.httpapi.models.UserModel;
 import org.rooset.httpapi.repositories.UserRepository;
+import org.rooset.httpapi.services.IdService;
 import org.rooset.httpapi.services.TestingEventStoreService;
 import org.rooset.httpapi.services.UserDetailsServiceImpl;
+import org.rooset.httpapi.commandcontrollers.CreateUnitHttpCommandRequestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -56,6 +60,9 @@ public class ManualIntegrationTests
   @Autowired
   private PasswordEncoder passwordEncoder;
 
+  @Autowired
+  private IdService idService;
+
   private ExecuteWatchdog watchdog;
   private UserModel testUser;
 
@@ -64,6 +71,7 @@ public class ManualIntegrationTests
   {
     System.out.println("Starting Event Store");
     watchdog = testingEventStoreService.startTestingEventStore();
+    MockitoAnnotations.initMocks(this);
 
     testUser = new UserModel(
       "no1TestUser420", "foo", "bar", "foo@bar.com",
@@ -97,6 +105,8 @@ public class ManualIntegrationTests
   public void createUnitShouldCreateUnit() throws Exception
   {
     userRepository.save(testUser);
+    UUID id = UUID.fromString("464b1ebb-32c1-460c-8e9e-333333333333");
+    when(idService.generateUniqueId()).thenReturn(id);
     JSONObject reqBody = new JSONObject();
     reqBody.put("name", "Test");
     reqBody.put("description", "The Test");
@@ -109,9 +119,9 @@ public class ManualIntegrationTests
     assertTrue(resp.getStatusCode().is2xxSuccessful());
 
     JSONObject respBody = new JSONObject(resp.getBody());
-    UUID id = UUID.fromString(respBody.getString("id"));
+    assertEquals(id.toString(), respBody.getString("id"));
     JSONObject event = testingEventStoreService.getLastEventForAggregate(id);
-    assertEquals(event.getJSONObject("payload").getString("id"), id.toString());
+    assertEquals(event.getJSONObject("payload").getString("id"), "464b1ebb-32c1-460c-8e9e-333333333333");
     assertEquals(event.getJSONObject("payload").getString("name"), "Test");
   }
 
@@ -159,6 +169,13 @@ public class ManualIntegrationTests
     {
       return new RestTemplateBuilder()
           .basicAuthorization("no1TestUser420", "password1");
+    }
+
+    @Bean
+    @Primary
+    public IdService idService()
+    {
+      return Mockito.mock(IdService.class);
     }
   }
 
