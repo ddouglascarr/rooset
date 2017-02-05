@@ -1,25 +1,45 @@
 ---
 label: Unit Aggregate Tests
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-000000000000
+  - &requesterId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &memberId 464b1ebb-32c1-460c-8e9e-222222222222
 
+  - &createUnitCmdPayload
+    id: *unitId
+    requesterId: *requesterId
+    name: Test Unit
+    description: The Test Unit
+    
 scenarios:
 
   -
-    label: Create Unit
+    label: Create Unit Scenario
     given: []
     when:
-      type: CREATE_UNIT_COMMAND
-      payload:
-        id: 464b1ebb-32c1-460c-8e9e-000000000000
-        requesterId: 464b1ebb-32c1-460c-8e9e-111111111111
-        name: Test Unit
-        description: The Test Unit
+      -
+        label: Create Unit
+        payload:
+          type: CREATE_UNIT_COMMAND
+          payload: *createUnitCmdPayload
+      -
+        label: Create Unit Http
+        payload:
+          type: HTTP_REQUEST
+          uri: '/units'
+          method: POST
+          body:
+            name: Test Unit
+            description: The Test Unit
     then:
-      type: UNIT_CREATED_EVENT
-      payload:
-        id: 464b1ebb-32c1-460c-8e9e-000000000000
-        requesterId: 464b1ebb-32c1-460c-8e9e-111111111111
-        name: Test Unit
-        description: The Test Unit
+      -
+        type: UNIT_CREATED_EVENT
+        payload: *createUnitCmdPayload
+      -
+        type: UNIT_CREATED_EVENT
+        payload: *createUnitCmdPayload
+
+
   -
     label: Unit Creator can grant privileges
     given:

@@ -189,6 +189,7 @@
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>ratk-generated-sources</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>add-source</goal>
@@ -196,6 +197,18 @@
                         <configuration>
                             <sources>
                                 <source>${project.build.directory}/generated-sources/ratk</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>ratk-generated-tests</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/ratktests</source>
                             </sources>
                         </configuration>
                     </execution>

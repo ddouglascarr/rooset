@@ -8,7 +8,7 @@ module.exports = (baseJavaPkg, testDoc) =>  {
 
 
   return `
-package ${baseJavaPkg}.integrationtests
+package ${baseJavaPkg}.integrationtests;
 
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.json.JSONObject;
