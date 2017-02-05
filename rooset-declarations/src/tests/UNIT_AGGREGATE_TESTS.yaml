@@ -28,8 +28,9 @@ scenarios:
           type: HTTP_REQUEST
           uri: '/units'
           method: POST
+          requesterId: *requesterId
           body:
-            name: Test Unit
+            name: Not The Test Unit
             description: The Test Unit
     then:
       -

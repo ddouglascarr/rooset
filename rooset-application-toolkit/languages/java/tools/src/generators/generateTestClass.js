@@ -32,6 +32,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -57,6 +62,7 @@ public class ${testClassname}
   private ExecuteWatchdog watchdog;
   private UserModel testUser;
 
+  private HttpHeaders headers;
 
 
   @Before
@@ -68,6 +74,10 @@ public class ${testClassname}
     testUser = new UserModel(
       "no1TestUser420", "foo", "bar", "foo@bar.com",
       passwordEncoder.encode("password1"));
+
+    headers = new HttpHeaders();
+    headers.add("Content-Type", "application/json");
+    headers.add("Accept", "application/json");
   }
 
 
