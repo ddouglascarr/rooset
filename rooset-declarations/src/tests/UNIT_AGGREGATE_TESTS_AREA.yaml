@@ -104,6 +104,19 @@ scenarios:
             name: test area
             description: the test area
             externalReference: 'area.com'
+      -
+        label: create area should emit event
+        payload:
+          type: HTTP_REQUEST
+          uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/areas
+          method: POST
+          requesterId: *requesterId
+          generate:
+            areaId: *areaId
+          body:
+            name: test area
+            description: the test area
+            externalReference: 'area.com'
     then:
       - &localEvent
         type: AREA_CREATED_EVENT
@@ -114,6 +127,7 @@ scenarios:
           name: test area
           description: the test area
           externalReference: 'area.com'
+      - *localEvent
 
 
   -
