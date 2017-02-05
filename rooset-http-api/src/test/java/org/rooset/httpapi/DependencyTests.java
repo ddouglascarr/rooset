@@ -17,6 +17,7 @@ import org.rooset.httpapi.enums.ExceptionType;
 import org.rooset.httpapi.exceptions.CommandEvaluationException;
 import org.rooset.httpapi.models.SchulzeBallot;
 import org.rooset.httpapi.models.UserModel;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -172,6 +173,25 @@ public class DependencyTests
             .put("message", "foo bar"));
     assertEquals(expectedJson.get("type").toString(), json.get("type").toString());
   }
+
+
+
+  @Test
+  public void JSONAssertShouldPassRegardlessOfOrder() throws Exception
+  {
+    String a = "{\"a\":1,\"b\":2}";
+    String b = "{\"b\":2,\"a\":1}";
+    JSONAssert.assertEquals(a, new JSONObject(a), true);
+    JSONAssert.assertEquals(b, new JSONObject(a), true);
+
+    JSONObject c = new JSONObject()
+        .put("a", 1)
+        .put("b", 3);
+    JSONAssert.assertNotEquals(a, c, true);
+  }
+
+
+
 }
 
 class TestObject
