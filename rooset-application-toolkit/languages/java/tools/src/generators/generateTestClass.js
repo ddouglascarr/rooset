@@ -32,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.skyscreamer.jsonassert.JSONAssert;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

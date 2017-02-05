@@ -29,6 +29,8 @@ scenarios:
           uri: '/units'
           method: POST
           requesterId: *requesterId
+          generate:
+            id: *unitId
           body:
             name: Not The Test Unit
             description: The Test Unit
