@@ -31,7 +31,7 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
   const runtimeGenerate = (v) => {
     const typename = getTypenameFromRef(commandSchemaPayloadProps[v])
     if (typename === 'uuid') {
-      return 'UUID.randomUUID()';
+      return 'idService.generateUniqueId()';
     }
     throw new Error(`no runtime generation handling for ${typename} ${v}`);
   }
@@ -71,6 +71,7 @@ import org.rooset.httpapi.aop.HandleServiceErrors;
 import org.rooset.httpapi.exceptions.RatkException;
 import org.rooset.httpapi.services.CommandService;
 import org.rooset.httpapi.models.CommandServiceResponse;
+import org.rooset.httpapi.services.IdService;
 
 
 @RestController
@@ -79,6 +80,9 @@ public class ${className}
 
   @Autowired
   CommandService commandService;
+
+  @Autowired
+  IdService idService;
 
   @HandleServiceErrors
   @RequestMapping(
