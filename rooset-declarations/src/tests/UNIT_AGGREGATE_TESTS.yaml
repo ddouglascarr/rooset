@@ -29,7 +29,7 @@ scenarios:
 
 
   -
-    label: Create Unit Scenario
+    label: Creating Units
     given: []
     when:
       -
@@ -59,7 +59,7 @@ scenarios:
 
 
   -
-    label: Unit Creator can grant privileges
+    label: Granting Privileges
     given:
       -
         type: UNIT_CREATED_EVENT
