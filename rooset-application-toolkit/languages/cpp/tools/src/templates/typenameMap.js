@@ -12,6 +12,6 @@ module.exports = {
   date: 'boost::posix_time::ptime',
   int: 'int',
   uint: 'unsigned int',
-  duration: 'boost::posix_time::time_duration',
+  duration: 'unsigned int',
 
 };

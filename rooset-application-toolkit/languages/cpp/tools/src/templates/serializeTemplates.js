@@ -104,7 +104,7 @@ module.exports = {
     const v_value = `${v}_value`;
     return `
           Value ${v_value};
-          ${v_value}.SetDouble(${v}.seconds());
+          ${v_value}.SetUint(${v});
           payload.AddMember("${v}", ${v_value}, d->GetAllocator());    `;
   },
 

@@ -45,5 +45,5 @@ module.exports = {
             ${v}(d["payload"]["${v}"].GetUint())`,
 
   duration: (v) => `
-            ${v}(boost::posix_time::seconds(d["payload"]["${v}"].GetDouble()))`,
+            ${v}(d["payload"]["${v}"].GetUint())`,
 };

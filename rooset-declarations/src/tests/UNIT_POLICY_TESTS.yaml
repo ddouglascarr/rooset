@@ -30,6 +30,25 @@ mocks:
       directMajorityNonNegative: 1
       noReverseBeatPath: false
       noMultistageMajority: false
+  - &setUnitPolicyHttpReqBody
+      name: Test Policy
+      description: The Test Policy
+      polling: false
+      maxAdmissionTime: 604800000
+      minAdmissionTime: 0
+      discussionTime: 604800000
+      verificationTime: 604800000
+      votingTime: 604800000
+      issueQuorumNum: 1
+      issueQuorumDen: 10
+      defeatStrength: SIMPLE
+      directMajorityNum: 1
+      directMajorityDen: 2
+      directMajorityStrict: true
+      directMajorityPositive: 1
+      directMajorityNonNegative: 1
+      noReverseBeatPath: false
+      noMultistageMajority: false
   - &setUnitPolicyCommand
     type: SET_UNIT_POLICY_COMMAND
     payload: *setUnitPolicyCommandPayload
@@ -69,13 +88,34 @@ scenarios:
         label: Set policy should emit event
         payload: *setUnitPolicyCommand
       -
+        label: Set policy request should emit event
+        payload:
+          type: HTTP_REQUEST
+          uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policy
+          method: POST
+          requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+          generate:
+            policyId: 464b1ebb-32c1-460c-8e9e-222222222222
+          body: *setUnitPolicyHttpReqBody
+      -
         label: requester must have management rights to set unit policy
         payload:
           <<: *setUnitPolicyCommand
           payload:
             <<: *setUnitPolicyCommandPayload
             requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+      -
+        label: Set policy request fail if requester doesnt have management rights
+        payload:
+          type: HTTP_REQUEST
+          uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policy
+          method: POST
+          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+          generate:
+            policyId: 464b1ebb-32c1-460c-8e9e-222222222222
+          body: *setUnitPolicyHttpReqBody
     then:
+      - *unitPolicySetEvent
       - *unitPolicySetEvent
       - &localErr
         type: COMMAND_EVALUATION_EXCEPTION
@@ -83,4 +123,5 @@ scenarios:
         payload:
           code: UNPRIVILEGED_EXCEPTION
           message: ''
+      - *localErr
 
