@@ -11,7 +11,16 @@ mocks:
     name: Test Unit
     description: The Test Unit
     
+  - &invalidInputErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: INVALID_INPUT_EXCEPTION
+      message: ''
+
+
 scenarios:
+
 
   -
     label: Create Unit Scenario
@@ -49,62 +58,67 @@ scenarios:
       -
         type: UNIT_CREATED_EVENT
         payload:
-          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
-          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+          id: *unitId
+          requesterId: *requesterId
           name: Test Unit
           description: The Test Unit
     when:
-      type: GRANT_PRIVILEGE_COMMAND
-      payload:
-        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6beb
-        requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
-        memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
-        pollingRight: true
-        votingRight: true
-        initiativeRight: true
-        managementRight: true
-        weight: 1
-    then:
-      type: PRIVILEGE_GRANTED_EVENT
-      payload:
-        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6beb
-        requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
-        memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
-        pollingRight: true
-        votingRight: true
-        initiativeRight: true
-        managementRight: true
-        weight: 1
-
-
-
-  -
-    label: Privilege weight restricted to 1
-    given:
       -
-        type: UNIT_CREATED_EVENT
+        label: Unit Creator can grant privileges
         payload:
-          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
-          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
-          name: Test Unit
-          description: The Test Unit
-    when:
-      type: GRANT_PRIVILEGE_COMMAND
-      payload:
-        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6beb
-        requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
-        memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
-        pollingRight: true
-        votingRight: true
-        initiativeRight: true
-        managementRight: true
-        weight: 2
+          type: GRANT_PRIVILEGE_COMMAND
+          payload:
+            id: *unitId
+            requesterId: *requesterId
+            memberId: *memberId
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: true
+            weight: 1
+      -
+        label: Member weight is restricted to 1
+        payload:
+          type: GRANT_PRIVILEGE_COMMAND
+          payload:
+            id: *unitId
+            requesterId: *requesterId
+            memberId: *memberId
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: true
+            weight: 2
+      -
+        label: Unit creator can grant privileges
+        payload:
+          type: HTTP_REQUEST
+          uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/members
+          method: POST
+          requesterId: *requesterId
+          body:
+            memberId: *memberId
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: true
+            weight: 1
     then:
-      type: COMMAND_EVALUATION_EXCEPTION
-      error: true
-      payload:
-        code: INVALID_INPUT_EXCEPTION
-        message: ''
+      - &localThenEvent
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *requesterId
+          memberId: *memberId
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 1
+      - *invalidInputErr
+      - *localThenEvent
+
+
 
   -
     label: Unprivileged member cannot create unit

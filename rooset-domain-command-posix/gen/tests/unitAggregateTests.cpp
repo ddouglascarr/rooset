@@ -83,8 +83,8 @@ TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
   givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
-    "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6bec",
-    "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Unit",
     "description": "The Test Unit"
   }
@@ -97,9 +97,9 @@ TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
   auto expected_doc = JsonUtils::parse(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
-    "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6beb",
-    "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
-    "memberId": "f00b6b62-72d1-4c5e-974d-8a678f2c252c",
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "memberId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "pollingRight": true,
     "votingRight": true,
     "initiativeRight": true,
@@ -117,9 +117,9 @@ TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GRANT_PRIVILEGE_COMMAND",
   "payload": {
-    "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6beb",
-    "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
-    "memberId": "f00b6b62-72d1-4c5e-974d-8a678f2c252c",
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "memberId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "pollingRight": true,
     "votingRight": true,
     "initiativeRight": true,
@@ -151,7 +151,7 @@ TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
 }
 
 
-TEST(unit_aggregate_tests, privilege_weight_restricted_to_1)
+TEST(unit_aggregate_tests, member_weight_is_restricted_to_1)
 {
   
   vector<string> givenEvents;
@@ -159,8 +159,8 @@ TEST(unit_aggregate_tests, privilege_weight_restricted_to_1)
   givenEvents.push_back(u8R"json({
   "type": "UNIT_CREATED_EVENT",
   "payload": {
-    "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6bec",
-    "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Unit",
     "description": "The Test Unit"
   }
@@ -188,9 +188,9 @@ TEST(unit_aggregate_tests, privilege_weight_restricted_to_1)
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "GRANT_PRIVILEGE_COMMAND",
   "payload": {
-    "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6beb",
-    "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
-    "memberId": "f00b6b62-72d1-4c5e-974d-8a678f2c252c",
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "memberId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "pollingRight": true,
     "votingRight": true,
     "initiativeRight": true,

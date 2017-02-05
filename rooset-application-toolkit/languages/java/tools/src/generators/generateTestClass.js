@@ -3,8 +3,9 @@ const generateTestMethod = require('./generateTestMethod');
 
 module.exports = (baseJavaPkg, testDoc) =>  {
   const testClassname = camelCase(testDoc.label);
-  const testMethods = testDoc.scenarios.map((scenario) => generateTestMethod(
-      scenario));
+  const testMethods = testDoc.scenarios
+      .map((scenario) => generateTestMethod(scenario))
+      .join('\n\n\n');
 
 
   return `
@@ -101,7 +102,9 @@ public class ${testClassname}
 
 
 
+
 ${testMethods}
+
 
 
 

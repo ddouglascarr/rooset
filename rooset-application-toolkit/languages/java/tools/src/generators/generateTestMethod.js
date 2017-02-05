@@ -50,7 +50,7 @@ function performRequest(scenario) {
 function persistGivenEvents(given) {
   return given
       .map((event) => `
-        testingEventStoreService.saveEvent(new JsonObject(
+        testingEventStoreService.saveEvent(new JSONObject(
             ${JSON.stringify(JSON.stringify(event))}));`)
       .join('');
 }
