@@ -185,7 +185,7 @@ TEST(unit_aggregate_tests_area, member_without_management_rights_cannot_create_a
 }
 
 
-TEST(unit_aggregate_tests_area, create_area)
+TEST(unit_aggregate_tests_area, create_area_should_emit_event)
 {
   
   vector<string> givenEvents;
