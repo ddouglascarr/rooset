@@ -64,6 +64,7 @@ function assessResponse(then) {
     return `
     assertTrue(response.getStatusCode().is4xxClientError());
     String expectedEvent = ${JSON.stringify(JSON.stringify(then))};
+    ${stripMessageFromExceptionResponseBody(then)}
     JSONAssert.assertEquals(expectedEvent, responseBody, true);
     `;
   }
@@ -88,4 +89,17 @@ function mockUniqueIdGenerator(when) {
   return `
     when(idService.generateUniqueId()).thenReturn(
         ${thenReturnArgs});`;
+}
+
+
+function stripMessageFromExceptionResponseBody(then) {
+  // if the expected exception message === '', do not require a match
+  const doStripMessage = (then.payload.message === '');
+  if (!doStripMessage) return '';
+  return `
+    // strip message from exception payload
+    JSONObject newPayload = responseBody.getJSONObject("payload");
+    newPayload.put("message", "");
+    responseBody.put("payload", newPayload);
+  `;
 }
