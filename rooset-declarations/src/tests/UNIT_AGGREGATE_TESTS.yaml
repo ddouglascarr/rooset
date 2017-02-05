@@ -1,0 +1,196 @@
+---
+label: Unit Aggregate Tests
+
+scenarios:
+
+  -
+    label: Create Unit
+    given: []
+    when:
+      type: CREATE_UNIT_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-000000000000
+        requesterId: 464b1ebb-32c1-460c-8e9e-111111111111
+        name: Test Unit
+        description: The Test Unit
+    then:
+      type: UNIT_CREATED_EVENT
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-000000000000
+        requesterId: 464b1ebb-32c1-460c-8e9e-111111111111
+        name: Test Unit
+        description: The Test Unit
+  -
+    label: Unit Creator can grant privileges
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+          name: Test Unit
+          description: The Test Unit
+    when:
+      type: GRANT_PRIVILEGE_COMMAND
+      payload:
+        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6beb
+        requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+        memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+        pollingRight: true
+        votingRight: true
+        initiativeRight: true
+        managementRight: true
+        weight: 1
+    then:
+      type: PRIVILEGE_GRANTED_EVENT
+      payload:
+        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6beb
+        requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+        memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+        pollingRight: true
+        votingRight: true
+        initiativeRight: true
+        managementRight: true
+        weight: 1
+
+
+
+  -
+    label: Privilege weight restricted to 1
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+          name: Test Unit
+          description: The Test Unit
+    when:
+      type: GRANT_PRIVILEGE_COMMAND
+      payload:
+        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6beb
+        requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+        memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+        pollingRight: true
+        votingRight: true
+        initiativeRight: true
+        managementRight: true
+        weight: 2
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: INVALID_INPUT_EXCEPTION
+        message: ''
+
+  -
+    label: Unprivileged member cannot create unit
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+          name: Test Unit
+          description: The Test Unit
+    when:
+      type: GRANT_PRIVILEGE_COMMAND
+      payload:
+        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+        requesterId: 86998399-3d86-4e0b-a2a5-6490056ce000
+        memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+        pollingRight: true
+        votingRight: true
+        initiativeRight: true
+        managementRight: true
+        weight: 1
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: UNPRIVILEGED_EXCEPTION
+        message: ''
+  -
+    label: Member without member privileges cannot grant privileges
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+          name: Test Unit
+          description: The Test Unit
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+          memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: false
+          weight: 1
+    when:
+      type: GRANT_PRIVILEGE_COMMAND
+      payload:
+        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+        requesterId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+        memberId: 6588b978-d3a8-4ed2-bd65-7157ab1f6016
+        pollingRight: true
+        votingRight: true
+        initiativeRight: true
+        managementRight: false
+        weight: 1
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: UNPRIVILEGED_EXCEPTION
+        message: ''
+
+
+  -
+    label: Member with member privileges can grant privileges
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+          name: Test Unit
+          description: The Test Unit
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+          memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 1
+    when:
+      type: GRANT_PRIVILEGE_COMMAND
+      payload:
+        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+        requesterId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+        memberId: 6588b978-d3a8-4ed2-bd65-7157ab1f6016
+        pollingRight: true
+        votingRight: true
+        initiativeRight: true
+        managementRight: false
+        weight: 1
+    then:
+      type: PRIVILEGE_GRANTED_EVENT
+      payload:
+        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+        requesterId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+        memberId: 6588b978-d3a8-4ed2-bd65-7157ab1f6016
+        pollingRight: true
+        votingRight: true
+        initiativeRight: true
+        managementRight: false
+        weight: 1
+
