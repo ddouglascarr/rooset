@@ -10,12 +10,18 @@ const testTypeEnumValues = [
 ];
 
 module.exports = (_srcPath, testType) => {
+  if (testTypeEnumValues.indexOf(testType) === -1) throw new Error(
+      `testType ${testType} must be one of ${testTypeEnumValues}`);
+      
   return getDeclarations(_srcPath).reduce(expandScenarios, []);
 
 
   function expandScenarios(r, spec) {
     spec.scenarios = spec.scenarios.reduce((r, scenario) => {
-      if (!isArray(scenario.when)) return r.concat([scenario]);
+      if (!isArray(scenario.when)) {
+        return isForThisTypeOfTest(testType, scenario.when, scenario.then) ?
+            r.concat([scenario]) : r;
+      }
       if (!isArray(scenario.then)) throw new Error(`
           Error parsing test ${scenario.label}:
           scenario.when is an array, but scenario.then is not.`);
@@ -43,5 +49,6 @@ function isForThisTypeOfTest(testType, when, then) {
   if (then.type === 'HTTP_RESPONSE' && isDomainCommandTest) {
     throw new Error("Incompatable when and then");
   }
-  return ((testType === 'DOMAIN_COMMAND_TEST') && isDomainCommandTest);
+  if (testType === 'DOMAIN_COMMAND_TEST') return isDomainCommandTest;
+  return !isDomainCommandTest;
 }

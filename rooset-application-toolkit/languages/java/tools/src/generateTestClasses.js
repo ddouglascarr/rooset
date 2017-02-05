@@ -18,7 +18,7 @@ const config = getConfigFromEnv({
 });
 const files = {};
 
-const testDecls = getTests(config.srcPath, 'HTTP_INTEGRATION_TESTS');
+const testDecls = getTests(config.srcPath, 'HTTP_API_TEST');
 testDecls.forEach((testDecl) => {
   const fileName = camelCase(testDecl.label);
   const content = generateTestClass(config.javaBasePackage, testDecl);
