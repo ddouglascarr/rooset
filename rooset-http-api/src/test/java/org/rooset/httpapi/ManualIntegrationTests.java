@@ -71,7 +71,7 @@ public class ManualIntegrationTests
   {
     System.out.println("Starting Event Store");
     watchdog = testingEventStoreService.startTestingEventStore();
-    MockitoAnnotations.initMocks(this);
+    // MockitoAnnotations.initMocks(this);
 
     testUser = new UserModel(
       "no1TestUser420", "foo", "bar", "foo@bar.com",

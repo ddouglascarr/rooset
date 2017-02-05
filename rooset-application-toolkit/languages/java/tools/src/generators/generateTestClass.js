@@ -19,12 +19,14 @@ import org.junit.runner.RunWith;
 import org.rooset.httpapi.models.UserModel;
 import org.rooset.httpapi.repositories.UserRepository;
 import org.rooset.httpapi.services.TestingEventStoreService;
+import org.rooset.httpapi.services.IdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,8 +40,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(SpringRunner.class)
@@ -59,6 +63,9 @@ public class ${testClassname}
 
   @Autowired
   private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private IdService idService;
 
   private ExecuteWatchdog watchdog;
   private UserModel testUser;
@@ -106,6 +113,13 @@ ${testMethods}
     {
       return new RestTemplateBuilder()
           .basicAuthorization("no1TestUser420", "password1");
+    }
+
+    @Bean
+    @Primary
+    public IdService idService()
+    {
+      return Mockito.mock(IdService.class);
     }
   }
 

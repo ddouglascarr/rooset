@@ -1,4 +1,4 @@
-const { camelCase } = require('lodash');
+const { camelCase, map } = require('lodash');
 
 
 module.exports = (scenario) => {
@@ -14,6 +14,9 @@ module.exports = (scenario) => {
     // set requesting user id and persist to testing user database
     testUser.setId(UUID.fromString("${when.requesterId}"));
     userRepository.save(testUser);
+
+    // set up generators
+${mockUniqueIdGenerator(when)}
 
     // set up request
     JSONObject requestBody = new JSONObject(
@@ -60,10 +63,23 @@ function assessResponse(then) {
   if (then.error) throw new Error("HTTP_RESPONSE error assessment not implemented");
 
   return `
-      assertTrue(response.getStatusCode().is2xxSuccessful());
-      UUID aggregateId = UUID.fromString(responseBody.getString("id"));
-      JSONObject event = testingEventStoreService.getLastEventForAggregate(aggregateId);
-      String expectedEvent = ${JSON.stringify(JSON.stringify(then))};
-      JSONAssert.assertEquals(expectedEvent, event, true);
+    assertTrue(response.getStatusCode().is2xxSuccessful());
+    UUID aggregateId = UUID.fromString(responseBody.getString("id"));
+    JSONObject event = testingEventStoreService.getLastEventForAggregate(aggregateId);
+    String expectedEvent = ${JSON.stringify(JSON.stringify(then))};
+    JSONAssert.assertEquals(expectedEvent, event, true);
   `;
+}
+
+
+function mockUniqueIdGenerator(when) {
+  if (!when.generate || Object.keys(when.generate).length === 0) return '';
+  // TODO: Support for more than one generated id
+  if (Object.keys(when.generate).length !== 1) throw new Error(
+      `support for generating more than 1 unique id per test not implmented`);
+  const thenReturnArgs = map(when.generate, (v) => `UUID.fromString("${v}")`)
+      .join(',\n');
+  return `
+    when(idService.generateUniqueId()).thenReturn(
+        ${thenReturnArgs});`;
 }
