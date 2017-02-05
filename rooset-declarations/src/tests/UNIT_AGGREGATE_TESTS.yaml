@@ -32,7 +32,7 @@ scenarios:
           generate:
             id: *unitId
           body:
-            name: Not The Test Unit
+            name: Test Unit
             description: The Test Unit
     then:
       -
