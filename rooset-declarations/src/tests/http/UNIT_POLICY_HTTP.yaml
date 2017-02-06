@@ -1,0 +1,89 @@
+---
+label: Unit Policy Http Tests
+key: unit-policy-http
+type: HTTP_API_TEST
+
+mocks:
+
+  - &setPolicyBody
+    name: Test Policy
+    description: The Test Policy
+    polling: false
+    maxAdmissionTime: 604800000
+    minAdmissionTime: 0
+    discussionTime: 604800000
+    verificationTime: 604800000
+    votingTime: 604800000
+    issueQuorumNum: 1
+    issueQuorumDen: 10
+    defeatStrength: SIMPLE
+    directMajorityNum: 1
+    directMajorityDen: 2
+    directMajorityStrict: true
+    directMajorityPositive: 1
+    directMajorityNonNegative: 1
+    noReverseBeatPath: false
+    noMultistageMajority: false
+    
+  - &unitPolicySetEvent
+    type: UNIT_POLICY_SET_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+      policyId: 464b1ebb-32c1-460c-8e9e-222222222222
+      name: Test Policy
+      description: The Test Policy
+      polling: false
+      maxAdmissionTime: 604800000
+      minAdmissionTime: 0
+      discussionTime: 604800000
+      verificationTime: 604800000
+      votingTime: 604800000
+      issueQuorumNum: 1
+      issueQuorumDen: 10
+      defeatStrength: SIMPLE
+      directMajorityNum: 1
+      directMajorityDen: 2
+      directMajorityStrict: true
+      directMajorityPositive: 1
+      directMajorityNonNegative: 1
+      noReverseBeatPath: false
+      noMultistageMajority: false
+
+
+scenarios:
+
+
+  -
+    label: Requester must have management rights
+    given: unit-aggregate-policy-command/unit-created
+    when:
+      label: A non-member makes a policy set request
+      action: &localAction
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policy
+        method: POST
+        requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
+        generate:
+          policyId: 464b1ebb-32c1-460c-8e9e-222222222222
+        body: *setPolicyBody
+    then:
+      label: The request is not allowed
+      outcome:
+        type: COMMAND_EVALUATION_EXCEPTION
+        error: true
+        payload:
+          code: UNPRIVILEGED_EXCEPTION
+          message: ''
+
+
+  -
+    label: A unit manager can set the unit policy
+    given: unit-aggregate-policy-command/unit-created
+    when:
+      label: A manager makes a policy set request
+      action: *localAction
+    then:
+      label: The policy is set
+      outcome: *unitPolicySetEvent
+        
