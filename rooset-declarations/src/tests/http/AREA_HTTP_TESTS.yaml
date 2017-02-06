@@ -1,0 +1,38 @@
+label: Http Area Tests
+key: area-http
+type: HTTP_API_TEST
+
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &areaId 464b1ebb-32c1-460c-8e9e-777777777777
+  - &managerId 464b1ebb-32c1-460c-8e9e-333333333333
+scenarios:
+
+
+  -
+    label: Create Area
+    given: area-command/management-priv-granted
+    when:
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/areas
+        method: POST
+        requesterId: *managerId
+        generate:
+          areaId: *areaId
+        body:
+          name: test area
+          description: the test area
+          externalReference: 'area.com'
+    then:
+      label: The area is Created
+      outcome:
+        type: AREA_CREATED_EVENT
+        payload:
+          id: *unitId
+          areaId: *areaId
+          requesterId: *managerId
+          name: test area
+          description: the test area
+          externalReference: 'area.com'
+      
