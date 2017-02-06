@@ -1,6 +1,5 @@
 module.exports = (path) => {
   const pathLength = path.length;
-  console.log(pathLength);
   let pathVariables = [];
   let openIdx = null;
   for (let i = 0; i < pathLength; ++i) {

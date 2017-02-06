@@ -4,6 +4,7 @@ const {
   getConfigFromEnv,
   generateSchemas,
   getDeclarations,
+  findCommandSchemaByType,
 } = require('../../../../ratk-declarations-utils');
 const {
   generateFilenameFromMsgType,
@@ -27,14 +28,9 @@ const generateHttpCommandRequestBody = require('./generators/generateHttpCommand
 const generateHttpCommandRequestController = require(
     './generators/generateHttpCommandRequestController');
 
-const commandSchemas = generateSchemas(
-    baseSchema, 'commands', config.commandSrcPath);
 const requestDeclarations = getDeclarations(config.srcPath);
 requestDeclarations.forEach((declaration) => {
-  const commandSchema = find(commandSchemas,
-      (s) => getMsgTypeFromSchema(s) === declaration.commandTarget);
-  if (!commandSchema) throw `
-      no commandSchema found: ${declaration.commandTarget}`;
+  const commandSchema = findCommandSchemaByType(declaration.commandTarget);
 
   const reqBodyContent = generateHttpCommandRequestBody(
       config.javaBasePackage, declaration, commandSchema);

@@ -5,4 +5,6 @@ module.exports = {
   updateDir: require('./src/updateDir'),
   getConfigFromEnv: require('./src/getConfigFromEnv'),
   getPathVariables: require('./src/getPathVariables'),
+  findCommandSchemaByType: require('./src/findCommandSchemaByType'),
+  matchUri: require('./src/matchUri'),
 };
