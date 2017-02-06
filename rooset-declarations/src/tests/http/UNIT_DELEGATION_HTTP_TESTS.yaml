@@ -1,0 +1,37 @@
+---
+label: Unit Delegation Http Tests
+key: unit-delegation-http
+type: HTTP_API_TEST
+
+
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &voter2 464b1ebb-32c1-460c-8e9e-222222222222
+  - &voter3 464b1ebb-32c1-460c-8e9e-333333333333
+
+
+scenarios:
+
+
+  -
+    label: Set Delegation
+    given: unit-delegation-command/privs-granted
+    when:
+      label: A member request an update to their unit delegation
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/delegation
+        method: POST
+        requesterId: *voter2
+        body:
+          trusteeId: *voter3
+    then:
+      label: Is succeeds
+      outcome:
+        type: UNIT_DELEGATION_SET_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          trusterId: *voter2
+          trusteeId: *voter3
+
+

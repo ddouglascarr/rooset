@@ -1,6 +1,6 @@
 ---
 label: Unit Aggregate - Delegations
-key: unit-aggregate-delegations-command
+key: unit-delegation-command
 type: DOMAIN_COMMAND_TEST
 mocks:
 - &unitCreatedEvent
@@ -10,6 +10,8 @@ mocks:
     requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
     name: Test Unit
     description: The Test Unit
+
+
 scenarios:
 
   -
@@ -88,35 +90,37 @@ scenarios:
   -
     label: set delegation
     given:
-      -
-        type: UNIT_CREATED_EVENT
-        payload:
-          id: 464b1ebb-32c1-460c-8e9e-111111111111
-          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
-          name: Test Unit
-          description: The Test Unit
-      -
-        type: PRIVILEGE_GRANTED_EVENT
-        payload:
-          id: 464b1ebb-32c1-460c-8e9e-111111111111
-          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
-          memberId: 464b1ebb-32c1-460c-8e9e-222222222222
-          pollingRight: true
-          votingRight: true
-          initiativeRight: true
-          managementRight: true
-          weight: 1
-      -
-        type: PRIVILEGE_GRANTED_EVENT
-        payload:
-          id: 464b1ebb-32c1-460c-8e9e-111111111111
-          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
-          memberId: 464b1ebb-32c1-460c-8e9e-333333333333
-          pollingRight: true
-          votingRight: true
-          initiativeRight: true
-          managementRight: true
-          weight: 1
+      key: privs-granted
+      precondition:
+        -
+          type: UNIT_CREATED_EVENT
+          payload:
+            id: 464b1ebb-32c1-460c-8e9e-111111111111
+            requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+            name: Test Unit
+            description: The Test Unit
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            id: 464b1ebb-32c1-460c-8e9e-111111111111
+            requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+            memberId: 464b1ebb-32c1-460c-8e9e-222222222222
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: true
+            weight: 1
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            id: 464b1ebb-32c1-460c-8e9e-111111111111
+            requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+            memberId: 464b1ebb-32c1-460c-8e9e-333333333333
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: true
+            weight: 1
     when:
       type: SET_UNIT_DELEGATION_COMMAND
       payload:
@@ -160,30 +164,32 @@ scenarios:
   -
     label: unset delegation
     given:
-      -
-        type: UNIT_CREATED_EVENT
-        payload:
-          id: 464b1ebb-32c1-460c-8e9e-111111111111
-          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
-          name: Test Unit
-          description: The Test Unit
-      -
-        type: PRIVILEGE_GRANTED_EVENT
-        payload:
-          id: 464b1ebb-32c1-460c-8e9e-111111111111
-          requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
-          memberId: 464b1ebb-32c1-460c-8e9e-222222222222
-          pollingRight: true
-          votingRight: true
-          initiativeRight: true
-          managementRight: true
-          weight: 1
-      -
-        type: UNIT_DELEGATION_SET_EVENT
-        payload:
-          id: 464b1ebb-32c1-460c-8e9e-111111111111
-          trusterId: 464b1ebb-32c1-460c-8e9e-222222222222
-          trusteeId: 464b1ebb-32c1-460c-8e9e-333333333333
+      key: delegation-set
+      precondition:
+        -
+          type: UNIT_CREATED_EVENT
+          payload:
+            id: 464b1ebb-32c1-460c-8e9e-111111111111
+            requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+            name: Test Unit
+            description: The Test Unit
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            id: 464b1ebb-32c1-460c-8e9e-111111111111
+            requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+            memberId: 464b1ebb-32c1-460c-8e9e-222222222222
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: true
+            weight: 1
+        -
+          type: UNIT_DELEGATION_SET_EVENT
+          payload:
+            id: 464b1ebb-32c1-460c-8e9e-111111111111
+            trusterId: 464b1ebb-32c1-460c-8e9e-222222222222
+            trusteeId: 464b1ebb-32c1-460c-8e9e-333333333333
     when:
       type: UNSET_UNIT_DELEGATION_COMMAND
       payload:

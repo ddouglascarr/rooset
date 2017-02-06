@@ -82,7 +82,14 @@ scenarios:
     given: unit-aggregate-policy-command/unit-created
     when:
       label: A manager makes a policy set request
-      action: *localAction
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policy
+        method: POST
+        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        generate:
+          policyId: 464b1ebb-32c1-460c-8e9e-222222222222
+        body: *setPolicyBody
     then:
       label: The policy is set
       outcome: *unitPolicySetEvent
