@@ -1,5 +1,7 @@
 ---
 label: UnitAggregate - Area and Issue Delegations
+key: area-issue-delegation-command
+type: DOMAIN_COMMAND_TEST
 
 mocks:
   - &unitCreatedEvent
@@ -185,23 +187,15 @@ mocks:
       message: ''
 
 scenarios:
+
   -
-    label: Area validation scenario
+    label: Area must exist
     given:
       - *unitCreatedEvent
       - *privGrantedEvtVoter4
       - *privGrantedEvtVoter5
-    when:
-      -
-        label: Area must exist
-        payload: *setDelegationCmd
-      -
-        label: Area must exist to block area delegation 
-        payload: *blockDelegationForAreaCmd
-    then:
-      - *notFoundErr
-      - *notFoundErr
-
+    when: *setDelegationCmd
+    then: *notFoundErr
 
   -
     label: truster must have voting right
@@ -302,6 +296,15 @@ scenarios:
       - *delegationSetEvent
       - *delegationBlockedForAreaEvt
     when: *unsetDelegationCmd
+    then: *notFoundErr
+
+  -
+    label: Area must exist to block area delegation
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+    when: *blockDelegationForAreaCmd
     then: *notFoundErr
 
   -

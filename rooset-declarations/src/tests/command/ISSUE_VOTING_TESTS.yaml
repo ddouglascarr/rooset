@@ -1,5 +1,7 @@
 ---
 label: Issue Aggregate - Voting Tests
+key: issue-aggregate-voting-command
+type: DOMAIN_COMMAND_TEST
 
 mocks:
   - &unitId 464b1ebb-32c1-460c-8e9e-000000000000

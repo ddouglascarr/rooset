@@ -1,5 +1,7 @@
 ---
 label: Unit Aggregate - Delegations
+key: unit-aggregate-delegations-command
+type: DOMAIN_COMMAND_TEST
 mocks:
 - &unitCreatedEvent
   type: UNIT_CREATED_EVENT

@@ -1,11 +1,6 @@
 label: Unit Aggregate Tests - Area
-mocks:
-  - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
-  - &requesterId 464b1ebb-32c1-460c-8e9e-333333333333
-  - &areaId 464b1ebb-32c1-460c-8e9e-777777777777
-
-
-
+key: unit-aggregate-area-command
+type: DOMAIN_COMMAND_TEST
 scenarios:
 
   -
@@ -77,58 +72,39 @@ scenarios:
       -
         type: UNIT_CREATED_EVENT
         payload:
-          id: *unitId
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
           requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
           name: Test Unit
           description: The Test Unit
       -
         type: PRIVILEGE_GRANTED_EVENT
         payload:
-          id: *unitId
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
           requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
-          memberId: *requesterId
+          memberId: 464b1ebb-32c1-460c-8e9e-333333333333
           pollingRight: true
           votingRight: true
           initiativeRight: true
           managementRight: true
           weight: 1
     when:
-      -
-        label: create area should emit event
-        payload:
-          type: CREATE_AREA_COMMAND
-          payload:
-            id: *unitId
-            areaId: *areaId
-            requesterId: *requesterId
-            name: test area
-            description: the test area
-            externalReference: 'area.com'
-      -
-        label: create area should emit event
-        payload:
-          type: HTTP_REQUEST
-          uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/areas
-          method: POST
-          requesterId: *requesterId
-          generate:
-            areaId: *areaId
-          body:
-            name: test area
-            description: the test area
-            externalReference: 'area.com'
+      type: CREATE_AREA_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-777777777777
+        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        name: test area
+        description: the test area
+        externalReference: 'area.com'
     then:
-      - &localEvent
-        type: AREA_CREATED_EVENT
-        payload:
-          id: *unitId
-          areaId: *areaId
-          requesterId: *requesterId
-          name: test area
-          description: the test area
-          externalReference: 'area.com'
-      - *localEvent
-
+      type: AREA_CREATED_EVENT
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-777777777777
+        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        name: test area
+        description: the test area
+        externalReference: 'area.com'
 
   -
     label: area must not already exist

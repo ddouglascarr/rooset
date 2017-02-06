@@ -1,5 +1,7 @@
 ---
 label: Support Caculation Tests
+key: support-calculation-command
+type: DOMAIN_COMMAND_TEST
 
 mocks:
 

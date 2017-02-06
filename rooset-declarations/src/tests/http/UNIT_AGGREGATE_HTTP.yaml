@@ -1,0 +1,123 @@
+---
+label: Unit Aggregate Http Tests
+key: unit-aggregate-http
+type: HTTP_API_TEST
+
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-000000000000
+  - &requesterId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &memberId 464b1ebb-32c1-460c-8e9e-222222222222
+
+  - &createUnitCmdPayload
+    id: *unitId
+    requesterId: *requesterId
+    name: Test Unit
+    description: The Test Unit
+    
+  - &invalidInputErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: INVALID_INPUT_EXCEPTION
+      message: ''
+  - &unprivErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: UNPRIVILEGED_EXCEPTION
+      message: ''
+
+
+scenarios:
+
+
+  -
+    label: Creating Units
+    given: []
+    when:
+      label: Create Unit Requested
+      action:
+        type: HTTP_REQUEST
+        uri: '/units'
+        method: POST
+        requesterId: *requesterId
+        generate:
+          id: *unitId
+        body:
+          name: Test Unit
+          description: The Test Unit
+    then:
+      label: Unit Created
+      outcome:
+        type: UNIT_CREATED_EVENT
+        payload: *createUnitCmdPayload
+
+
+  -
+    label: Unit Creator can grant privileges
+    given: unit-aggregate-command/unit-created
+    when:
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/members
+        method: POST
+        requesterId: *requesterId
+        body:
+          memberId: *memberId
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 1
+    then:
+      outcome:
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *requesterId
+          memberId: *memberId
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 1
+
+
+  -
+    label: Unprivileged member cannot grant privileges
+    given: unit-aggregate-command/unit-created
+    when:
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/members
+        method: POST
+        requesterId: *memberId
+        body:
+          memberId: 464b1ebb-32c1-460c-8e9e-666666666666
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 1
+    then:
+      outcome: *unprivErr
+
+
+  -
+    label: Member weight is restricted to 1
+    given: unit-aggregate-command/unit-created
+    when:
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/members
+        method: POST
+        requesterId: *requesterId
+        body:
+          memberId: *memberId
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 2
+    then: *invalidInputErr
+        

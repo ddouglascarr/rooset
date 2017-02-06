@@ -16,7 +16,7 @@ using ::testing::NiceMock;
 namespace rooset_unit_aggregate_tests_tests {
 
 
-TEST(unit_aggregate_tests, create_unit)
+TEST(unit_aggregate_tests, creating_units)
 {
   
   vector<string> givenEvents;

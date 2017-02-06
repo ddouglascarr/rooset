@@ -16,7 +16,7 @@ using ::testing::NiceMock;
 namespace rooset_unit_aggregate_policy_tests {
 
 
-TEST(unit_aggregate_policy, set_policy_should_emit_event)
+TEST(unit_aggregate_policy, set_policy)
 {
   
   vector<string> givenEvents;
@@ -118,7 +118,7 @@ TEST(unit_aggregate_policy, set_policy_should_emit_event)
 }
 
 
-TEST(unit_aggregate_policy, requester_must_have_management_rights_to_set_unit_policy)
+TEST(unit_aggregate_policy, requester_must_have_managment_rights)
 {
   
   vector<string> givenEvents;
