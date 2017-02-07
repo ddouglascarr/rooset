@@ -52,3 +52,24 @@ scenarios:
         payload:
           id: *unitId
           trusterId: *voter2
+
+
+  -
+    label: Unset Unit Delegation should fail if no delegations
+    given: unit-delegation-command/privs-granted
+    when:
+      label: A member requests to unset their unit delegation
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/delegation
+        method: DELETE
+        requesterId: *voter2
+    then:
+      label: A not found error is produced
+      outcome:
+        type: COMMAND_EVALUATION_EXCEPTION
+        error: true
+        payload:
+          code: ITEM_NOT_FOUND_EXCEPTION
+          message: ''
+
