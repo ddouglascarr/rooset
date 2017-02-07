@@ -17,6 +17,7 @@ import org.rooset.httpapi.services.IdService;
 import org.rooset.httpapi.services.TestingEventStoreService;
 import org.rooset.httpapi.services.UserDetailsServiceImpl;
 import org.rooset.httpapi.commandcontrollers.CreateUnitHttpCommandRequestController;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -104,6 +105,7 @@ public class ManualIntegrationTests
   @Test
   public void createUnitShouldCreateUnit() throws Exception
   {
+    testUser.setId(UUID.fromString("464b1ebb-32c1-460c-8e9e-555555555555"));
     userRepository.save(testUser);
     UUID id = UUID.fromString("464b1ebb-32c1-460c-8e9e-333333333333");
     when(idService.generateUniqueId()).thenReturn(id);
@@ -116,10 +118,16 @@ public class ManualIntegrationTests
     HttpEntity<String> req = new HttpEntity<>(reqBody.toString(), headers);
     ResponseEntity<String> resp = this.restTemplate.postForEntity("/units", req, String.class);
 
+    JSONObject expectedHttpRespBody = new JSONObject();
+    expectedHttpRespBody.put("id", id.toString());
+    expectedHttpRespBody.put("name", "Test");
+    expectedHttpRespBody.put("description", "The Test");
+    expectedHttpRespBody.put("requesterId", "464b1ebb-32c1-460c-8e9e-555555555555");
+
     assertTrue(resp.getStatusCode().is2xxSuccessful());
 
     JSONObject respBody = new JSONObject(resp.getBody());
-    assertEquals(id.toString(), respBody.getString("id"));
+    JSONAssert.assertEquals(expectedHttpRespBody, respBody, true);
     JSONObject event = testingEventStoreService.getLastEventForAggregate(id);
     assertEquals(event.getJSONObject("payload").getString("id"), "464b1ebb-32c1-460c-8e9e-333333333333");
     assertEquals(event.getJSONObject("payload").getString("name"), "Test");

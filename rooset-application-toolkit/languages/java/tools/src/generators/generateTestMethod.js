@@ -101,19 +101,6 @@ function assessResponse(then) {
 }
 
 
-function mockUniqueIdGenerator(when) {
-  if (!when.generate || Object.keys(when.generate).length === 0) return '';
-  // TODO: Support for more than one generated id
-  if (Object.keys(when.generate).length !== 1) throw new Error(
-      `support for generating more than 1 unique id per test not implmented`);
-  const thenReturnArgs = map(when.generate, (v) => `UUID.fromString("${v}")`)
-      .join(',\n');
-  return `
-    when(idService.generateUniqueId()).thenReturn(
-        ${thenReturnArgs});`;
-}
-
-
 function mockGenerators(scenario) {
   const when = scenario.when;
   const generate = when.generate;
@@ -127,10 +114,10 @@ function mockGenerators(scenario) {
   const generateCalls = chain(commandSchema.properties.payload.properties)
       .map((ref, v) => generateKeys.indexOf(v) !== -1 ? [v, getTypenameFromRef(ref)] : null)
       .filter((type) => type !== null)
-      .groupBy((a) => { console.log(a); return a[1] })
+      .groupBy((a) => a[1])
       .value();
 
-  return map(generateCalls, (calls, type) => {
+  const generations =  map(generateCalls, (calls, type) => {
         let call = null;
         if (type === 'uuid') {
           calls = map(calls, (call) => `UUID.fromString("${generate[call[0]]}")`).join(', ');
@@ -138,11 +125,15 @@ function mockGenerators(scenario) {
         }
         if (type === 'date') {
           calls = map(calls, (call) => generate[call[0]]).join(', ');
-          return `when(dateService.getNow().thenReturn(${calls})`;
+          return `when(dateService.getNow()).thenReturn(${calls})`;
         }
         throw new Error(`no generateor for type ${type} of key ${calls[o]}`);
       })
       .join('\n    ');
+
+  return `
+    // generate mock values
+    ${generations}`;
 }
 
 

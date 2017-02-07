@@ -65,6 +65,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.rooset.httpapi.services.UserDetailsServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -99,8 +100,9 @@ public class ${className}
   @HandleServiceErrors
   @RequestMapping(
       value="${declaration.uri}",
-      method=RequestMethod.${declaration.method})
-  public ResponseEntity<CommandServiceResponse> execute${commandClassName}(
+      method=RequestMethod.${declaration.method},
+      produces=MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<String> execute${commandClassName}(
       ${variableParams.join(',\n    ')})
       throws RatkException
   {
@@ -108,7 +110,7 @@ public class ${className}
         ${commandConstructorParams.join(', ')});
 
     CommandServiceResponse resp = commandService.execute(cmd.serialize());
-    return new ResponseEntity<>(resp, HttpStatus.CREATED);
+    return new ResponseEntity<>(cmd.serialize().getJSONObject("payload").toString(), HttpStatus.CREATED);
   }
 
 
