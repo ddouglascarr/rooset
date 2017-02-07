@@ -23,6 +23,13 @@ get-event-store:
   binPath: '' # Not used in production, testing only
   bin: '' # Not used in production, only for testing
 
+
+---
+
+spring:
+  profiles: clean-dev
+
+
 ---
 
 spring:
@@ -33,4 +40,5 @@ get-event-store:
   host: localhost
   binPath: '/home/daniel/opt/EventStore-OSS-Ubuntu-14.04-v3.9.3'
   bin: '/home/daniel/opt/EventStore-OSS-Ubuntu-14.04-v3.9.3/run-node.sh'
+
 

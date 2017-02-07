@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.rooset.httpapi.enums.ExceptionCode;
@@ -32,19 +33,17 @@ public class RoosetHttpApiApplication {
 	@Autowired
   CommandService commandService;
 
-	/*@Bean
+	@Profile("clean-dev")
+  @Bean
   public CommandLineRunner demo(UserRepository userRepository)
   {
     return (args) -> {
       PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
       UserModel fooUser = new UserModel(
-          "foo", "bar", "foo@bar.com",
+          "foobar", "foo", "bar", "foo@bar.com",
           passwordEncoder.encode("password1"));
       fooUser.setId(UUID.fromString("464b1ebb-32c1-460c-8e9e-333333333333"));
       userRepository.save(fooUser);
-      userRepository.save(new UserModel(
-          "bing", "bong", "bing@bong.com",
-          passwordEncoder.encode("password2")));
 
       log.info("Users with findAll():");
       for (UserModel userModel : userRepository.findAll()) {
@@ -73,7 +72,7 @@ public class RoosetHttpApiApplication {
 
     };
 
-  }*/
+  }
 
   private ExceptionCode getExceptionCode(String c) {
 	  if (c == "a") {

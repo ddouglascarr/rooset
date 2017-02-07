@@ -18,10 +18,7 @@ module.exports = (scenario) => {
     // set up generators
 ${mockUniqueIdGenerator(when)}
 
-    // set up request
-    JSONObject requestBody = new JSONObject(
-        ${JSON.stringify(JSON.stringify(when.body || {}))});
-    HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);
+${declareRequest(when)}
 
     // persist given events to testing event store
 ${persistGivenEvents(scenario.given)}
@@ -39,10 +36,31 @@ ${assessResponse(scenario.then)}
 
 
 function performRequest(scenario) {
-  if (scenario.when.method !== 'POST') throw new Error(
-      `when.method is ${scenario.when.method} but only POST is supported`);
-  return `this.restTemplate.postForEntity(
-        "${scenario.when.uri}", request, String.class);`;
+  const supportedMethods = [ 'POST', 'DELETE' ];
+  switch (scenario.when.method) {
+    case ('POST'):
+      return `this.restTemplate.postForEntity(
+            "${scenario.when.uri}", request, String.class);`;
+    case ('DELETE'):
+      return `this.restTemplate.exchange("${scenario.when.uri}", HttpMethod.DELETE, request, String.class);`;
+    default:
+      throw new Error(
+          `when.method is ${scenario.when.method} but only POST, DELETE are supported`);
+  }
+}
+
+
+function declareRequest(when) {
+  if (when.body) {
+    return `
+    JSONObject requestBody = new JSONObject(
+        ${JSON.stringify(JSON.stringify(when.body || {}))});
+    HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);`;
+  } else {
+    return `
+    HttpEntity<String> request = new HttpEntity<>(headers);`;
+
+  }
 }
 
 

@@ -22,12 +22,6 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
   const commandSchemaPropTypes = map(commandSchemaPayloadProps, (ref, v) => getTypenameFromRef(ref));
   const commandSchemaPropVariables = Object.keys(commandSchema.properties.payload.properties);
 
-  const pathVariables = getPathVariables(declaration.uri);
-  const variableParams = pathVariables.map(
-      (v) => `@PathVariable ${typenameMap[getTypenameFromRef(commandSchemaPayloadProps[v])]} ${v}`);
-  variableParams.push(`@AuthenticationPrincipal UserDetailsImpl user`);
-  variableParams.push(`@RequestBody ${requestBodyClassName} requestBody`);
-
   const runtimeGenerate = (v) => {
     const typename = getTypenameFromRef(commandSchemaPayloadProps[v])
     if (typename === 'uuid') {
@@ -36,6 +30,8 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
     throw new Error(`no runtime generation handling for ${typename} ${v}`);
   }
 
+  const pathVariables = getPathVariables(declaration.uri);
+  let hasRequestBody = false;
   const commandConstructorParams = commandSchemaPropVariables.map((v) => {
     if (declaration.userIdMapping === v) {
       return 'user.getId()';
@@ -44,9 +40,18 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
     } else if (declaration.generate && declaration.generate.indexOf(v) !== -1) {
       return runtimeGenerate(v)
     } else {
+      hasRequestBody = true;
       return `requestBody.${v}`;
     }
   });
+  const variableParams = pathVariables.map(
+      (v) => `@PathVariable ${typenameMap[getTypenameFromRef(commandSchemaPayloadProps[v])]} ${v}`);
+  variableParams.push(`@AuthenticationPrincipal UserDetailsImpl user`);
+  if (hasRequestBody) {
+    variableParams.push(`@RequestBody ${requestBodyClassName} requestBody`);
+  }
+
+
 
 
   return `

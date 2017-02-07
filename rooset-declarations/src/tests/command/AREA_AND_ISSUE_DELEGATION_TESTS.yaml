@@ -218,10 +218,12 @@ scenarios:
   -
     label: set delegation
     given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *areaCreatedEvent
+      key: area-created
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
     when: *setDelegationCmd
     then:
       type: AREA_DELEGATION_SET_EVENT
@@ -256,11 +258,13 @@ scenarios:
   -
     label: unset delegation
     given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *areaCreatedEvent
-      - *delegationSetEvent
+      key: area-delegated
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+        - *delegationSetEvent
     when: *unsetDelegationCmd
     then:
       type: AREA_DELEGATION_UNSET_EVENT
@@ -309,11 +313,7 @@ scenarios:
 
   -
     label: block area delegation
-    given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *areaCreatedEvent
+    given: area-created
     when: *blockDelegationForAreaCmd
     then: *delegationBlockedForAreaEvt
 
@@ -350,11 +350,13 @@ scenarios:
   -
     label: Unblock Area Delegation
     given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *areaCreatedEvent
-      - *delegationBlockedForAreaEvt
+      key: area-delegation-blocked
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+        - *delegationBlockedForAreaEvt
     when: *unblockDelegationForAreaCmd
     then: *delegationUnblockedForAreaEvt
   -
