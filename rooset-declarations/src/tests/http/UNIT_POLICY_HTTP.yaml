@@ -62,7 +62,7 @@ scenarios:
       action: &localAction
         type: HTTP_REQUEST
         uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policy
-        method: POST
+        method: PUT
         requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
         generate:
           policyId: 464b1ebb-32c1-460c-8e9e-222222222222
@@ -85,7 +85,7 @@ scenarios:
       action:
         type: HTTP_REQUEST
         uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policy
-        method: POST
+        method: PUT
         requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
         generate:
           policyId: 464b1ebb-32c1-460c-8e9e-222222222222

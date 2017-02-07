@@ -21,7 +21,7 @@ scenarios:
       action:
         type: HTTP_REQUEST
         uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/delegation
-        method: POST
+        method: PUT
         requesterId: *voter2
         body:
           trusteeId: *voter3
