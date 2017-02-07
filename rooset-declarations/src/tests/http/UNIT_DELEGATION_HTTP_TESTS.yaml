@@ -14,7 +14,7 @@ scenarios:
 
 
   -
-    label: Set Delegation
+    label: Set Unit Delegation
     given: unit-delegation-command/privs-granted
     when:
       label: A member request an update to their unit delegation
@@ -35,3 +35,20 @@ scenarios:
           trusteeId: *voter3
 
 
+  -
+    label: Unset Unit Delegation
+    given: unit-delegation-command/delegation-set
+    when:
+      label: A member requests to unset their unit delegation
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/delegation
+        method: DELETE
+        requesterId: *voter2
+    then:
+      label: It succeeds
+      outcome:
+        type: UNIT_DELEGATION_UNSET_EVENT
+        payload:
+          id: *unitId
+          trusterId: *voter2
