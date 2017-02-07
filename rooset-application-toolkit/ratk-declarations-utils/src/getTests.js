@@ -67,8 +67,6 @@ module.exports = (_srcPath, testType) => {
 
 
   function stripMetadata(spec) {
-    if (spec.key === 'unit-aggregate-command') console.log(
-        JSON.stringify(spec, null, 2));
     spec.scenarios = spec.scenarios.map((scenario) => {
       const { given, when, then, label } = scenario;
       const out = {
@@ -82,18 +80,7 @@ module.exports = (_srcPath, testType) => {
       if (!isArray(out.given)) throw new Error(JSON.stringify(out, null, 2));
 
       return out;
-
-      /*
-      if (scenario.given.precondition) console.log(JSON.stringify(scenario, null, 2));
-      scenario.given = scenario.given.precondition ?
-          scenario.given.precondition : scenario.given;
-      if (scenario.when.action) scenario.when = scenario.when.action;
-      if (scenario.then.outcome) scenario.then = scenario.then.outcome;
-      if (!isArray(scenario.given)) throw new Error(JSON.stringify(scenario, null, 2));
-      return scenario;*/
     });
-    if (spec.key === 'unit-aggregate-command') console.log(
-        JSON.stringify(spec, null, 2));
     return spec;
   }
 
@@ -121,11 +108,6 @@ module.exports = (_srcPath, testType) => {
 
     const preconditions = reduce(spec.scenarios, (r, scenario) => {
       if (isObject(scenario.given) && scenario.given.key) {
-        if (r[scenario.given.key]) {
-          console.log(r);
-          console.log(scenario);
-          console.log(scenario.given.key);
-        }
         r[scenario.given.key] = scenario.given;
       }
       return r;
@@ -138,35 +120,5 @@ module.exports = (_srcPath, testType) => {
   }
 
 
-  function expandScenarios(r, spec) {
-    spec.scenarios = spec.scenarios.reduce((r, scenario) => {
-      if (!isArray(scenario.when)) return r.concat([scenario]);
-      if (!isArray(scenario.then)) throw new Error(`
-          Error parsing test ${scenario.label}:
-          scenario.when is an array, but scenario.then is not.`);
-      const result = reduce(scenario.when, (r, whenContainer, idx) => {
-        const when = whenContainer.payload;
-        const then = scenario.then[idx];
-        if (!isForThisTypeOfTest(testType, when, then)) return r;
-        const outScenario = cloneDeep(scenario);
-        outScenario.then = then;
-        outScenario.when = when;
-        outScenario.label = whenContainer.label;
-        return r.concat([outScenario]);
-      }, []);
-      return r.concat(result);
-    }, []);
-    if (spec.scenarios.length === 0) return r;
-    return r.concat([spec]);
-  }
 }
 
-
-function isForThisTypeOfTest(testType, when, then) {
-  let isDomainCommandTest = true;
-  if (when.type === 'HTTP_REQUEST') isDomainCommandTest = false;
-  if (then.type === 'HTTP_RESPONSE' && isDomainCommandTest) {
-    throw new Error("Incompatable when and then");
-  }
-  return ((testType === 'DOMAIN_COMMAND_TEST') && isDomainCommandTest);
-}
