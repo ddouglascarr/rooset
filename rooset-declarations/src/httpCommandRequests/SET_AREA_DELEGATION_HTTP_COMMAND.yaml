@@ -1,8 +1,8 @@
 ---
 type: SET_AREA_DELEGATION_HTTP_COMMAND_REQUEST
 commandTarget: SET_AREA_DELEGATION_COMMAND
-description: Set the are delegation for a member
-method: POST
+description: Set the area delegation for a member
+method: PUT
 uri: /units/{id}/areas/{areaId}/delegation
 userIdMapping: requesterId
 body:

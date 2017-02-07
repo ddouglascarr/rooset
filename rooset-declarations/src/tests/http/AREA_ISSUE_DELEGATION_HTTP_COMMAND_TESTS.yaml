@@ -20,7 +20,7 @@ scenarios:
       action:
         type: HTTP_REQUEST
         uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/areas/464b1ebb-32c1-460c-8e9e-333333333333/delegation
-        method: POST
+        method: PUT
         requesterId: *voter4
         body:
           trusteeId: *voter5

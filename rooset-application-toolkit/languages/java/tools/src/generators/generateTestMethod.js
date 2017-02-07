@@ -38,14 +38,15 @@ ${assessResponse(scenario.then)}
 function performRequest(scenario) {
   const supportedMethods = [ 'POST', 'DELETE' ];
   switch (scenario.when.method) {
+    case ('PUT'):
+      return `this.restTemplate.exchange("${scenario.when.uri}", HttpMethod.PUT, request, String.class);`;
     case ('POST'):
-      return `this.restTemplate.postForEntity(
-            "${scenario.when.uri}", request, String.class);`;
+      return `this.restTemplate.postForEntity("${scenario.when.uri}", request, String.class);`;
     case ('DELETE'):
       return `this.restTemplate.exchange("${scenario.when.uri}", HttpMethod.DELETE, request, String.class);`;
     default:
       throw new Error(
-          `when.method is ${scenario.when.method} but only POST, DELETE are supported`);
+          `when.method is ${scenario.when.method} but only PUT, POST, DELETE are supported`);
   }
 }
 
