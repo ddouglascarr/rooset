@@ -79,9 +79,8 @@ module.exports = {
     const v_value = `${v}_value`;
     return `
           Value ${v_value};
-          ${v_value}.SetDouble(boost::posix_time::to_time_t(${v}));
+          ${v_value}.SetUint(${v});
           payload.AddMember("${v}", ${v_value}, d->GetAllocator());    `;
-
   },
 
   int: (v) => {

@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <map>
-#include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
 #include "ratk/IdToolsImpl.h"
 #include "ratk/uuid.h"
 #include "enums/IssueState.h"
@@ -31,7 +30,7 @@ namespace rooset {
   struct Initiative {
     string name;
     uuid initiatorId;
-    boost::posix_time::ptime created;
+    unsigned long created;
     vector<uuid> supporters;
   };
 

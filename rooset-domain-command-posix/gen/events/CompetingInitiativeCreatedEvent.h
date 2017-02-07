@@ -36,7 +36,7 @@ namespace rooset {
         const string externalReference;
         const string content;
         const string textSearchData;
-        const boost::posix_time::ptime created;
+        const unsigned int created;
 
     
         CompetingInitiativeCreatedEvent(
@@ -47,7 +47,7 @@ namespace rooset {
             string externalReference,
             string content,
             string textSearchData,
-            boost::posix_time::ptime created) :
+            unsigned int created) :
             id(id),
             requesterId(requesterId),
             initiativeId(initiativeId),
@@ -69,8 +69,7 @@ namespace rooset {
             externalReference(JsonUtils::parseString(d["payload"]["externalReference"])),
             content(JsonUtils::parseString(d["payload"]["content"])),
             textSearchData(JsonUtils::parseString(d["payload"]["textSearchData"])),
-            created(boost::posix_time::from_time_t(
-                time_t(d["payload"]["created"].GetDouble())))
+            created(d["payload"]["created"].GetUint())
         {}
   
 
@@ -137,7 +136,7 @@ created(c.created)
               d->GetAllocator());
 
           Value created_value;
-          created_value.SetDouble(boost::posix_time::to_time_t(created));
+          created_value.SetUint(created);
           payload.AddMember("created", created_value, d->GetAllocator());    
 
       d->AddMember("payload", payload, d->GetAllocator());
