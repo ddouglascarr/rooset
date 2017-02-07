@@ -9,6 +9,7 @@ mocks:
   - &voter4 464b1ebb-32c1-460c-8e9e-444444444444
   - &voter5 464b1ebb-32c1-460c-8e9e-555555555555
 
+
 scenarios:
 
 
@@ -49,6 +50,46 @@ scenarios:
       label: The delegation is unset
       outcome:
         type: AREA_DELEGATION_UNSET_EVENT
+        payload:
+          id: *unitId
+          areaId: *areaId
+          trusterId: *voter4
+
+
+  -
+    label: A member can block delegations at the area level
+    given: area-issue-delegation-command/area-created
+    when:
+      label: A member makes a http Block Delegation request
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/areas/464b1ebb-32c1-460c-8e9e-333333333333/block-delegation
+        method: PUT
+        requesterId: *voter4
+    then:
+      label: Delegations are blocked
+      outcome:
+        type: DELEGATION_BLOCKED_FOR_AREA_EVENT
+        payload:
+          id: *unitId
+          areaId: *areaId
+          trusterId: *voter4
+
+
+  -
+    label: A member can unblock delegations at the area level
+    given: area-issue-delegation-command/area-delegation-blocked
+    when:
+      label: A member makes a http Unblock delegation request
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/areas/464b1ebb-32c1-460c-8e9e-333333333333/block-delegation
+        method: DELETE
+        requesterId: *voter4
+    then:
+      label: Delegations are unblocked
+      outcome:
+        type: DELEGATION_UNBLOCKED_FOR_AREA_EVENT
         payload:
           id: *unitId
           areaId: *areaId

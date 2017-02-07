@@ -1,0 +1,7 @@
+---
+type: UNBLOCK_DELEGATION_FOR_AREA_HTTP_COMMAND_REQUEST
+commandTarget: UNBLOCK_DELEGATION_FOR_AREA_COMMAND
+description: Unblock delegations at the area level
+method: DELETE
+uri: /units/{id}/areas/{areaId}/block-delegation
+userIdMapping: requesterId
