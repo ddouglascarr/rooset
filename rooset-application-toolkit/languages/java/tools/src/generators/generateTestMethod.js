@@ -1,4 +1,9 @@
-const { camelCase, map } = require('lodash');
+const { camelCase, map, merge, chain } = require('lodash');
+const {
+  findHttpCommandRequestByUri,
+  findCommandSchemaByType,
+} = require('../../../../../ratk-declarations-utils');
+const { getTypenameFromRef } = require('../utils');
 
 
 module.exports = (scenario) => {
@@ -15,8 +20,7 @@ module.exports = (scenario) => {
     testUser.setId(UUID.fromString("${when.requesterId}"));
     userRepository.save(testUser);
 
-    // set up generators
-${mockUniqueIdGenerator(when)}
+${mockGenerators(scenario)}
 
 ${declareRequest(when)}
 
@@ -107,6 +111,38 @@ function mockUniqueIdGenerator(when) {
   return `
     when(idService.generateUniqueId()).thenReturn(
         ${thenReturnArgs});`;
+}
+
+
+function mockGenerators(scenario) {
+  const when = scenario.when;
+  const generate = when.generate;
+  if (!generate) return '    // nothing to generate';
+  const generateKeys = Object.keys(generate);
+
+  const httpDecl = findHttpCommandRequestByUri(when.uri, when.method);
+  if (!httpDecl) throw new Error(`cant find httpDecl ${when.method} ${when.uri}`);
+  const commandSchema = findCommandSchemaByType(httpDecl.commandTarget);
+  if (!commandSchema) throw new Error(`cant find commandSchema ${httpDecl.commandTarget}`);
+  const generateCalls = chain(commandSchema.properties.payload.properties)
+      .map((ref, v) => generateKeys.indexOf(v) !== -1 ? [v, getTypenameFromRef(ref)] : null)
+      .filter((type) => type !== null)
+      .groupBy((a) => { console.log(a); return a[1] })
+      .value();
+
+  return map(generateCalls, (calls, type) => {
+        let call = null;
+        if (type === 'uuid') {
+          calls = map(calls, (call) => `UUID.fromString("${generate[call[0]]}")`).join(', ');
+          return `when(idService.generateUniqueId()).thenReturn(${calls});`;
+        }
+        if (type === 'date') {
+          calls = map(calls, (call) => generate[call[0]]).join(', ');
+          return `when(dateService.getNow().thenReturn(${calls})`;
+        }
+        throw new Error(`no generateor for type ${type} of key ${calls[o]}`);
+      })
+      .join('\n    ');
 }
 
 

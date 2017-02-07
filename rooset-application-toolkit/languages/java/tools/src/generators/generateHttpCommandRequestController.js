@@ -27,6 +27,9 @@ module.exports = function(javaBasePackage, declaration, commandSchema) {
     if (typename === 'uuid') {
       return 'idService.generateUniqueId()';
     }
+    if (typename === 'date') {
+      return 'dateService.getNow()';
+    }
     throw new Error(`no runtime generation handling for ${typename} ${v}`);
   }
 
@@ -77,6 +80,7 @@ import org.rooset.httpapi.exceptions.RatkException;
 import org.rooset.httpapi.services.CommandService;
 import org.rooset.httpapi.models.CommandServiceResponse;
 import org.rooset.httpapi.services.IdService;
+import org.rooset.httpapi.services.DateService;
 
 
 @RestController
@@ -88,6 +92,9 @@ public class ${className}
 
   @Autowired
   IdService idService;
+
+  @Autowired
+  DateService dateService;
 
   @HandleServiceErrors
   @RequestMapping(

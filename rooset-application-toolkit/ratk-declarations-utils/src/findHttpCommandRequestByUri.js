@@ -5,7 +5,7 @@ const matchUri = require('./matchUri');
 
 let requestDeclarations = null;
 
-module.exports = (uri) => {
+module.exports = (uri, method) => {
   const config = getConfigFromEnv({
     srcPath: 'RATK_GEN_HTTP_COMMAND_REQUEST_DECL_DIR',
   });
@@ -15,7 +15,7 @@ module.exports = (uri) => {
   }
 
   const request = find(requestDeclarations,
-      (r) => matchUri(r.uri, uri));
+      (r) => matchUri(r.uri, uri) && method === r.method);
   if (!request) throw new Error(`
     could not find HttpCommandRequest with uri of ${uri}`);
   return request;

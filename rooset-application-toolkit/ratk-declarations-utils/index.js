@@ -6,5 +6,6 @@ module.exports = {
   getConfigFromEnv: require('./src/getConfigFromEnv'),
   getPathVariables: require('./src/getPathVariables'),
   findCommandSchemaByType: require('./src/findCommandSchemaByType'),
+  findHttpCommandRequestByUri: require('./src/findHttpCommandRequestByUri'),
   matchUri: require('./src/matchUri'),
 };
