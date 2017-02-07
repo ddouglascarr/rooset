@@ -1,0 +1,7 @@
+---
+type: UNBLOCK_DELEGATION_FOR_ISSUE_HTTP_COMMAND_REQUEST
+commandTarget: UNBLOCK_DELEGATION_FOR_ISSUE_COMMAND
+description: Unblock delegation at the issue level
+method: DELETE
+uri: /issues/{id}/block-delegation
+userIdMapping: requesterId

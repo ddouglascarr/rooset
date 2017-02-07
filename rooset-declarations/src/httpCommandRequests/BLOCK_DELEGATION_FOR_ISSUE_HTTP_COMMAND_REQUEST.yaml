@@ -1,0 +1,9 @@
+---
+type: BLOCK_DELEGATION_FOR_ISSUE_HTTP_COMMAND_REQUEST
+commandTarget: BLOCK_DELEGATION_FOR_ISSUE_COMMAND
+description: Block delegations at the issue level
+method: PUT
+uri: /issues/{id}/block-delegation
+userIdMapping: requesterId
+
+

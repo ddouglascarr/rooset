@@ -8,6 +8,7 @@ mocks:
   - &areaId 464b1ebb-32c1-460c-8e9e-333333333333
   - &voter4 464b1ebb-32c1-460c-8e9e-444444444444
   - &voter5 464b1ebb-32c1-460c-8e9e-555555555555
+  - &issueId 464b1ebb-32c1-460c-8e9e-666666666666
 
 
 scenarios:
@@ -94,3 +95,84 @@ scenarios:
           id: *unitId
           areaId: *areaId
           trusterId: *voter4
+
+
+  -
+    label: A member can set their issue delegation
+    given: area-issue-delegation-command/issue-created
+    when:
+      label: A member makes a http delegate issue delegation request
+      action:
+        type: HTTP_REQUEST
+        uri: /issues/464b1ebb-32c1-460c-8e9e-666666666666/delegation
+        method: PUT
+        requesterId: *voter5
+        body:
+          trusteeId: *voter4
+    then:
+      label: Issue delegated
+      outcome:
+        type: ISSUE_DELEGATION_SET_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-666666666666
+          trusterId: *voter5
+          trusteeId: *voter4
+
+
+  -
+    label: A member can unset their issue delegation
+    given: area-issue-delegation-command/issue-delegated
+    when:
+      label: A member mase a http unset issue delegation request
+      action:
+        type: HTTP_REQUEST
+        uri: /issues/464b1ebb-32c1-460c-8e9e-666666666666/delegation
+        method: DELETE
+        requesterId: *voter5
+    then:
+      label: Issue delegation unset
+      outcome:
+        type: ISSUE_DELEGATION_UNSET_EVENT
+        payload:
+          id: *issueId
+          trusterId: *voter5
+
+
+  -
+    label: A member can block delegations at the issue level
+    given: area-issue-delegation-command/issue-created
+    when:
+      label: A member makes a http block issue delegation request
+      action:
+        type: HTTP_REQUEST
+        uri: /issues/464b1ebb-32c1-460c-8e9e-666666666666/block-delegation
+        method: PUT
+        requesterId: *voter5
+    then:
+      label: Delegation is blocked at the issue level
+      outcome:
+        type: DELEGATION_BLOCKED_FOR_ISSUE_EVENT
+        payload:
+          id: *issueId
+          trusterId: *voter5
+
+
+  -
+    label: A member can unblock delegations at the issue level
+    given: area-issue-delegation-command/issue-blocked
+    when:
+      label: A member makes a http unblock issue delegation request
+      action:
+        type: HTTP_REQUEST
+        uri: /issues/464b1ebb-32c1-460c-8e9e-666666666666/block-delegation
+        method: DELETE
+        requesterId: *voter5
+    then:
+      label: Delegation is blocked at the issue level
+      outcome:
+        type: DELEGATION_UNBLOCKED_FOR_ISSUE_EVENT
+        payload:
+          id: *issueId
+          trusterId: *voter5
+        
+

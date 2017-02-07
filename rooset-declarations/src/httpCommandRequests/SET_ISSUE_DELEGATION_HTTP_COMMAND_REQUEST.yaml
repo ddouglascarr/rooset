@@ -1,0 +1,9 @@
+---
+type: SET_ISSUE_DELEGATION_HTTP_COMMAND_REQUEST
+commandTarget: SET_ISSUE_DELEGATION_COMMAND
+description: Set the issue delegation
+method: PUT
+uri: /issues/{id}/delegation
+userIdMapping: requesterId
+body:
+  - trusteeId

@@ -377,10 +377,11 @@ scenarios:
   -
     label: set issue delegation should require voting privilege of truster
     given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *areaCreatedEvent
-      - *newInitiativeCreatedEvt
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *areaCreatedEvent
+        - *newInitiativeCreatedEvt
     when:
       type: SET_ISSUE_DELEGATION_COMMAND
       payload:  *setIssueDelegationCmdPayload
@@ -389,11 +390,13 @@ scenarios:
   -
     label: set issue delegation
     given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *areaCreatedEvent
-      - *newInitiativeCreatedEvt
+      key: issue-created
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+        - *newInitiativeCreatedEvt
     when:
       type: SET_ISSUE_DELEGATION_COMMAND
       payload: *setIssueDelegationCmdPayload
@@ -414,24 +417,21 @@ scenarios:
 
   -
     label: unset issue delegation should fail if no delegation set
-    given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *areaCreatedEvent
-      - *newInitiativeCreatedEvt
+    given: issue-created
     when: *unsetIssueDelegationCmd
     then: *notFoundErr
 
   -
     label: unset issue delegation
     given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *areaCreatedEvent
-      - *newInitiativeCreatedEvt
-      - *issueDelegationSetEvt
+      key: issue-delegated
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+        - *newInitiativeCreatedEvt
+        - *issueDelegationSetEvt
     when: *unsetIssueDelegationCmd
     then: *issueDelegationUnsetEvt
 
@@ -499,18 +499,13 @@ scenarios:
 
   -
     label: block issue delegation
-    given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *areaCreatedEvent
-      - *newInitiativeCreatedEvt
+    given: issue-created
     when: *blockDelegationForIssueCmd
     then: *delegationBlockedForIssueEvt
 
   -
     label: block issue delegation should fail on duplicate
-    given:
+    given: 
       - *unitCreatedEvent
       - *privGrantedEvtVoter4
       - *privGrantedEvtVoter5
@@ -560,12 +555,14 @@ scenarios:
   -
     label: unblock issue delegation
     given:
-      - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *areaCreatedEvent
-      - *newInitiativeCreatedEvt
-      - *delegationBlockedForIssueEvt
+      key: issue-blocked
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+        - *newInitiativeCreatedEvt
+        - *delegationBlockedForIssueEvt
     when: *unblockDelegationForIssueCmd
     then: *delegationUnblockedForIssueEvt
 
