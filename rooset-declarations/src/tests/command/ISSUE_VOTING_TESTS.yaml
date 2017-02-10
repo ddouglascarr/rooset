@@ -41,6 +41,18 @@ mocks:
       description: the test area
       externalReference: 'area.com'
 
+  - &privGrantedEvtVoter0
+    type: PRIVILEGE_GRANTED_EVENT
+    payload:
+      id: *unitId
+      requesterId: *managerId
+      memberId: *voter0
+      votingRight: true
+      managementRight: false
+      pollingRight: false
+      initiativeRight: true
+      weight: 1
+
   - &unitPolicySetEvt
     type: UNIT_POLICY_SET_EVENT
     payload:
@@ -228,27 +240,70 @@ scenarios:
   -
     label: Unset ballot
     given:
-      - *unitCreatedEvt
-      - *unitPolicySetEvt
-      - *areaCreatedEvt
-      - *newInitiativeCreatedEvt
-      - *issueVerificationPhaseCompletedEvt
-      -
-        <<: *issueBallotSetEvt
-        payload:
-          id: *issueId
-          requesterId: *voter0
-          ballot:
-            approve:
-              -
-                - *initiativeB
-            abstain:
-              - *initiativeC
-            disapprove:
-              -
-                - *initiativeD
+      key: ballot-cast
+      precondition:
+        - *unitCreatedEvt
+        - *unitPolicySetEvt
+        - *areaCreatedEvt
+        - *newInitiativeCreatedEvt
+        - *issueVerificationPhaseCompletedEvt
+        -
+          <<: *issueBallotSetEvt
+          payload:
+            id: *issueId
+            requesterId: *voter0
+            ballot:
+              approve:
+                -
+                  - *initiativeB
+              abstain:
+                - *initiativeC
+              disapprove:
+                -
+                  - *initiativeD
     when: *unsetIssueBallotCmd
     then: *issueBallotUnsetEvt
+
+
+  -
+    label: Set Ballot
+    given:
+      key: voting-phase
+      precondition:
+        - *unitCreatedEvt
+        - *unitPolicySetEvt
+        - *areaCreatedEvt
+        - *privGrantedEvtVoter0
+        - *newInitiativeCreatedEvt
+        - *issueVerificationPhaseCompletedEvt
+    when:
+      <<: *setIssueBallotCmd
+      payload:
+        id: *issueId
+        requesterId: *voter0
+        ballot:
+          approve:
+            -
+              - *initiativeB
+          abstain:
+            - *initiativeC
+          disapprove:
+            -
+              - *initiativeD
+    then:
+      <<: *issueBallotSetEvt
+      payload:
+        id: *issueId
+        requesterId: *voter0
+        ballot:
+          approve:
+            -
+              - *initiativeB
+          abstain:
+            - *initiativeC
+          disapprove:
+            -
+              - *initiativeD
 
 
   -
