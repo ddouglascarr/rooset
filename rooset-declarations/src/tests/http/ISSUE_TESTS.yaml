@@ -42,8 +42,25 @@ mocks:
       content: 'mock competing content'
       textSearchData: 'bing, bong'
       created: *competingCreated
-      
-      
+
+  # Support mocks, ids dont match up
+
+  - &giveInitiativeSupportCmdPayload
+    id: 464b1ebb-32c1-460c-8e9e-666666666666
+    requesterId: 464b1ebb-32c1-460c-8e9e-555555555555
+    initiativeId: 464b1ebb-32c1-460c-8e9e-000000000000
+
+  - &initiativeSupportGivenEvt
+    type: INITIATIVE_SUPPORT_GIVEN_EVENT
+    payload: *giveInitiativeSupportCmdPayload
+
+  - &revokeInitiativeSupportCmd
+    type: REVOKE_INITIATIVE_SUPPORT_COMMAND
+    payload: *giveInitiativeSupportCmdPayload
+
+  - &initiativeSupportRevokedEvt
+    type: INITIATIVE_SUPPORT_REVOKED_EVENT
+    payload: *giveInitiativeSupportCmdPayload
 
 scenarios:
 
@@ -72,8 +89,8 @@ scenarios:
           textSearchData: 'foo, bar'
     then:
       outcome: *newInitiativeCreatedEvent
-          
-          
+
+
   -
     label: Create Competing Initiative
     given: issue-creation-command/issue-created
@@ -93,4 +110,34 @@ scenarios:
           textSearchData: 'bing, bong'
     then:
       outcome: *competingInitiativeCreatedEvent
-          
+
+
+  -
+    label: Give initiative Support
+    given: issue-lifecycle-command/initiatives-created
+    when:
+      label: User gives support to initiative
+      action:
+        type: HTTP_REQUEST
+        uri: /issues/464b1ebb-32c1-460c-8e9e-666666666666/initiatives/464b1ebb-32c1-460c-8e9e-000000000000
+        method: PUT
+        requesterId: 464b1ebb-32c1-460c-8e9e-555555555555
+    then:
+      label: A INITIATIVE_SUPPORT_GIVEN event is recorded
+      outcome: *initiativeSupportGivenEvt
+
+
+  -
+    label: Revoke initiative Support
+    given: issue-lifecycle-command/initiative-support-given
+    when:
+      label: User revokes support for an initiative
+      action:
+        type: HTTP_REQUEST
+        uri: /issues/464b1ebb-32c1-460c-8e9e-666666666666/initiatives/464b1ebb-32c1-460c-8e9e-000000000000
+        method: DELETE
+        requesterId: 464b1ebb-32c1-460c-8e9e-555555555555
+    then:
+      label: a INITIATIVE_SUPPORT_REVOKED event is recorded
+      outcome: *initiativeSupportRevokedEvt
+

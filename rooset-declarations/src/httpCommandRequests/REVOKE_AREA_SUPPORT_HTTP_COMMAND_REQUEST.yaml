@@ -1,0 +1,7 @@
+---
+type: REVOKE_INITIATIVE_SUPPORT_HTTP_COMMAND_REQUEST
+commandTarget: REVOKE_INITIATIVE_SUPPORT_COMMAND
+description: Revoke support for an initiative
+method: DELETE
+uri: '/issues/{id}/initiatives/{initiativeId}'
+userIdMapping: requesterId

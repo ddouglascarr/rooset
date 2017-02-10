@@ -1,6 +1,6 @@
 ---
 label: Issue Aggregate - Lifecycle Tests
-key: issue-aggregate-lifecycle-command
+key: issue-lifecycle-command
 type: DOMAIN_COMMAND_TEST
 
 mocks:
@@ -205,17 +205,19 @@ scenarios:
   -
     label: Give Initiative Support
     given:
-      - *unitCreatedEvent
-      - *areaCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *unitPolicySetEvent
-      -
-        type: NEW_INITIATIVE_CREATED_EVENT
-        payload: *createNewInitiativeCmdPayload
-      -
-        type: COMPETING_INITIATIVE_CREATED_EVENT
-        payload: *createCompetingInitiativeCmdPayload
+      key: initiatives-created
+      precondition:
+        - *unitCreatedEvent
+        - *areaCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *unitPolicySetEvent
+        -
+          type: NEW_INITIATIVE_CREATED_EVENT
+          payload: *createNewInitiativeCmdPayload
+        -
+          type: COMPETING_INITIATIVE_CREATED_EVENT
+          payload: *createCompetingInitiativeCmdPayload
     when: *giveInitiativeSupportCmd
     then: *initiativeSupportGivenEvt
 
@@ -290,18 +292,20 @@ scenarios:
   -
     label: Revoke Initiative Support
     given:
-      - *unitCreatedEvent
-      - *areaCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *unitPolicySetEvent
-      -
-        type: NEW_INITIATIVE_CREATED_EVENT
-        payload: *createNewInitiativeCmdPayload
-      -
-        type: COMPETING_INITIATIVE_CREATED_EVENT
-        payload: *createCompetingInitiativeCmdPayload
-      - *initiativeSupportGivenEvt
+      key: initiative-support-given
+      precondition:
+        - *unitCreatedEvent
+        - *areaCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *unitPolicySetEvent
+        -
+          type: NEW_INITIATIVE_CREATED_EVENT
+          payload: *createNewInitiativeCmdPayload
+        -
+          type: COMPETING_INITIATIVE_CREATED_EVENT
+          payload: *createCompetingInitiativeCmdPayload
+        - *initiativeSupportGivenEvt
     when: *revokeInitiativeSupportCmd
     then: *initiativeSupportRevokedEvt
 
