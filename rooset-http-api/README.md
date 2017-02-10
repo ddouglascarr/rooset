@@ -1,14 +1,11 @@
 rooset-http-api
 ===============
 
-The http api is a user interface to:
-  - rooset-domain-command-posix
-
-It is responsible for the following:
-  - Authentication (But not Authorization)
-  - Transforming HTTP requests into roost commands
+rooset-http-api is responsible for the following:
+  - Authentication (But not authorization)
+  - Transforming HTTP requests into rooset commands
   - Calling the rooset command handler
-  - Transforming the command responses into an Http Response
+  - Transforming the command handler response into an Http Response
   - Routing Query requests *
 
 
@@ -25,6 +22,13 @@ Project Dependencies:
   - rooset-declarations
   - rooset-domain-command-posix
 
+
+Configuration
+-------------
+
+Project configuration can be found in src/main/resources/application.yaml
+
+You can [https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html](override any of these variables at runtime)
 
 
 Running Integration Tests
@@ -43,9 +47,3 @@ Running
 ```
 
 
-Configuration
--------------
-
-Project configuration can be found in src/main/resources/application.yaml
-
-You can [https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html](override any of these variables at runtime)

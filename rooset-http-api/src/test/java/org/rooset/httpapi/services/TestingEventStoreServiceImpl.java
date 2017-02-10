@@ -40,9 +40,6 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
   @Value("${get-event-store.port}")
   private String getEventStorePort;
 
-  @Value("${get-event-store.bin}")
-  private String getEventStoreBin;
-
   @Value("${get-event-store.binPath}")
   private String getEventStoreBinPath;
 

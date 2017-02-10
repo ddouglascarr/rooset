@@ -39,6 +39,5 @@ get-event-store:
   port: 2114
   host: localhost
   binPath: '/home/daniel/opt/EventStore-OSS-Ubuntu-14.04-v3.9.3'
-  bin: '/home/daniel/opt/EventStore-OSS-Ubuntu-14.04-v3.9.3/run-node.sh'
 
 
