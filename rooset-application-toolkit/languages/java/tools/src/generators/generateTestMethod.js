@@ -124,8 +124,8 @@ function mockGenerators(scenario) {
           return `when(idService.generateUniqueId()).thenReturn(${calls});`;
         }
         if (type === 'date') {
-          calls = map(calls, (call) => generate[call[0]]).join(', ');
-          return `when(dateService.getNow()).thenReturn(${calls})`;
+          calls = map(calls, (call) => generate[call[0]]).map((n) => `${n}L`).join(', ');
+          return `when(dateService.getNow()).thenReturn(${calls});`;
         }
         throw new Error(`no generateor for type ${type} of key ${calls[o]}`);
       })

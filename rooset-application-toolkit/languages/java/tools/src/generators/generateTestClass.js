@@ -21,6 +21,7 @@ import org.rooset.httpapi.models.UserModel;
 import org.rooset.httpapi.repositories.UserRepository;
 import org.rooset.httpapi.services.TestingEventStoreService;
 import org.rooset.httpapi.services.IdService;
+import org.rooset.httpapi.services.DateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -68,6 +69,9 @@ public class ${testClassname}
 
   @Autowired
   private IdService idService;
+
+  @Autowired
+  private DateService dateService;
 
   private ExecuteWatchdog watchdog;
   private UserModel testUser;
@@ -124,6 +128,13 @@ ${testMethods}
     public IdService idService()
     {
       return Mockito.mock(IdService.class);
+    }
+
+    @Bean
+    @Primary
+    public DateService dateService()
+    {
+      return Mockito.mock(DateService.class);
     }
   }
 

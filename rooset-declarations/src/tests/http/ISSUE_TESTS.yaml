@@ -4,7 +4,7 @@ key: issue-http
 type: HTTP_API_TEST
 
 mocks:
-  - &issueId 2464b1ebb-32c1-460c-8e9e-666666666666
+  - &issueId 464b1ebb-32c1-460c-8e9e-666666666666
   - &voterId 464b1ebb-32c1-460c-8e9e-444444444444
   - &areaId 464b1ebb-32c1-460c-8e9e-333333333333
   - &initiativeId 464b1ebb-32c1-460c-8e9e-777777777777
