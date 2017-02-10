@@ -1,6 +1,6 @@
 ---
 label: Issue Aggregate - Create Initiatives Tests
-key: issue-aggregate-creation-command
+key: issue-creation-command
 type: DOMAIN_COMMAND_TEST
 
 mocks:
@@ -183,10 +183,12 @@ scenarios:
   -
     label: Create New Initiative
     given:
-      - *unitCreatedEvent
-      - *areaCreatedEvent
-      - *privGrantedEvtVoter4
-      - *unitPolicySetEvent
+      key: area-created
+      precondition:
+        - *unitCreatedEvent
+        - *areaCreatedEvent
+        - *privGrantedEvtVoter4
+        - *unitPolicySetEvent
     when:
       type: CREATE_NEW_INITIATIVE_COMMAND
       payload: *createNewInitiativeCmdPayload

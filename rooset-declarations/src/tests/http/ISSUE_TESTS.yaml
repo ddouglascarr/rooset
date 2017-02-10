@@ -1,0 +1,60 @@
+---
+label: Http Issue Tests
+key: issue-http
+type: HTTP_API_TEST
+
+mocks:
+  - &issueId 2464b1ebb-32c1-460c-8e9e-666666666666
+  - &voterId 464b1ebb-32c1-460c-8e9e-444444444444
+  - &areaId 464b1ebb-32c1-460c-8e9e-333333333333
+  - &initiativeId 464b1ebb-32c1-460c-8e9e-777777777777
+  - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &policyId 464b1ebb-32c1-460c-8e9e-888888888888
+  - &created 1483586759
+
+  - &newInitiativeCreatedEvent
+    type: NEW_INITIATIVE_CREATED_EVENT
+    payload:
+      id: *issueId
+      requesterId: *voterId
+      initiativeId: *initiativeId
+      unitId: *unitId
+      areaId: *areaId
+      policyId: *policyId
+      name: 'Test Initiative'
+      polling: false
+      externalReference: ''
+      content: 'mock content'
+      textSearchData: 'foo, bar'
+      created: *created
+
+
+scenarios:
+
+
+  -
+    label: Create new Initiative
+    given: issue-creation-command/area-created
+    when:
+      action:
+        type: HTTP_REQUEST
+        uri: /issues
+        method: POST
+        requesterId: *voterId
+        generate:
+          id: *issueId
+          initiativeId: *initiativeId
+          created: *created
+        body:
+          unitId: *unitId
+          areaId: *areaId
+          policyId: *policyId
+          name: 'Test Initiative'
+          polling: false
+          externalReference: ''
+          content: 'mock content'
+          textSearchData: 'foo, bar'
+    then:
+      outcome: *newInitiativeCreatedEvent
+          
+          
