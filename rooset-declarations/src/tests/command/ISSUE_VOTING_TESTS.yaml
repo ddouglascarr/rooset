@@ -1,6 +1,6 @@
 ---
 label: Issue Aggregate - Voting Tests
-key: issue-aggregate-voting-command
+key: issue-voting-command
 type: DOMAIN_COMMAND_TEST
 
 mocks:
@@ -240,7 +240,7 @@ scenarios:
   -
     label: Unset ballot
     given:
-      key: ballot-cast
+      key: ballot-set
       precondition:
         - *unitCreatedEvt
         - *unitPolicySetEvt

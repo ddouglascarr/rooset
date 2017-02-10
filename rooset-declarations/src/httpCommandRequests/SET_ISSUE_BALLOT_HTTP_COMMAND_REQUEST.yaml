@@ -1,0 +1,10 @@
+---
+type: SET_ISSUE_BALLOT_HTTP_COMMAND_REQUEST
+commandTarget: SET_ISSUE_BALLOT_COMMAND
+description: Set the ballot for an issue
+method: PUT
+uri: /issues/{id}/ballot
+userIdMapping: requesterId
+body:
+  - ballot
+
