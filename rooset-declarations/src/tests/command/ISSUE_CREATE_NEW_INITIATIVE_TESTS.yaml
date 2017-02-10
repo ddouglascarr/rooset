@@ -219,14 +219,16 @@ scenarios:
   -
     label: Create Competing Initiative
     given:
-      - *unitCreatedEvent
-      - *areaCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter9
-      - *unitPolicySetEvent
-      -
-        type: NEW_INITIATIVE_CREATED_EVENT
-        payload: *createNewInitiativeCmdPayload
+      key: issue-created
+      precondition:
+        - *unitCreatedEvent
+        - *areaCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter9
+        - *unitPolicySetEvent
+        -
+          type: NEW_INITIATIVE_CREATED_EVENT
+          payload: *createNewInitiativeCmdPayload
     when:
       type: CREATE_COMPETING_INITIATIVE_COMMAND
       payload: *createCompetingInitiativeCmdPayload

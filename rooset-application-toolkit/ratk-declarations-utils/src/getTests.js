@@ -97,6 +97,9 @@ module.exports = (_srcPath, testType) => {
 
   function getPrecondition(testKey, preconditionKey) {
     const spec = allTestSpecs[testKey];
+    if (!spec) throw new Error(`
+      Cannot find a test spec with key ${testKey}. Have you spelled it right?
+      Should be one of these: ${JSON.stringify(Object.keys(allTestSpecs), null, 2)}`);
     let topPreconditions = {};
     if (spec.preconditions) {
       topPreconditions = reduce(spec.preconditions, (r, p) => {
