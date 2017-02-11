@@ -33,6 +33,7 @@ public class RoosetHttpApiApplication {
 	@Autowired
   CommandService commandService;
 
+	// Creates a user for development purposes.
 	@Profile("clean-dev")
   @Bean
   public CommandLineRunner demo(UserRepository userRepository)
@@ -44,40 +45,7 @@ public class RoosetHttpApiApplication {
           passwordEncoder.encode("password1"));
       fooUser.setId(UUID.fromString("464b1ebb-32c1-460c-8e9e-333333333333"));
       userRepository.save(fooUser);
-
-      log.info("Users with findAll():");
-      for (UserModel userModel : userRepository.findAll()) {
-        log.info(userModel.getEmail());
-        log.info(userModel.getPassword());
-      }
-
-     log.info("find foo by email");
-     UserModel user = userRepository.findOneByEmail("foo@bar.com");
-
-     if (null != user) {
-       log.info(user.getFirstName());
-       log.info(user.getLastName());
-     }
-
-     ExceptionCode r = getExceptionCode("a");
-     if (ExceptionCode.CONFLICT_EXCEPTION.equals(r)) {
-      log.info("ExceptionCode compiles");
-     }
-
-      String eStr = getExceptionCode("foo").toString();
-     log.info("Exception Code toString(): " + eStr);
-      if (ExceptionCode.valueOf("ITEM_NOT_FOUND_EXCEPTION") == ExceptionCode.ITEM_NOT_FOUND_EXCEPTION) {
-        log.info("valueOf works well");
-      }
-
     };
 
-  }
-
-  private ExceptionCode getExceptionCode(String c) {
-	  if (c == "a") {
-	    return ExceptionCode.CONFLICT_EXCEPTION;
-    }
-    return ExceptionCode.ITEM_NOT_FOUND_EXCEPTION;
   }
 }

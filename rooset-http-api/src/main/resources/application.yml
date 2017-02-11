@@ -4,14 +4,11 @@ server:
 spring:
   jpa:
     database: POSTGRESQL
-    'show-sql': true
-    hibernate:
-      'ddl-auto': create-drop
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/rooset_http_api
-    username: daniel
-    password: daniel
+    username: rooset
+    password: rooset
     driveClassName: org.postgresql.Driver
 
 rooset:
@@ -27,6 +24,10 @@ get-event-store:
 
 spring:
   profiles: clean-dev
+  jpa:
+    'show-sql': true
+    hibernate:
+      'ddl-auto': create-drop
 
 
 ---

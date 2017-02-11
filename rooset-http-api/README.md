@@ -16,6 +16,7 @@ Third party Dependencies:
   - Maven
   - Java 8
   - [http://geteventstore.com](EventStore)
+  - Postgres (We use hibernate, so it's easy to configure another RDB)
 
 Project Dependencies:
   - rooset-application-toolkit
@@ -51,4 +52,9 @@ Running
   $ mvn spring-boot:run
 ```
 
+There is profile named 'clean-dev', which create-drops the user databse, and creates a user at startup. (Username: 'foobar', password:'password1').
 
+
+```
+  $ mvn spring-boot:run -Drun.profiles=clean-dev
+```
