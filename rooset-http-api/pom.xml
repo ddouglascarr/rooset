@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.rooset.httpapi</groupId>
+	<artifactId>rooset-http-api</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>rooset-http-api</name>
+	<description>Demo project for Spring Boot</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.4.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- <dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency> -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.4.1208</version>
+		</dependency>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-json-org</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>fluent-hc</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-exec</artifactId>
+            <version>1.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <version>1.4.0</version>
+            <scope>test</scope>
+        </dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <id>Ratk Enum Generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <RATK_GEN_ENUM_JAVA_DEST_DIR>${project.build.directory}/generated-sources/ratk/org/rooset/httpapi/enums</RATK_GEN_ENUM_JAVA_DEST_DIR>
+                                <RATK_GEN_BASE_SCHEMA_FILE>${basedir}/../rooset-declarations/src/base.schema.json</RATK_GEN_BASE_SCHEMA_FILE>
+                                <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
+                            </environmentVariables>
+                            <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-enums</executable>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Ratk Exception Generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <RATK_GEN_EXCEPTION_JAVA_DEST_DIR>${project.build.directory}/generated-sources/ratk/org/rooset/httpapi/exceptions</RATK_GEN_EXCEPTION_JAVA_DEST_DIR>
+                                <RATK_GEN_EXCEPTION_DECL_DIR>${basedir}/../rooset-declarations/src/exceptions</RATK_GEN_EXCEPTION_DECL_DIR>
+                                <RATK_GEN_BASE_SCHEMA_FILE>${basedir}/../rooset-declarations/src/base.schema.json</RATK_GEN_BASE_SCHEMA_FILE>
+                                <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
+                            </environmentVariables>
+                            <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-exceptions</executable>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Ratk Command Generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <RATK_GEN_COMMAND_JAVA_DEST_DIR>${project.build.directory}/generated-sources/ratk/org/rooset/httpapi/commands</RATK_GEN_COMMAND_JAVA_DEST_DIR>
+                                <RATK_GEN_COMMAND_DECL_DIR>${basedir}/../rooset-declarations/src/commands</RATK_GEN_COMMAND_DECL_DIR>
+                                <RATK_GEN_BASE_SCHEMA_FILE>${basedir}/../rooset-declarations/src/base.schema.json</RATK_GEN_BASE_SCHEMA_FILE>
+                                <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
+                            </environmentVariables>
+                            <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-commands</executable>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Ratk Http Command Request Generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <RATK_GEN_HTTP_CONTROLLER_JAVA_DIR>${project.build.directory}/generated-sources/ratk/org/rooset/httpapi/httpcommandrequestcontrollers</RATK_GEN_HTTP_CONTROLLER_JAVA_DIR>
+                                <RATK_GEN_HTTP_REQUEST_BODY_JAVA_DIR>${project.build.directory}/generated-sources/ratk/org/rooset/httpapi/httpcommandrequestbodies</RATK_GEN_HTTP_REQUEST_BODY_JAVA_DIR>
+                                <RATK_GEN_HTTP_COMMAND_REQUEST_DECL_DIR>${basedir}/../rooset-declarations/src/httpCommandRequests</RATK_GEN_HTTP_COMMAND_REQUEST_DECL_DIR>
+                                <RATK_GEN_COMMAND_DECL_DIR>${basedir}/../rooset-declarations/src/commands</RATK_GEN_COMMAND_DECL_DIR>
+                                <RATK_GEN_BASE_SCHEMA_FILE>${basedir}/../rooset-declarations/src/base.schema.json</RATK_GEN_BASE_SCHEMA_FILE>
+                                <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
+                            </environmentVariables>
+                            <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-http-command-requests</executable>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Ratk Http Integration Test Generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <RATK_GEN_TEST_JAVA_DEST_DIR>${project.build.directory}/generated-sources/ratktests/org/rooset/httpapi/integrationtests</RATK_GEN_TEST_JAVA_DEST_DIR>
+                                <RATK_GEN_HTTP_COMMAND_REQUEST_DECL_DIR>${basedir}/../rooset-declarations/src/httpCommandRequests</RATK_GEN_HTTP_COMMAND_REQUEST_DECL_DIR>
+                                <RATK_GEN_COMMAND_DECL_DIR>${basedir}/../rooset-declarations/src/commands</RATK_GEN_COMMAND_DECL_DIR>
+                                <RATK_GEN_TEST_DECL_DIR>${basedir}/../rooset-declarations/src/tests</RATK_GEN_TEST_DECL_DIR>
+                                <RATK_GEN_BASE_SCHEMA_FILE>${basedir}/../rooset-declarations/src/base.schema.json</RATK_GEN_BASE_SCHEMA_FILE>
+                                <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
+                            </environmentVariables>
+                            <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-tests</executable>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>ratk-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/ratk</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>ratk-generated-tests</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/ratktests</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+		</plugins>
+
+	</build>
+
+
+</project>

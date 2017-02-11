@@ -3,7 +3,8 @@
 namespace rooset {
   enum class ExceptionType
   {
-    COMMAND_EVALUATION_EXCEPTION
+    COMMAND_EVALUATION_EXCEPTION,
+SYSTEM_EXCEPTION
   };
 }
 

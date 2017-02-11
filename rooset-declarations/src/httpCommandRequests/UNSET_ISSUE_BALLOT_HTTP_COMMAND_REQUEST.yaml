@@ -1,0 +1,7 @@
+---
+type: UNSET_ISSUE_BALLOT_HTTP_COMMAND_REQUEST
+commandTarget: UNSET_ISSUE_BALLOT_COMMAND
+description: Unset the issue ballot
+method: DELETE
+uri: /issues/{id}/ballot
+userIdMapping: requesterId

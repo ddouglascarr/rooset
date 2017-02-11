@@ -1,0 +1,9 @@
+---
+type: SET_UNIT_POLICY_HTTP_COMMAND_REQUEST
+commandTarget: SET_UNIT_POLICY_COMMAND
+description: Set the policy of a unit
+method: PUT
+uri: /units/{id}/policy
+userIdMapping: requesterId
+generate:
+  - policyId

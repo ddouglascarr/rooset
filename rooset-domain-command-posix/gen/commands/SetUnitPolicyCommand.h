@@ -36,11 +36,11 @@ namespace rooset {
         const string name;
         const string description;
         const bool polling;
-        const boost::posix_time::time_duration maxAdmissionTime;
-        const boost::posix_time::time_duration minAdmissionTime;
-        const boost::posix_time::time_duration discussionTime;
-        const boost::posix_time::time_duration verificationTime;
-        const boost::posix_time::time_duration votingTime;
+        const unsigned int maxAdmissionTime;
+        const unsigned int minAdmissionTime;
+        const unsigned int discussionTime;
+        const unsigned int verificationTime;
+        const unsigned int votingTime;
         const unsigned int issueQuorumNum;
         const unsigned int issueQuorumDen;
         const rooset::DefeatStrength defeatStrength;
@@ -60,11 +60,11 @@ namespace rooset {
             string name,
             string description,
             bool polling,
-            boost::posix_time::time_duration maxAdmissionTime,
-            boost::posix_time::time_duration minAdmissionTime,
-            boost::posix_time::time_duration discussionTime,
-            boost::posix_time::time_duration verificationTime,
-            boost::posix_time::time_duration votingTime,
+            unsigned int maxAdmissionTime,
+            unsigned int minAdmissionTime,
+            unsigned int discussionTime,
+            unsigned int verificationTime,
+            unsigned int votingTime,
             unsigned int issueQuorumNum,
             unsigned int issueQuorumDen,
             rooset::DefeatStrength defeatStrength,
@@ -108,11 +108,11 @@ namespace rooset {
             name(JsonUtils::parseString(d["payload"]["name"])),
             description(JsonUtils::parseString(d["payload"]["description"])),
             polling(d["payload"]["polling"].GetBool()),
-            maxAdmissionTime(boost::posix_time::seconds(d["payload"]["maxAdmissionTime"].GetDouble())),
-            minAdmissionTime(boost::posix_time::seconds(d["payload"]["minAdmissionTime"].GetDouble())),
-            discussionTime(boost::posix_time::seconds(d["payload"]["discussionTime"].GetDouble())),
-            verificationTime(boost::posix_time::seconds(d["payload"]["verificationTime"].GetDouble())),
-            votingTime(boost::posix_time::seconds(d["payload"]["votingTime"].GetDouble())),
+            maxAdmissionTime(d["payload"]["maxAdmissionTime"].GetUint()),
+            minAdmissionTime(d["payload"]["minAdmissionTime"].GetUint()),
+            discussionTime(d["payload"]["discussionTime"].GetUint()),
+            verificationTime(d["payload"]["verificationTime"].GetUint()),
+            votingTime(d["payload"]["votingTime"].GetUint()),
             issueQuorumNum(d["payload"]["issueQuorumNum"].GetUint()),
             issueQuorumDen(d["payload"]["issueQuorumDen"].GetUint()),
             defeatStrength(EnumUtils::parseDefeatStrength(string(
@@ -172,23 +172,23 @@ namespace rooset {
           payload.AddMember("polling", polling_value, d->GetAllocator());
 
           Value maxAdmissionTime_value;
-          maxAdmissionTime_value.SetDouble(maxAdmissionTime.seconds());
+          maxAdmissionTime_value.SetUint(maxAdmissionTime);
           payload.AddMember("maxAdmissionTime", maxAdmissionTime_value, d->GetAllocator());    
 
           Value minAdmissionTime_value;
-          minAdmissionTime_value.SetDouble(minAdmissionTime.seconds());
+          minAdmissionTime_value.SetUint(minAdmissionTime);
           payload.AddMember("minAdmissionTime", minAdmissionTime_value, d->GetAllocator());    
 
           Value discussionTime_value;
-          discussionTime_value.SetDouble(discussionTime.seconds());
+          discussionTime_value.SetUint(discussionTime);
           payload.AddMember("discussionTime", discussionTime_value, d->GetAllocator());    
 
           Value verificationTime_value;
-          verificationTime_value.SetDouble(verificationTime.seconds());
+          verificationTime_value.SetUint(verificationTime);
           payload.AddMember("verificationTime", verificationTime_value, d->GetAllocator());    
 
           Value votingTime_value;
-          votingTime_value.SetDouble(votingTime.seconds());
+          votingTime_value.SetUint(votingTime);
           payload.AddMember("votingTime", votingTime_value, d->GetAllocator());    
 
           Value issueQuorumNum_value;

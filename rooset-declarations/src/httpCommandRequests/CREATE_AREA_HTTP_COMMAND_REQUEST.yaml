@@ -1,0 +1,9 @@
+---
+type: CREATE_AREA_HTTP_COMMAND_REQUEST
+commandTarget: CREATE_AREA_COMMAND
+description: Create a new area within a unit
+method: POST
+uri: '/units/{id}/areas'
+userIdMapping: requesterId
+generate:
+  - areaId

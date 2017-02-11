@@ -1,0 +1,7 @@
+---
+type: UNSET_AREA_DELEGATION_HTTP_COMMAND_REQUEST
+commandTarget: UNSET_AREA_DELEGATION_COMMAND
+description: Unset the area delegation for a member
+method: DELETE
+uri: /units/{id}/areas/{areaId}/delegation
+userIdMapping: requesterId

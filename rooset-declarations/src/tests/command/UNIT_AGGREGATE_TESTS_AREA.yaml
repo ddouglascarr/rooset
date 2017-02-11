@@ -1,0 +1,156 @@
+label: Unit Aggregate Tests - Area
+key: area-command
+type: DOMAIN_COMMAND_TEST
+scenarios:
+
+  -
+    label: Unprivileged Member cannot create area
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+          name: Test Unit
+          description: The Test Unit
+    when:
+      type: CREATE_AREA_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-777777777777
+        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        name: test area
+        description: the test area
+        externalReference: 'area.com'
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: UNPRIVILEGED_EXCEPTION
+        message: ''
+
+  -
+    label: Member without management rights cannot create area
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+          name: Test Unit
+          description: The Test Unit
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+          memberId: 464b1ebb-32c1-460c-8e9e-333333333333
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: false
+          weight: 1
+    when:
+      type: CREATE_AREA_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-777777777777
+        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        name: test area
+        description: the test area
+        externalReference: 'area.com'
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: UNPRIVILEGED_EXCEPTION
+        message: ''
+
+  -
+    label: create area
+    given:
+      key: management-priv-granted
+      precondition:
+        -
+          type: UNIT_CREATED_EVENT
+          payload:
+            id: 464b1ebb-32c1-460c-8e9e-111111111111
+            requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+            name: Test Unit
+            description: The Test Unit
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            id: 464b1ebb-32c1-460c-8e9e-111111111111
+            requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+            memberId: 464b1ebb-32c1-460c-8e9e-333333333333
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: true
+            weight: 1
+    when:
+      type: CREATE_AREA_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-777777777777
+        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        name: test area
+        description: the test area
+        externalReference: 'area.com'
+    then:
+      type: AREA_CREATED_EVENT
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-777777777777
+        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        name: test area
+        description: the test area
+        externalReference: 'area.com'
+
+  -
+    label: area must not already exist
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+          name: Test Unit
+          description: The Test Unit
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+          memberId: 464b1ebb-32c1-460c-8e9e-333333333333
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 1
+      -
+        type: AREA_CREATED_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          areaId: 464b1ebb-32c1-460c-8e9e-777777777777
+          requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+          name: test area
+          description: the test area
+          externalReference: 'area.com'
+    when:
+      type: CREATE_AREA_COMMAND
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-777777777777
+        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        name: test area
+        description: the test area
+        externalReference: 'area.com'
+    then:
+      type: COMMAND_EVALUATION_EXCEPTION
+      error: true
+      payload:
+        code: CONFLICT_EXCEPTION
+        message: ''
+

@@ -1,0 +1,568 @@
+---
+label: UnitAggregate - Area and Issue Delegations
+key: area-issue-delegation-command
+type: DOMAIN_COMMAND_TEST
+
+mocks:
+  - &unitCreatedEvent
+    type: UNIT_CREATED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      name: Test Unit
+      description: The Test Unit
+  - &areaCreatedEvent
+    type: AREA_CREATED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      name: test area
+      description: the test area
+      externalReference: 'area.com'
+  - &privGrantedEvtVoter4
+    type: PRIVILEGE_GRANTED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      memberId: 464b1ebb-32c1-460c-8e9e-444444444444
+      pollingRight: true
+      votingRight: true
+      initiativeRight: true
+      managementRight: true
+      weight: 1
+  - &privGrantedEvtVoter5
+    type: PRIVILEGE_GRANTED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      memberId: 464b1ebb-32c1-460c-8e9e-555555555555
+      pollingRight: true
+      votingRight: true
+      initiativeRight: true
+      managementRight: true
+      weight: 1
+  - &delegationSetEvent
+    type: AREA_DELEGATION_SET_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      trusterId: 464b1ebb-32c1-460c-8e9e-444444444444
+      trusteeId: 464b1ebb-32c1-460c-8e9e-555555555555
+
+  - &setDelegationCmd
+    type: SET_AREA_DELEGATION_COMMAND
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
+      trusteeId: 464b1ebb-32c1-460c-8e9e-555555555555
+  - &unsetDelegationCmd
+    type: UNSET_AREA_DELEGATION_COMMAND
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
+
+  - &blockDelegationForAreaCmd
+    type: BLOCK_DELEGATION_FOR_AREA_COMMAND
+    payload: 
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
+
+  - &unblockDelegationForAreaCmd
+    type: UNBLOCK_DELEGATION_FOR_AREA_COMMAND
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
+
+  - &delegationBlockedForAreaEvt
+    type: DELEGATION_BLOCKED_FOR_AREA_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      trusterId: 464b1ebb-32c1-460c-8e9e-444444444444
+
+  - &delegationUnblockedForAreaEvt
+    type: DELEGATION_UNBLOCKED_FOR_AREA_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      trusterId: 464b1ebb-32c1-460c-8e9e-444444444444
+
+  - &newInitiativeCreatedEvt
+    type: NEW_INITIATIVE_CREATED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+      requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
+      initiativeId: 464b1ebb-32c1-460c-8e9e-777777777777
+      unitId: 464b1ebb-32c1-460c-8e9e-111111111111
+      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      policyId: 464b1ebb-32c1-460c-8e9e-888888888888
+      name: 'Test Initiative'
+      polling: false
+      externalReference: ''
+      content: 'mock content'
+      textSearchData: 'foo, bar'
+      created: 1483586759
+
+  - &setIssueDelegationCmdPayload
+    id: 464b1ebb-32c1-460c-8e9e-666666666666
+    requesterId: 464b1ebb-32c1-460c-8e9e-555555555555
+    trusteeId: 464b1ebb-32c1-460c-8e9e-444444444444
+
+  - &issueDelegationSetEvt
+    type: ISSUE_DELEGATION_SET_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+      trusterId: 464b1ebb-32c1-460c-8e9e-555555555555
+      trusteeId: 464b1ebb-32c1-460c-8e9e-444444444444
+
+  - &unsetIssueDelegationCmd
+    type: UNSET_ISSUE_DELEGATION_COMMAND
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+      requesterId: 464b1ebb-32c1-460c-8e9e-555555555555
+
+  - &issueDelegationUnsetEvt
+    type: ISSUE_DELEGATION_UNSET_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+      trusterId: 464b1ebb-32c1-460c-8e9e-555555555555
+
+  - &issueQuorumFailedEvt
+    type: ISSUE_ADMISSION_QUORUM_FAILED_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+
+  - &blockDelegationForIssueCmd
+    type: BLOCK_DELEGATION_FOR_ISSUE_COMMAND
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+      requesterId: 464b1ebb-32c1-460c-8e9e-555555555555
+
+  - &delegationBlockedForIssueEvt
+    type: DELEGATION_BLOCKED_FOR_ISSUE_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+      trusterId: 464b1ebb-32c1-460c-8e9e-555555555555
+
+  - &unblockDelegationForIssueCmd
+    type: UNBLOCK_DELEGATION_FOR_ISSUE_COMMAND
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+      requesterId: 464b1ebb-32c1-460c-8e9e-555555555555
+
+  - &delegationUnblockedForIssueEvt
+    type: DELEGATION_UNBLOCKED_FOR_ISSUE_EVENT
+    payload:
+      id: 464b1ebb-32c1-460c-8e9e-666666666666
+      trusterId: 464b1ebb-32c1-460c-8e9e-555555555555
+
+  - &notFoundErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: ITEM_NOT_FOUND_EXCEPTION
+      message: ''
+  - &unprivilegedErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: UNPRIVILEGED_EXCEPTION
+      message: ''
+  - &issueStateErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: ISSUE_STATE_EXCEPTION
+      message: ''
+  - &conflictErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: CONFLICT_EXCEPTION
+      message: ''
+
+scenarios:
+
+  -
+    label: Area must exist
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+    when: *setDelegationCmd
+    then: *notFoundErr
+
+  -
+    label: truster must have voting right
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+    when: *setDelegationCmd
+    then: *unprivilegedErr
+
+  -
+    label: trustee must have voting right
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *areaCreatedEvent
+    when: *setDelegationCmd
+    then: *unprivilegedErr
+
+  -
+    label: set delegation
+    given:
+      key: area-created
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+    when: *setDelegationCmd
+    then:
+      type: AREA_DELEGATION_SET_EVENT
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+        trusterId: 464b1ebb-32c1-460c-8e9e-444444444444
+        trusteeId: 464b1ebb-32c1-460c-8e9e-555555555555
+
+  -
+    label: set area delegation should remove block
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *delegationBlockedForAreaEvt
+      - *delegationSetEvent
+    when: *unblockDelegationForAreaCmd
+    then: *notFoundErr
+
+  -
+    label: unset delegation, delegation must exist
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+    when: *unsetDelegationCmd
+    then: *notFoundErr
+
+  -
+    label: unset delegation
+    given:
+      key: area-delegated
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+        - *delegationSetEvent
+    when: *unsetDelegationCmd
+    then:
+      type: AREA_DELEGATION_UNSET_EVENT
+      payload:
+        id: 464b1ebb-32c1-460c-8e9e-111111111111
+        areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+        trusterId: 464b1ebb-32c1-460c-8e9e-444444444444
+
+  -
+    label: unset delegation should remove delegation
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *delegationSetEvent
+      -
+        type: AREA_DELEGATION_UNSET_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+          trusterId: 464b1ebb-32c1-460c-8e9e-444444444444
+    when: *unsetDelegationCmd
+    then: *notFoundErr
+
+  -
+    label: block area delegation should unset area delegation
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *delegationSetEvent
+      - *delegationBlockedForAreaEvt
+    when: *unsetDelegationCmd
+    then: *notFoundErr
+
+  -
+    label: Area must exist to block area delegation
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+    when: *blockDelegationForAreaCmd
+    then: *notFoundErr
+
+  -
+    label: block area delegation
+    given: area-created
+    when: *blockDelegationForAreaCmd
+    then: *delegationBlockedForAreaEvt
+
+  -
+    label: block area for delegation should fail on duplicate
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *delegationBlockedForAreaEvt
+    when: *blockDelegationForAreaCmd
+    then: *conflictErr
+
+  -
+    label: Area must exist to unblock area delegation
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+    when: *unblockDelegationForAreaCmd
+    then: *notFoundErr
+
+  -
+    label: Block must exist to unblock area delegation
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+    when: *unblockDelegationForAreaCmd
+    then: *notFoundErr
+
+  -
+    label: Unblock Area Delegation
+    given:
+      key: area-delegation-blocked
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+        - *delegationBlockedForAreaEvt
+    when: *unblockDelegationForAreaCmd
+    then: *delegationUnblockedForAreaEvt
+  -
+    label: set issue delegation should require voting privilege of trustee
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+    when:
+      type: SET_ISSUE_DELEGATION_COMMAND
+      payload:
+        <<: *setIssueDelegationCmdPayload
+        trusteeId: 464b1ebb-32c1-460c-8e9e-000000000000
+    then: *unprivilegedErr
+
+  -
+    label: set issue delegation should require voting privilege of truster
+    given:
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *areaCreatedEvent
+        - *newInitiativeCreatedEvt
+    when:
+      type: SET_ISSUE_DELEGATION_COMMAND
+      payload:  *setIssueDelegationCmdPayload
+    then: *unprivilegedErr
+
+  -
+    label: set issue delegation
+    given:
+      key: issue-created
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+        - *newInitiativeCreatedEvt
+    when:
+      type: SET_ISSUE_DELEGATION_COMMAND
+      payload: *setIssueDelegationCmdPayload
+    then: *issueDelegationSetEvt
+
+  -
+    label: set issue delegation should remove conflicting block
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+      - *delegationBlockedForIssueEvt
+      - *issueDelegationSetEvt
+    when: *unblockDelegationForIssueCmd
+    then: *notFoundErr
+
+  -
+    label: unset issue delegation should fail if no delegation set
+    given: issue-created
+    when: *unsetIssueDelegationCmd
+    then: *notFoundErr
+
+  -
+    label: unset issue delegation
+    given:
+      key: issue-delegated
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+        - *newInitiativeCreatedEvt
+        - *issueDelegationSetEvt
+    when: *unsetIssueDelegationCmd
+    then: *issueDelegationUnsetEvt
+
+  -
+    label: unset issue delegation should fail on duplicate
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+      - *issueDelegationSetEvt
+      - *issueDelegationUnsetEvt
+    when: *unsetIssueDelegationCmd
+    then: *notFoundErr
+
+  -
+    label: set issue delegation should fail if issue not open
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+      - *issueQuorumFailedEvt
+    when:
+      type: SET_ISSUE_DELEGATION_COMMAND
+      payload: *setIssueDelegationCmdPayload
+    then: *issueStateErr
+
+  -
+    label: unset issue delegation should fail if issue not open
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+      - *issueDelegationSetEvt
+      - *issueQuorumFailedEvt
+    when: *unsetIssueDelegationCmd
+    then: *issueStateErr
+
+  -
+    label: block issue delegation should fail if issue not open
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+      - *issueQuorumFailedEvt
+    when: *blockDelegationForIssueCmd
+    then: *issueStateErr
+
+  -
+    label: member must have voting rights to block delegation for issue
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+    when: *blockDelegationForIssueCmd
+    then: *unprivilegedErr
+
+  -
+    label: block issue delegation
+    given: issue-created
+    when: *blockDelegationForIssueCmd
+    then: *delegationBlockedForIssueEvt
+
+  -
+    label: block issue delegation should fail on duplicate
+    given: 
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+      - *delegationBlockedForIssueEvt
+    when: *blockDelegationForIssueCmd
+    then: *conflictErr
+
+  -
+    label: block issue delegation should remove conflicting area delegation
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+      - *issueDelegationSetEvt
+      - *delegationBlockedForIssueEvt
+    when: *unsetIssueDelegationCmd
+    then: *notFoundErr
+
+  -
+    label: unblock issue delegation should fail if issue not open
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+      - *delegationBlockedForIssueEvt
+      - *issueQuorumFailedEvt
+    when: *unblockDelegationForIssueCmd
+    then: *issueStateErr
+
+  -
+    label: unblock issue delegation should fail if issue no block exists
+    given:
+      - *unitCreatedEvent
+      - *privGrantedEvtVoter4
+      - *privGrantedEvtVoter5
+      - *areaCreatedEvent
+      - *newInitiativeCreatedEvt
+    when: *unblockDelegationForIssueCmd
+    then: *notFoundErr
+
+  -
+    label: unblock issue delegation
+    given:
+      key: issue-blocked
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter4
+        - *privGrantedEvtVoter5
+        - *areaCreatedEvent
+        - *newInitiativeCreatedEvt
+        - *delegationBlockedForIssueEvt
+    when: *unblockDelegationForIssueCmd
+    then: *delegationUnblockedForIssueEvt
+

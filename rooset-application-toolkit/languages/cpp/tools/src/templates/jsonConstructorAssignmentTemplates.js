@@ -35,8 +35,7 @@ module.exports = {
                 [&](const rapidjson::Value& v) { return JsonUtils::parseUuid(v); }))`,
 
   date: (v) => `
-            ${v}(boost::posix_time::from_time_t(
-                time_t(d["payload"]["${v}"].GetDouble())))`,
+            ${v}(d["payload"]["${v}"].GetUint())`,
 
   int: (v) => `
             ${v}(d["payload"]["${v}"].GetInt())`,
@@ -45,5 +44,5 @@ module.exports = {
             ${v}(d["payload"]["${v}"].GetUint())`,
 
   duration: (v) => `
-            ${v}(boost::posix_time::seconds(d["payload"]["${v}"].GetDouble()))`,
+            ${v}(d["payload"]["${v}"].GetUint())`,
 };

@@ -1,0 +1,43 @@
+server:
+  port: 8095
+
+spring:
+  jpa:
+    database: POSTGRESQL
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/rooset_http_api
+    username: rooset
+    password: rooset
+    driveClassName: org.postgresql.Driver
+
+rooset:
+  'domain-command-bin': '@basedir@/../rooset-domain-command-posix/build/rooset-command'
+
+get-event-store:
+  port: 2113
+  host: localhost
+  binPath: '' # Not used in production, testing only
+
+
+---
+
+spring:
+  profiles: clean-dev
+  jpa:
+    'show-sql': true
+    hibernate:
+      'ddl-auto': create-drop
+
+
+---
+
+spring:
+  profiles: integration-tests
+
+get-event-store:
+  port: 2114
+  host: localhost
+  binPath: '/opt/EventStore'
+
+

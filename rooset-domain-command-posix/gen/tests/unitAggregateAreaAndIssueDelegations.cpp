@@ -118,107 +118,6 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist)
 }
 
 
-TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_block_area_delegation)
-{
-  
-  vector<string> givenEvents;
-  
-  givenEvents.push_back(u8R"json({
-  "type": "UNIT_CREATED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "name": "Test Unit",
-    "description": "The Test Unit"
-  }
-})json");
-  givenEvents.push_back(u8R"json({
-  "type": "PRIVILEGE_GRANTED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "memberId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "pollingRight": true,
-    "votingRight": true,
-    "initiativeRight": true,
-    "managementRight": true,
-    "weight": 1
-  }
-})json");
-  givenEvents.push_back(u8R"json({
-  "type": "PRIVILEGE_GRANTED_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
-    "memberId": "464b1ebb-32c1-460c-8e9e-555555555555",
-    "pollingRight": true,
-    "votingRight": true,
-    "initiativeRight": true,
-    "managementRight": true,
-    "weight": 1
-  }
-})json");
-  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
-      NiceMock<EventRepositoryMockImpl>>();
-  eventRepository->setMockEvents(givenEvents);
-  CommandHandler commandHandler(eventRepository); 
-  
-  auto expected_doc = JsonUtils::parse(u8R"json({
-  "type": "COMMAND_EVALUATION_EXCEPTION",
-  "error": true,
-  "payload": {
-    "code": "ITEM_NOT_FOUND_EXCEPTION",
-    "message": ""
-  }
-})json");
-  try {
-  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("expected schema invalid");
-  }
-  CommandEvaluationException expected(expected_doc);
-  
-  auto cmd_doc = JsonUtils::parse(u8R"json({
-  "type": "BLOCK_DELEGATION_FOR_AREA_COMMAND",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444"
-  }
-})json");
-  try {
-  JsonUtils::validate(BlockDelegationForAreaCommand::schema, cmd_doc);
-  } catch (invalid_argument e) {
-    throw invalid_argument("cmd schema invalid");
-  }
-  BlockDelegationForAreaCommand cmd(cmd_doc);
-  
-  try {
-    commandHandler.evaluate(cmd);
-    throw invalid_argument("An exception was expected");
-  } catch(CommandEvaluationException e) {
-    auto resultDoc = e.serialize();
-    
-  // if docs don't match, assess the json output to make useful error report
-  auto expectedDoc = expected.serialize();
-  
-  // ignore the message from the test, and log it if the test fails
-  const string msg = (*resultDoc)["payload"]["message"].GetString();
-  (*expectedDoc)["payload"].RemoveMember("message");
-  (*resultDoc)["payload"].RemoveMember("message");
-  if (*expectedDoc != *resultDoc) cout << msg;
-      
-  bool isPass = *resultDoc == *expectedDoc;
-  if (isPass) {
-    EXPECT_EQ(*resultDoc, *expectedDoc);
-  }  else {
-    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
-        JsonUtils::serialize(*expectedDoc));
-  };
-  }
-}
-
-
 TEST(unit_aggregate_area_and_issue_delegations, truster_must_have_voting_right)
 {
   
@@ -1108,6 +1007,107 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation_should_uns
     throw invalid_argument("cmd schema invalid");
   }
   UnsetAreaDelegationCommand cmd(cmd_doc);
+  
+  try {
+    commandHandler.evaluate(cmd);
+    throw invalid_argument("An exception was expected");
+  } catch(CommandEvaluationException e) {
+    auto resultDoc = e.serialize();
+    
+  // if docs don't match, assess the json output to make useful error report
+  auto expectedDoc = expected.serialize();
+  
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
+      
+  bool isPass = *resultDoc == *expectedDoc;
+  if (isPass) {
+    EXPECT_EQ(*resultDoc, *expectedDoc);
+  }  else {
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
+  };
+  }
+}
+
+
+TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_block_area_delegation)
+{
+  
+  vector<string> givenEvents;
+  
+  givenEvents.push_back(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test Unit",
+    "description": "The Test Unit"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "memberId": "464b1ebb-32c1-460c-8e9e-444444444444",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "memberId": "464b1ebb-32c1-460c-8e9e-555555555555",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
+  
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "COMMAND_EVALUATION_EXCEPTION",
+  "error": true,
+  "payload": {
+    "code": "ITEM_NOT_FOUND_EXCEPTION",
+    "message": ""
+  }
+})json");
+  try {
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("expected schema invalid");
+  }
+  CommandEvaluationException expected(expected_doc);
+  
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "BLOCK_DELEGATION_FOR_AREA_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444"
+  }
+})json");
+  try {
+  JsonUtils::validate(BlockDelegationForAreaCommand::schema, cmd_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("cmd schema invalid");
+  }
+  BlockDelegationForAreaCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);

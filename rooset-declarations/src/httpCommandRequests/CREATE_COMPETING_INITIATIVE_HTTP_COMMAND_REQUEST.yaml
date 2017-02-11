@@ -1,0 +1,10 @@
+---
+type: CREATE_COMPETING_INITIATIVE_HTTP_COMMAND_REQUEST
+commandTarget: CREATE_COMPETING_INITIATIVE_COMMAND
+description: Create a competing initiative within an issue
+method: POST
+uri: '/issues/{id}/initiatives'
+userIdMapping: requesterId
+generate:
+  - initiativeId
+  - created

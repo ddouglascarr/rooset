@@ -43,7 +43,7 @@ Contains the following delcaration types:
   - Enums
   - Exceptions
   - CommandIntegrationTests
-  - CommandRequests *
+  - CommandRequests
   - QueryRequests *
   - QueryResponses *
 
@@ -86,13 +86,13 @@ Javascript Event reducers.
 
 
 
-rooset-http-api *
+rooset-http-api
 ---------------
 
 Http api.
 
-  - Transforms CommandRequests into Commands, and calls rooset-domain-command-posix
-  - Transforms QueryRequests into requests to the GetEventStore projections system
+  - Transforms HttpCommandRequests into Commands, and calls rooset-domain-command-posix
+  - Transforms QueryRequests into requests to the GetEventStore projections system *
 
 
 

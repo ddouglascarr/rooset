@@ -1,0 +1,7 @@
+---
+type: UNSET_UNIT_DELEGATION_HTTP_COMMAND_REQUEST
+commandTarget: UNSET_UNIT_DELEGATION_COMMAND
+description: Unset the unit delegation for a member
+method: DELETE
+uri: /units/{id}/delegation
+userIdMapping: requesterId

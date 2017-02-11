@@ -1,0 +1,212 @@
+---
+label: Unit Aggregate Tests
+key: unit-aggregate-command
+type: DOMAIN_COMMAND_TEST
+
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-000000000000
+  - &requesterId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &memberId 464b1ebb-32c1-460c-8e9e-222222222222
+
+  - &createUnitCmdPayload
+    id: *unitId
+    requesterId: *requesterId
+    name: Test Unit
+    description: The Test Unit
+    
+  - &invalidInputErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: INVALID_INPUT_EXCEPTION
+      message: ''
+  - &unprivErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: UNPRIVILEGED_EXCEPTION
+      message: ''
+
+
+preconditions:
+  -
+    label: Unit Exists
+    key: unit-created
+    precondition:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *requesterId
+          name: Test Unit
+          description: The Test Unit
+
+
+scenarios:
+
+
+  -
+    label: Creating Units
+    given: []
+    when:
+      action:
+        type: CREATE_UNIT_COMMAND
+        payload: *createUnitCmdPayload
+    then:
+      outcome:
+        type: UNIT_CREATED_EVENT
+        payload: *createUnitCmdPayload
+
+
+  -
+    label: Unit Creator can grant privileges
+    given: unit-created
+    when:
+      action:
+        type: GRANT_PRIVILEGE_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *requesterId
+          memberId: *memberId
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 1
+    then:
+      outcome:
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *requesterId
+          memberId: *memberId
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 1
+
+
+  -
+    label: Member Weight is restricted to 1
+    given: unit-created
+    when:
+      action:
+        type: GRANT_PRIVILEGE_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *requesterId
+          memberId: *memberId
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 2
+    then: *invalidInputErr
+
+
+
+  -
+    label: Unprivileged member cannot grant privileges
+    given: unit-created
+    when:
+      action:
+        type: GRANT_PRIVILEGE_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *memberId
+          memberId: 464b1ebb-32c1-460c-8e9e-666666666666
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 1
+    then:
+      outcome: *unprivErr
+
+
+
+  -
+    label: Member without member privileges cannot grant privileges
+    given:
+      label: member granted permission
+      key: priv-granted
+      precondition:
+        -
+          type: UNIT_CREATED_EVENT
+          payload:
+            id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+            requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+            name: Test Unit
+            description: The Test Unit
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+            requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+            memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: false
+            weight: 1
+    when:
+      action:
+        type: GRANT_PRIVILEGE_COMMAND
+        payload:
+          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+          requesterId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+          memberId: 6588b978-d3a8-4ed2-bd65-7157ab1f6016
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: false
+          weight: 1
+    then:
+      outcome: *unprivErr
+
+
+  -
+    label: Member with member privileges can grant privileges
+    given:
+      -
+        type: UNIT_CREATED_EVENT
+        payload:
+          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+          name: Test Unit
+          description: The Test Unit
+      -
+        type: PRIVILEGE_GRANTED_EVENT
+        payload:
+          id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+          requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
+          memberId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+          pollingRight: true
+          votingRight: true
+          initiativeRight: true
+          managementRight: true
+          weight: 1
+    when:
+      type: GRANT_PRIVILEGE_COMMAND
+      payload:
+        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+        requesterId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+        memberId: 6588b978-d3a8-4ed2-bd65-7157ab1f6016
+        pollingRight: true
+        votingRight: true
+        initiativeRight: true
+        managementRight: false
+        weight: 1
+    then:
+      type: PRIVILEGE_GRANTED_EVENT
+      payload:
+        id: 0c1fe645-4f57-4cfa-88d5-b2973f3f6bec
+        requesterId: f00b6b62-72d1-4c5e-974d-8a678f2c252c
+        memberId: 6588b978-d3a8-4ed2-bd65-7157ab1f6016
+        pollingRight: true
+        votingRight: true
+        initiativeRight: true
+        managementRight: false
+        weight: 1
+

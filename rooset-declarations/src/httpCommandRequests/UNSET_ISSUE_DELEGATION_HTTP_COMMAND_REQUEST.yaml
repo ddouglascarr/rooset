@@ -1,0 +1,7 @@
+---
+type: UNSET_ISSUE_DELEGATION_HTTP_COMMAND_REQUEST
+commandTarget: UNSET_ISSUE_DELEGATION_COMMAND
+description: Unset the issue delegation
+method: DELETE
+uri: /issues/{id}/delegation
+userIdMapping: requesterId

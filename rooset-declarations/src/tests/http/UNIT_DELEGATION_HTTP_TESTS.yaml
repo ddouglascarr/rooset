@@ -1,0 +1,75 @@
+---
+label: Unit Delegation Http Tests
+key: unit-delegation-http
+type: HTTP_API_TEST
+
+
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &voter2 464b1ebb-32c1-460c-8e9e-222222222222
+  - &voter3 464b1ebb-32c1-460c-8e9e-333333333333
+
+
+scenarios:
+
+
+  -
+    label: Set Unit Delegation
+    given: unit-delegation-command/privs-granted
+    when:
+      label: A member request an update to their unit delegation
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/delegation
+        method: PUT
+        requesterId: *voter2
+        body:
+          trusteeId: *voter3
+    then:
+      label: Is succeeds
+      outcome:
+        type: UNIT_DELEGATION_SET_EVENT
+        payload:
+          id: 464b1ebb-32c1-460c-8e9e-111111111111
+          trusterId: *voter2
+          trusteeId: *voter3
+
+
+  -
+    label: Unset Unit Delegation
+    given: unit-delegation-command/delegation-set
+    when:
+      label: A member requests to unset their unit delegation
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/delegation
+        method: DELETE
+        requesterId: *voter2
+    then:
+      label: It succeeds
+      outcome:
+        type: UNIT_DELEGATION_UNSET_EVENT
+        payload:
+          id: *unitId
+          trusterId: *voter2
+
+
+  -
+    label: Unset Unit Delegation should fail if no delegations
+    given: unit-delegation-command/privs-granted
+    when:
+      label: A member requests to unset their unit delegation
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/delegation
+        method: DELETE
+        requesterId: *voter2
+    then:
+      label: A not found error is produced
+      outcome:
+        type: COMMAND_EVALUATION_EXCEPTION
+        error: true
+        payload:
+          code: ITEM_NOT_FOUND_EXCEPTION
+          message: ''
+

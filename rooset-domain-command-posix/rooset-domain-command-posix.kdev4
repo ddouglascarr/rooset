@@ -1,0 +1,4 @@
+[Project]
+CreatedFrom=rooset-domain-command-posix
+Manager=KDevCMakeManager
+Name=rooset-domain-command-posix
