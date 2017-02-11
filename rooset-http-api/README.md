@@ -38,6 +38,11 @@ Running Integration Tests
   $ mvn test
 ```
 
+This expects EventStore to be installed at /opt/EventStore. To override:
+
+```
+  $ mvn test -Drun.arguments="--rooset.get-event-store.binPath=/path/to/event/store"
+```
 
 Running
 -------
