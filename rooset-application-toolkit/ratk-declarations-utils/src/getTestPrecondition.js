@@ -18,5 +18,5 @@ module.exports = (testKey, scenarioKey) => {
       Could not find scenario with key ${scenarioKey} in test with key ${testKey}`);
 
   const events = scenario.given.precondition;
-  console.log(JSON.stringify(events, null, 2));
+  return events;
 };
