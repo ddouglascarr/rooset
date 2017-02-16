@@ -2,6 +2,20 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type":"object",
   "definitions": {
+    "area": {
+      "type": "object",
+      "properties": {
+        "areaId": { "$ref": "#/definitions/uuid" },
+        "name": { "$ref": "#/definitions/string" },
+        "description": { "$ref": "#/definitions/string" },
+        "externalReference": { "$ref": "#/definitions/string" }
+      },
+      "required": ["areaId", "name", "description", "externalReference"]
+    },
+    "areaArray": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/area" }
+    },
     "bool": {
       "type": "boolean"
     },
@@ -13,6 +27,16 @@
     "duration": {
       "type": "integer",
       "description": "Length of duration in seconds"
+    },
+    "policy": {
+      "policyId": { "$ref": "#/definitions/uuid" },
+      "name": { "$ref": "#/defintions/string" },
+      "description": { "$ref": "#/definitions/string" },
+      "discusionTime": { "$ref": "#/definitions/duration" },
+      "verificationTime": { "$ref": "#/definitions/duration" },
+      "votingTime": { "$ref": "#/definitions/duration" },
+      "issueQuorumNum": { "$ref": "#/defintions/uint" },
+      "issueQuorumDen": { "$ref": "#/definitions/unit" }
     },
     "uuid": {
       "type":"string",
