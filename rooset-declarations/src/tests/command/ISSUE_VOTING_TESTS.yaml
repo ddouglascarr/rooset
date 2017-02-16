@@ -335,167 +335,170 @@ scenarios:
 
   - label: Should pick single winner in schulze ex 1
     given:
-      - *unitCreatedEvt
-      - *unitPolicySetEvt
-      - *areaCreatedEvt
-      - *newInitiativeCreatedEvt
-      -
-        type: COMPETING_INITIATIVE_CREATED_EVENT
-        payload:
-          <<: *competingInitiativeCreatedPayload
-          initiativeId: *initiativeC
-          created: 1484817333
-      -
-        type: COMPETING_INITIATIVE_CREATED_EVENT
-        payload:
-          <<: *competingInitiativeCreatedPayload
-          initiativeId: *initiativeD
-          created: 1484817320
-      - *issueVerificationPhaseCompletedEvt
-      -
-        type: PRIVILEGE_GRANTED_EVENT
-        payload:
-          <<: *privGrantedPayload
-          memberId: *voter0
-          weight: 8
-      -
-        type: PRIVILEGE_GRANTED_EVENT
-        payload:
-          <<: *privGrantedPayload
-          memberId: *voter1
-          weight: 2
-      -
-        type: PRIVILEGE_GRANTED_EVENT
-        payload:
-          <<: *privGrantedPayload
-          memberId: *voter2
-          weight: 4
-      -
-        type: PRIVILEGE_GRANTED_EVENT
-        payload:
-          <<: *privGrantedPayload
-          memberId: *voter3
-          weight: 4
-      -
-        type: PRIVILEGE_GRANTED_EVENT
-        payload:
-          <<: *privGrantedPayload
-          memberId: *voter4
-      -
-        type: PRIVILEGE_GRANTED_EVENT
-        payload:
-          <<: *privGrantedPayload
-          memberId: *voter5
-      -
-        type: PRIVILEGE_GRANTED_EVENT
-        payload:
-          <<: *privGrantedPayload
-          memberId: *voter6
-      -
-        <<: *issueBallotSetEvt
-        payload:
-          id: *issueId
-          requesterId: *voter0
-          ballot:
-            approve: []
-            abstain: []
-            disapprove:
-              -
-                - *initiativeC
-              -
-                - *initiativeD
-              -
-                - *initiativeB
-      -
-        <<: *issueBallotSetEvt
-        payload:
-          id: *issueId
-          requesterId: *voter1
-          ballot:
-            approve:
-              -
-                - *initiativeB
-            abstain: []
-            disapprove:
-              -
-                - *initiativeD
-              -
-                - *initiativeC
-      -
-        <<: *issueBallotSetEvt
-        payload:
-          id: *issueId
-          requesterId: *voter2
-          ballot:
-            approve:
-              -
-                - *initiativeC
-              -
-                - *initiativeD
-              -
-                - *initiativeB
-            abstain: []
-            disapprove: []
-      -
-        <<: *issueBallotSetEvt
-        payload:
-          id: *issueId
-          requesterId: *voter3
-          ballot:
-            approve:
-              -
-                - *initiativeD
-              -
-                - *initiativeB
-            abstain: []
-            disapprove:
-              -
-                - *initiativeC
-      -
-        <<: *issueBallotSetEvt
-        payload:
-          id: *issueId
-          requesterId: *voter4
-          ballot:
-            approve:
-              -
-                - *initiativeD
-              -
-                - *initiativeC
-              -
-                - *initiativeB
-            abstain: []
-            disapprove: []
-      -
-        <<: *issueBallotSetEvt
-        payload:
-          id: *issueId
-          requesterId: *voter5
-          ballot:
-            approve:
-              -
-                - *initiativeD
-              -
-                - *initiativeC
-              -
-                - *initiativeB
-            abstain: []
-            disapprove: []
-      -
-        <<: *issueBallotSetEvt
-        payload:
-          id: *issueId
-          requesterId: *voter6
-          ballot:
-            approve:
-              -
-                - *initiativeD
-              -
-                - *initiativeC
-              -
-                - *initiativeB
-            abstain: []
-            disapprove: []
+      key: single-winner-voting
+      description: A single winner has been voted
+      precondition:
+        - *unitCreatedEvt
+        - *unitPolicySetEvt
+        - *areaCreatedEvt
+        - *newInitiativeCreatedEvt
+        -
+          type: COMPETING_INITIATIVE_CREATED_EVENT
+          payload:
+            <<: *competingInitiativeCreatedPayload
+            initiativeId: *initiativeC
+            created: 1484817333
+        -
+          type: COMPETING_INITIATIVE_CREATED_EVENT
+          payload:
+            <<: *competingInitiativeCreatedPayload
+            initiativeId: *initiativeD
+            created: 1484817320
+        - *issueVerificationPhaseCompletedEvt
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            <<: *privGrantedPayload
+            memberId: *voter0
+            weight: 8
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            <<: *privGrantedPayload
+            memberId: *voter1
+            weight: 2
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            <<: *privGrantedPayload
+            memberId: *voter2
+            weight: 4
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            <<: *privGrantedPayload
+            memberId: *voter3
+            weight: 4
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            <<: *privGrantedPayload
+            memberId: *voter4
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            <<: *privGrantedPayload
+            memberId: *voter5
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            <<: *privGrantedPayload
+            memberId: *voter6
+        -
+          <<: *issueBallotSetEvt
+          payload:
+            id: *issueId
+            requesterId: *voter0
+            ballot:
+              approve: []
+              abstain: []
+              disapprove:
+                -
+                  - *initiativeC
+                -
+                  - *initiativeD
+                -
+                  - *initiativeB
+        -
+          <<: *issueBallotSetEvt
+          payload:
+            id: *issueId
+            requesterId: *voter1
+            ballot:
+              approve:
+                -
+                  - *initiativeB
+              abstain: []
+              disapprove:
+                -
+                  - *initiativeD
+                -
+                  - *initiativeC
+        -
+          <<: *issueBallotSetEvt
+          payload:
+            id: *issueId
+            requesterId: *voter2
+            ballot:
+              approve:
+                -
+                  - *initiativeC
+                -
+                  - *initiativeD
+                -
+                  - *initiativeB
+              abstain: []
+              disapprove: []
+        -
+          <<: *issueBallotSetEvt
+          payload:
+            id: *issueId
+            requesterId: *voter3
+            ballot:
+              approve:
+                -
+                  - *initiativeD
+                -
+                  - *initiativeB
+              abstain: []
+              disapprove:
+                -
+                  - *initiativeC
+        -
+          <<: *issueBallotSetEvt
+          payload:
+            id: *issueId
+            requesterId: *voter4
+            ballot:
+              approve:
+                -
+                  - *initiativeD
+                -
+                  - *initiativeC
+                -
+                  - *initiativeB
+              abstain: []
+              disapprove: []
+        -
+          <<: *issueBallotSetEvt
+          payload:
+            id: *issueId
+            requesterId: *voter5
+            ballot:
+              approve:
+                -
+                  - *initiativeD
+                -
+                  - *initiativeC
+                -
+                  - *initiativeB
+              abstain: []
+              disapprove: []
+        -
+          <<: *issueBallotSetEvt
+          payload:
+            id: *issueId
+            requesterId: *voter6
+            ballot:
+              approve:
+                -
+                  - *initiativeD
+                -
+                  - *initiativeC
+                -
+                  - *initiativeB
+              abstain: []
+              disapprove: []
     when:
       type: COMPLETE_ISSUE_VOTING_PHASE_COMMAND
       payload:
