@@ -1,6 +1,19 @@
 #!/bin/bash
 set -o errexit -o nounset -o pipefail
 
+
+########################################
+#
+# Rough tool for persisting a test precondition to
+# EventStore. Don't use this in formal tests. It
+# is for manual testing an experimentation.
+#
+# Usage: ./persist-test-precondition <test-key> <precondition-key>
+# Example: ./persist-test-precondition area-issue-delegation-command area-created
+#
+########################################
+
+
 WORKDIR=`dirname "$(readlink -f "$0")"`
 cd $WORKDIR
 
