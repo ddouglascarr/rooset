@@ -8,4 +8,5 @@ module.exports = {
   findCommandSchemaByType: require('./src/findCommandSchemaByType'),
   findHttpCommandRequestByUri: require('./src/findHttpCommandRequestByUri'),
   matchUri: require('./src/matchUri'),
+  getTestPrecondition: require('./src/getTestPrecondition'),
 };

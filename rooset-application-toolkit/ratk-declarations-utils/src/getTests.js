@@ -22,7 +22,7 @@ const testTypeEnumValues = [
 
 
 
-module.exports = (_srcPath, testType) => {
+module.exports = (_srcPath, testType, doStripMetadata = true) => {
   const allTestSpecs = {};
   if (testTypeEnumValues.indexOf(testType) === -1) {
     throw new Error(`testType must be one of ${testTypeEnumValues}, it is ${testType}`);
@@ -44,7 +44,7 @@ module.exports = (_srcPath, testType) => {
   return chain(jsonTests.concat(yamlTests))
       .map((d) => addToAllTestSpecs(d))
       .map((d) => injectPreconditions(d))
-      .map((d) => stripMetadata(d))
+      .map((d) => doStripMetadata ? stripMetadata(d) : d)
       .filter((d) => (testType === 'ALL' || d.type === testType))
       .value();
 
