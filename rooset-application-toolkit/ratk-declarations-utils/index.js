@@ -7,6 +7,7 @@ module.exports = {
   getPathVariables: require('./src/getPathVariables'),
   findCommandSchemaByType: require('./src/findCommandSchemaByType'),
   findHttpCommandRequestByUri: require('./src/findHttpCommandRequestByUri'),
+  findSchema: require('./src/findSchema'),
   matchUri: require('./src/matchUri'),
   getTestPrecondition: require('./src/getTestPrecondition'),
 };
