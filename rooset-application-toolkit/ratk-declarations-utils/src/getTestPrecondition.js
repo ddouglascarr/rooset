@@ -2,12 +2,12 @@ const { find } = require('lodash');
 const getConfigFromEnv = require('./getConfigFromEnv');
 const getTests = require('./getTests');
 
-const config = getConfigFromEnv({
-  testSrcPath: 'RATK_GEN_TEST_DECL_DIR',
-});
-
 
 module.exports = (testKey, scenarioKey) => {
+  const config = getConfigFromEnv({
+    testSrcPath: 'RATK_GEN_TEST_DECL_DIR',
+  });
+
   const testSpecs = getTests(config.testSrcPath, 'ALL', false);
   const testSpec = find(testSpecs, (spec) => spec.key === testKey);
   if (!testSpec) throw new Error(`
