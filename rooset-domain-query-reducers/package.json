@@ -1,0 +1,19 @@
+{
+  "name": "rooset-domain-query-reducers",
+  "version": "0.1.0",
+  "description": "Query reducers for rooset",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ddouglascarr/rooset.git"
+  },
+  "author": "Daniel Carr <d.douglas.carr@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ddouglascarr/rooset/issues"
+  },
+  "homepage": "https://github.com/ddouglascarr/rooset#readme"
+}
