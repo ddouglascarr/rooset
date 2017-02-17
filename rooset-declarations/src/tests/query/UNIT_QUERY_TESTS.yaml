@@ -1,0 +1,101 @@
+---
+label: Unit Query Tests
+type: QUERY_TEST
+key: unit-query
+
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-000000000000
+  - &areaId0 464b1ebb-32c1-460c-8e9e-111111111111
+  - &areaId1 464b1ebb-32c1-460c-8e9e-222222222222
+  - &policyId 464b1ebb-32c1-460c-8e9e-333333333333
+  - &managerId 464b1ebb-32c1-460c-8e9e-444444444444
+  - &policyQueryBody
+      policyId: *policyId
+      name: Test Policy
+      description: The Test Policy
+      discussionTime: 604800000
+      verificationTime: 604800000
+      votingTime: 604800000
+      issueQuorumNum: 1
+      issueQuorumDen: 10
+    
+
+scenarios:
+
+
+  -
+    label: Query active unit
+    given:
+      key: unit-created-with-areas
+      label: A unit has been created
+      precondition:
+        -
+          type: UNIT_CREATED_EVENT
+          payload:
+            id: *unitId
+            requesterId: *managerId
+            name: "Test Unit"
+            description: "The Test Unit"
+        -
+          type: UNIT_POLICY_SET_EVENT
+          payload:
+            <<: *policyQueryBody
+            id: *unitId
+            requesterId: *managerId
+            polling: false
+            maxAdmissionTime: 604800000
+            minAdmissionTime: 0
+            defeatStrength: SIMPLE
+            directMajorityNum: 1
+            directMajorityDen: 2
+            directMajorityStrict: true
+            directMajorityPositive: 1
+            directMajorityNonNegative: 1
+            noReverseBeatPath: false
+            noMultistageMajority: false
+        -
+          type: AREA_CREATED_EVENT
+          payload:
+            id: *unitId
+            areaId: *areaId0
+            requesterId: *managerId
+            name: "area0"
+            description: "The 0 Area"
+            externalReference: "http://area0.org"
+        -
+          type: AREA_CREATED_EVENT
+          payload:
+            id: *unitId
+            areaId: *areaId1
+            requesterId: *managerId
+            name: "area1"
+            description: "The 1 Area"
+            externalReference: "http://area1.org"
+      when:
+        label: The Unit is Queried
+        action:
+          type: UNIT_QUERY_REQUEST
+          payload:
+            id: *unitId
+      then:
+        label: System Responds
+        outcome:
+          type: UNIT_QUERY_RESPONSE
+          payload:
+            id: *unitId
+            name: "Test Unit"
+            description: "The Test Unit"
+            policy: *policyQueryBody
+            areas:
+              -
+                areaId: *areaId0
+                name: "area0"
+                description: "The 0 Area"
+                externalReference: "http://area0.org"
+              -
+                areaId: *areaId1
+                name: "area1"
+                description: "The 1 Area"
+                externalReference: "http://area1.org"
+
+

@@ -12,4 +12,5 @@ module.exports = {
       './src/assertMessageCompliesWithSchema'),
   matchUri: require('./src/matchUri'),
   getTestPrecondition: require('./src/getTestPrecondition'),
+  getMsgTypeFromSchema: require('./src/getMsgTypeFromSchema'),
 };
