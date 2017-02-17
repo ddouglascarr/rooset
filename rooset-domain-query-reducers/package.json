@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/ddouglascarr/rooset/issues"
   },
-  "homepage": "https://github.com/ddouglascarr/rooset#readme"
+  "homepage": "https://github.com/ddouglascarr/rooset#readme",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "node-fetch": "^1.6.3",
+    "uuid4": "^1.0.0"
+  }
 }
