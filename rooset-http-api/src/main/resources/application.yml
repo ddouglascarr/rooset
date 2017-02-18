@@ -39,6 +39,4 @@ get-event-store:
   port: 2114
   host: localhost
   binPath: '/opt/EventStore'
-
-rooset:
-  'domain-query-reducer-path': '@basedir@/../rooset-domain-query-reducers/reducers'
+  'init-all-projections-bin': '@basedir@/../rooset-domain-query-reducers/init-all-projections'

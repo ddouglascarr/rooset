@@ -44,8 +44,8 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
   @Value("${get-event-store.binPath}")
   private String getEventStoreBinPath;
 
-  @Value("${rooset.domain-query-reducer-path}")
-  private String reducerPath;
+  @Value("${get-event-store.init-all-projections-bin}")
+  private String initAllProjectionsBin;
 
   @Override
   public ExecuteWatchdog startTestingEventStore()
@@ -54,10 +54,11 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
     final ByteArrayOutputStream bos = new ByteArrayOutputStream();
     final PumpStreamHandler psh = new PumpStreamHandler(bos);
 
-    CommandLine cmdLine = new CommandLine("./eventstored");
+    CommandLine cmdLine = new CommandLine("eventstored");
     cmdLine.addArgument("--mem-db");
     cmdLine.addArgument("--ext-http-port");
     cmdLine.addArgument(getEventStorePort);
+    cmdLine.addArgument("--run-projections=all");
 
     DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
     final DaemonExecutor executor = new DaemonExecutor();
