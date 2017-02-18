@@ -1,9 +1,14 @@
 const Ajv = require('ajv');
+const ajv = new Ajv({
+  allErrors: true,
+  verbose: true,
+  format: 'full',
+  validateSchema: 'log',
+});
 
 
 module.exports = (schema, message) => {
   try {
-    const ajv = new Ajv();
     const validate = ajv.compile(schema);
     const isValid = validate(message);
     if (!isValid) throw new Error(`

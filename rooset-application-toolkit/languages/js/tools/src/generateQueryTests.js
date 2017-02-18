@@ -38,7 +38,7 @@ function validateTestDecl(testDecl) {
       if (!type) throw new Error(
           `No type for event: ${event} in ${scenario.label}`);
       const schema = findSchema(baseSchema, "events", config.eventSrcPath, type);
-      // assertMessageCompliesWithSchema(schema, event);
+      assertMessageCompliesWithSchema(schema, event);
     });
   });
 }
