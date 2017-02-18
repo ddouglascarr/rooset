@@ -49,6 +49,7 @@ function initProjection(queryType, fileContent) {
 }
 
 function persistEvent(event) {
+  console.log(`persisting ${event.type}`);
   const type = event.type;
   const streamId = event.payload.id;
 
@@ -61,11 +62,9 @@ function persistEvent(event) {
     `http://${EVENTSTORE_HOST}:${EVENTSTORE_PORT}/streams/${streamId}`,
     { body: JSON.stringify(event), headers: localHeaders, method: "POST" }
   ).then(resp => {
-    if (!resp.ok)
-      throw new Error(`saving event ${type} failed ${resp.statusText}`);
-    return Promise.resolve(resp);
-  }).then((resp) => {
-    console.log(`persistEvent response ${resp}`);
+    if (!resp.ok) throw new Error(
+        `saving event ${type} failed ${resp.statusText}`);
+    console.log(`persisted ${event.type}`);
     return Promise.resolve();
   });
 }

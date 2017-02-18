@@ -39,7 +39,7 @@ ${testBlocks.join("\n")}
 
   function generateTestBlock(scenario) {
     const setEvents = scenario.given.precondition.map((event) =>
-  `   .then(() => persistEvent(${JSON.stringify(event)}))`);
+  `       .then(() => { return persistEvent(${JSON.stringify(event)}); })`);
 
     const queryType = scenario.when.action.type.split('_REQUEST')[0];
     const queryDecl = findDeclarationByType(queryDeclDir, queryType);
@@ -53,20 +53,33 @@ ${testBlocks.join("\n")}
       .then(() =>  initProjection("${queryType}", file))
 
       // persist events
+      .then(() => {
+          return Promise.resolve()
   ${setEvents.join("\n")}
+          .then((resp) => Promise.resolve({foo: 'bar'}))
+      })
 
       // perform query
-      .then(() => fetch(
-        "http://localhost:2113/projection/${queryType}${applyUriTemplate(queryDecl.projectionUri, { id: scenario.then.outcome.payload.id })}"
-      ))
+      .then(() => {
+        return new Promise((resolve) => {
+          setTimeout(resolve, 600);
+        });
+      })
+      .then(() => {
+        const url = "http://localhost:2113/projection/${queryType}${applyUriTemplate(queryDecl.projectionUri, { id: scenario.then.outcome.payload.id })}";
+        console.log(url);
+        return fetch(url);
+      })
 
       .then((resp) => {
         if (!resp.ok) throw new Error("response failed: " + resp);
-        expect(resp.json()).toEqual(${JSON.stringify(scenario.then.outcome)});
         return resp.json();
       })
-      .then((body) => {
-        expect(body).toEqual(${JSON.stringify(scenario.then.outcome)});
+      .then(function(body) {
+        console.log('performing test');
+        console.log(body);
+        expect(body).toEqual(${JSON.stringify(scenario.then.outcome.payload)});
+        return Promise.resolve();
       });
     });
 
