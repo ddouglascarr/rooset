@@ -1,6 +1,5 @@
 
 const fetch = require("node-fetch");
-const fs = require('fs');
 const {
   startEventStore,
   initProjection,
@@ -23,10 +22,9 @@ describe("Unit Query Tests", () => {
 
     it("Query active unit", () => {
       // init projection
-      const file = fs.readFileSync(__dirname + "/../reducers/UNIT_QUERY.js", "utf8");
-      if (!file) throw new Error("could not read UNIT_QUERY reducer");
+      const reducerFileContent = "fromAll()\n.foreachStream()\n.when({\n\n  $init: function() {\n    return {\n      id: null,\n      name: \"\",\n      description: \"\",\n      areas: [],\n      policy: null,\n    };\n  },\n\n  UNIT_CREATED_EVENT: function(s, e) {\n    s.id = e.body.payload.id;\n    s.name = e.body.payload.name;\n    s.description = e.body.payload.description;\n  },\n\n  UNIT_POLICY_SET_EVENT: function(s, e) {\n    const p = e.body.payload;\n    const policy = {\n      policyId: p.policyId,\n      name: p.name,\n      description: p.description,\n      discussionTime: p.discussionTime,\n      verificationTime: p.verificationTime,\n      votingTime: p.votingTime,\n      issueQuorumNum: p.issueQuorumNum,\n      issueQuorumDen: p.issueQuorumDen,\n    };\n    s.policy = policy;\n  },\n\n  AREA_CREATED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    const area = {\n      areaId: p.areaId,\n      name: p.name,\n      description: p.description,\n      externalReference: p.externalReference,\n    };\n    s.areas.push(area);\n  },\n\n});\n";
       return Promise.resolve()
-      .then(() =>  initProjection("UNIT_QUERY", file))
+      .then(() =>  initProjection("UNIT_QUERY", reducerFileContent))
 
       // persist events
       .then(() => {

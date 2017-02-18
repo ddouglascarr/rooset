@@ -1,6 +1,5 @@
 
 const fetch = require("node-fetch");
-const fs = require('fs');
 const {
   startEventStore,
   initProjection,
@@ -23,10 +22,9 @@ describe("Unit Member Query Tests", () => {
 
     it("Query unit members", () => {
       // init projection
-      const file = fs.readFileSync(__dirname + "/../reducers/UNIT_MEMBER_QUERY.js", "utf8");
-      if (!file) throw new Error("could not read UNIT_MEMBER_QUERY reducer");
+      const reducerFileContent = "fromAll()\n.foreachStream()\n.when({\n\n  $init: function() {\n    return {\n      id: null,\n      members: [],\n      totalWeight: 0,\n    };\n  },\n\n  UNIT_CREATED_EVENT: function(s, e) {\n    s.id = e.body.payload.id;\n  },\n\n  PRIVILEGE_GRANTED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    s.members.push({\n      id: p.id,\n      memberId: p.memberId,\n      pollingRight: p.pollingRight,\n      votingRight: p.votingRight,\n      initiativeRight: p.initiativeRight,\n      managementRight: p.managementRight,\n      weight: p.weight,\n    });\n    s.totalWeight += p.weight;\n  },\n\n})\n";
       return Promise.resolve()
-      .then(() =>  initProjection("UNIT_MEMBER_QUERY", file))
+      .then(() =>  initProjection("UNIT_MEMBER_QUERY", reducerFileContent))
 
       // persist events
       .then(() => {

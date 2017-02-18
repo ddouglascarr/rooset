@@ -2,6 +2,7 @@ const {
   applyUriTemplate,
   findDeclarationByType,
 } = require('../../../../../ratk-declarations-utils');
+const fs = require('fs');
 
 module.exports = (testDecl, queryDeclDir, reducerDir) => {
 
@@ -9,7 +10,6 @@ module.exports = (testDecl, queryDeclDir, reducerDir) => {
 
   return `
 const fetch = require("node-fetch");
-const fs = require('fs');
 const {
   startEventStore,
   initProjection,
@@ -43,14 +43,17 @@ ${testBlocks.join("\n")}
 
     const queryType = scenario.when.action.type.split('_REQUEST')[0];
     const queryDecl = findDeclarationByType(queryDeclDir, queryType);
+    const reducerFileContent = fs.readFileSync(
+        `${reducerDir}/${queryType}.js`, "utf8");
+    if (!reducerFileContent) throw new Error(`could not read ${queryType} reducer`);
+
 
     return `
     it("${scenario.label}", () => {
       // init projection
-      const file = fs.readFileSync(__dirname + "/../reducers/${queryType}.js", "utf8");
-      if (!file) throw new Error("could not read ${queryType} reducer");
+      const reducerFileContent = ${JSON.stringify(reducerFileContent)};
       return Promise.resolve()
-      .then(() =>  initProjection("${queryType}", file))
+      .then(() =>  initProjection("${queryType}", reducerFileContent))
 
       // persist events
       .then(() => {
