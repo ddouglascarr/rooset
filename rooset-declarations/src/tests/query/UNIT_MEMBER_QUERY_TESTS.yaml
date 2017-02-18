@@ -1,0 +1,81 @@
+---
+label: Unit Member Query Tests
+type: QUERY_TEST
+key: unit-member-query
+
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-000000000000
+  - &memberId1 464b1ebb-32c1-460c-8e9e-111111111111
+  - &memberId2 464b1ebb-32c1-460c-8e9e-222222222222
+  - &managerId 464b1ebb-32c1-460c-8e9e-333333333333
+
+
+scenarios:
+
+
+  -
+    label: Query unit members
+    given:
+      key: unit-created-members
+      label: A unit is created with 2 members
+      precondition:
+        -
+          type: UNIT_CREATED_EVENT
+          payload:
+            id: *unitId
+            requesterId: *managerId
+            name: "Test Unit"
+            description: "The Test Unit"
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            id: *unitId
+            requesterId: *managerId
+            memberId: *memberId1
+            pollingRight: true
+            votingRight: true
+            initiativeRight: true
+            managementRight: false
+            weight: 2
+        -
+          type: PRIVILEGE_GRANTED_EVENT
+          payload:
+            id: *unitId
+            requesterId: *managerId
+            memberId: *memberId2
+            pollingRight: true
+            votingRight: true
+            initiativeRight: false
+            managementRight: false
+            weight: 1
+    when:
+      label: The Unit Members are queried
+      action:
+        type: UNIT_MEMBER_QUERY_REQUEST
+        payload:
+          id: *unitId
+    then:
+      label: System Responds
+      outcome:
+        type: UNIT_MEMBER_QUERY_RESPONSE
+        payload:
+          id: *unitId
+          members:
+            -
+              id: *unitId
+              memberId: *memberId1
+              pollingRight: true
+              votingRight: true
+              initiativeRight: true
+              managementRight: false
+              weight: 2
+            -
+              id: *unitId
+              memberId: *memberId2
+              pollingRight: true
+              votingRight: true
+              initiativeRight: false
+              managementRight: false
+              weight: 1
+          totalWeight: 3
+        

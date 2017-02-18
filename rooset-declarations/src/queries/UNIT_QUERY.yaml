@@ -15,4 +15,4 @@ resp:
   areas:
     type: areaArray
 projectionUri: "/state?partition={id}"
-httpUri: "/unit/{id}"
+httpUri: "/units/{id}"

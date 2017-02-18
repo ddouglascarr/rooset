@@ -28,15 +28,38 @@
       "type": "integer",
       "description": "Length of duration in seconds"
     },
+    "member": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref":  "#/definitions/uuid" },
+        "memberId": { "$ref": "#/definitions/uuid" },
+        "pollingRight": { "$ref": "#/definitions/bool" },
+        "votingRight": { "$ref": "#/definitions/bool" },
+        "initiativeRight": { "$ref": "#/definitions/bool" },
+        "managementRight": { "$ref": "#/definitions/bool" },
+        "weight": { "$ref": "#/definitions/uint" }
+      },
+      "required": [
+        "id", "memberId", "pollingRight", "votingRight",
+        "initiativeRight", "managementRight", "weight"
+      ]
+    },
+    "memberArray": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/member" }
+    },
     "policy": {
-      "policyId": { "$ref": "#/definitions/uuid" },
-      "name": { "$ref": "#/defintions/string" },
-      "description": { "$ref": "#/definitions/string" },
-      "discusionTime": { "$ref": "#/definitions/duration" },
-      "verificationTime": { "$ref": "#/definitions/duration" },
-      "votingTime": { "$ref": "#/definitions/duration" },
-      "issueQuorumNum": { "$ref": "#/defintions/uint" },
-      "issueQuorumDen": { "$ref": "#/definitions/unit" }
+      "type": "object",
+      "properties": {
+        "policyId": { "$ref": "#/definitions/uuid" },
+        "name": { "$ref": "#/defintions/string" },
+        "description": { "$ref": "#/definitions/string" },
+        "discusionTime": { "$ref": "#/definitions/duration" },
+        "verificationTime": { "$ref": "#/definitions/duration" },
+        "votingTime": { "$ref": "#/definitions/duration" },
+        "issueQuorumNum": { "$ref": "#/defintions/uint" },
+        "issueQuorumDen": { "$ref": "#/definitions/unit" }
+      }
     },
     "uuid": {
       "type":"string",

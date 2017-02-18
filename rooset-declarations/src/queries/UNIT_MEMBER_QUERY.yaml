@@ -1,0 +1,16 @@
+---
+type: UNIT_MEMBER_QUERY
+req:
+  id:
+    type: uuid
+    description: Unit Id
+resp:
+  id: # unit id
+    type: uuid
+    description: Unit Id
+  members:
+    type: memberArray
+  totalWeight:
+    type: ullong
+projectionUri: "/state?partition={id}"
+httpUri: "/units/{id}/members"
