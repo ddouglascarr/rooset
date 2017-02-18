@@ -16,7 +16,7 @@ describe("Unit Query Tests", () => {
   });
 
   afterEach(() => {
-    eventStoreProcess.kill();
+    // eventStoreProcess.kill();
   });
 
 
@@ -36,7 +36,7 @@ describe("Unit Query Tests", () => {
 
       // perform query
       .then(() => fetch(
-        "http://localhost:2113/projection/UNIT_QUERY/state?partition={id}"
+        "http://localhost:2113/projection/UNIT_QUERY/state?partition=464b1ebb-32c1-460c-8e9e-000000000000"
       ))
 
       .then((resp) => {
@@ -44,6 +44,7 @@ describe("Unit Query Tests", () => {
         expect(body.json()).toEqual(scenario.when.outcome);
         return Promise.resolve();
       })
+      .catch((err) => { console.log(err); throw err; });
     });
 
   

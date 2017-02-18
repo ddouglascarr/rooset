@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ddouglascarr/rooset#readme",
   "dependencies": {
+    "btoa": "^1.1.2",
     "lodash": "^4.17.4",
     "node-fetch": "^1.6.3",
     "uuid4": "^1.0.0"

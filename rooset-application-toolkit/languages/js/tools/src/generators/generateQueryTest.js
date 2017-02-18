@@ -25,7 +25,7 @@ describe("${testDecl.label}", () => {
   });
 
   afterEach(() => {
-    eventStoreProcess.kill();
+    // eventStoreProcess.kill();
   });
 
 
@@ -57,7 +57,7 @@ ${testBlocks.join("\n")}
 
       // perform query
       .then(() => fetch(
-        "http://localhost:2113/projection/${queryType}${queryDecl.projectionUri}"
+        "http://localhost:2113/projection/${queryType}${applyUriTemplate(queryDecl.projectionUri, { id: scenario.then.outcome.payload.id })}"
       ))
 
       .then((resp) => {
@@ -65,6 +65,7 @@ ${testBlocks.join("\n")}
         expect(body.json()).toEqual(scenario.when.outcome);
         return Promise.resolve();
       })
+      .catch((err) => { console.log(err); throw err; });
     });
 
   `;
