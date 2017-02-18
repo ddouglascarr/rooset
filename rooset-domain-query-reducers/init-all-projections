@@ -6,4 +6,4 @@ cd $WORKDIR
 
 export RATK_GEN_QUERY_DECL_DIR=${WORKDIR}/../rooset-declarations/src/queries
 
-node -e "require('./utils/eventStoreUtils').initAllProjections()"
+node -e "require('./utils/eventStoreUtils').initAllProjections().catch(() => process.exit(1))"

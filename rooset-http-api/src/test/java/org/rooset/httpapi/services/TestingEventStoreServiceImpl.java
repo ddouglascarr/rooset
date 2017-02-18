@@ -3,6 +3,7 @@ package org.rooset.httpapi.services;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DaemonExecutor;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.ProcessDestroyer;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -65,7 +66,7 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
     ExecuteWatchdog watchdog = new ExecuteWatchdog(60000);
     executor.setStreamHandler(psh);
     executor.setWatchdog(watchdog);
-    executor.setWorkingDirectory(new File(getEventStoreBinPath));
+    // executor.setWorkingDirectory(new File(getEventStoreBinPath));
     Map<String, String> env = new HashMap<>();
     executor.execute(cmdLine, resultHandler);
 
@@ -80,7 +81,7 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
       final ByteArrayOutputStream bos) throws IOException
   {
 
-    String upMessage = "IS MASTER";
+    String upMessage = "Sub System 'Projections' initialized";
     int sleepMs = 200;
 
     try {
@@ -190,6 +191,11 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
   @Override
   public void initProjections() throws Exception
   {
-
+    CommandLine cmd = new CommandLine(initAllProjectionsBin);
+    final DefaultExecutor executor = new DefaultExecutor();
+    int returnValue = executor.execute(cmd);
+    if (returnValue != 0) {
+      throw new Exception("init-all-projections returned code: " + returnValue);
+    }
   }
 }

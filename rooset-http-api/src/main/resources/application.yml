@@ -36,7 +36,7 @@ spring:
   profiles: integration-tests
 
 get-event-store:
-  port: 2114
+  port: 2113
   host: localhost
   binPath: '/opt/EventStore'
   'init-all-projections-bin': '@basedir@/../rooset-domain-query-reducers/init-all-projections'
