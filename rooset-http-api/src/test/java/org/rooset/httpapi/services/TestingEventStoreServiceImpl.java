@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -43,6 +44,8 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
   @Value("${get-event-store.binPath}")
   private String getEventStoreBinPath;
 
+  @Value("${rooset.domain-query-reducer-path}")
+  private String reducerPath;
 
   @Override
   public ExecuteWatchdog startTestingEventStore()
@@ -181,5 +184,11 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
     } finally {
       httpClient.close();
     }
+  }
+
+  @Override
+  public void initProjections() throws Exception
+  {
+
   }
 }

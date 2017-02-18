@@ -1,8 +1,6 @@
 #!/bin/bash
 set -o errexit -o nounset -o pipefail
 
-
-
 WORKDIR=`dirname "$(readlink -f "$0")"`
 cd $WORKDIR
 

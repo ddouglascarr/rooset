@@ -6,7 +6,8 @@ const btoa = require("btoa");
 const {
   getConfigFromEnv,
   findSchema,
-  assertMessageCompliesWithSchema
+  assertMessageCompliesWithSchema,
+  getDeclarations,
 } = require("../../rooset-application-toolkit/ratk-declarations-utils");
 
 const EVENTSTORE_HOST = "localhost";
@@ -20,7 +21,9 @@ const HEADERS = {
 module.exports = {
   startEventStore,
   initProjection,
-  persistEvent
+  initAllProjections,
+  persistEvent,
+  getDeclarations,
 };
 
 function startEventStore() {
@@ -31,6 +34,23 @@ function startEventStore() {
       if (chunk.includes("Sub System 'Projections' initialized")) return resolve(child);
     });
   });
+}
+
+function initAllProjections() {
+  const config = getConfigFromEnv({
+    querySrcPath: "RATK_GEN_QUERY_DECL_DIR",
+  });
+  config.reducerSrcPath = `${__dirname}/../reducers`;
+
+  const reducerDecls = getDeclarations(config.querySrcPath);
+  return reducerDecls.reduce((p, decl) => {
+    const type = decl.type;
+    const reducerContent = fs.readFileSync(
+        `${config.reducerSrcPath}/${type}.js`, "utf8");
+    if (!reducerContent) throw new Error(
+        `no reducer for ${type} in ${config.reducerSrcPath}`);
+    return p.then(() => initProjection(type, reducerContent));
+  }, Promise.resolve());
 }
 
 function initProjection(queryType, fileContent) {

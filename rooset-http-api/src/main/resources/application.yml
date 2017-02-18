@@ -40,4 +40,5 @@ get-event-store:
   host: localhost
   binPath: '/opt/EventStore'
 
-
+rooset:
+  'domain-query-reducer-path': '@basedir@/../rooset-domain-query-reducers/reducers'
