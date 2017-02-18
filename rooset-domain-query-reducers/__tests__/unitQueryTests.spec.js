@@ -41,10 +41,12 @@ describe("Unit Query Tests", () => {
 
       .then((resp) => {
         if (!resp.ok) throw new Error("response failed: " + resp);
-        expect(body.json()).toEqual(scenario.when.outcome);
-        return Promise.resolve();
+        expect(resp.json()).toEqual({"type":"UNIT_QUERY_RESPONSE","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","name":"Test Unit","description":"The Test Unit","policy":{"policyId":"464b1ebb-32c1-460c-8e9e-333333333333","name":"Test Policy","description":"The Test Policy","discussionTime":604800000,"verificationTime":604800000,"votingTime":604800000,"issueQuorumNum":1,"issueQuorumDen":10},"areas":[{"areaId":"464b1ebb-32c1-460c-8e9e-111111111111","name":"area0","description":"The 0 Area","externalReference":"http://area0.org"},{"areaId":"464b1ebb-32c1-460c-8e9e-222222222222","name":"area1","description":"The 1 Area","externalReference":"http://area1.org"}]}});
+        return resp.json();
       })
-      .catch((err) => { console.log(err); throw err; });
+      .then((body) => {
+        expect(body).toEqual({"type":"UNIT_QUERY_RESPONSE","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","name":"Test Unit","description":"The Test Unit","policy":{"policyId":"464b1ebb-32c1-460c-8e9e-333333333333","name":"Test Policy","description":"The Test Policy","discussionTime":604800000,"verificationTime":604800000,"votingTime":604800000,"issueQuorumNum":1,"issueQuorumDen":10},"areas":[{"areaId":"464b1ebb-32c1-460c-8e9e-111111111111","name":"area0","description":"The 0 Area","externalReference":"http://area0.org"},{"areaId":"464b1ebb-32c1-460c-8e9e-222222222222","name":"area1","description":"The 1 Area","externalReference":"http://area1.org"}]}});
+      });
     });
 
   

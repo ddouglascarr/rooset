@@ -62,10 +62,12 @@ ${testBlocks.join("\n")}
 
       .then((resp) => {
         if (!resp.ok) throw new Error("response failed: " + resp);
-        expect(body.json()).toEqual(scenario.when.outcome);
-        return Promise.resolve();
+        expect(resp.json()).toEqual(${JSON.stringify(scenario.then.outcome)});
+        return resp.json();
       })
-      .catch((err) => { console.log(err); throw err; });
+      .then((body) => {
+        expect(body).toEqual(${JSON.stringify(scenario.then.outcome)});
+      });
     });
 
   `;
