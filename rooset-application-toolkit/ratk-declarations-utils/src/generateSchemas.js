@@ -13,7 +13,7 @@ const cache = {};
 
 
 module.exports = (baseSchema, messageCategory, _srcPath) => {
-  if (cache[messageCategory]) return cache[messagecategory];
+  if (cache[messageCategory]) return cache[messageCategory];
 
   const srcPath = `${_srcPath}`;
   if (!includes(['commands', 'events', 'exceptions'], messageCategory)) {

@@ -14,3 +14,5 @@ resp:
     type: policy
   areas:
     type: areaArray
+projectionUri: "/state?partition={id}"
+httpUri: "/unit/{id}"

@@ -1,1 +1,1 @@
-module.exports = (schema) => schema.properties.type.enum[0],
+module.exports = (schema) => schema.properties.type.enum[0];

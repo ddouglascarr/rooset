@@ -1,10 +1,10 @@
 {
-  "name": "rooset-domain-query-reducers",
+  "name": "roost-application-toolkit-javascript-tools",
   "version": "0.1.0",
-  "description": "Query reducers for rooset",
+  "description": "Tools for generating rooset javascript assets",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -20,8 +20,5 @@
     "lodash": "^4.17.4",
     "node-fetch": "^1.6.3",
     "uuid4": "^1.0.0"
-  },
-  "devDependencies": {
-    "jest": "^18.1.0"
   }
 }

@@ -71,31 +71,31 @@ scenarios:
             name: "area1"
             description: "The 1 Area"
             externalReference: "http://area1.org"
-      when:
-        label: The Unit is Queried
-        action:
-          type: UNIT_QUERY_REQUEST
-          payload:
-            id: *unitId
-      then:
-        label: System Responds
-        outcome:
-          type: UNIT_QUERY_RESPONSE
-          payload:
-            id: *unitId
-            name: "Test Unit"
-            description: "The Test Unit"
-            policy: *policyQueryBody
-            areas:
-              -
-                areaId: *areaId0
-                name: "area0"
-                description: "The 0 Area"
-                externalReference: "http://area0.org"
-              -
-                areaId: *areaId1
-                name: "area1"
-                description: "The 1 Area"
-                externalReference: "http://area1.org"
+    when:
+      label: The Unit is Queried
+      action:
+        type: UNIT_QUERY_REQUEST
+        payload:
+          id: *unitId
+    then:
+      label: System Responds
+      outcome:
+        type: UNIT_QUERY_RESPONSE
+        payload:
+          id: *unitId
+          name: "Test Unit"
+          description: "The Test Unit"
+          policy: *policyQueryBody
+          areas:
+            -
+              areaId: *areaId0
+              name: "area0"
+              description: "The 0 Area"
+              externalReference: "http://area0.org"
+            -
+              areaId: *areaId1
+              name: "area1"
+              description: "The 1 Area"
+              externalReference: "http://area1.org"
 
 

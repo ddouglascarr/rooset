@@ -11,13 +11,6 @@ const {
 const EVENTSTORE_HOST = "localhost";
 const EVENTSTORE_PORT = "2113";
 const HEADERS = { "Content-Type": "application/json" };
-const config = getConfigFromEnv({
-  baseSchema: RATK_GEN_BASE_SCHEMA_FILE,
-  testSrc: RATK_GEN_TEST_DECL_DIR,
-  eventDeclSrc: RATK_GET_EVENT_DECL_DIR
-});
-
-const baseSchema = require(config.baseSchema);
 
 module.exports = {
   startEventStore,
@@ -35,24 +28,19 @@ function startEventStore() {
   });
 }
 
-function initProjection(queryType) {
-  const file = fs.readFileSync(`../reducers/${queryType}.js`, "utf8");
-  if (!file) throw new Error(`could not read ${queryType} reducer`);
+function initProjection(queryType, fileContent) {
   return fetch(
     `http://admin:changeit@${EVENTSTORE_HOST}:${EVENTSTORE_PORT}/projections/continuous` +
       "?name=${queryType}" +
       "&type=js" +
       "&emit=true" +
       "&trackemittedstreams=true",
-    { method: POST, body: file, headers: HEADERS }
+    { method: "POST", body: fileContent, headers: HEADERS }
   );
 }
 
 function persistEvent(event) {
   const type = event.type;
-  if (!type) throw new Error(`No type for event: ${event}`);
-  const schema = findSchema(baseSchema, "events", eventDeclSrc, type);
-  assertMessageCompliesWithSchema(schema, event);
   const streamId = event.payload.id;
 
   const localHeaders = Object.assign({}, HEADERS, {
