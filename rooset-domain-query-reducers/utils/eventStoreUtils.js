@@ -34,22 +34,20 @@ function startEventStore() {
 }
 
 function initProjection(queryType, fileContent) {
-  console.log('initProjection run');
-    const url = `http://${EVENTSTORE_HOST}:${EVENTSTORE_PORT}/projections/continuous` +
-      `?name=${queryType}` +
-      "&type=js" +
-      "&emit=true" +
-      "&trackemittedstreams=true";
-    console.log(url);
-    return fetch(url, { method: "POST", body: fileContent, headers: HEADERS }
-  ).then((resp) => {
+  const url = `http://${EVENTSTORE_HOST}:${EVENTSTORE_PORT}/projections/continuous` +
+    `?name=${queryType}` +
+    "&type=js" +
+    "&emit=true" +
+    "&trackemittedstreams=true";
+
+  return fetch(url, { method: "POST", body: fileContent, headers: HEADERS })
+  .then((resp) => {
     if (!resp.ok) throw new Error(resp.statusText);
     return Promise.resolve();
   });
 }
 
 function persistEvent(event) {
-  console.log(`persisting ${event.type}`);
   const type = event.type;
   const streamId = event.payload.id;
 
@@ -64,7 +62,6 @@ function persistEvent(event) {
   ).then(resp => {
     if (!resp.ok) throw new Error(
         `saving event ${type} failed ${resp.statusText}`);
-    console.log(`persisted ${event.type}`);
     return Promise.resolve();
   });
 }
