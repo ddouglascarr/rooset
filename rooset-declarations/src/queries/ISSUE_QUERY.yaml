@@ -20,6 +20,9 @@ resp:
     description: Date the first initiative was created
   issueState:
     type: issueState
+  resolved:
+    type: bool
+    description: Has the issue been resolved.
   initiatives:
     type: keyNamePairArray
     description: Active initiatives

@@ -14,6 +14,52 @@ mocks:
   - &issueId 464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa
   - &policyId 464b1ebb-32c1-460c-8e9e-cccccccccccc
 
+  - &newInitiativeCreatedEvt
+    type: NEW_INITIATIVE_CREATED_EVENT
+    payload:
+      id: *issueId
+      requesterId: *memberId1
+      initiativeId: *initiativeId4
+      unitId: *unitId
+      areaId: *areaId
+      policyId: *policyId
+      name: "Paint the bike shed"
+      polling: false
+      externalReference: "1234"
+      content: "Paint the bike shed red"
+      textSearchData: "bike, shed"
+      created: 1487394829
+
+  - &competingInitiativeCreatedEvtGreen
+    type: COMPETING_INITIATIVE_CREATED_EVENT
+    payload:
+      id: *issueId
+      requesterId: *memberId2
+      initiativeId: *initiativeId5
+      name: "Paint it green"
+      externalReference: "5678"
+      content: "Paint the bike shed green"
+      textSearchData: "bike, shed"
+      created: 1487394950
+
+  - &issueAdmissionQuorumPassedEvt
+    type: ISSUE_ADMISSION_QUORUM_PASSED_EVENT
+    payload:
+      id: *issueId
+
+  - &issueAdmissionQuorumFailedEvt
+    type: ISSUE_ADMISSION_QUORUM_FAILED_EVENT
+    payload:
+      id: *issueId
+
+  - &queryWhen
+    label: The issue is queried
+    action:
+      type: ISSUE_QUERY_REQUEST
+      payload:
+        id: *issueId
+
+
 scenarios:
 
 
@@ -23,38 +69,9 @@ scenarios:
       key: issue-with-2-initiatives
       label: A issue is created with 2 initiatives
       precondition:
-        -
-          type: NEW_INITIATIVE_CREATED_EVENT
-          payload:
-            id: *issueId
-            requesterId: *memberId1
-            initiativeId: *initiativeId4
-            unitId: *unitId
-            areaId: *areaId
-            policyId: *policyId
-            name: "Paint the bike shed"
-            polling: false
-            externalReference: "1234"
-            content: "Paint the bike shed red"
-            textSearchData: "bike, shed"
-            created: 1487394829
-        -
-          type: COMPETING_INITIATIVE_CREATED_EVENT
-          payload:
-            id: *issueId
-            requesterId: *memberId2
-            initiativeId: *initiativeId5
-            name: "Paint it green"
-            externalReference: "5678"
-            content: "Paint the bike shed green"
-            textSearchData: "bike, shed"
-            created: 1487394950
-    when:
-      label: The issue is queried
-      action:
-        type: ISSUE_QUERY_REQUEST
-        payload:
-          id: *issueId
+        - *newInitiativeCreatedEvt
+        - *competingInitiativeCreatedEvtGreen
+    when: *queryWhen
     then:
       label: The system responds
       outcome:
@@ -66,6 +83,7 @@ scenarios:
           policyId: *policyId
           created: 1487394829
           issueState: ADMISSION
+          resolved: false
           initiatives:
             -
               key: *initiativeId4
@@ -73,3 +91,59 @@ scenarios:
             -
               key: *initiativeId5
               name: Paint it green
+
+
+  -
+    label: The issue state advances to DISCUSSION
+    given:
+      key: issue-admission-passed
+      label: A issue has bassed admission
+      precondition:
+        - *newInitiativeCreatedEvt
+        - *competingInitiativeCreatedEvtGreen
+        - *issueAdmissionQuorumPassedEvt
+    when: *queryWhen
+    then:
+      label: The issue is DISCUSSION
+      outcome:
+        type: ISSUE_QUERY_RESPONSE
+        payload:
+          id: *issueId
+          unitId: *unitId
+          areaId: *areaId
+          policyId: *policyId
+          created: 1487394829
+          issueState: DISCUSSION
+          resolved: false
+          initiatives:
+            -
+              key: *initiativeId4
+              name: Paint the bike shed
+            -
+              key: *initiativeId5
+              name: Paint it green
+
+
+  -
+    label: The issue state falls to CANCELED_NO_INITIATIVE_ADMITTED if quorum not passed
+    given:
+      key: issue-admission-passed
+      label: A issue has bassed admission
+      precondition:
+        - *newInitiativeCreatedEvt
+        - *competingInitiativeCreatedEvtGreen
+        - *issueAdmissionQuorumFailedEvt
+    when: *queryWhen
+    then:
+      label: The issue is CANCELED_NO_INITIATIVE_ADMITTED
+      outcome:
+        type: ISSUE_QUERY_RESPONSE
+        payload:
+          id: *issueId
+          unitId: *unitId
+          areaId: *areaId
+          policyId: *policyId
+          created: 1487394829
+          issueState: CANCELED_NO_INITIATIVE_ADMITTED
+          resolved: true
+          initiatives: []

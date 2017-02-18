@@ -10,6 +10,7 @@ fromAll()
       policyId: null,
       created: 0,
       issueState: "ADMISSION",
+      resolved: false,
       initiatives: [],
     };
   },
@@ -33,6 +34,16 @@ fromAll()
       key: p.initiativeId,
       name: p.name,
     });
+  },
+
+  ISSUE_ADMISSION_QUORUM_PASSED_EVENT: function(s, e) {
+    s.issueState = "DISCUSSION";
+  },
+
+  ISSUE_ADMISSION_QUORUM_FAILED_EVENT: function(s, e) {
+    s.issueState = "CANCELED_NO_INITIATIVE_ADMITTED";
+    s.resolved = true;
+    s.initiatives = [];
   },
 
 })
