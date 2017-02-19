@@ -4,7 +4,6 @@ const generateQueryTestMethod = require('./generateQueryTestMethod');
 module.exports = (testDoc, config) => {
 
   const testClassname = camelCase(testDoc.label);
-  console.log(JSON.stringify(testDoc, null, 2));
   const testMethods = testDoc.scenarios
       .map((scenario) => generateQueryTestMethod(scenario, config))
       .join('\n\n\n');
@@ -39,11 +38,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.skyscreamer.jsonassert.JSONAssert;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.*;
