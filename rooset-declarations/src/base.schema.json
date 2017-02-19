@@ -193,6 +193,7 @@
       "type": "string",
       "enum": [
         "COMMAND_EVALUATION_EXCEPTION",
+        "QUERY_EXCEPTION",
         "SYSTEM_EXCEPTION"
       ]
     }

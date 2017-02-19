@@ -18,7 +18,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -34,6 +36,7 @@ import java.util.UUID;
 import static java.lang.Thread.sleep;
 
 @Service
+@Profile("integration-tests")
 public class TestingEventStoreServiceImpl implements TestingEventStoreService
 {
   @Value("${get-event-store.host}")
