@@ -1,0 +1,28 @@
+{
+  "name": "rooset-domain-query-reducers",
+  "version": "0.1.0",
+  "description": "Query reducers for rooset",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --runInBand"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ddouglascarr/rooset.git"
+  },
+  "author": "Daniel Carr <d.douglas.carr@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ddouglascarr/rooset/issues"
+  },
+  "homepage": "https://github.com/ddouglascarr/rooset#readme",
+  "dependencies": {
+    "btoa": "^1.1.2",
+    "lodash": "^4.17.4",
+    "node-fetch": "^1.6.3",
+    "uuid4": "^1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^18.1.0"
+  }
+}

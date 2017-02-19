@@ -1,0 +1,31 @@
+---
+type: ISSUE_QUERY
+req:
+  id:
+    type: uuid
+    description: Issue Id
+resp:
+  id:
+    type: uuid
+    description: Issue Id
+  unitId:
+    type: uuid
+    description: Unit Id
+  areaId:
+    type: uuid
+  policyId:
+    type: uuid
+  created:
+    type: date
+    description: Date the first initiative was created
+  issueState:
+    type: issueState
+  resolved:
+    type: bool
+    description: Has the issue been resolved.
+  initiatives:
+    type: keyNamePairArray
+    description: Active initiatives
+projectionUri: "/state?partition={id}"
+httpUri: "/issues/{id}"
+

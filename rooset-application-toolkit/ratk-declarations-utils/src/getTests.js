@@ -15,9 +15,10 @@ const glob = require('glob');
 const YAML = require('yamljs');
 
 const testTypeEnumValues = [
- 'DOMAIN_COMMAND_TEST',
- 'HTTP_API_TEST',
- 'ALL',
+  'DOMAIN_COMMAND_TEST',
+  'HTTP_API_TEST',
+  'QUERY_TEST',
+  'ALL',
 ];
 
 

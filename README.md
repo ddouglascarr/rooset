@@ -38,14 +38,12 @@ YAML declarations of messages. Transformed by RATK into message classes for othe
 
 Contains the following delcaration types:
 
-  - Commands
-  - Events
-  - Enums
-  - Exceptions
-  - CommandIntegrationTests
-  - CommandRequests
-  - QueryRequests *
-  - QueryResponses *
+  - commands
+  - events
+  - exceptions
+  - httpCommandRequests
+  - queries
+  - tests
 
 
 
@@ -75,14 +73,14 @@ A CQRS-like command executer, that runs on the Ethereum Blockchain
 
 
 
-rooset-domain-query-reducers *
+rooset-domain-query-reducers
 ----------------------------
 
-Javascript Event reducers.
+Javascript Event reducers (aka projections).
 
   - Used to produce query state
   - Runs on the GetEventStore projection engine
-  - Runs on a javascript client that reads Ethereum blockchain events.
+  - Runs on a javascript client that reads Ethereum blockchain events. *
 
 
 
@@ -92,7 +90,7 @@ rooset-http-api
 Http api.
 
   - Transforms HttpCommandRequests into Commands, and calls rooset-domain-command-posix
-  - Transforms QueryRequests into requests to the GetEventStore projections system *
+  - Transforms HttpQueryRequests into QueryRequest to the GetEventStore projections system
 
 
 

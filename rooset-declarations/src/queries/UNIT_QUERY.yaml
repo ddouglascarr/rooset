@@ -1,0 +1,18 @@
+---
+type: UNIT_QUERY
+req:
+  id:
+    type: uuid
+resp:
+  id:
+    type: uuid
+  name:
+    type: string
+  description:
+    type: string
+  policy:
+    type: policy
+  areas:
+    type: areaArray
+projectionUri: "/state?partition={id}"
+httpUri: "/units/{id}"

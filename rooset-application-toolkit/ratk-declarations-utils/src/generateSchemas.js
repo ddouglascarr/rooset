@@ -5,13 +5,16 @@ const ajv = require('ajv');
 const YAML = require('yamljs');
 const path = require('path');
 
-const BASE_URL = 'https://rooset.org/schemas';
 
+const BASE_URL = 'https://rooset.org/schemas';
 const typeRe = /([A-Z_]+)/;
 const isYamlFilename = (filename) => filename.slice(filename.length - 4) === 'yaml';
+const cache = {};
 
 
 module.exports = (baseSchema, messageCategory, _srcPath) => {
+  if (cache[messageCategory]) return cache[messageCategory];
+
   const srcPath = `${_srcPath}`;
   if (!includes(['commands', 'events', 'exceptions'], messageCategory)) {
     throw `${messageCategory} message category invalid`;
@@ -20,7 +23,9 @@ module.exports = (baseSchema, messageCategory, _srcPath) => {
       { cwd: process.cwd() });
   const yamlSrcFiles = glob.sync(`${srcPath}/*.yaml`, /**/
       { cwd: process.cwd() });
-  return jsonSrcFiles.concat(yamlSrcFiles).map(mapSchemaFiles(baseSchema, messageCategory));
+
+  cache[messageCategory] = jsonSrcFiles.concat(yamlSrcFiles).map(mapSchemaFiles(baseSchema, messageCategory));
+  return cache[messageCategory];
 };
 
 

@@ -192,6 +192,38 @@
                             <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-tests</executable>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>Ratk Http Integration Query Test Generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <RATK_GEN_QUERY_TEST_JAVA_DEST_DIR>${project.build.directory}/generated-sources/ratktests/org/rooset/httpapi/integrationquerytests</RATK_GEN_QUERY_TEST_JAVA_DEST_DIR>
+                                <RATK_GEN_HTTP_COMMAND_REQUEST_DECL_DIR>${basedir}/../rooset-declarations/src/httpCommandRequests</RATK_GEN_HTTP_COMMAND_REQUEST_DECL_DIR>
+                                <RATK_GEN_TEST_DECL_DIR>${basedir}/../rooset-declarations/src/tests</RATK_GEN_TEST_DECL_DIR>
+                                <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
+                                <RATK_GEN_QUERY_DECL_DIR>${basedir}/../rooset-declarations/src/queries</RATK_GEN_QUERY_DECL_DIR>
+                            </environmentVariables>
+                            <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-query-tests</executable>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Ratk Http Query Controller Generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
+                                <RATK_GEN_QUERY_DECL_DIR>${basedir}/../rooset-declarations/src/queries</RATK_GEN_QUERY_DECL_DIR>
+                                <RATK_GEN_HTTP_QUERY_CONTROLLER_JAVA_DEST_DIR>${project.build.directory}/generated-sources/ratk/org/rooset/httpapi/querycontrollers</RATK_GEN_HTTP_QUERY_CONTROLLER_JAVA_DEST_DIR>
+                            </environmentVariables>
+                            <executable>${basedir}/../rooset-application-toolkit/languages/java/tools/generate-java-query-controllers</executable>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>

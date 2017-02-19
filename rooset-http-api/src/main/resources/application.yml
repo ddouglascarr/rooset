@@ -4,12 +4,17 @@ server:
 spring:
   jpa:
     database: POSTGRESQL
+    hibernate:
+      'ddl-auto': validate
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/rooset_http_api
     username: rooset
     password: rooset
-    driveClassName: org.postgresql.Driver
+    driverClassName: org.postgresql.Driver
+    tomcat:
+      'max-active': 5
+      'max-wait': 10000
 
 rooset:
   'domain-command-bin': '@basedir@/../rooset-domain-command-posix/build/rooset-command'
@@ -28,16 +33,24 @@ spring:
     'show-sql': true
     hibernate:
       'ddl-auto': create-drop
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rooset_http_api_testing
 
 
 ---
 
 spring:
   profiles: integration-tests
+  jpa:
+    'show-sql': true
+    hibernate:
+      'ddl-auto': create-drop
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rooset_http_api_integration_testing
+
 
 get-event-store:
-  port: 2114
+  port: 2113
   host: localhost
   binPath: '/opt/EventStore'
-
-
+  'init-all-projections-bin': '@basedir@/../rooset-domain-query-reducers/init-all-projections'

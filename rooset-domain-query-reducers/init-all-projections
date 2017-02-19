@@ -1,0 +1,9 @@
+#!/bin/bash
+set -o errexit -o nounset -o pipefail
+
+WORKDIR=`dirname "$(readlink -f "$0")"`
+cd $WORKDIR
+
+export RATK_GEN_QUERY_DECL_DIR=${WORKDIR}/../rooset-declarations/src/queries
+
+node -e "require('./utils/eventStoreUtils').initAllProjections().catch(() => process.exit(1))"

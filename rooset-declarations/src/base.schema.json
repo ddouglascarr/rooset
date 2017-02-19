@@ -2,6 +2,20 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type":"object",
   "definitions": {
+    "area": {
+      "type": "object",
+      "properties": {
+        "areaId": { "$ref": "#/definitions/uuid" },
+        "name": { "$ref": "#/definitions/string" },
+        "description": { "$ref": "#/definitions/string" },
+        "externalReference": { "$ref": "#/definitions/string" }
+      },
+      "required": ["areaId", "name", "description", "externalReference"]
+    },
+    "areaArray": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/area" }
+    },
     "bool": {
       "type": "boolean"
     },
@@ -13,6 +27,71 @@
     "duration": {
       "type": "integer",
       "description": "Length of duration in seconds"
+    },
+    "keyNamePair": {
+      "type": "object",
+      "description": "A uuid - name pair for storing a ref and a human friendly name",
+      "properties": {
+        "key": { "$ref": "#/definitions/uuid" },
+        "name": { "$ref": "#/defintions/string" }
+      },
+      "required": ["key", "name"]
+    },
+    "keyNamePairArray": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/idNamePair" }
+    },
+    "initiative": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref":  "#/definitions/uuid" },
+        "initiativeId": { "$ref":  "#/definitions/uuid" },
+        "requesterId" : { "$ref":  "#/definitions/uuid" },
+        "name": { "$ref":  "#/definitions/string" },
+        "content": { "$ref": "#/definitions/string" },
+        "created": { "$ref": "#/definitions/date" }
+      },
+      "required": [
+        "id", "initiativeId", "requesterId", "name", "externalReference",
+        "content", "textSearchData", "created"
+      ]
+    },
+    "initiativeArray": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/initiative" }
+    },
+    "member": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref":  "#/definitions/uuid" },
+        "memberId": { "$ref": "#/definitions/uuid" },
+        "pollingRight": { "$ref": "#/definitions/bool" },
+        "votingRight": { "$ref": "#/definitions/bool" },
+        "initiativeRight": { "$ref": "#/definitions/bool" },
+        "managementRight": { "$ref": "#/definitions/bool" },
+        "weight": { "$ref": "#/definitions/uint" }
+      },
+      "required": [
+        "id", "memberId", "pollingRight", "votingRight",
+        "initiativeRight", "managementRight", "weight"
+      ]
+    },
+    "memberArray": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/member" }
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "policyId": { "$ref": "#/definitions/uuid" },
+        "name": { "$ref": "#/defintions/string" },
+        "description": { "$ref": "#/definitions/string" },
+        "discusionTime": { "$ref": "#/definitions/duration" },
+        "verificationTime": { "$ref": "#/definitions/duration" },
+        "votingTime": { "$ref": "#/definitions/duration" },
+        "issueQuorumNum": { "$ref": "#/defintions/uint" },
+        "issueQuorumDen": { "$ref": "#/definitions/unit" }
+      }
     },
     "uuid": {
       "type":"string",
@@ -114,6 +193,7 @@
       "type": "string",
       "enum": [
         "COMMAND_EVALUATION_EXCEPTION",
+        "QUERY_EXCEPTION",
         "SYSTEM_EXCEPTION"
       ]
     }

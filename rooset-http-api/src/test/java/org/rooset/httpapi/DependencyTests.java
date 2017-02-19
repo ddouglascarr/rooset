@@ -19,6 +19,7 @@ import org.rooset.httpapi.models.SchulzeBallot;
 import org.rooset.httpapi.models.UserModel;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
+@ActiveProfiles("integration-tests")
 @SpringBootTest
 public class DependencyTests
 {

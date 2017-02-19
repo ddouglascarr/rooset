@@ -3,6 +3,7 @@ package org.rooset.httpapi.services;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DaemonExecutor;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.ProcessDestroyer;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -17,7 +18,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -25,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +36,7 @@ import java.util.UUID;
 import static java.lang.Thread.sleep;
 
 @Service
+@Profile("integration-tests")
 public class TestingEventStoreServiceImpl implements TestingEventStoreService
 {
   @Value("${get-event-store.host}")
@@ -43,6 +48,8 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
   @Value("${get-event-store.binPath}")
   private String getEventStoreBinPath;
 
+  @Value("${get-event-store.init-all-projections-bin}")
+  private String initAllProjectionsBin;
 
   @Override
   public ExecuteWatchdog startTestingEventStore()
@@ -51,17 +58,18 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
     final ByteArrayOutputStream bos = new ByteArrayOutputStream();
     final PumpStreamHandler psh = new PumpStreamHandler(bos);
 
-    CommandLine cmdLine = new CommandLine("./eventstored");
+    CommandLine cmdLine = new CommandLine("eventstored");
     cmdLine.addArgument("--mem-db");
     cmdLine.addArgument("--ext-http-port");
     cmdLine.addArgument(getEventStorePort);
+    cmdLine.addArgument("--run-projections=all");
 
     DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
     final DaemonExecutor executor = new DaemonExecutor();
     ExecuteWatchdog watchdog = new ExecuteWatchdog(60000);
     executor.setStreamHandler(psh);
     executor.setWatchdog(watchdog);
-    executor.setWorkingDirectory(new File(getEventStoreBinPath));
+    // executor.setWorkingDirectory(new File(getEventStoreBinPath));
     Map<String, String> env = new HashMap<>();
     executor.execute(cmdLine, resultHandler);
 
@@ -76,7 +84,7 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
       final ByteArrayOutputStream bos) throws IOException
   {
 
-    String upMessage = "IS MASTER";
+    String upMessage = "Sub System 'Projections' initialized";
     int sleepMs = 200;
 
     try {
@@ -180,6 +188,17 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
       }
     } finally {
       httpClient.close();
+    }
+  }
+
+  @Override
+  public void initProjections() throws Exception
+  {
+    CommandLine cmd = new CommandLine(initAllProjectionsBin);
+    final DefaultExecutor executor = new DefaultExecutor();
+    int returnValue = executor.execute(cmd);
+    if (returnValue != 0) {
+      throw new Exception("init-all-projections returned code: " + returnValue);
     }
   }
 }
