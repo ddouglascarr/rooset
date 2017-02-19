@@ -29,7 +29,7 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-// @ActiveProfiles("integration-tests")
+@ActiveProfiles("integration-tests")
 @SpringBootTest
 public class DependencyTests
 {
