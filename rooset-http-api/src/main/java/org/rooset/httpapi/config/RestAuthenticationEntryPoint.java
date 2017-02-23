@@ -21,6 +21,8 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint
       AuthenticationException e)
       throws IOException, ServletException
   {
-    httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+    httpServletResponse.sendError(
+        HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
   }
+
 }

@@ -41,10 +41,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     http.authorizeRequests()
         .anyRequest().authenticated();
 
+    http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
     http.httpBasic()
         .and()
         .formLogin()
-            .loginProcessingUrl("/login")
             .successHandler(authenticationSuccessHandler)
             .failureHandler(authenticationFailureHandler)
         .and()
