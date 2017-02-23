@@ -1,25 +1,34 @@
 // @flow
 
 import React from "react";
-import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { Container } from "../components/BaseComponents";
+import { CommandBar } from "office-ui-fabric-react/lib/CommandBar";
 
-export default class ProjectNavbar extends React.Component {
+class ProjectNavbar extends React.Component {
+  static contextTypes: { router: React.PropTypes.object };
+
   render() {
     return (
-      <Navbar inverse>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Link to="/">Rooset</Link>
-          </Navbar.Brand>
-        </Navbar.Header>
-
-        <Nav pullRight>
-          <Navbar.Text key={1}>
-            <Link to="/login">Login</Link>
-          </Navbar.Text>
-        </Nav>
-      </Navbar>
+      <Container>
+        <CommandBar
+          isSearchBoxVisible={false}
+          items={[
+            {
+              name: "Rooset",
+              onClick: () => this.context.router.push("/"),
+            },
+            {
+              name: "Login",
+              onClick: () => this.context.router.push("/login"),
+            },
+          ]}
+        />
+      </Container>
     );
   }
 }
+
+ProjectNavbar.contextTypes = { router: React.PropTypes.object };
+
+export default ProjectNavbar;
