@@ -11,7 +11,8 @@ export type UnitStatePayloadModelType = {
 };
 
 export type UnitStateModelType = {
-  status: "EMPTY" | "LOADING" | "READY",
+  status: "EMPTY" | "LOADING" | "READY" | "ERROR",
+  error: Array<any>,
   payload: UnitStatePayloadModelType,
 }
 
@@ -73,6 +74,7 @@ export class UnitStatePayload extends ImmutableModel {
 export class UnitState extends ImmutableModel {
   static fromJS(json: UnitStateModelType): UnitState {
     const state: Object = Object.assign({}, json);
+    state.error = Immutable.List(state.error);
     state.payload = UnitStatePayload.fromJS(state.payload);
     return new this(Immutable.Map(state));
   }
@@ -80,16 +82,25 @@ export class UnitState extends ImmutableModel {
   toJS(): UnitStateModelType {
     return {
       status: this.status,
+      error: this.error.toArray(),
       payload: this.payload.toJS(),
     };
   }
 
-  get status(): 'EMPTY' | 'LOADING' | 'READY' {
+  get status(): 'EMPTY' | 'LOADING' | 'READY' | 'ERROR' {
     return this._state.get('status');
   }
 
-  setStatus(status: 'EMPTY' | 'LOADING' | 'READY'): this {
+  setStatus(status: 'EMPTY' | 'LOADING' | 'READY' | 'ERROR'): this {
     return this.clone(this._state.set('status', status));
+  }
+
+  get error(): Immutable.List<any> {
+    return this._state.get('error');
+  }
+
+  setError(error: Immutable.List<any>): this {
+    return this.clone(this._state.set('error', error));
   }
 
   get payload(): UnitStatePayload {
