@@ -33,32 +33,32 @@ export class UnitStatePayload extends ImmutableModel {
     return {
       id: this.id,
       name: this.name,
-      description: this.description
+      description: this.description,
     };
   }
 
   get id(): uuid | null {
-    return this._state.get("id");
+    return this._state.get('id');
   }
 
   setId(id: uuid | null): this {
-    return this.clone(this._state.set("id", id));
+    return this.clone(this._state.set('id', id));
   }
 
   get name(): string | null {
-    return this._state.get("name");
+    return this._state.get('name');
   }
 
   setName(name: string | null): this {
-    return this.clone(this._state.set("name", name));
+    return this.clone(this._state.set('name', name));
   }
 
   get description(): string | null {
-    return this._state.get("description");
+    return this._state.get('description');
   }
 
   setDescription(description: string | null): this {
-    return this.clone(this._state.set("description", description));
+    return this.clone(this._state.set('description', description));
   }
 }
 
@@ -80,23 +80,23 @@ export class UnitState extends ImmutableModel {
   toJS(): UnitStateModelType {
     return {
       status: this.status,
-      payload: this.payload.toJS()
+      payload: this.payload.toJS(),
     };
   }
 
-  get status(): "EMPTY" | "LOADING" | "READY" {
-    return this._state.get("status");
+  get status(): 'EMPTY' | 'LOADING' | 'READY' {
+    return this._state.get('status');
   }
 
-  setStatus(status: "EMPTY" | "LOADING" | "READY"): this {
-    return this.clone(this._state.set("status", status));
+  setStatus(status: 'EMPTY' | 'LOADING' | 'READY'): this {
+    return this.clone(this._state.set('status', status));
   }
 
   get payload(): UnitStatePayload {
-    return this._state.get("payload");
+    return this._state.get('payload');
   }
 
   setPayload(payload: UnitStatePayload): this {
-    return this.clone(this._state.set("payload", payload));
+    return this.clone(this._state.set('payload', payload));
   }
 }

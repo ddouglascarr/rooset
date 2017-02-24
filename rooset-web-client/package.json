@@ -51,6 +51,7 @@
   "dependencies": {
     "flow-immutable-models": "^0.11.1",
     "immutable": "^3.8.1",
+    "jscodeshift": "^0.3.30",
     "office-ui-fabric-react": "^1.12.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
@@ -67,7 +68,8 @@
     "test": "node scripts/test.js --env=jsdom",
     "flow": "flow",
     "build-css": "node-sass src/ -o src/",
-    "watch-css": "npm run build-css && node-sass src/ -o src/ --watch"
+    "watch-css": "npm run build-css && node-sass src/ -o src/ --watch",
+    "flow-immutable-models": "jscodeshift -t ./node_modules/flow-immutable-models/lib/transform.js ./src/reducers/models"
   },
   "jest": {
     "collectCoverageFrom": [

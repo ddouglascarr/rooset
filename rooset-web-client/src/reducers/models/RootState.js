@@ -27,15 +27,15 @@ export class RootState extends ImmutableModel {
 
   toJS(): RootStateModelType {
     return {
-      unit: this.unit.toJS()
+      unit: this.unit.toJS(),
     };
   }
 
   get unit(): UnitState {
-    return this._state.get("unit");
+    return this._state.get('unit');
   }
 
   setUnit(unit: UnitState): this {
-    return this.clone(this._state.set("unit", unit));
+    return this.clone(this._state.set('unit', unit));
   }
 }
