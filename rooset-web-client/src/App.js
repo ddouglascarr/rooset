@@ -33,6 +33,7 @@ class App extends Component {
                 }}
                 componentDidUpdate={() => console.log("login did mount")}
               />
+              <Route path="/:unitUriName" component={UnitPage} />
               <Route path="/" render={() => <div>404</div>} />
             </Switch>
 

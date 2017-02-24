@@ -2,12 +2,11 @@
 
 import type { Action } from "../actions/Action";
 import { Root } from "./models/Root";
-import { Unit } from "./models/Unit";
 
-const initialState: Root = Root.fromJS({
-  unit: { id: "", name: "", description: "" },
+export const initialState: Root = Root.fromJS({
+  unit: { status: "EMPTY", payload: { id: null, name: null, description: null } },
 });
-
-export default function(state: Root = initialState, action: Action): Root {
+console.log(initialState);
+export default function(state: Root, action: Action): Root {
   return state;
 }

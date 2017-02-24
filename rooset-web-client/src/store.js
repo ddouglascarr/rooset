@@ -1,15 +1,27 @@
+// @flow
+
 import { createStore, applyMiddleware } from "redux";
 import createLogger from "redux-logger";
 import createSagaMiddleware from "redux-saga";
-import rootReducer from "./reducers/rootReducer";
-import { Map } from "immutable";
+import rootReducer, { initialState } from "./reducers/rootReducer";
 
-export default function configureStore(initialState) {
-  const loggerMiddleware = createLogger({ collapsed: true });
+// eslint-disable-next-line no-unused-vars
+const stateTransformer = state => {
+  if (typeof state.toJS === "function") return state.toJS();
+  return state;
+};
+
+// eslint-disable-next-line no-unused-vars
+const stateTransformerStub = () => {
+  return {};
+};
+
+export default function configureStore() {
+  const loggerMiddleware = createLogger({ collapsed: true, stateTransformer });
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(
     rootReducer,
-    Map(), // initial state
+    initialState,
     applyMiddleware(loggerMiddleware, sagaMiddleware),
   );
   // sagaMiddleware.run(rootSaga);

@@ -32,10 +32,10 @@ export class Root extends ImmutableModel {
   }
 
   get unit(): Unit {
-    return this._state.get("unit");
+    return this._state.get('unit');
   }
 
   setUnit(unit: Unit): this {
-    return this.clone(this._state.set("unit", unit));
+    return this.clone(this._state.set('unit', unit));
   }
 }
