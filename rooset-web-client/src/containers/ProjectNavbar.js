@@ -6,7 +6,7 @@ import { Container } from "../components/BaseComponents";
 import { CommandBar } from "office-ui-fabric-react/lib/CommandBar";
 
 class ProjectNavbar extends React.Component {
-  static contextTypes: { router: React.PropTypes.object };
+  static contextTypes: { router: Object };
 
   render() {
     return (
