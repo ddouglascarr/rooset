@@ -1,12 +1,12 @@
 // @flow
 
 import type { Action } from "../actions/Action";
-import { Root } from "./models/Root";
+import { RootState } from "./models/RootState";
 
-export const initialState: Root = Root.fromJS({
+export const initialState: RootState = RootState.fromJS({
   unit: { status: "EMPTY", payload: { id: null, name: null, description: null } },
 });
-console.log(initialState);
-export default function(state: Root, action: Action): Root {
+
+export default function(state: RootState, action: Action): RootState {
   return state;
 }

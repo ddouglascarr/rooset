@@ -3,11 +3,11 @@
 import * as Immutable from "immutable";
 import ImmutableModel from "flow-immutable-models";
 
-import type { UnitModelType } from "./Unit.js";
-import { Unit } from "./Unit.js";
+import type { UnitStateModelType } from "./UnitState.js";
+import { UnitState } from "./UnitState.js";
 
-export type RootModelType = {
-  unit: UnitModelType,
+export type RootStateModelType = {
+  unit: UnitStateModelType,
 };
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -18,24 +18,24 @@ export type RootModelType = {
 // and re-run the flow-immutable-models codemod
 //
 // /////////////////////////////////////////////////////////////////////////////
-export class Root extends ImmutableModel {
-  static fromJS(json: RootModelType): Root {
+export class RootState extends ImmutableModel {
+  static fromJS(json: RootStateModelType): RootState {
     const state: Object = Object.assign({}, json);
-    state.unit = Unit.fromJS(state.unit);
+    state.unit = UnitState.fromJS(state.unit);
     return new this(Immutable.Map(state));
   }
 
-  toJS(): RootModelType {
+  toJS(): RootStateModelType {
     return {
-      unit: this.unit.toJS(),
+      unit: this.unit.toJS()
     };
   }
 
-  get unit(): Unit {
-    return this._state.get('unit');
+  get unit(): UnitState {
+    return this._state.get("unit");
   }
 
-  setUnit(unit: Unit): this {
-    return this.clone(this._state.set('unit', unit));
+  setUnit(unit: UnitState): this {
+    return this.clone(this._state.set("unit", unit));
   }
 }
