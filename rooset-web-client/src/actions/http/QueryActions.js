@@ -211,8 +211,3 @@ export type QueryError =
   | UnitQueryError
 
 export type QueryAction = QueryRequest | QueryResponse | QueryError;
-function applyUriTemplate(uriTmpl, vars) {
-  const opts = { interpolate:  /{(.+?)}/g };
-  const tmpl = template(uriTmpl, opts);
-  return tmpl(vars);
-}

@@ -37,10 +37,5 @@ export type QueryError =
   | ${queryDecls.map(d => getClassNameFromType(d.type + "_ERROR")).join("\n  | ")}
 
 export type QueryAction = QueryRequest | QueryResponse | QueryError;
-function applyUriTemplate(uriTmpl, vars) {
-  const opts = { interpolate:  /\{(.+?)\}/g };
-  const tmpl = template(uriTmpl, opts);
-  return tmpl(vars);
-}
 `;
 };

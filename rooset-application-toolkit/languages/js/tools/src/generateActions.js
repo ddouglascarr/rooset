@@ -4,7 +4,10 @@ const {
   getConfigFromEnv,
   getDeclarations,
 } = require("../../../../ratk-declarations-utils");
-const generateQueryActions = require('./generators/generateQueryActions')
+const generateQueryActions = require("./generators/generateQueryActions");
+const generateExecuteHttpRequest = require(
+  "./generators/generateExecuteHttpRequests"
+);
 
 const files = {};
 const config = getConfigFromEnv({
@@ -13,7 +16,13 @@ const config = getConfigFromEnv({
 });
 
 const queryDecls = getDeclarations(config.querySrcPath);
+
 const queryActionsContent = generateQueryActions(queryDecls, config);
 files["QueryActions.js"] = queryActionsContent;
+
+const executeHttpRequestContent = generateExecuteHttpRequest(
+  queryDecls,
+  config);
+files["executeHttpRequest.js"] = executeHttpRequestContent;
 
 updateDir(config.destPath, files);
