@@ -37,6 +37,10 @@ export class ${className} {
   {
     return new ${responseClassName}(payload);
   }
+
+  buildError(payload: ExceptionPayload) : ${errorClassName} {
+    return new ${errorClassName}(payload);
+  }
 }
 `;
 };
