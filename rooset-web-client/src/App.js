@@ -41,25 +41,18 @@ class App extends Component {
             </Switch>
 
             {/* for dispatching redux route events */}
-            <Route
-              path="/"
-              render={props => {
-                dispatch({
-                  type: "ROUTE_CHANGED",
-                  payload: { pathname: props.location.pathname },
-                });
-                return null;
-              }}
-            />
-            <Route
-              exact
-              path="/:unitId"
-              render={({ match }) => {
-                console.log("unitId path matched");
-                dispatch(buildDisplayUnitPageAction({id: match.params.unitId}));
-                return null;
-              }}
-            />
+            <Switch>
+              <Route exact path="/login" render={() => null} />
+              <Route
+                exact
+                path="/:unitId"
+                render={({ match }) => {
+                  console.log("unitId path matched");
+                  dispatch(buildDisplayUnitPageAction({id: match.params.unitId}));
+                  return null;
+                }}
+              />
+            </Switch>
           </div>
         </Router>
       </Provider>

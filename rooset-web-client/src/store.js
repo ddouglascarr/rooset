@@ -1,10 +1,12 @@
-// @flow
-
 import { createStore, applyMiddleware } from "redux";
 import createLogger from "redux-logger";
 import createSagaMiddleware from "redux-saga";
 import rootReducer, { initialState } from "./reducers/rootReducer";
 import rootSaga from "./sagas/rootSaga";
+import { pageProcessManager } from "./processManagers/pageProcessManager";
+import {
+  httpRequestProcessManager,
+} from "./processManagers/httpRequestProcessManager";
 
 // eslint-disable-next-line no-unused-vars
 const stateTransformer = state => {
@@ -23,7 +25,11 @@ export default function configureStore() {
   const store = createStore(
     rootReducer,
     initialState,
-    applyMiddleware(loggerMiddleware, sagaMiddleware),
+    applyMiddleware(
+      loggerMiddleware,
+      sagaMiddleware,
+      pageProcessManager,
+      httpRequestProcessManager)
   );
   sagaMiddleware.run(rootSaga);
   return store;
