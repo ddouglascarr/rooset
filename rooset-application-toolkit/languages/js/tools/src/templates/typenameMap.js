@@ -12,8 +12,15 @@ module.exports = {
   keyNamePair: "KeyNamePair",
   initiative: "Initiative",
   member: "Member",
+  memberArray: "Array<Member>",
   uuidNullable: "?Uuid",
   exceptionCode: "ExcetionCode",
   issueState: "IssueState",
   exceptionType: "ExceptionType",
+  keyNamePair: "KeyNamePair",
+  keyNamePairArray: "Array<KeyNamePair>",
+  ullong: "Ullong",
+  policy: "Policy",
+  area: "Area",
+  areaArray: "Array<Area>"
 };

@@ -2,24 +2,25 @@ const typenames = require("../templates/typenameMap");
 const { camelCase, map } = require("lodash");
 
 module.exports = (query, config) => {
-  const requestType = `${query.type}_REQUEST`;
-  const className = camelCase(requestType);
-  const payloadDecl = map(query.req, (v, k) => `  ${k}: ${typenames[v.type]}`);
-
+  const responseType = `${query.type}_RESPONSE`;
+  const className = camelCase(responseType);
+  const payloadDecl = map(query.resp, (v, k) => `  ${k}: ${typenames[v.type]}`);
   return `
-export type ${requestType} = "${requestType}";
+export type ${responseType} = "${responseType}";
 
 type ${className}Payload = {|
 ${payloadDecl.join(",\n")}
 |};
 
 export class ${className} {
-  type: ${requestType};
+  type: ${responseType};
   payload: ${className}Payload;
+
   constructor(payload: ${className}Payload) {
     this.payload = payload;
-    this.type = "${requestType}";
+    this.type = "${responseType}";
   }
 }
+
 `;
 };

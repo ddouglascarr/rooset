@@ -8,7 +8,6 @@ export type Ullong = number;
 
 export type Uuid = UUID<4>;
 
-
 export type Area = {
   areaId: Uuid,
   name: string,
@@ -80,3 +79,19 @@ export type ExceptionType =
   | "COMMAND_EVALUATION_EXCEPTION"
   | "QUERY_EXCEPTION"
   | "SYSTEM_EXCEPTION";
+
+export type Policy = {|
+  policyId: Uuid,
+  name: string,
+  description: string,
+  discussionTime: Duration,
+  verificationTime: Duration,
+  votingTime: Duration,
+  issueQuorumNum: Uint,
+  issueQuorumDen: Uint,
+|};
+
+export type ExceptionPayload = {
+  code: ExceptionType,
+  message: string,
+};
