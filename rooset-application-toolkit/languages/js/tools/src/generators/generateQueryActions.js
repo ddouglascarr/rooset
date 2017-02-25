@@ -16,9 +16,17 @@ import type {
   Ullong,
   Policy,
 } from '../../types';
+import { template } from "lodash";
 
-${queryDecls.map(d => generateQueryRequestAction(d, config)).join("\n")}
+
 
 ${queryDecls.map(d => generateQueryResponseAction(d, config)).join("\n")}
+${queryDecls.map(d => generateQueryRequestAction(d, config)).join("\n")}
+
+function applyUriTemplate(uriTmpl, vars) {
+  const opts = { interpolate:  /\{(.+?)\}/g };
+  const tmpl = template(uriTmpl, opts);
+  return tmpl(vars);
+}
 `;
 };
