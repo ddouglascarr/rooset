@@ -3,8 +3,11 @@ import { Provider } from "react-redux";
 import ProjectNavbar from "./containers/ProjectNavbar";
 import HomePage from "./containers/HomePage";
 import LoginPage from "./containers/LoginPage";
+import UnitPage from "./containers/UnitPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import configureStore from "./store";
+import { UnitQueryRequest } from "./actions/http/QueryActions";
+import { buildDisplayUnitPageAction } from './actions/PageAction';
 
 class App extends Component {
   constructor() {
@@ -33,6 +36,7 @@ class App extends Component {
                 }}
                 componentDidUpdate={() => console.log("login did mount")}
               />
+              <Route exact path="/:unitId" component={UnitPage} />
               <Route path="/" render={() => <div>404</div>} />
             </Switch>
 
@@ -44,6 +48,15 @@ class App extends Component {
                   type: "ROUTE_CHANGED",
                   payload: { pathname: props.location.pathname },
                 });
+                return null;
+              }}
+            />
+            <Route
+              exact
+              path="/:unitId"
+              render={({ match }) => {
+                console.log("unitId path matched");
+                dispatch(buildDisplayUnitPageAction({id: match.params.unitId}));
                 return null;
               }}
             />

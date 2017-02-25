@@ -18,6 +18,7 @@ import type {
   Policy,
 } from '../../types';
 import { template } from "lodash";
+import HttpRequest from "../../sys/HttpRequest";
 
 
 ${queryDecls.map(d => generateQueryResponseAction(d, config)).join("\n")}

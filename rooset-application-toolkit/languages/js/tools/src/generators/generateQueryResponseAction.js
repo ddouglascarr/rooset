@@ -1,24 +1,25 @@
-const typenames = require("../templates/typenameMap");
-const { camelCase, upperFirst, map } = require("lodash");
+const { map } = require("lodash");
+const { getClassNameFromType, buildPayloadDeclaration } = require("../utils");
 
 module.exports = (query, config) => {
   const responseType = `${query.type}_RESPONSE`;
-  const className = upperFirst(camelCase(responseType));
-  const payloadDecl = map(query.resp, (v, k) => `  ${k}: ${typenames[v.type]}`);
+  const className = getClassNameFromType(responseType);
+  const payloadDecl = buildPayloadDeclaration(query.resp);
   return `
 export type ${responseType} = "${responseType}";
-
 type ${className}Payload = {|
 ${payloadDecl.join(",\n")}
 |};
 
-export class ${className} {
-  type: ${responseType};
-  payload: ${className}Payload;
+export type ${className} = {|
+  type: ${responseType},
+  payload: ${className}Payload,
+|}
 
-  constructor(payload: ${className}Payload) {
-    this.payload = payload;
-    this.type = "${responseType}";
+export function build${className}(payload: ${className}Payload) :${className} {
+  return {
+    type: "${responseType}",
+    payload: payload,
   }
 }
 

@@ -13,11 +13,11 @@ import type {
   Policy,
 } from '../../types';
 import { template } from "lodash";
+import HttpRequest from "../../sys/HttpRequest";
 
 
 
 export type ISSUE_QUERY_RESPONSE = "ISSUE_QUERY_RESPONSE";
-
 type IssueQueryResponsePayload = {|
   id: Uuid,
   unitId: Uuid,
@@ -29,40 +29,42 @@ type IssueQueryResponsePayload = {|
   initiatives: Array<KeyNamePair>
 |};
 
-export class IssueQueryResponse {
-  type: ISSUE_QUERY_RESPONSE;
-  payload: IssueQueryResponsePayload;
+export type IssueQueryResponse = {|
+  type: ISSUE_QUERY_RESPONSE,
+  payload: IssueQueryResponsePayload,
+|}
 
-  constructor(payload: IssueQueryResponsePayload) {
-    this.payload = payload;
-    this.type = "ISSUE_QUERY_RESPONSE";
+export function buildIssueQueryResponse(payload: IssueQueryResponsePayload) :IssueQueryResponse {
+  return {
+    type: "ISSUE_QUERY_RESPONSE",
+    payload: payload,
   }
 }
 
 
 
 export type UNIT_MEMBER_QUERY_RESPONSE = "UNIT_MEMBER_QUERY_RESPONSE";
-
 type UnitMemberQueryResponsePayload = {|
   id: Uuid,
   members: Array<Member>,
   totalWeight: Ullong
 |};
 
-export class UnitMemberQueryResponse {
-  type: UNIT_MEMBER_QUERY_RESPONSE;
-  payload: UnitMemberQueryResponsePayload;
+export type UnitMemberQueryResponse = {|
+  type: UNIT_MEMBER_QUERY_RESPONSE,
+  payload: UnitMemberQueryResponsePayload,
+|}
 
-  constructor(payload: UnitMemberQueryResponsePayload) {
-    this.payload = payload;
-    this.type = "UNIT_MEMBER_QUERY_RESPONSE";
+export function buildUnitMemberQueryResponse(payload: UnitMemberQueryResponsePayload) :UnitMemberQueryResponse {
+  return {
+    type: "UNIT_MEMBER_QUERY_RESPONSE",
+    payload: payload,
   }
 }
 
 
 
 export type UNIT_QUERY_RESPONSE = "UNIT_QUERY_RESPONSE";
-
 type UnitQueryResponsePayload = {|
   id: Uuid,
   name: string,
@@ -71,13 +73,15 @@ type UnitQueryResponsePayload = {|
   areas: Array<Area>
 |};
 
-export class UnitQueryResponse {
-  type: UNIT_QUERY_RESPONSE;
-  payload: UnitQueryResponsePayload;
+export type UnitQueryResponse = {|
+  type: UNIT_QUERY_RESPONSE,
+  payload: UnitQueryResponsePayload,
+|}
 
-  constructor(payload: UnitQueryResponsePayload) {
-    this.payload = payload;
-    this.type = "UNIT_QUERY_RESPONSE";
+export function buildUnitQueryResponse(payload: UnitQueryResponsePayload) :UnitQueryResponse {
+  return {
+    type: "UNIT_QUERY_RESPONSE",
+    payload: payload,
   }
 }
 
@@ -85,43 +89,52 @@ export class UnitQueryResponse {
 
 export type ISSUE_QUERY_ERROR = "ISSUE_QUERY_ERROR";
 
-export class IssueQueryError {
-  type: ISSUE_QUERY_ERROR;
-  payload: ExceptionPayload;
-  error: true;
+export type IssueQueryError = {
+  type: ISSUE_QUERY_ERROR,
+  error: true,
+  payload: ExceptionPayload,
+};
 
-  constructor(payload: ExceptionPayload) {
-    this.payload = payload;
-    this.error = true;
-  }
+export function buildIssueQueryError(payload: ExceptionPayload) {
+  return {
+    type: "ISSUE_QUERY_ERROR",
+    error:true,
+    payload,
+  };
 }
 
 
 export type UNIT_MEMBER_QUERY_ERROR = "UNIT_MEMBER_QUERY_ERROR";
 
-export class UnitMemberQueryError {
-  type: UNIT_MEMBER_QUERY_ERROR;
-  payload: ExceptionPayload;
-  error: true;
+export type UnitMemberQueryError = {
+  type: UNIT_MEMBER_QUERY_ERROR,
+  error: true,
+  payload: ExceptionPayload,
+};
 
-  constructor(payload: ExceptionPayload) {
-    this.payload = payload;
-    this.error = true;
-  }
+export function buildUnitMemberQueryError(payload: ExceptionPayload) {
+  return {
+    type: "UNIT_MEMBER_QUERY_ERROR",
+    error:true,
+    payload,
+  };
 }
 
 
 export type UNIT_QUERY_ERROR = "UNIT_QUERY_ERROR";
 
-export class UnitQueryError {
-  type: UNIT_QUERY_ERROR;
-  payload: ExceptionPayload;
-  error: true;
+export type UnitQueryError = {
+  type: UNIT_QUERY_ERROR,
+  error: true,
+  payload: ExceptionPayload,
+};
 
-  constructor(payload: ExceptionPayload) {
-    this.payload = payload;
-    this.error = true;
-  }
+export function buildUnitQueryError(payload: ExceptionPayload) {
+  return {
+    type: "UNIT_QUERY_ERROR",
+    error:true,
+    payload,
+  };
 }
 
 
@@ -131,30 +144,16 @@ type IssueQueryRequestPayload = {|
   id: Uuid
 |};
 
-export class IssueQueryRequest {
-  type: ISSUE_QUERY_REQUEST;
-  payload: IssueQueryRequestPayload;
-  isHttpQueryAction: true;
+export type IssueQueryRequest = {|
+  type: ISSUE_QUERY_REQUEST,
+  payload: IssueQueryRequestPayload,
+|};
 
-  constructor(payload: IssueQueryRequestPayload) {
-    this.payload = payload;
-    this.type = "ISSUE_QUERY_REQUEST";
-    this.isHttpQueryAction = true;
-  }
-
-  getHttpUri(): string {
-    return applyUriTemplate("/issues/{id}", this.payload);
-  }
-
-  buildResponse(payload: IssueQueryResponsePayload)
-    : IssueQueryResponse
-  {
-    return new IssueQueryResponse(payload);
-  }
-
-  buildError(payload: ExceptionPayload) : IssueQueryError {
-    return new IssueQueryError(payload);
-  }
+export function buildIssueQueryRequest(payload: IssueQueryRequestPayload) :IssueQueryRequest {
+  return {
+    type: "ISSUE_QUERY_REQUEST",
+    payload,
+  };
 }
 
 
@@ -164,30 +163,16 @@ type UnitMemberQueryRequestPayload = {|
   id: Uuid
 |};
 
-export class UnitMemberQueryRequest {
-  type: UNIT_MEMBER_QUERY_REQUEST;
-  payload: UnitMemberQueryRequestPayload;
-  isHttpQueryAction: true;
+export type UnitMemberQueryRequest = {|
+  type: UNIT_MEMBER_QUERY_REQUEST,
+  payload: UnitMemberQueryRequestPayload,
+|};
 
-  constructor(payload: UnitMemberQueryRequestPayload) {
-    this.payload = payload;
-    this.type = "UNIT_MEMBER_QUERY_REQUEST";
-    this.isHttpQueryAction = true;
-  }
-
-  getHttpUri(): string {
-    return applyUriTemplate("/units/{id}/members", this.payload);
-  }
-
-  buildResponse(payload: UnitMemberQueryResponsePayload)
-    : UnitMemberQueryResponse
-  {
-    return new UnitMemberQueryResponse(payload);
-  }
-
-  buildError(payload: ExceptionPayload) : UnitMemberQueryError {
-    return new UnitMemberQueryError(payload);
-  }
+export function buildUnitMemberQueryRequest(payload: UnitMemberQueryRequestPayload) :UnitMemberQueryRequest {
+  return {
+    type: "UNIT_MEMBER_QUERY_REQUEST",
+    payload,
+  };
 }
 
 
@@ -197,30 +182,16 @@ type UnitQueryRequestPayload = {|
   id: Uuid
 |};
 
-export class UnitQueryRequest {
-  type: UNIT_QUERY_REQUEST;
-  payload: UnitQueryRequestPayload;
-  isHttpQueryAction: true;
+export type UnitQueryRequest = {|
+  type: UNIT_QUERY_REQUEST,
+  payload: UnitQueryRequestPayload,
+|};
 
-  constructor(payload: UnitQueryRequestPayload) {
-    this.payload = payload;
-    this.type = "UNIT_QUERY_REQUEST";
-    this.isHttpQueryAction = true;
-  }
-
-  getHttpUri(): string {
-    return applyUriTemplate("/units/{id}", this.payload);
-  }
-
-  buildResponse(payload: UnitQueryResponsePayload)
-    : UnitQueryResponse
-  {
-    return new UnitQueryResponse(payload);
-  }
-
-  buildError(payload: ExceptionPayload) : UnitQueryError {
-    return new UnitQueryError(payload);
-  }
+export function buildUnitQueryRequest(payload: UnitQueryRequestPayload) :UnitQueryRequest {
+  return {
+    type: "UNIT_QUERY_REQUEST",
+    payload,
+  };
 }
 
 

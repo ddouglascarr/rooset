@@ -1,21 +1,24 @@
-const { camelCase, upperFirst } = require("lodash");
+const { getClassNameFromType } = require("../utils");
 
 module.exports = (query, config) => {
   const errorType = `${query.type}_ERROR`;
-  const className = upperFirst(camelCase(errorType));
+  const className = getClassNameFromType(errorType);
 
   return `
 export type ${errorType} = "${errorType}";
 
-export class ${className} {
-  type: ${errorType};
-  payload: ExceptionPayload;
-  error: true;
+export type ${className} = {
+  type: ${errorType},
+  error: true,
+  payload: ExceptionPayload,
+};
 
-  constructor(payload: ExceptionPayload) {
-    this.payload = payload;
-    this.error = true;
-  }
+export function build${className}(payload: ExceptionPayload) {
+  return {
+    type: "${errorType}",
+    error:true,
+    payload,
+  };
 }
 `;
 };
