@@ -4,17 +4,16 @@ const {
   getConfigFromEnv,
   getDeclarations,
 } = require("../../../../ratk-declarations-utils");
-const generateQueryRequestAction = require('./generators/generateQueryRequestAction')
+const generateQueryActions = require('./generators/generateQueryActions')
 
 const files = {};
 const config = getConfigFromEnv({
   destPath: "RATK_GEN_QUERY_ACTION_JS_DEST_DIR",
   querySrcPath: "RATK_GEN_QUERY_DECL_DIR",
 });
-const baseSchema = require(config.baseSchemaLocation);
 
 const queryDecls = getDeclarations(config.querySrcPath);
-queryDecls.forEach(query => {
-  const queryType = query.type;
-  const requestContent = generateQueryRequestAction(query, config);
-})
+const queryActionsContent = generateQueryActions(queryDecls, config);
+files["QueryActions.js"] = queryActionsContent;
+
+updateDir(config.destPath, files);

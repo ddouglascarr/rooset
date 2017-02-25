@@ -1,5 +1,5 @@
 // @flow
-import type { Uuid } from "../types";
+import type { Uuid }  from "../types";
 
 export type DISPLAY_USER_PAGE_ACTION = "DISPLAY_USER_PAGE_ACTION";
 export type DISPLAY_UNIT_PAGE_ACTION = "DISPLAY_UNIT_PAGE_ACTION";

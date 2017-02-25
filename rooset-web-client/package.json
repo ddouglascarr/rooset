@@ -69,7 +69,8 @@
     "flow": "flow",
     "build-css": "node-sass src/ -o src/",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch",
-    "flow-immutable-models": "jscodeshift -t ./node_modules/flow-immutable-models/lib/transform.js ./src/reducers/models"
+    "flow-immutable-models": "jscodeshift -t ./node_modules/flow-immutable-models/lib/transform.js ./src/reducers/models",
+    "generate": "./scripts/generate"
   },
   "jest": {
     "collectCoverageFrom": [
