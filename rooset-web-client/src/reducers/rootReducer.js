@@ -2,6 +2,7 @@
 
 import type { Action } from "../actions/Action";
 import { RootState } from "./models/RootState";
+export type State = RootState;
 
 export const initialState: RootState = RootState.fromJS({
   unit: {

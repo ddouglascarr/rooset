@@ -1,25 +1,26 @@
 
 // @flow
-import type { HttpAction } from "../Action";
+import type { Action, HttpAction } from "../Action";
 import { template } from "lodash";
 import {
-  buildIssueQueryRequest,  
-buildIssueQueryError,  
-buildIssueQueryResponse,  
-buildUnitMemberQueryRequest,  
-buildUnitMemberQueryError,  
-buildUnitMemberQueryResponse,  
-buildUnitQueryRequest,  
-buildUnitQueryError,  
-buildUnitQueryResponse
+  buildIssueQueryRequest,
+  buildIssueQueryError,
+  buildIssueQueryResponse,
+  buildUnitMemberQueryRequest,
+  buildUnitMemberQueryError,
+  buildUnitMemberQueryResponse,
+  buildUnitQueryRequest,
+  buildUnitQueryError,
+  buildUnitQueryResponse
 } from "./QueryActions";
 import type {
-  IssueQueryRequest,  
-UnitMemberQueryRequest,  
-UnitQueryRequest
+  QueryRequest,
+  IssueQueryRequest,
+  UnitMemberQueryRequest,
+  UnitQueryRequest
 } from "./QueryActions";
 
-export default async function(action: HttpAction) :Promise<HttpAction> {
+export default async function(action: Action) :Promise<HttpAction> {
   switch (action.type) {
 
     case "ISSUE_QUERY_REQUEST":

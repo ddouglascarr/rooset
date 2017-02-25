@@ -37,16 +37,17 @@ async function execute${getClassNameFromType(d.type)}HttpRequest(
 
   return `
 // @flow
-import type { HttpAction } from "../Action";
+import type { Action, HttpAction } from "../Action";
 import { template } from "lodash";
 import {
-  ${factoryImports.join(",  \n")}
+  ${factoryImports.join(",\n  ")}
 } from "./QueryActions";
 import type {
-  ${typeImports.join(",  \n")}
+  QueryRequest,
+  ${typeImports.join(",\n  ")}
 } from "./QueryActions";
 
-export default async function(action: HttpAction) :Promise<HttpAction> {
+export default async function(action: Action) :Promise<HttpAction> {
   switch (action.type) {
 ${caseStatements.join("")}
     default:

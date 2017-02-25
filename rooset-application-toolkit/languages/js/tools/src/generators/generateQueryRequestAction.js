@@ -16,12 +16,14 @@ ${payloadDecl.join(",\n")}
 export type ${className} = {|
   type: ${requestType},
   payload: ${className}Payload,
+  meta: {| isHttpRequest: true |},
 |};
 
 export function build${className}(payload: ${className}Payload) :${className} {
   return {
     type: "${requestType}",
     payload,
+    meta: { isHttpRequest: true },
   };
 }
 `;

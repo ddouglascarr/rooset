@@ -147,12 +147,14 @@ type IssueQueryRequestPayload = {|
 export type IssueQueryRequest = {|
   type: ISSUE_QUERY_REQUEST,
   payload: IssueQueryRequestPayload,
+  meta: {| isHttpRequest: true |},
 |};
 
 export function buildIssueQueryRequest(payload: IssueQueryRequestPayload) :IssueQueryRequest {
   return {
     type: "ISSUE_QUERY_REQUEST",
     payload,
+    meta: { isHttpRequest: true },
   };
 }
 
@@ -166,12 +168,14 @@ type UnitMemberQueryRequestPayload = {|
 export type UnitMemberQueryRequest = {|
   type: UNIT_MEMBER_QUERY_REQUEST,
   payload: UnitMemberQueryRequestPayload,
+  meta: {| isHttpRequest: true |},
 |};
 
 export function buildUnitMemberQueryRequest(payload: UnitMemberQueryRequestPayload) :UnitMemberQueryRequest {
   return {
     type: "UNIT_MEMBER_QUERY_REQUEST",
     payload,
+    meta: { isHttpRequest: true },
   };
 }
 
@@ -185,12 +189,14 @@ type UnitQueryRequestPayload = {|
 export type UnitQueryRequest = {|
   type: UNIT_QUERY_REQUEST,
   payload: UnitQueryRequestPayload,
+  meta: {| isHttpRequest: true |},
 |};
 
 export function buildUnitQueryRequest(payload: UnitQueryRequestPayload) :UnitQueryRequest {
   return {
     type: "UNIT_QUERY_REQUEST",
     payload,
+    meta: { isHttpRequest: true },
   };
 }
 
