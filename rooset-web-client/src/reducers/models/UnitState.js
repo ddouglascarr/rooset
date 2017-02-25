@@ -2,10 +2,10 @@
 /* eslint-disable no-use-before-define */
 import * as Immutable from "immutable";
 import ImmutableModel from "flow-immutable-models";
-import type { uuid } from '../../types';
+import type { Uuid } from '../../types';
 
 export type UnitStatePayloadModelType = {
-  id: uuid | null,
+  id: Uuid | null,
   name: string | null,
   description: string | null,
 };
@@ -38,11 +38,11 @@ export class UnitStatePayload extends ImmutableModel {
     };
   }
 
-  get id(): uuid | null {
+  get id(): Uuid | null {
     return this._state.get('id');
   }
 
-  setId(id: uuid | null): this {
+  setId(id: Uuid | null): this {
     return this.clone(this._state.set('id', id));
   }
 

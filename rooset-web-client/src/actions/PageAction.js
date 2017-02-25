@@ -1,10 +1,10 @@
 // @flow
-import type { uuid } from "../types";
+import type { Uuid } from "../types";
 
 export type DISPLAY_USER_PAGE_ACTION = "DISPLAY_USER_PAGE_ACTION";
 export type DISPLAY_UNIT_PAGE_ACTION = "DISPLAY_UNIT_PAGE_ACTION";
 
-type DisplayUnitPagePayload = {| id: uuid |};
+type DisplayUnitPagePayload = {| id: Uuid |};
 export class DisplayUnitPageAction {
   type: DISPLAY_USER_PAGE_ACTION;
   payload: DisplayUnitPagePayload;
@@ -16,9 +16,9 @@ export class DisplayUnitPageAction {
 
 export class DisplayUserPageAction {
   type: DISPLAY_UNIT_PAGE_ACTION;
-  payload: {| id: uuid |};
+  payload: {| id: Uuid |};
 
-  constructor(id: uuid) {
+  constructor(id: Uuid) {
     this.payload = { id };
   }
 }

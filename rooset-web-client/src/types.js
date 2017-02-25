@@ -2,40 +2,41 @@
 
 import type { UUID } from "uuid-js";
 
-export type int = number;
-export type uint = number;
-export type ullong = number;
+export type Int = number;
+export type Uint = number;
+export type Ullong = number;
 
-export type uuid = UUID<4>;
+export type Uuid = UUID<4>;
 
-export type area = {
-  areaId: uuid,
+
+export type Area = {
+  areaId: Uuid,
   name: string,
   description: string,
   externalReference: string,
 };
 
-export type date = number;
+export type Date = number;
 
-export type duration = number;
+export type Duration = number;
 
-export type keyNamePair = {
-  key: uuid,
+export type KeyNamePair = {
+  key: Uuid,
   name: string,
 };
 
-export type initiative = {
-  id: uuid,
-  initiativeId: uuid,
-  requesterid: uuid,
+export type Initiative = {
+  id: Uuid,
+  initiativeId: Uuid,
+  requesterid: Uuid,
   name: string,
   content: string,
-  created: date,
+  created: Date,
 };
 
-export type member = {
-  id: uuid,
-  memberId: uuid,
+export type Member = {
+  id: Uuid,
+  memberId: Uuid,
   pollingRight: boolean,
   votingRight: boolean,
   initiativeRight: boolean,
@@ -43,17 +44,15 @@ export type member = {
   weight: number,
 };
 
-export type uuidNullable = uuid | null;
-
-export type schulzeBallot = {
-  approve: Array<Array<uuid>>,
-  abstain: Array<uuid>,
-  disapprove: Array<Array<uuid>>,
+export type SchulzeBallot = {
+  approve: Array<Array<Uuid>>,
+  abstain: Array<Uuid>,
+  disapprove: Array<Array<Uuid>>,
 };
 
-export type email = string;
+export type Email = string;
 
-export type exceptionCode =
+export type ExceptionCode =
   | "CONFLICT_EXCEPTION"
   | "GENERAL_PROJECT_EXCEPTION"
   | "ITEM_NOT_FOUND_EXCEPTION"
@@ -62,7 +61,7 @@ export type exceptionCode =
   | "INVALID_INPUT_EXCEPTION"
   | "ISSUE_STATE_EXCEPTION";
 
-export type issueState =
+export type IssueState =
   | "ADMISSION"
   | "DISCUSSION"
   | "VERIFICATION"
@@ -77,7 +76,7 @@ export type issueState =
   | "FINISHED_WITHOUT_WINNER"
   | "FINISHED_WITH_WINNER";
 
-export type exceptionType =
+export type ExceptionType =
   | "COMMAND_EVALUATION_EXCEPTION"
   | "QUERY_EXCEPTION"
   | "SYSTEM_EXCEPTION";
