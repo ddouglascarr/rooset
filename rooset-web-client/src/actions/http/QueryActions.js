@@ -170,6 +170,48 @@ export class UnitQueryRequest {
 }
 
 
+export type ISSUE_QUERY_ERROR = "ISSUE_QUERY_ERROR";
+
+export class IssueQueryError {
+  type: ISSUE_QUERY_ERROR;
+  payload: ExceptionPayload;
+  error: true;
+
+  constructor(payload: ExceptionPayload) {
+    this.payload = payload;
+    this.error = true;
+  }
+}
+
+
+export type UNIT_MEMBER_QUERY_ERROR = "UNIT_MEMBER_QUERY_ERROR";
+
+export class UnitMemberQueryError {
+  type: UNIT_MEMBER_QUERY_ERROR;
+  payload: ExceptionPayload;
+  error: true;
+
+  constructor(payload: ExceptionPayload) {
+    this.payload = payload;
+    this.error = true;
+  }
+}
+
+
+export type UNIT_QUERY_ERROR = "UNIT_QUERY_ERROR";
+
+export class UnitQueryError {
+  type: UNIT_QUERY_ERROR;
+  payload: ExceptionPayload;
+  error: true;
+
+  constructor(payload: ExceptionPayload) {
+    this.payload = payload;
+    this.error = true;
+  }
+}
+
+
 function applyUriTemplate(uriTmpl, vars) {
   const opts = { interpolate:  /{(.+?)}/g };
   const tmpl = template(uriTmpl, opts);

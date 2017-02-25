@@ -1,5 +1,6 @@
 const generateQueryRequestAction = require("./generateQueryRequestAction");
 const generateQueryResponseAction = require("./generateQueryResponseAction");
+const generateQueryErrorAction = require("./generateQueryErrorAction");
 
 module.exports = (queryDecls, config) => {
   return `
@@ -21,6 +22,7 @@ import { template } from "lodash";
 
 ${queryDecls.map(d => generateQueryResponseAction(d, config)).join("\n")}
 ${queryDecls.map(d => generateQueryRequestAction(d, config)).join("\n")}
+${queryDecls.map(d => generateQueryErrorAction(d, config)).join("\n")}
 
 function applyUriTemplate(uriTmpl, vars) {
   const opts = { interpolate:  /\{(.+?)\}/g };

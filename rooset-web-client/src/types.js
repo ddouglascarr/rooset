@@ -8,32 +8,32 @@ export type Ullong = number;
 
 export type Uuid = UUID<4>;
 
-export type Area = {
+export type Area = {|
   areaId: Uuid,
   name: string,
   description: string,
   externalReference: string,
-};
+|};
 
 export type Date = number;
 
 export type Duration = number;
 
-export type KeyNamePair = {
+export type KeyNamePair = {|
   key: Uuid,
   name: string,
-};
+|};
 
-export type Initiative = {
+export type Initiative = {|
   id: Uuid,
   initiativeId: Uuid,
   requesterid: Uuid,
   name: string,
   content: string,
   created: Date,
-};
+|};
 
-export type Member = {
+export type Member = {|
   id: Uuid,
   memberId: Uuid,
   pollingRight: boolean,
@@ -41,13 +41,13 @@ export type Member = {
   initiativeRight: boolean,
   managementRight: boolean,
   weight: number,
-};
+|};
 
-export type SchulzeBallot = {
+export type SchulzeBallot = {|
   approve: Array<Array<Uuid>>,
   abstain: Array<Uuid>,
   disapprove: Array<Array<Uuid>>,
-};
+|};
 
 export type Email = string;
 
@@ -91,7 +91,7 @@ export type Policy = {|
   issueQuorumDen: Uint,
 |};
 
-export type ExceptionPayload = {
+export type ExceptionPayload = {|
   code: ExceptionType,
   message: string,
-};
+|};
