@@ -16,10 +16,9 @@ import { template } from "lodash";
 
 
 
-
 export type ISSUE_QUERY_RESPONSE = "ISSUE_QUERY_RESPONSE";
 
-type issueQueryResponsePayload = {|
+type IssueQueryResponsePayload = {|
   id: Uuid,
   unitId: Uuid,
   areaId: Uuid,
@@ -30,11 +29,11 @@ type issueQueryResponsePayload = {|
   initiatives: Array<KeyNamePair>
 |};
 
-export class issueQueryResponse {
+export class IssueQueryResponse {
   type: ISSUE_QUERY_RESPONSE;
-  payload: issueQueryResponsePayload;
+  payload: IssueQueryResponsePayload;
 
-  constructor(payload: issueQueryResponsePayload) {
+  constructor(payload: IssueQueryResponsePayload) {
     this.payload = payload;
     this.type = "ISSUE_QUERY_RESPONSE";
   }
@@ -44,17 +43,17 @@ export class issueQueryResponse {
 
 export type UNIT_MEMBER_QUERY_RESPONSE = "UNIT_MEMBER_QUERY_RESPONSE";
 
-type unitMemberQueryResponsePayload = {|
+type UnitMemberQueryResponsePayload = {|
   id: Uuid,
   members: Array<Member>,
   totalWeight: Ullong
 |};
 
-export class unitMemberQueryResponse {
+export class UnitMemberQueryResponse {
   type: UNIT_MEMBER_QUERY_RESPONSE;
-  payload: unitMemberQueryResponsePayload;
+  payload: UnitMemberQueryResponsePayload;
 
-  constructor(payload: unitMemberQueryResponsePayload) {
+  constructor(payload: UnitMemberQueryResponsePayload) {
     this.payload = payload;
     this.type = "UNIT_MEMBER_QUERY_RESPONSE";
   }
@@ -64,7 +63,7 @@ export class unitMemberQueryResponse {
 
 export type UNIT_QUERY_RESPONSE = "UNIT_QUERY_RESPONSE";
 
-type unitQueryResponsePayload = {|
+type UnitQueryResponsePayload = {|
   id: Uuid,
   name: string,
   description: string,
@@ -72,11 +71,11 @@ type unitQueryResponsePayload = {|
   areas: Array<Area>
 |};
 
-export class unitQueryResponse {
+export class UnitQueryResponse {
   type: UNIT_QUERY_RESPONSE;
-  payload: unitQueryResponsePayload;
+  payload: UnitQueryResponsePayload;
 
-  constructor(payload: unitQueryResponsePayload) {
+  constructor(payload: UnitQueryResponsePayload) {
     this.payload = payload;
     this.type = "UNIT_QUERY_RESPONSE";
   }
@@ -86,63 +85,87 @@ export class unitQueryResponse {
 
 export type ISSUE_QUERY_REQUEST = "ISSUE_QUERY_REQUEST";
 
-type issueQueryRequestPayload = {|
+type IssueQueryRequestPayload = {|
   id: Uuid
 |};
 
-export class issueQueryRequest {
+export class IssueQueryRequest {
   type: ISSUE_QUERY_REQUEST;
-  payload: issueQueryRequestPayload;
+  payload: IssueQueryRequestPayload;
   isHttpQueryAction: true;
-  constructor(payload: issueQueryRequestPayload) {
+
+  constructor(payload: IssueQueryRequestPayload) {
     this.payload = payload;
     this.type = "ISSUE_QUERY_REQUEST";
     this.isHttpQueryAction = true;
   }
+
   getHttpUri(): string {
     return applyUriTemplate("/issues/{id}", this.payload);
+  }
+
+  buildResponse(payload: IssueQueryResponsePayload)
+    : IssueQueryResponse
+  {
+    return new IssueQueryResponse(payload);
   }
 }
 
 
 export type UNIT_MEMBER_QUERY_REQUEST = "UNIT_MEMBER_QUERY_REQUEST";
 
-type unitMemberQueryRequestPayload = {|
+type UnitMemberQueryRequestPayload = {|
   id: Uuid
 |};
 
-export class unitMemberQueryRequest {
+export class UnitMemberQueryRequest {
   type: UNIT_MEMBER_QUERY_REQUEST;
-  payload: unitMemberQueryRequestPayload;
+  payload: UnitMemberQueryRequestPayload;
   isHttpQueryAction: true;
-  constructor(payload: unitMemberQueryRequestPayload) {
+
+  constructor(payload: UnitMemberQueryRequestPayload) {
     this.payload = payload;
     this.type = "UNIT_MEMBER_QUERY_REQUEST";
     this.isHttpQueryAction = true;
   }
+
   getHttpUri(): string {
     return applyUriTemplate("/units/{id}/members", this.payload);
+  }
+
+  buildResponse(payload: UnitMemberQueryResponsePayload)
+    : UnitMemberQueryResponse
+  {
+    return new UnitMemberQueryResponse(payload);
   }
 }
 
 
 export type UNIT_QUERY_REQUEST = "UNIT_QUERY_REQUEST";
 
-type unitQueryRequestPayload = {|
+type UnitQueryRequestPayload = {|
   id: Uuid
 |};
 
-export class unitQueryRequest {
+export class UnitQueryRequest {
   type: UNIT_QUERY_REQUEST;
-  payload: unitQueryRequestPayload;
+  payload: UnitQueryRequestPayload;
   isHttpQueryAction: true;
-  constructor(payload: unitQueryRequestPayload) {
+
+  constructor(payload: UnitQueryRequestPayload) {
     this.payload = payload;
     this.type = "UNIT_QUERY_REQUEST";
     this.isHttpQueryAction = true;
   }
+
   getHttpUri(): string {
     return applyUriTemplate("/units/{id}", this.payload);
+  }
+
+  buildResponse(payload: UnitQueryResponsePayload)
+    : UnitQueryResponse
+  {
+    return new UnitQueryResponse(payload);
   }
 }
 

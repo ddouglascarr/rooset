@@ -19,7 +19,6 @@ import type {
 import { template } from "lodash";
 
 
-
 ${queryDecls.map(d => generateQueryResponseAction(d, config)).join("\n")}
 ${queryDecls.map(d => generateQueryRequestAction(d, config)).join("\n")}
 
