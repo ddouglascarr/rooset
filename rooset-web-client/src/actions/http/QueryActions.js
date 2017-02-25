@@ -195,6 +195,22 @@ export function buildUnitQueryRequest(payload: UnitQueryRequestPayload) :UnitQue
 }
 
 
+export type QueryRequest =
+  | IssueQueryRequest
+  | UnitMemberQueryRequest
+  | UnitQueryRequest
+
+export type QueryResponse =
+  | IssueQueryResponse
+  | UnitMemberQueryResponse
+  | UnitQueryResponse
+
+export type QueryError =
+  | IssueQueryError
+  | UnitMemberQueryError
+  | UnitQueryError
+
+export type QueryAction = QueryRequest | QueryResponse | QueryError;
 function applyUriTemplate(uriTmpl, vars) {
   const opts = { interpolate:  /{(.+?)}/g };
   const tmpl = template(uriTmpl, opts);
