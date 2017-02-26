@@ -10,6 +10,7 @@ export const initialState: RootState = RootState.fromJS({
     payload: { id: null, name: null, description: null },
     error: [],
   },
+  session: { status: "LOGGED_OUT", username: "" },
 });
 
 export default function(state: RootState, action: Action): RootState {
