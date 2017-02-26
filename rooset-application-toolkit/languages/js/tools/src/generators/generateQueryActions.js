@@ -7,6 +7,7 @@ const { getClassNameFromType } = require("../utils");
 module.exports = (queryDecls, config) => {
   return `
 // @flow
+/* eslint-disable no-unused-vars */
 import type {
   Uuid,
   Date,

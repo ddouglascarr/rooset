@@ -1,5 +1,4 @@
 // @flow
-import { pick, extend } from "lodash";
 
 export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
 
@@ -14,7 +13,7 @@ export default class HttpRequest {
   }
   execute(): Promise<Response> {
     const { method, path, body } = this;
-    const req: Request = new Request(this.path, {
+    const req: Request = new Request(path, {
       method,
       body,
       headers: new Headers({ "Content-Type": "application/json" }),

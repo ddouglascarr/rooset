@@ -6,7 +6,6 @@ import LoginPage from "./containers/LoginPage";
 import UnitPage from "./containers/UnitPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import configureStore from "./store";
-import { UnitQueryRequest } from "./actions/http/QueryActions";
 import { buildDisplayUnitPageAction } from './actions/PageAction';
 
 class App extends Component {

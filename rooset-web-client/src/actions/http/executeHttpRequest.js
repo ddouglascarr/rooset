@@ -1,5 +1,6 @@
 
 // @flow
+/* eslint-disable no-unused-vars */
 import type { Action, HttpAction } from "../Action";
 import { template } from "lodash";
 import {

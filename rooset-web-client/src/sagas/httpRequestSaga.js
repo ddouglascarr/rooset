@@ -1,5 +1,5 @@
 import { takeEvery } from "redux-saga";
-import { put, call } from "redux-saga/effects";
+import { call } from "redux-saga/effects";
 
 const takePredicate = action => action.isHttpQueryAction;
 export default function* watcher() {

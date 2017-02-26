@@ -1,5 +1,6 @@
 
 // @flow
+/* eslint-disable no-unused-vars */
 import type {
   Uuid,
   Date,
