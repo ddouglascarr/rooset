@@ -4,13 +4,14 @@ import type { DisplayUnitPageAction } from "../actions/PageAction";
 import type { Dispatch } from "redux";
 import type { State } from "../reducers/rootReducer";
 import type { Action } from "../actions/Action";
-import { buildUnitQueryRequest } from "../actions/http/QueryActions";
+import { buildUnitQueryRequest, buildUnitQueryError } from "../actions/http/QueryActions";
 import type {
   IProcessManager,
 } from "../processManagers/ProcessManager";
 import {
   AbstractProcessManager,
 } from "../processManagers/ProcessManager";
+import { getUnitUrlParameterName } from "../services/urlParameterService";
 
 export default class PageProcessManager
   extends AbstractProcessManager
@@ -23,9 +24,17 @@ export default class PageProcessManager
       default: // nothing, want to return regarless of dispatch.
     }
 
-    function displayUnitPage(action: DisplayUnitPageAction) {
+    async function displayUnitPage(action: DisplayUnitPageAction) {
       console.log("Unit Page displayed");
-      dispatch(buildUnitQueryRequest(action.payload));
+      const unitId = await getUnitUrlParameterName(action.payload.urlParameterName);
+      if (!unitId) {
+        dispatch(buildUnitQueryError({
+          code: "QUERY_EXCEPTION",
+          message: `no unit at ${action.payload.urlParameterName}`
+        }));
+        return;
+      }
+      dispatch(buildUnitQueryRequest({ id: unitId }));
     }
   }
 }

@@ -4,7 +4,7 @@ import type { Uuid } from "../types";
 export type DISPLAY_USER_PAGE_ACTION = "DISPLAY_USER_PAGE_ACTION";
 export type DISPLAY_UNIT_PAGE_ACTION = "DISPLAY_UNIT_PAGE_ACTION";
 
-type DisplayUnitPageActionPayload = {| id: Uuid |};
+type DisplayUnitPageActionPayload = {| urlParameterName: string |};
 export type DisplayUnitPageAction = {|
   type: DISPLAY_UNIT_PAGE_ACTION,
   payload: DisplayUnitPageActionPayload,

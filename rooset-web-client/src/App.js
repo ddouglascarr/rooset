@@ -57,7 +57,9 @@ class App extends React.Component {
                 render={({ match }) => {
                   console.log("unitId path matched");
                   dispatch(
-                    buildDisplayUnitPageAction({ id: match.params.unitId }),
+                    buildDisplayUnitPageAction({
+                      urlParameterName: match.params.unitId,
+                    }),
                   );
                   return null;
                 }}
