@@ -7,11 +7,10 @@ import createLogger from "redux-logger";
 // import createSagaMiddleware from "redux-saga";
 import rootReducer, { initialState } from "./reducers/rootReducer";
 // import rootSaga from "./sagas/rootSaga";
-import pageProcessManager from "./processManagers/pageProcessManager";
+import PageProcessManager from "./processManagers/pageProcessManager";
 import {
   httpRequestProcessManager,
 } from "./processManagers/httpRequestProcessManager";
-import buildProcessManager from "./processManagers/buildProcessManager";
 
 // eslint-disable-next-line no-unused-vars
 const stateTransformer = state => {
@@ -33,7 +32,7 @@ export default function configureStore(): Store<State, Action> {
     applyMiddleware(
       loggerMiddleware,
       // sagaMiddleware,
-      buildProcessManager(pageProcessManager),
+      new PageProcessManager().getMiddleware(),
       httpRequestProcessManager,
     ),
   );
