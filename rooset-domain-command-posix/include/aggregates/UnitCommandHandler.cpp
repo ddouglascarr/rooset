@@ -31,7 +31,7 @@ uuid rooset::UnitCommandHandler::getAreaDelegation(
 
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const CreateUnitCommand& c)
 {
-  return make_unique<UnitCreatedEvent>(c.id, c.requesterId, c.name, c.description);
+  return make_unique<UnitCreatedEvent>(c);
 }
 
 

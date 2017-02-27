@@ -27,7 +27,8 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -182,7 +183,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -337,7 +339,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -514,7 +517,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -673,7 +677,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -849,7 +854,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1004,7 +1010,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1189,7 +1196,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1357,7 +1365,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1524,7 +1533,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({

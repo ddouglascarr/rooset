@@ -11,6 +11,7 @@ mocks:
       requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
       name: Test Unit
       description: The Test Unit
+      urlParameterName: test-unit
   - &areaCreatedEvent
     type: AREA_CREATED_EVENT
     payload:

@@ -10,6 +10,7 @@ mocks:
     requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
     name: Test Unit
     description: The Test Unit
+    urlParameterName: test-unit
 
 
 scenarios:
@@ -99,6 +100,7 @@ scenarios:
             requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
             name: Test Unit
             description: The Test Unit
+            urlParameterName: test-unit
         -
           type: PRIVILEGE_GRANTED_EVENT
           payload:
@@ -173,6 +175,7 @@ scenarios:
             requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
             name: Test Unit
             description: The Test Unit
+            urlParameterName: test-unit
         -
           type: PRIVILEGE_GRANTED_EVENT
           payload:
@@ -211,6 +214,7 @@ scenarios:
           requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
           name: Test Unit
           description: The Test Unit
+          urlParameterName: test-unit
       -
         type: PRIVILEGE_GRANTED_EVENT
         payload:
@@ -244,4 +248,3 @@ scenarios:
       payload:
         code: ITEM_NOT_FOUND_EXCEPTION
         message: ''
-

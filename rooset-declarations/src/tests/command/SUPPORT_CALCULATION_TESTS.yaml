@@ -12,6 +12,7 @@ mocks:
       requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
       name: Test Unit
       description: The Test Unit
+      urlParameterName: test-unit
 
   - &areaCreatedEvt
     type: AREA_CREATED_EVENT
@@ -224,7 +225,7 @@ mocks:
  # test quorum
 
   - &assessIssueAdmissionQuorumCmd
-    type: ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND 
+    type: ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND
     payload:
       id: 464b1ebb-32c1-460c-8e9e-666666666666
 
@@ -433,4 +434,3 @@ scenarios:
       - *supportF
     when: *completeIssueAdmissionPhaseCmd
     then: *issueAdmissionQuorumPassedEvt
-

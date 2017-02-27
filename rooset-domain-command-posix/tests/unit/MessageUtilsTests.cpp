@@ -22,7 +22,7 @@ namespace roosetMessageUtilsTests {
     bool has = false;
     bool hasnot = false;
 
-    const UnitCreatedEvent e{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar" };
+    const UnitCreatedEvent e{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar", "foo-bar" };
     auto a = make_unique<UnitAggregate>(e);
 
     const UnitDelegationSetEvent e1{ idTools->generateUniqueId(), idTools->generateUniqueId(), idTools->generateUniqueId() };
@@ -38,7 +38,7 @@ namespace roosetMessageUtilsTests {
     bool has = false;
     bool hasnot = false;
 
-    const UnitCreatedEvent e{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar" };
+    const UnitCreatedEvent e{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar", "foo-bar" };
     UnitAggregate a(e);
 
     SetUnitDelegationCommand c1{idTools->generateUniqueId(), idTools->generateUniqueId(), idTools->generateUniqueId()};
@@ -54,7 +54,7 @@ namespace roosetMessageUtilsTests {
   {
     bool hasnot = false;
 
-    const UnitCreatedEvent e{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar" };
+    const UnitCreatedEvent e{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar", "foo-bar" };
     const auto a = MessageUtils::instantiateAggregate<UnitAggregate, UnitCreatedEvent>(e, [&]() {hasnot = true; });
 
     EXPECT_FALSE(a == nullptr);
@@ -88,7 +88,7 @@ namespace roosetMessageUtilsTests {
   {
     bool hasnot = false;
 
-    const UnitCreatedEvent e{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar" };
+    const UnitCreatedEvent e{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar", "foo-bar" };
     unique_ptr<UnitAggregate> a = nullptr;
     MessageUtils::applyEvent<UnitAggregate, UnitCreatedEvent>(a, e, [&]() {hasnot = true; });
 
@@ -100,7 +100,7 @@ namespace roosetMessageUtilsTests {
   {
     bool hasnot = false;
 
-    const UnitCreatedEvent e{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar" };
+    const UnitCreatedEvent e{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar", "foo-bar" };
     const UnitDelegationSetEvent e1{ idTools->generateUniqueId(), idTools->generateUniqueId(), idTools->generateUniqueId() };
 
     unique_ptr<UnitAggregate> a = nullptr;
@@ -128,8 +128,8 @@ namespace roosetMessageUtilsTests {
   TEST(MessageUtils, applyEventShouldThrowIfConstructorEventFollowsOtherConstructorEvent)
   {
 
-    const UnitCreatedEvent e0{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar" };
-    const UnitCreatedEvent e1{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar" };
+    const UnitCreatedEvent e0{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar", "foo-bar" };
+    const UnitCreatedEvent e1{ idTools->generateUniqueId(), idTools->generateUniqueId(), "foo", "foobar", "foo-bar" };
 
     unique_ptr<UnitAggregate> a = nullptr;
     MessageUtils::applyEvent<UnitAggregate, UnitCreatedEvent>(a, e0, []() {});

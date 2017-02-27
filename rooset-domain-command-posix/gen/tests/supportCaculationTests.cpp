@@ -27,7 +27,8 @@ TEST(support_caculation_tests, test_compiles)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -315,7 +316,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -526,7 +528,8 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -737,7 +740,8 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -995,7 +999,8 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1253,7 +1258,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1535,7 +1541,8 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({

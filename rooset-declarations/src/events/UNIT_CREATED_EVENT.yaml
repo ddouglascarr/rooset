@@ -8,3 +8,6 @@ properties:
     type: string
   description:
     type: string
+  urlParameterName:
+    type: string
+commandConstructor: CREATE_UNIT_COMMAND

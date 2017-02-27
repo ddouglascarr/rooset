@@ -27,7 +27,8 @@ TEST(unit_aggregate_tests_area, unprivileged_member_cannot_create_area)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
@@ -105,7 +106,8 @@ TEST(unit_aggregate_tests_area, member_without_management_rights_cannot_create_a
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -196,7 +198,8 @@ TEST(unit_aggregate_tests_area, create_area)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -281,7 +284,8 @@ TEST(unit_aggregate_tests_area, area_must_not_already_exist)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
