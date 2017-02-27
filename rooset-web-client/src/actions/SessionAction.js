@@ -11,7 +11,7 @@ export type LoginRequestAction = {
 };
 
 export function buildLoginRequestActionPayload(
-  payload: LoginRequestActionPayload
+  payload: LoginRequestActionPayload,
 ) {
   return {
     type: "LOGIN_REQUEST",
@@ -40,3 +40,8 @@ export type LoginErrorAction = {|
 export function buildLoginErrorAction() {
   return { type: "LOGIN_ERROR", payload: {} };
 }
+
+export type SessionAction =
+  | LoginRequestAction
+  | LoginErrorAction
+  | LoginResponseAction;
