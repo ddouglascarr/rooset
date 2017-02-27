@@ -1,25 +1,26 @@
 // @flow
 
 import type {DisplayUnitPageAction } from "../actions/PageAction";
-import type { Store } from "redux";
+import type { MiddlewareAPI, Dispatch } from "redux";
 import type { State } from "../reducers/rootReducer";
 import type { Action } from "../actions/Action";
 
 
-export const pageProcessManager = (store: Store<State, Action>) =>
-  (next: () => void) =>
-  (action: Action) => {
-    next(action);
+export function pageProcessManager(store: MiddlewareAPI<State, Action>):
+  Dispatch<Action> => Dispatch<Action> {
+  return (next) =>
+  (action) => {
     switch(action.type) {
       case "DISPLAY_UNIT_PAGE_ACTION":
-        return displayUnitPage(action);
-      default:
-        return next(action);
+        displayUnitPage(action);
+        break;
+      default: // nothing, want to return regarless of dispatch.
     }
 
-  function displayUnitPage(action: DisplayUnitPageAction) {
-    next(action);
-  }
-
-
+    return next(action);
   };
+
+  function displayUnitPage(action: DisplayUnitPageAction) {
+
+  }
+}

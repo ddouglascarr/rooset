@@ -1,3 +1,7 @@
+// @flow
+import type { Store } from "redux";
+import type { State } from "./reducers/rootReducer";
+import type { Action } from "./actions/Action";
 import { createStore, applyMiddleware } from "redux";
 import createLogger from "redux-logger";
 // import createSagaMiddleware from "redux-saga";
@@ -19,17 +23,18 @@ const stateTransformerStub = () => {
   return {};
 };
 
-export default function configureStore() {
+export default function configureStore(): Store<State, Action> {
   const loggerMiddleware = createLogger({ collapsed: true, stateTransformer });
-//  const sagaMiddleware = createSagaMiddleware();
-  const store = createStore(
+  //  const sagaMiddleware = createSagaMiddleware();
+  const store: Store<State, Action> = createStore(
     rootReducer,
     initialState,
     applyMiddleware(
       loggerMiddleware,
       // sagaMiddleware,
       pageProcessManager,
-      httpRequestProcessManager)
+      httpRequestProcessManager,
+    ),
   );
   // sagaMiddleware.run(rootSaga);
   return store;
