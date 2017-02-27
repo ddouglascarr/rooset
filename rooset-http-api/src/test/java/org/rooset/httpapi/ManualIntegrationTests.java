@@ -112,6 +112,7 @@ public class ManualIntegrationTests
     JSONObject reqBody = new JSONObject();
     reqBody.put("name", "Test");
     reqBody.put("description", "The Test");
+    reqBody.put("urlParameterName", "test-unit");
     HttpHeaders headers = new HttpHeaders();
     headers.add("Content-Type", "application/json");
     headers.add("Accept", "application/json");
@@ -123,6 +124,7 @@ public class ManualIntegrationTests
     expectedHttpRespBody.put("name", "Test");
     expectedHttpRespBody.put("description", "The Test");
     expectedHttpRespBody.put("requesterId", "464b1ebb-32c1-460c-8e9e-555555555555");
+    expectedHttpRespBody.put("urlParameterName", "test-unit");
 
     assertTrue(resp.getStatusCode().is2xxSuccessful());
 
@@ -154,6 +156,7 @@ public class ManualIntegrationTests
         .put("id", "464b1ebb-32c1-460c-8e9e-111111111111")
         .put("requesterId", UUID.fromString("464b1ebb-32c1-460c-8e9e-333333333333"))
         .put("name", "Test Unit")
+        .put("urlParameterName", "test-unit")
         .put("description", "The Test Unit"));
     testingEventStoreService.saveEvent(unitCreatedEvt);
 
