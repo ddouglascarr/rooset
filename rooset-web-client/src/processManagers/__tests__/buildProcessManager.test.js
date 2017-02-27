@@ -1,6 +1,6 @@
 // @flow
-import type { IProcessManager } from "../AbstractProcessManager";
-import { AbstractProcessManager } from "../AbstractProcessManager";
+import type { IProcessManager } from "../ProcessManager";
+import { AbstractProcessManager, buildProcessManagerMiddleware } from "../ProcessManager";
 import { initialState } from "../../reducers/rootReducer";
 import { buildLoginErrorAction } from "../../actions/SessionAction";
 import { createStore } from "redux";
@@ -16,7 +16,7 @@ describe("buildProcessManager", () => {
       respond = jest.fn((state, dispatch, action) => {});
     }
     const mockProcessManager = new MockProcessManager();
-    const middleware = mockProcessManager.getMiddleware();
+    const middleware = buildProcessManagerMiddleware(mockProcessManager);
     const wrapper = middleware(mockStore);
     const dispatcher = wrapper(mockNext);
     const result = dispatcher(mockAction);

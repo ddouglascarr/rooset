@@ -6,18 +6,13 @@ import type { State } from "../reducers/rootReducer";
 
 export interface IProcessManager {
   respond(State, Dispatch<Action>, Action): void,
-  getMiddleware(): Middleware<State, Action>,
 }
 
-export class AbstractProcessManager implements IProcessManager {
-  respond(state: State, dispatch: Dispatch<Action>, action: Action): void {}
+export class AbstractProcessManager {
 
-  getMiddleware(): Middleware<State, Action> {
-    return buildProcessManagerMiddleware(this);
-  }
 }
 
-function buildProcessManagerMiddleware(
+export function buildProcessManagerMiddleware(
   manager: IProcessManager,
 ): Middleware<State, Action> {
   return function(

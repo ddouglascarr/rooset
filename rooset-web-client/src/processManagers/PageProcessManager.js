@@ -7,10 +7,10 @@ import type { Action } from "../actions/Action";
 import { buildUnitQueryRequest } from "../actions/http/QueryActions";
 import type {
   IProcessManager,
-} from "../processManagers/AbstractProcessManager";
+} from "../processManagers/ProcessManager";
 import {
   AbstractProcessManager,
-} from "../processManagers/AbstractProcessManager";
+} from "../processManagers/ProcessManager";
 
 export default class PageProcessManager
   extends AbstractProcessManager
