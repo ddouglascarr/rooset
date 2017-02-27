@@ -1,0 +1,10 @@
+---
+type: UNIT_URL_PARAMETER_NAME_QUERY
+req:
+  urlParameterName:
+    type: string
+resp:
+  id:
+    type: uuid
+projectionUri: "/state?partition={urlParameterName}"
+httpUri: "/unit-url-parameter-names/{urlParameterName}"
