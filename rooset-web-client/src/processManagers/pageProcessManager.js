@@ -21,6 +21,6 @@ export function pageProcessManager(store: MiddlewareAPI<State, Action>):
   };
 
   function displayUnitPage(action: DisplayUnitPageAction) {
-
+    console.log("Unit Page displayed");
   }
 }
