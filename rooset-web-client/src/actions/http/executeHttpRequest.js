@@ -12,13 +12,17 @@ import {
   buildUnitMemberQueryResponse,
   buildUnitQueryRequest,
   buildUnitQueryError,
-  buildUnitQueryResponse
+  buildUnitQueryResponse,
+  buildUnitUrlParameterNameQueryRequest,
+  buildUnitUrlParameterNameQueryError,
+  buildUnitUrlParameterNameQueryResponse
 } from "./QueryActions";
 import type {
   QueryRequest,
   IssueQueryRequest,
   UnitMemberQueryRequest,
-  UnitQueryRequest
+  UnitQueryRequest,
+  UnitUrlParameterNameQueryRequest
 } from "./QueryActions";
 
 export default async function(action: Action) :Promise<HttpAction> {
@@ -30,6 +34,8 @@ export default async function(action: Action) :Promise<HttpAction> {
       return executeUnitMemberQueryHttpRequest(action)
     case "UNIT_QUERY_REQUEST":
       return executeUnitQueryHttpRequest(action)
+    case "UNIT_URL_PARAMETER_NAME_QUERY_REQUEST":
+      return executeUnitUrlParameterNameQueryHttpRequest(action)
     default:
       throw new Error("Not an HttpAction: " + action.type);
   }
@@ -74,6 +80,19 @@ async function executeUnitQueryHttpRequest(
   const json = await resp.json();
   if (resp.ok) return buildUnitQueryResponse(json);
   return buildUnitQueryError(json.payload);
+}
+async function executeUnitUrlParameterNameQueryHttpRequest(
+    action: UnitUrlParameterNameQueryRequest) :Promise<HttpAction>
+{
+  const req = new Request(applyUriTemplate("/unit-url-parameter-names/{urlParameterName}", action.payload), {
+    method: "GET",
+    headers: new Headers({"Content-Type": "application/json"}),
+    include: "same-origin",
+  });
+  const resp = await fetch(req);
+  const json = await resp.json();
+  if (resp.ok) return buildUnitUrlParameterNameQueryResponse(json);
+  return buildUnitUrlParameterNameQueryError(json.payload);
 }
 
 function applyUriTemplate(uriTmpl, vars) {

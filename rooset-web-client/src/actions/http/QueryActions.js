@@ -1,3 +1,4 @@
+
 // @flow
 /* eslint-disable no-unused-vars */
 import type {
@@ -11,9 +12,10 @@ import type {
   Member,
   Ullong,
   Policy,
-} from "../../types";
+} from '../../types';
 import { template } from "lodash";
-import HttpRequest from "../../sys/HttpRequest";
+
+
 
 export type ISSUE_QUERY_RESPONSE = "ISSUE_QUERY_RESPONSE";
 type IssueQueryResponsePayload = {|
@@ -24,43 +26,43 @@ type IssueQueryResponsePayload = {|
   created: Date,
   issueState: IssueState,
   resolved: boolean,
-  initiatives: Array<KeyNamePair>,
+  initiatives: Array<KeyNamePair>
 |};
 
 export type IssueQueryResponse = {|
   type: ISSUE_QUERY_RESPONSE,
   payload: IssueQueryResponsePayload,
-|};
+|}
 
-export function buildIssueQueryResponse(
-  payload: IssueQueryResponsePayload,
-): IssueQueryResponse {
+export function buildIssueQueryResponse(payload: IssueQueryResponsePayload) :IssueQueryResponse {
   return {
     type: "ISSUE_QUERY_RESPONSE",
     payload: payload,
-  };
+  }
 }
+
+
 
 export type UNIT_MEMBER_QUERY_RESPONSE = "UNIT_MEMBER_QUERY_RESPONSE";
 type UnitMemberQueryResponsePayload = {|
   id: Uuid,
   members: Array<Member>,
-  totalWeight: Ullong,
+  totalWeight: Ullong
 |};
 
 export type UnitMemberQueryResponse = {|
   type: UNIT_MEMBER_QUERY_RESPONSE,
   payload: UnitMemberQueryResponsePayload,
-|};
+|}
 
-export function buildUnitMemberQueryResponse(
-  payload: UnitMemberQueryResponsePayload,
-): UnitMemberQueryResponse {
+export function buildUnitMemberQueryResponse(payload: UnitMemberQueryResponsePayload) :UnitMemberQueryResponse {
   return {
     type: "UNIT_MEMBER_QUERY_RESPONSE",
     payload: payload,
-  };
+  }
 }
+
+
 
 export type UNIT_QUERY_RESPONSE = "UNIT_QUERY_RESPONSE";
 type UnitQueryResponsePayload = {|
@@ -68,22 +70,41 @@ type UnitQueryResponsePayload = {|
   name: string,
   description: string,
   policy: Policy,
-  areas: Array<Area>,
+  areas: Array<Area>
 |};
 
 export type UnitQueryResponse = {|
   type: UNIT_QUERY_RESPONSE,
   payload: UnitQueryResponsePayload,
-|};
+|}
 
-export function buildUnitQueryResponse(
-  payload: UnitQueryResponsePayload,
-): UnitQueryResponse {
+export function buildUnitQueryResponse(payload: UnitQueryResponsePayload) :UnitQueryResponse {
   return {
     type: "UNIT_QUERY_RESPONSE",
     payload: payload,
-  };
+  }
 }
+
+
+
+export type UNIT_URL_PARAMETER_NAME_QUERY_RESPONSE = "UNIT_URL_PARAMETER_NAME_QUERY_RESPONSE";
+type UnitUrlParameterNameQueryResponsePayload = {|
+  id: Uuid
+|};
+
+export type UnitUrlParameterNameQueryResponse = {|
+  type: UNIT_URL_PARAMETER_NAME_QUERY_RESPONSE,
+  payload: UnitUrlParameterNameQueryResponsePayload,
+|}
+
+export function buildUnitUrlParameterNameQueryResponse(payload: UnitUrlParameterNameQueryResponsePayload) :UnitUrlParameterNameQueryResponse {
+  return {
+    type: "UNIT_URL_PARAMETER_NAME_QUERY_RESPONSE",
+    payload: payload,
+  }
+}
+
+
 
 export type ISSUE_QUERY_ERROR = "ISSUE_QUERY_ERROR";
 
@@ -96,10 +117,11 @@ export type IssueQueryError = {
 export function buildIssueQueryError(payload: ExceptionPayload) {
   return {
     type: "ISSUE_QUERY_ERROR",
-    error: true,
+    error:true,
     payload,
   };
 }
+
 
 export type UNIT_MEMBER_QUERY_ERROR = "UNIT_MEMBER_QUERY_ERROR";
 
@@ -112,10 +134,11 @@ export type UnitMemberQueryError = {
 export function buildUnitMemberQueryError(payload: ExceptionPayload) {
   return {
     type: "UNIT_MEMBER_QUERY_ERROR",
-    error: true,
+    error:true,
     payload,
   };
 }
+
 
 export type UNIT_QUERY_ERROR = "UNIT_QUERY_ERROR";
 
@@ -128,15 +151,33 @@ export type UnitQueryError = {
 export function buildUnitQueryError(payload: ExceptionPayload) {
   return {
     type: "UNIT_QUERY_ERROR",
-    error: true,
+    error:true,
     payload,
   };
 }
 
+
+export type UNIT_URL_PARAMETER_NAME_QUERY_ERROR = "UNIT_URL_PARAMETER_NAME_QUERY_ERROR";
+
+export type UnitUrlParameterNameQueryError = {
+  type: UNIT_URL_PARAMETER_NAME_QUERY_ERROR,
+  error: true,
+  payload: ExceptionPayload,
+};
+
+export function buildUnitUrlParameterNameQueryError(payload: ExceptionPayload) {
+  return {
+    type: "UNIT_URL_PARAMETER_NAME_QUERY_ERROR",
+    error:true,
+    payload,
+  };
+}
+
+
 export type ISSUE_QUERY_REQUEST = "ISSUE_QUERY_REQUEST";
 
 type IssueQueryRequestPayload = {|
-  id: Uuid,
+  id: Uuid
 |};
 
 export type IssueQueryRequest = {|
@@ -145,9 +186,7 @@ export type IssueQueryRequest = {|
   meta: {| isHttpRequest: true |},
 |};
 
-export function buildIssueQueryRequest(
-  payload: IssueQueryRequestPayload,
-): IssueQueryRequest {
+export function buildIssueQueryRequest(payload: IssueQueryRequestPayload) :IssueQueryRequest {
   return {
     type: "ISSUE_QUERY_REQUEST",
     payload,
@@ -155,10 +194,11 @@ export function buildIssueQueryRequest(
   };
 }
 
+
 export type UNIT_MEMBER_QUERY_REQUEST = "UNIT_MEMBER_QUERY_REQUEST";
 
 type UnitMemberQueryRequestPayload = {|
-  id: Uuid,
+  id: Uuid
 |};
 
 export type UnitMemberQueryRequest = {|
@@ -167,9 +207,7 @@ export type UnitMemberQueryRequest = {|
   meta: {| isHttpRequest: true |},
 |};
 
-export function buildUnitMemberQueryRequest(
-  payload: UnitMemberQueryRequestPayload,
-): UnitMemberQueryRequest {
+export function buildUnitMemberQueryRequest(payload: UnitMemberQueryRequestPayload) :UnitMemberQueryRequest {
   return {
     type: "UNIT_MEMBER_QUERY_REQUEST",
     payload,
@@ -177,10 +215,11 @@ export function buildUnitMemberQueryRequest(
   };
 }
 
+
 export type UNIT_QUERY_REQUEST = "UNIT_QUERY_REQUEST";
 
 type UnitQueryRequestPayload = {|
-  id: Uuid,
+  id: Uuid
 |};
 
 export type UnitQueryRequest = {|
@@ -189,9 +228,7 @@ export type UnitQueryRequest = {|
   meta: {| isHttpRequest: true |},
 |};
 
-export function buildUnitQueryRequest(
-  payload: UnitQueryRequestPayload,
-): UnitQueryRequest {
+export function buildUnitQueryRequest(payload: UnitQueryRequestPayload) :UnitQueryRequest {
   return {
     type: "UNIT_QUERY_REQUEST",
     payload,
@@ -199,19 +236,44 @@ export function buildUnitQueryRequest(
   };
 }
 
+
+export type UNIT_URL_PARAMETER_NAME_QUERY_REQUEST = "UNIT_URL_PARAMETER_NAME_QUERY_REQUEST";
+
+type UnitUrlParameterNameQueryRequestPayload = {|
+  urlParameterName: string
+|};
+
+export type UnitUrlParameterNameQueryRequest = {|
+  type: UNIT_URL_PARAMETER_NAME_QUERY_REQUEST,
+  payload: UnitUrlParameterNameQueryRequestPayload,
+  meta: {| isHttpRequest: true |},
+|};
+
+export function buildUnitUrlParameterNameQueryRequest(payload: UnitUrlParameterNameQueryRequestPayload) :UnitUrlParameterNameQueryRequest {
+  return {
+    type: "UNIT_URL_PARAMETER_NAME_QUERY_REQUEST",
+    payload,
+    meta: { isHttpRequest: true },
+  };
+}
+
+
 export type QueryRequest =
   | IssueQueryRequest
   | UnitMemberQueryRequest
-  | UnitQueryRequest;
+  | UnitQueryRequest
+  | UnitUrlParameterNameQueryRequest
 
 export type QueryResponse =
   | IssueQueryResponse
   | UnitMemberQueryResponse
-  | UnitQueryResponse;
+  | UnitQueryResponse
+  | UnitUrlParameterNameQueryResponse
 
 export type QueryError =
   | IssueQueryError
   | UnitMemberQueryError
-  | UnitQueryError;
+  | UnitQueryError
+  | UnitUrlParameterNameQueryError
 
 export type QueryAction = QueryRequest | QueryResponse | QueryError;
