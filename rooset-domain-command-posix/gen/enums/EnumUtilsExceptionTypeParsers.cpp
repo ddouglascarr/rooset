@@ -7,6 +7,7 @@ namespace rooset {
   ExceptionType EnumUtils::parseExceptionType(const string& e)
   {
     if (e == "COMMAND_EVALUATION_EXCEPTION") return ExceptionType::COMMAND_EVALUATION_EXCEPTION;
+if (e == "QUERY_EXCEPTION") return ExceptionType::QUERY_EXCEPTION;
 if (e == "SYSTEM_EXCEPTION") return ExceptionType::SYSTEM_EXCEPTION;
     throw std::invalid_argument("unknown enum");
   }
@@ -14,6 +15,7 @@ if (e == "SYSTEM_EXCEPTION") return ExceptionType::SYSTEM_EXCEPTION;
   string EnumUtils::serializeExceptionType(ExceptionType e)
   {
     if (e == ExceptionType::COMMAND_EVALUATION_EXCEPTION) return "COMMAND_EVALUATION_EXCEPTION";
+if (e == ExceptionType::QUERY_EXCEPTION) return "QUERY_EXCEPTION";
 if (e == ExceptionType::SYSTEM_EXCEPTION) return "SYSTEM_EXCEPTION";
     throw std::invalid_argument("unknown enum");
   }

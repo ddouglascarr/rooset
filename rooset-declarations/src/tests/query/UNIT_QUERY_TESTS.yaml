@@ -18,9 +18,25 @@ mocks:
       votingTime: 604800000
       issueQuorumNum: 1
       issueQuorumDen: 10
-    
+
 
 scenarios:
+
+  -
+    label: Query Url Parameter name
+    given: unit-created-with-areas
+    when:
+      label: The url parameter name is queried
+      action:
+        type: UNIT_URL_PARAMETER_NAME_QUERY_REQUEST
+        payload:
+          urlParameterName: test-unit
+    then:
+      label: The system responds with the unitId
+      outcome:
+        type: UNIT_URL_PARAMETER_NAME_QUERY_RESPONSE
+        payload:
+          id: *unitId
 
 
   -
@@ -36,6 +52,7 @@ scenarios:
             requesterId: *managerId
             name: "Test Unit"
             description: "The Test Unit"
+            urlParameterName: "test-unit"
         -
           type: UNIT_POLICY_SET_EVENT
           payload:
@@ -97,5 +114,3 @@ scenarios:
               name: "area1"
               description: "The 1 Area"
               externalReference: "http://area1.org"
-
-

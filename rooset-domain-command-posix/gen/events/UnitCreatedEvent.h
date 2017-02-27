@@ -13,7 +13,7 @@
 #include "ratk/JsonUtils.h"
 #include "enums/EnumUtils.h"
 #include "aggregates/SchulzeBallot.h"
-
+#include "commands/CreateUnitCommand.h"
 
 using namespace std;
 using namespace rooset;
@@ -33,17 +33,20 @@ namespace rooset {
         const uuid requesterId;
         const string name;
         const string description;
+        const string urlParameterName;
 
     
         UnitCreatedEvent(
             uuid id,
             uuid requesterId,
             string name,
-            string description) :
+            string description,
+            string urlParameterName) :
             id(id),
             requesterId(requesterId),
             name(name),
-            description(description)
+            description(description),
+            urlParameterName(urlParameterName)
         {}
   
 
@@ -53,11 +56,20 @@ namespace rooset {
             id(JsonUtils::parseUuid(d["payload"]["id"])),
             requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
             name(JsonUtils::parseString(d["payload"]["name"])),
-            description(JsonUtils::parseString(d["payload"]["description"]))
+            description(JsonUtils::parseString(d["payload"]["description"])),
+            urlParameterName(JsonUtils::parseString(d["payload"]["urlParameterName"]))
         {}
   
 
     
+    UnitCreatedEvent(const CreateUnitCommand& c):
+        id(c.id),
+requesterId(c.requesterId),
+name(c.name),
+description(c.description),
+urlParameterName(c.urlParameterName)
+    {}
+  
 
     unique_ptr<Document> serialize() const override
     {
@@ -91,6 +103,11 @@ namespace rooset {
           payload.AddMember(
               "description",
               JsonUtils::serializeString(description, d->GetAllocator()),
+              d->GetAllocator());
+
+          payload.AddMember(
+              "urlParameterName",
+              JsonUtils::serializeString(urlParameterName, d->GetAllocator()),
               d->GetAllocator());
 
       d->AddMember("payload", payload, d->GetAllocator());

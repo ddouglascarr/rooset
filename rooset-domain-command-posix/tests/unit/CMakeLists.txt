@@ -7,5 +7,6 @@ set(ROOSET_UNIT_TEST_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/JsonUtilsTests.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MessageUtilsTests.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/VoteCalculatorSchulzeImplTests.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/DependancyTests.cpp
 
     CACHE FILEPATH "Sources for rooset unit tests")

@@ -8,12 +8,22 @@ mocks:
   - &requesterId 464b1ebb-32c1-460c-8e9e-111111111111
   - &memberId 464b1ebb-32c1-460c-8e9e-222222222222
 
+  - &unitCreatedEvent
+    type: UNIT_CREATED_EVENT
+    payload:
+      id: *unitId
+      requesterId: *requesterId
+      name: Test Unit
+      description: The Test Unit
+      urlParameterName: test-unit
+
   - &createUnitCmdPayload
     id: *unitId
     requesterId: *requesterId
     name: Test Unit
     description: The Test Unit
-    
+    urlParameterName: test-unit
+
   - &invalidInputErr
     type: COMMAND_EVALUATION_EXCEPTION
     error: true
@@ -33,13 +43,7 @@ preconditions:
     label: Unit Exists
     key: unit-created
     precondition:
-      -
-        type: UNIT_CREATED_EVENT
-        payload:
-          id: *unitId
-          requesterId: *requesterId
-          name: Test Unit
-          description: The Test Unit
+      - *unitCreatedEvent
 
 
 scenarios:
@@ -57,6 +61,18 @@ scenarios:
         type: UNIT_CREATED_EVENT
         payload: *createUnitCmdPayload
 
+  -
+    label: UrlParameterName must be of correct format
+    given: []
+    when:
+      description: The unit has an uppercase letter
+      action:
+        type: CREATE_UNIT_COMMAND
+        payload:
+          <<: *createUnitCmdPayload
+          urlParameterName: testUnit
+    then:
+      outcome: *invalidInputErr
 
   -
     label: Unit Creator can grant privileges
@@ -139,6 +155,7 @@ scenarios:
             requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
             name: Test Unit
             description: The Test Unit
+            urlParameterName: test-unit
         -
           type: PRIVILEGE_GRANTED_EVENT
           payload:
@@ -176,6 +193,7 @@ scenarios:
           requesterId: 86998399-3d86-4e0b-a2a5-6490056ce43e
           name: Test Unit
           description: The Test Unit
+          urlParameterName: test-unit
       -
         type: PRIVILEGE_GRANTED_EVENT
         payload:
@@ -209,4 +227,3 @@ scenarios:
         initiativeRight: true
         managementRight: false
         weight: 1
-

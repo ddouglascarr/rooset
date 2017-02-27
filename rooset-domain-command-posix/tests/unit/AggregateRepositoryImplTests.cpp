@@ -42,7 +42,8 @@ TEST_F(AggregateRepositoryImplTests,
       "id": "464b1ebb-32c1-460c-8e9e-111111111111",
       "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
       "name": "Test Unit",
-      "description": "The Test Unit"
+      "description": "The Test Unit",
+      "urlParameterName": "test-unit"
     }
   })json");
 
@@ -111,7 +112,8 @@ TEST_F(AggregateRepositoryImplTests, load_shouldReturnAggregates)
       "id": "464b1ebb-32c1-460c-8e9e-111111111111",
       "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
       "name": "Test Unit",
-      "description": "The Test Unit"
+      "description": "The Test Unit",
+      "urlParameterName": "test-unit"
     }
   })json"));
   mockEvents.push_back(JsonUtils::parse(u8R"json({

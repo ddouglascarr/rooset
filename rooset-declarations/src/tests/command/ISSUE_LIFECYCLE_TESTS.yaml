@@ -7,7 +7,7 @@ mocks:
 
   - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
   - &requesterId 464b1ebb-32c1-460c-8e9e-222222222222
-  
+
   - &unitCreatedEvent
     type: UNIT_CREATED_EVENT
     payload:
@@ -15,6 +15,7 @@ mocks:
       requesterId: *requesterId
       name: Test Unit
       description: The Test Unit
+      urlParameterName: test-unit
 
   - &areaCreatedEvent
     type: AREA_CREATED_EVENT

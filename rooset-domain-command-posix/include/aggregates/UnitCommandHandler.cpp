@@ -1,3 +1,4 @@
+#include <regex>
 #include "UnitCommandHandler.h"
 #include "PrivilegeUtils.h"
 #include "CommandHandlerUtils.h"
@@ -31,7 +32,13 @@ uuid rooset::UnitCommandHandler::getAreaDelegation(
 
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const CreateUnitCommand& c)
 {
-  return make_unique<UnitCreatedEvent>(c.id, c.requesterId, c.name, c.description);
+  std::regex urlParameterNameTest("^([a-z][a-z-]*)$");
+  if (!std::regex_match(c.urlParameterName, urlParameterNameTest)) {
+    throw CommandEvaluationException(
+        ExceptionCode::INVALID_INPUT_EXCEPTION,
+        "urlParameterName may only have a-z and '-' characters");                             
+  }
+  return make_unique<UnitCreatedEvent>(c);
 }
 
 

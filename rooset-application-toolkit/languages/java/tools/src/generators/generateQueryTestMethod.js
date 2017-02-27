@@ -10,7 +10,7 @@ module.exports = (scenario, config) => {
   const testMethodName = camelCase(scenario.label);
   const queryType = scenario.when.action.type.split('_REQUEST')[0];
   const queryDecl = findDeclarationByType(config.queryDeclDir, queryType);
-  const uri = applyUriTemplate(queryDecl.httpUri, scenario.then.outcome.payload);
+  const uri = applyUriTemplate(queryDecl.httpUri, scenario.when.action.payload);
 
   return `
   @Test
@@ -27,7 +27,7 @@ ${persistGivenEvents(scenario.given.precondition)}
     JSONObject responseBody = new JSONObject(response.getBody());
 
     // assess response
-    assertTrue("2xx response expected", response.getStatusCode().is2xxSuccessful());
+    assertTrue("2xx response expected, got " + response.getStatusCode().toString(), response.getStatusCode().is2xxSuccessful());
     String expectedResponseBody = ${JSON.stringify(JSON.stringify(
         scenario.then.outcome.payload))};
     JSONAssert.assertEquals(expectedResponseBody, responseBody, true);

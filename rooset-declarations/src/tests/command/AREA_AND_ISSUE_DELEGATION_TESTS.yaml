@@ -11,6 +11,7 @@ mocks:
       requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
       name: Test Unit
       description: The Test Unit
+      urlParameterName: test-unit
   - &areaCreatedEvent
     type: AREA_CREATED_EVENT
     payload:
@@ -66,7 +67,7 @@ mocks:
 
   - &blockDelegationForAreaCmd
     type: BLOCK_DELEGATION_FOR_AREA_COMMAND
-    payload: 
+    payload:
       id: 464b1ebb-32c1-460c-8e9e-111111111111
       areaId: 464b1ebb-32c1-460c-8e9e-333333333333
       requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
@@ -505,7 +506,7 @@ scenarios:
 
   -
     label: block issue delegation should fail on duplicate
-    given: 
+    given:
       - *unitCreatedEvent
       - *privGrantedEvtVoter4
       - *privGrantedEvtVoter5
@@ -565,4 +566,3 @@ scenarios:
         - *delegationBlockedForIssueEvt
     when: *unblockDelegationForIssueCmd
     then: *delegationUnblockedForIssueEvt
-

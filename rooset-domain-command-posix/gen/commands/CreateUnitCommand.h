@@ -34,17 +34,20 @@ namespace rooset {
         const uuid requesterId;
         const string name;
         const string description;
+        const string urlParameterName;
 
     
         CreateUnitCommand(
             uuid id,
             uuid requesterId,
             string name,
-            string description) :
+            string description,
+            string urlParameterName) :
             id(id),
             requesterId(requesterId),
             name(name),
-            description(description)
+            description(description),
+            urlParameterName(urlParameterName)
         {}
   
 
@@ -54,7 +57,8 @@ namespace rooset {
             id(JsonUtils::parseUuid(d["payload"]["id"])),
             requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
             name(JsonUtils::parseString(d["payload"]["name"])),
-            description(JsonUtils::parseString(d["payload"]["description"]))
+            description(JsonUtils::parseString(d["payload"]["description"])),
+            urlParameterName(JsonUtils::parseString(d["payload"]["urlParameterName"]))
         {}
   
 
@@ -90,6 +94,11 @@ namespace rooset {
           payload.AddMember(
               "description",
               JsonUtils::serializeString(description, d->GetAllocator()),
+              d->GetAllocator());
+
+          payload.AddMember(
+              "urlParameterName",
+              JsonUtils::serializeString(urlParameterName, d->GetAllocator()),
               d->GetAllocator());
 
       d->AddMember("payload", payload, d->GetAllocator());
