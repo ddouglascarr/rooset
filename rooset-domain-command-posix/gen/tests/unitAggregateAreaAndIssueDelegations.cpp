@@ -27,7 +27,8 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -129,7 +130,8 @@ TEST(unit_aggregate_area_and_issue_delegations, truster_must_have_voting_right)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -229,7 +231,8 @@ TEST(unit_aggregate_area_and_issue_delegations, trustee_must_have_voting_right)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -329,7 +332,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_delegation)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -434,7 +438,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_area_delegation_should_remov
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -563,7 +568,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_delegation_must
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -675,7 +681,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -787,7 +794,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_delegation_should_remove_d
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -916,7 +924,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation_should_uns
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1045,7 +1054,8 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_block_area_de
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1146,7 +1156,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_delegation)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1249,7 +1260,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_area_for_delegation_should
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1369,7 +1381,8 @@ TEST(unit_aggregate_area_and_issue_delegations, area_must_exist_to_unblock_area_
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1470,7 +1483,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_must_exist_to_unblock_area
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1582,7 +1596,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_area_delegation)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1693,7 +1708,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_requ
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1822,7 +1838,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_requ
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1938,7 +1955,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -2058,7 +2076,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_remo
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -2201,7 +2220,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -2329,7 +2349,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -2455,7 +2476,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -2598,7 +2620,8 @@ TEST(unit_aggregate_area_and_issue_delegations, set_issue_delegation_should_fail
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -2733,7 +2756,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unset_issue_delegation_should_fa
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -2875,7 +2899,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fa
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -3009,7 +3034,8 @@ TEST(unit_aggregate_area_and_issue_delegations, member_must_have_voting_rights_t
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -3124,7 +3150,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -3242,7 +3269,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_fa
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -3377,7 +3405,8 @@ TEST(unit_aggregate_area_and_issue_delegations, block_issue_delegation_should_re
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -3520,7 +3549,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -3661,7 +3691,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation_should_
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -3789,7 +3820,8 @@ TEST(unit_aggregate_area_and_issue_delegations, unblock_issue_delegation)
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({

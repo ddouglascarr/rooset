@@ -2,14 +2,14 @@
 
 #include <string>
 #include <memory>
+#include <regex>
 #include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
-#include "commands/CreateAdminMemberCommand.h"
-#include "events/AdminMemberCreatedEvent.h"
 #include "ratk/JsonUtils.h"
 #include "ratk/IdToolsImpl.h"
 
 // using namespace rooset;
 using namespace std;
+using namespace rooset;
 using namespace boost;
 
 namespace roosetTesting {
@@ -17,8 +17,6 @@ namespace roosetTesting {
   auto idTools = make_unique<IdToolsImpl>();
   auto id = idTools->generateUniqueId();
   string idString = idTools->serialize(id);
-  CreateAdminMemberCommand c(id, "admin", "pw1", "adam admin", "adam@admin.com");
-
   TEST(dependencies, boost_posix_time)
   {
     const auto testTime = 1477705463L;
@@ -47,6 +45,15 @@ namespace roosetTesting {
     const auto isAnotherIdPresent = a.delegations.find(idTools->generateUniqueId()) != a.delegations.end();
     EXPECT_EQ(isIdPresent, true);
     EXPECT_EQ(isAnotherIdPresent, false);
+  }
+  
+  TEST(dependencies, std_regex)
+  {
+    std::regex urlParameterNameRegex("^([a-z][a-z-]*)$");
+    EXPECT_TRUE(std::regex_match("foobar", urlParameterNameRegex));
+    EXPECT_TRUE(std::regex_match("foo-bar", urlParameterNameRegex));
+    EXPECT_FALSE(std::regex_match("Foobar", urlParameterNameRegex));
+    EXPECT_FALSE(std::regex_match("foo_bar", urlParameterNameRegex));
   }
 
   class MyTestFixture : public ::testing::Test

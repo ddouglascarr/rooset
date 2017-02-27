@@ -13,6 +13,7 @@ scenarios:
           requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
           name: Test Unit
           description: The Test Unit
+          urlParameterName: test-unit
     when:
       type: CREATE_AREA_COMMAND
       payload:
@@ -39,6 +40,7 @@ scenarios:
           requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
           name: Test Unit
           description: The Test Unit
+          urlParameterName: test-unit
       -
         type: PRIVILEGE_GRANTED_EVENT
         payload:
@@ -78,6 +80,7 @@ scenarios:
             requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
             name: Test Unit
             description: The Test Unit
+            urlParameterName: test-unit
         -
           type: PRIVILEGE_GRANTED_EVENT
           payload:
@@ -118,6 +121,7 @@ scenarios:
           requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
           name: Test Unit
           description: The Test Unit
+          urlParameterName: test-unit
       -
         type: PRIVILEGE_GRANTED_EVENT
         payload:
@@ -153,4 +157,3 @@ scenarios:
       payload:
         code: CONFLICT_EXCEPTION
         message: ''
-

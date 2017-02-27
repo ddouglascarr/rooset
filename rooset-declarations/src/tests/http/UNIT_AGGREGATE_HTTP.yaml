@@ -13,7 +13,8 @@ mocks:
     requesterId: *requesterId
     name: Test Unit
     description: The Test Unit
-    
+    urlParameterName: test-unit
+
   - &invalidInputErr
     type: COMMAND_EVALUATION_EXCEPTION
     error: true
@@ -46,6 +47,7 @@ scenarios:
         body:
           name: Test Unit
           description: The Test Unit
+          urlParameterName: test-unit
     then:
       label: Unit Created
       outcome:
@@ -120,4 +122,3 @@ scenarios:
           managementRight: true
           weight: 2
     then: *invalidInputErr
-        

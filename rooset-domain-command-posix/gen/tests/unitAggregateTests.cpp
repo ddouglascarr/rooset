@@ -32,7 +32,8 @@ TEST(unit_aggregate_tests, creating_units)
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   try {
@@ -48,7 +49,8 @@ TEST(unit_aggregate_tests, creating_units)
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   try {
@@ -75,6 +77,74 @@ TEST(unit_aggregate_tests, creating_units)
 }
 
 
+TEST(unit_aggregate_tests, url_parameter_name_must_be_of_correct_format)
+{
+  
+  vector<string> givenEvents;
+  
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
+  
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "COMMAND_EVALUATION_EXCEPTION",
+  "error": true,
+  "payload": {
+    "code": "INVALID_INPUT_EXCEPTION",
+    "message": ""
+  }
+})json");
+  try {
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("expected schema invalid");
+  }
+  CommandEvaluationException expected(expected_doc);
+  
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "CREATE_UNIT_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "name": "Test Unit",
+    "description": "The Test Unit",
+    "urlParameterName": "testUnit"
+  }
+})json");
+  try {
+  JsonUtils::validate(CreateUnitCommand::schema, cmd_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("cmd schema invalid");
+  }
+  CreateUnitCommand cmd(cmd_doc);
+  
+  try {
+    commandHandler.evaluate(cmd);
+    throw invalid_argument("An exception was expected");
+  } catch(CommandEvaluationException e) {
+    auto resultDoc = e.serialize();
+    
+  // if docs don't match, assess the json output to make useful error report
+  auto expectedDoc = expected.serialize();
+  
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
+      
+  bool isPass = *resultDoc == *expectedDoc;
+  if (isPass) {
+    EXPECT_EQ(*resultDoc, *expectedDoc);
+  }  else {
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
+  };
+  }
+}
+
+
 TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
 {
   
@@ -86,7 +156,8 @@ TEST(unit_aggregate_tests, unit_creator_can_grant_privileges)
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
@@ -162,7 +233,8 @@ TEST(unit_aggregate_tests, member_weight_is_restricted_to_1)
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
@@ -242,7 +314,8 @@ TEST(unit_aggregate_tests, unprivileged_member_cannot_grant_privileges)
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
@@ -322,7 +395,8 @@ TEST(unit_aggregate_tests, member_without_member_privileges_cannot_grant_privile
     "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6bec",
     "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -415,7 +489,8 @@ TEST(unit_aggregate_tests, member_with_member_privileges_can_grant_privileges)
     "id": "0c1fe645-4f57-4cfa-88d5-b2973f3f6bec",
     "requesterId": "86998399-3d86-4e0b-a2a5-6490056ce43e",
     "name": "Test Unit",
-    "description": "The Test Unit"
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
   }
 })json");
   givenEvents.push_back(u8R"json({

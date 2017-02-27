@@ -30,6 +30,7 @@ mocks:
       requesterId: *managerId
       name: Test Unit
       description: The Test Unit
+      urlParameterName: test-unit
 
   - &areaCreatedEvt
     type: AREA_CREATED_EVENT
@@ -723,4 +724,3 @@ scenarios:
       payload:
         id: *issueId
         winnerId: null
-
