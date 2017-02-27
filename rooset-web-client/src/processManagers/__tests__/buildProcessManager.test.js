@@ -1,5 +1,5 @@
 // @flow
-import buildProcessManager from "../buildProcessManger";
+import buildProcessManager from "../buildProcessManager";
 import { initialState } from "../../reducers/rootReducer";
 import { buildLoginErrorAction } from "../../actions/SessionAction";
 import { createStore } from "redux";

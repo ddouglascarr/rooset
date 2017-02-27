@@ -5,9 +5,10 @@ export type DISPLAY_USER_PAGE_ACTION = "DISPLAY_USER_PAGE_ACTION";
 export type DISPLAY_UNIT_PAGE_ACTION = "DISPLAY_UNIT_PAGE_ACTION";
 
 type DisplayUnitPageActionPayload = {| id: Uuid |};
-export type DisplayUnitPageAction = {
+export type DisplayUnitPageAction = {|
   type: DISPLAY_UNIT_PAGE_ACTION,
-};
+  payload: DisplayUnitPageActionPayload,
+|};
 
 export function buildDisplayUnitPageAction(
   payload: DisplayUnitPageActionPayload,
