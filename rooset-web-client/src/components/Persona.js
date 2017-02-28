@@ -8,10 +8,14 @@ type Props = {
   id: Uuid,
 };
 
-type State =
-  | { status: "LOADING" }
-  | { status: "ERROR" }
-  | { status: "READY", firstName: String, lastName: String, username: String };
+type State = {|
+  status: "LOADING" | "ERROR" | "READY",
+  data?: {|
+    firstName: String,
+    lastName: String,
+    username: String,
+  |},
+|};
 
 export default class Persona extends React.Component {
   props: Props;
@@ -20,13 +24,14 @@ export default class Persona extends React.Component {
   constructor(props: Props, context: any) {
     super(props, context);
     this.state = { status: "LOADING" };
-    fetchPublicUserData(props.id).then(m =>
-      this.setState({
-        status: "READY",
+    fetchPublicUserData(props.id).then(m => m ? this.setState({
+      status: "READY",
+      data: {
         firstName: m.firstName,
         lastName: m.lastName,
         username: m.username,
-      }));
+      },
+    }) : this.setState({status: "ERROR"}));
   }
 
   renderLoading() {
@@ -43,7 +48,7 @@ export default class Persona extends React.Component {
       return this.renderLoading();
     }
     if (state.status === "READY") {
-      return <FabricPersona primaryText={state.username} />;
+      return <FabricPersona primaryText={state.data ? state.data.username : "..."} />;
     }
     return null;
   }
