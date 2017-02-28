@@ -5,7 +5,9 @@ import type {
   UnitQueryResponse,
   UnitQueryRequest,
   UnitQueryError,
+  UnitMemberQueryResponse,
 } from "../actions/http/QueryActions";
+import { fromJS } from "immutable";
 
 export default function unitReducer(
   state: UnitState,
@@ -18,6 +20,8 @@ export default function unitReducer(
       return unitQueryError(state, action);
     case "UNIT_QUERY_RESPONSE":
       return unitQueryResponse(state, action);
+    case "UNIT_MEMBER_QUERY_RESPONSE":
+      return unitMemberQueryResponse(state, action);
     default:
       return state;
   }
@@ -41,9 +45,20 @@ function unitQueryResponse(
   const payload = state.payload
     .setId(action.payload.id)
     .setName(action.payload.name)
-    .setDescription(action.payload.description);
+    .setDescription(action.payload.description)
+    .setAreas(fromJS(action.payload.areas));
 
-  return state
-    .setStatus("READY")
-    .setPayload(payload);
+  return state.setStatus("READY").setPayload(payload);
+}
+
+function unitMemberQueryResponse(
+  state,
+  action: UnitMemberQueryResponse,
+): UnitState {
+  const members = fromJS(action.payload.members.map(m => m.memberId));
+  return state.setPayload(
+    state.payload
+      .setMembers(members)
+      .setTotalWeight(action.payload.totalWeight),
+  );
 }

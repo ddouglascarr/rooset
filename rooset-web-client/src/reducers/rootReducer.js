@@ -8,7 +8,14 @@ import unitReducer from "./unitReducer";
 export const initialState: RootState = RootState.fromJS({
   unit: {
     status: "EMPTY",
-    payload: { id: null, name: null, description: null },
+    payload: {
+      id: null,
+      name: null,
+      description: null,
+      members: [],
+      areas: [],
+      totalWeight: 0,
+    },
     error: [],
   },
   session: { status: "LOGGED_OUT", username: "" },
