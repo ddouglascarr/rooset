@@ -1,7 +1,6 @@
 // @flow
 
 import React from "react";
-import { Container } from "../components/BaseComponents";
 import { CommandBar } from "office-ui-fabric-react/lib/CommandBar";
 
 class ProjectNavbar extends React.Component {
@@ -9,7 +8,6 @@ class ProjectNavbar extends React.Component {
 
   render() {
     return (
-      <Container>
         <CommandBar
           isSearchBoxVisible={false}
           items={[
@@ -23,7 +21,6 @@ class ProjectNavbar extends React.Component {
             },
           ]}
         />
-      </Container>
     );
   }
 }

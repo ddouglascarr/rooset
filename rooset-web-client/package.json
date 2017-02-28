@@ -67,7 +67,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "flow": "flow",
-    "build-css": "node-sass src/ -o src/",
+    "build-css": "node-sass src/components/style -o src/components/style",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch",
     "flow-immutable-models": "jscodeshift -t ./node_modules/flow-immutable-models/lib/transform.js ./src/reducers/models",
     "generate": "./scripts/generate"
