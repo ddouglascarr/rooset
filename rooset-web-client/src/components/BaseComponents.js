@@ -2,7 +2,6 @@
 // Flow #1964 dictates he janky props.children usage. If its fixed, refactor
 import React from "react";
 
-
 type ContainerProps = {
   children?: React.Children,
 };
@@ -26,11 +25,15 @@ type GridColProps = {
   children?: React.Children,
   smWidth?: number,
   lgWidth?: number,
-  rightAlign?: bool,
-  backgroundColor?: String
+  rightAlign?: boolean,
+  backgroundColor?:
+    | "neutralTertiary"
+    | "neutralTertiaryAlt"
+    | "neutralLighter"
+    | "white",
 };
 export function GridCol(props: GridColProps) {
-  const { children, smWidth, lgWidth, rightAlign } = props;
+  const { children, smWidth, lgWidth, rightAlign, backgroundColor } = props;
   let classNames: string = "ms-Grid-col";
   if (props.smWidth) {
     classNames += ` ms-u-sm${String(smWidth)}`;
@@ -39,14 +42,15 @@ export function GridCol(props: GridColProps) {
     classNames += ` ms-u-xl${String(lgWidth)}`;
   }
   if (rightAlign) classNames += " ms-u-textAlignRight";
+  if (backgroundColor) classNames += ` ms-bgColor-${backgroundColor}`;
   return <div className={classNames}>{children ? children : null}</div>;
 }
 
 type TextProps = {
   children?: string,
-  weight?: "light" | "semilight" | "regular" | "bold",
+  weight?: "light" | "semilight" | "regular" | "semibold",
   size?: "s" | "m" | "l" | "xxl",
-  inverse?: bool,
+  inverse?: boolean,
 };
 export function Text(props: TextProps) {
   const { children, inverse } = props;
@@ -56,4 +60,12 @@ export function Text(props: TextProps) {
   classNames += ` ms-fontWeight-${weight}`;
   if (inverse) classNames += ` ms-fontColor-neutralLighter`;
   return <span className={classNames}>{children ? children : ""}</span>;
+}
+
+type ListProps = {
+  children?: React.Element<*>,
+};
+export function List(props: ListProps) {
+  const { children } = props;
+  return <ul style={{ listStyle: "none" }}>{children ? children : null}</ul>;
 }
