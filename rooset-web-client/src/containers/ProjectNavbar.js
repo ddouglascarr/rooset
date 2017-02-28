@@ -1,26 +1,24 @@
 // @flow
 
 import React from "react";
-import { CommandBar } from "office-ui-fabric-react/lib/CommandBar";
+import { Grid, GridRow, GridCol, Text } from "../components/BaseComponents";
+
+import "../components/style/project.css";
 
 class ProjectNavbar extends React.Component {
   static contextTypes: { router: Object };
 
   render() {
     return (
-        <CommandBar
-          isSearchBoxVisible={false}
-          items={[
-            {
-              name: "Rooset",
-              onClick: () => this.context.router.push("/"),
-            },
-            {
-              name: "Login",
-              onClick: () => this.context.router.push("/login"),
-            },
-          ]}
-        />
+      <div className="project-header ms-bgColor-black ms-fontColor-neutralLight ms-font-m">
+        <Grid>
+          <GridRow>
+              <GridCol lgWidth={2} rightAlign>
+                <Text size="xxl" weight="bold" inverse>Rooset</Text>
+              </GridCol>
+          </GridRow>
+        </Grid>
+      </div>
     );
   }
 }

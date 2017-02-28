@@ -11,6 +11,7 @@ import UnitPage from "./containers/UnitPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import configureStore from "./store";
 import { buildDisplayUnitPageAction } from "./actions/PageAction";
+import "office-ui-fabric-react/dist/css/fabric.css";
 
 class App extends React.Component {
   state: {
@@ -29,7 +30,7 @@ class App extends React.Component {
     return (
       <Provider store={this.state.store}>
         <Router>
-          <div className="App">
+          <div className="App ms-Fabric ms-font-m ms-bgColor-neutralPrimary">
             <ProjectNavbar />
             <Switch>
               <Route exact path="/" component={HomePage} />
