@@ -3,6 +3,7 @@
 import type { Action } from "../actions/Action";
 import { RootState } from "./models/RootState";
 export type State = RootState;
+import unitReducer from "./unitReducer";
 
 export const initialState: RootState = RootState.fromJS({
   unit: {
@@ -14,5 +15,5 @@ export const initialState: RootState = RootState.fromJS({
 });
 
 export default function(state: RootState, action: Action): RootState {
-  return state;
+  return state.setUnit(unitReducer(state.unit, action));
 }
