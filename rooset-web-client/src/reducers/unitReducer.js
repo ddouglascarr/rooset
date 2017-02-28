@@ -42,13 +42,13 @@ function unitQueryResponse(
   state: UnitState,
   action: UnitQueryResponse,
 ): UnitState {
-  const payload = state.payload
+  const data = state.data
     .setId(action.payload.id)
     .setName(action.payload.name)
     .setDescription(action.payload.description)
     .setAreas(fromJS(action.payload.areas));
 
-  return state.setStatus("READY").setPayload(payload);
+  return state.setStatus("READY").setData(data);
 }
 
 function unitMemberQueryResponse(
@@ -56,8 +56,8 @@ function unitMemberQueryResponse(
   action: UnitMemberQueryResponse,
 ): UnitState {
   const members = fromJS(action.payload.members.map(m => m.memberId));
-  return state.setPayload(
-    state.payload
+  return state.setData(
+    state.data
       .setMembers(members)
       .setTotalWeight(action.payload.totalWeight),
   );

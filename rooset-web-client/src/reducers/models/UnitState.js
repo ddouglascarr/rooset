@@ -10,7 +10,7 @@ export type AreaModelType = {
   description: string,
 };
 
-export type UnitStatePayloadModelType = {
+export type UnitStateDataModelType = {
   id: Uuid | null,
   name: string | null,
   description: string | null,
@@ -21,8 +21,8 @@ export type UnitStatePayloadModelType = {
 
 export type UnitStateModelType = {
   status: "EMPTY" | "LOADING" | "READY" | "ERROR",
-  error: Array<any>,
-  payload: UnitStatePayloadModelType,
+  error: Object,
+  data: UnitStateDataModelType,
 }
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -33,15 +33,62 @@ export type UnitStateModelType = {
 // and re-run the flow-immutable-models codemod
 //
 // /////////////////////////////////////////////////////////////////////////////
-export class UnitStatePayload extends ImmutableModel {
-  static fromJS(json: UnitStatePayloadModelType): UnitStatePayload {
+export class Area extends ImmutableModel {
+  static fromJS(json: AreaModelType): Area {
+    const state: Object = Object.assign({}, json);
+    return new this(Immutable.Map(state));
+  }
+
+  toJS(): AreaModelType {
+    return {
+      areaId: this.areaId,
+      name: this.name,
+      description: this.description,
+    };
+  }
+
+  get areaId(): Uuid {
+    return this._state.get('areaId');
+  }
+
+  setAreaId(areaId: Uuid): this {
+    return this.clone(this._state.set('areaId', areaId));
+  }
+
+  get name(): string {
+    return this._state.get('name');
+  }
+
+  setName(name: string): this {
+    return this.clone(this._state.set('name', name));
+  }
+
+  get description(): string {
+    return this._state.get('description');
+  }
+
+  setDescription(description: string): this {
+    return this.clone(this._state.set('description', description));
+  }
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+//
+// NOTE: THIS CLASS IS GENERATED. DO NOT MAKE CHANGES HERE.
+//
+// If you need to update this class, update the corresponding flow type above
+// and re-run the flow-immutable-models codemod
+//
+// /////////////////////////////////////////////////////////////////////////////
+export class UnitStateData extends ImmutableModel {
+  static fromJS(json: UnitStateDataModelType): UnitStateData {
     const state: Object = Object.assign({}, json);
     state.members = Immutable.List(state.members);
     state.areas = Immutable.List(state.areas).map(item => Area.fromJS(item));
     return new this(Immutable.Map(state));
   }
 
-  toJS(): UnitStatePayloadModelType {
+  toJS(): UnitStateDataModelType {
     return {
       id: this.id,
       name: this.name,
@@ -112,16 +159,15 @@ export class UnitStatePayload extends ImmutableModel {
 export class UnitState extends ImmutableModel {
   static fromJS(json: UnitStateModelType): UnitState {
     const state: Object = Object.assign({}, json);
-    state.error = Immutable.List(state.error);
-    state.payload = UnitStatePayload.fromJS(state.payload);
+    state.data = UnitStateData.fromJS(state.data);
     return new this(Immutable.Map(state));
   }
 
   toJS(): UnitStateModelType {
     return {
       status: this.status,
-      error: this.error.toArray(),
-      payload: this.payload.toJS(),
+      error: this.error,
+      data: this.data.toJS(),
     };
   }
 
@@ -133,66 +179,19 @@ export class UnitState extends ImmutableModel {
     return this.clone(this._state.set('status', status));
   }
 
-  get error(): Immutable.List<any> {
+  get error(): Object {
     return this._state.get('error');
   }
 
-  setError(error: Immutable.List<any>): this {
+  setError(error: Object): this {
     return this.clone(this._state.set('error', error));
   }
 
-  get payload(): UnitStatePayload {
-    return this._state.get('payload');
+  get data(): UnitStateData {
+    return this._state.get('data');
   }
 
-  setPayload(payload: UnitStatePayload): this {
-    return this.clone(this._state.set('payload', payload));
-  }
-}
-
-// /////////////////////////////////////////////////////////////////////////////
-//
-// NOTE: THIS CLASS IS GENERATED. DO NOT MAKE CHANGES HERE.
-//
-// If you need to update this class, update the corresponding flow type above
-// and re-run the flow-immutable-models codemod
-//
-// /////////////////////////////////////////////////////////////////////////////
-export class Area extends ImmutableModel {
-  static fromJS(json: AreaModelType): Area {
-    const state: Object = Object.assign({}, json);
-    return new this(Immutable.Map(state));
-  }
-
-  toJS(): AreaModelType {
-    return {
-      areaId: this.areaId,
-      name: this.name,
-      description: this.description,
-    };
-  }
-
-  get areaId(): Uuid {
-    return this._state.get('areaId');
-  }
-
-  setAreaId(areaId: Uuid): this {
-    return this.clone(this._state.set('areaId', areaId));
-  }
-
-  get name(): string {
-    return this._state.get('name');
-  }
-
-  setName(name: string): this {
-    return this.clone(this._state.set('name', name));
-  }
-
-  get description(): string {
-    return this._state.get('description');
-  }
-
-  setDescription(description: string): this {
-    return this.clone(this._state.set('description', description));
+  setData(data: UnitStateData): this {
+    return this.clone(this._state.set('data', data));
   }
 }
