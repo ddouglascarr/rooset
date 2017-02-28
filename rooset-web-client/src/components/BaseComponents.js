@@ -27,7 +27,7 @@ type GridColProps = {
   smWidth?: number,
   lgWidth?: number,
   rightAlign?: bool,
-  backgroundColor: ""
+  backgroundColor?: String
 };
 export function GridCol(props: GridColProps) {
   const { children, smWidth, lgWidth, rightAlign } = props;

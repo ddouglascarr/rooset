@@ -41,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     http.authorizeRequests()
         .antMatchers("/unit-url-parameter-names/**").permitAll()
         .antMatchers("/units/**").permitAll()
+        .antMatchers("/users/{id}").permitAll()
         .anyRequest().authenticated();
 
     http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);

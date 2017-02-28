@@ -44,7 +44,18 @@ public class RoosetHttpApiApplication {
           "foobar", "foo", "bar", "foo@bar.com",
           passwordEncoder.encode("password1"));
       fooUser.setId(UUID.fromString("464b1ebb-32c1-460c-8e9e-333333333333"));
+      UserModel determinedPoitras = new UserModel(
+          "determinedPoitras", "Determined", "Poitras", "determined.poitras@example.com",
+          passwordEncoder.encode("login"));
+      determinedPoitras.setId(UUID.fromString("464b1ebb-32c1-460c-8e9e-444444444444"));
+      UserModel tenderHugle = new UserModel(
+          "tenderHugle", "Tender", "Hugle", "tender.hugle@example.com",
+          passwordEncoder.encode("login"));
+      tenderHugle.setId(UUID.fromString("464b1ebb-32c1-460c-8e9e-555555555555"));
+
       userRepository.save(fooUser);
+      userRepository.save(determinedPoitras);
+      userRepository.save(tenderHugle);
     };
 
   }

@@ -1,5 +1,7 @@
 package org.rooset.httpapi.models;
 
+import org.json.JSONObject;
+
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -103,5 +105,16 @@ public class UserModel
   public void setPassword(String password)
   {
     this.password = password;
+  }
+
+  // for public access. No email or password
+  public JSONObject publicSerialize()
+  {
+    JSONObject out = new JSONObject()
+        .put("id", id.toString())
+        .put("username", username)
+        .put("firstName", firstName)
+        .put("lastName", lastName);
+    return out;
   }
 }
