@@ -5,7 +5,13 @@ import { connect } from "react-redux";
 import { UnitState } from "../reducers/models/UnitState";
 import { RootState } from "../reducers/models/RootState";
 import type { Action } from "../actions/Action";
-import { Grid, GridRow, GridCol, Text, List } from "../components/BaseComponents";
+import {
+  Grid,
+  GridRow,
+  GridCol,
+  Text,
+  List,
+} from "../components/BaseComponents";
 import Persona from "../components/Persona";
 
 type Props = {
@@ -33,9 +39,13 @@ class UnitPage extends React.Component {
               </li>
               <li>
                 <Text weight="semibold" size="l">Members</Text>
-                  {unit.data.members.map((memberId, k) =>
-                    <Persona id={memberId} key={k} />
-                  )}
+                <List>
+                  {unit.data.members.map((memberId, k) => (
+                    <li key={k}>
+                      <Persona id={memberId} key={k} size="small" />
+                    </li>
+                  ))}
+                </List>
               </li>
             </List>
           </GridCol>
