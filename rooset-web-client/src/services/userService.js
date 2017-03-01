@@ -4,8 +4,7 @@ import type { Uuid } from "../types";
 export type PublicUserData = {|
   id: Uuid,
   username: String,
-  firstName: String,
-  lastName: String,
+  displayName: String,
 |};
 
 export async function fetchPublicUserData(id: Uuid): Promise<?PublicUserData> {

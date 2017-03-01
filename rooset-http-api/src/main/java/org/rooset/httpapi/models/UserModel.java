@@ -19,6 +19,7 @@ public class UserModel
   private UUID id;
 
   @Column(unique = true) private String username;
+  private String displayName;
   private String firstName;
   private String lastName;
   @Column(unique = true) String email;
@@ -26,10 +27,11 @@ public class UserModel
 
   protected UserModel() {}
 
-  public UserModel(String username, String firstName, String lastName, String email, String password)
+  public UserModel(String username, String displayName, String firstName, String lastName, String email, String password)
   {
     this.id = UUID.randomUUID();
     this.username = username;
+    this.displayName = displayName;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -41,6 +43,7 @@ public class UserModel
   {
     this.id = user.id;
     this.username = user.username;
+    this.displayName = user.displayName;
     this.firstName = user.firstName;
     this.lastName = user.lastName;
     this.email = user.email;
@@ -107,14 +110,23 @@ public class UserModel
     this.password = password;
   }
 
+  public String getDisplayName()
+  {
+    return displayName;
+  }
+
+  public void setDisplayName(String displayName)
+  {
+    this.displayName = displayName;
+  }
+
   // for public access. No email or password
   public JSONObject publicSerialize()
   {
     JSONObject out = new JSONObject()
         .put("id", id.toString())
         .put("username", username)
-        .put("firstName", firstName)
-        .put("lastName", lastName);
+        .put("displayName", displayName);
     return out;
   }
 }

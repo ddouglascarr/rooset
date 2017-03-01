@@ -11,6 +11,7 @@ import {
   GridCol,
   Text,
   List,
+  ListItem,
 } from "../components/BaseComponents";
 import Persona from "../components/Persona";
 
@@ -27,26 +28,26 @@ class UnitPage extends React.Component {
     return (
       <Grid>
         <GridRow>
-          <GridCol lgWidth={2} backgroundColor="neutralTertiaryAlt">
+          <GridCol lgWidth={2} backgroundColor="neutralLight">
             <List>
-              <li>
+              <ListItem>
                 <Text weight="semibold" size="l">Areas</Text>
                 <List>
                   {unit.data.areas.map((a, k) => (
-                    <li key={k}><Text size="l">{a.get("name")}</Text></li>
+                    <ListItem key={k}><Text size="l">{a.get("name")}</Text></ListItem>
                   ))}
                 </List>
-              </li>
-              <li>
+              </ListItem>
+              <ListItem>
                 <Text weight="semibold" size="l">Members</Text>
                 <List>
                   {unit.data.members.map((memberId, k) => (
-                    <li key={k}>
+                    <ListItem key={k}>
                       <Persona id={memberId} key={k} size="small" />
-                    </li>
+                    </ListItem>
                   ))}
                 </List>
-              </li>
+              </ListItem>
             </List>
           </GridCol>
         </GridRow>

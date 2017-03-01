@@ -29,6 +29,7 @@ type GridColProps = {
   backgroundColor?:
     | "neutralTertiary"
     | "neutralTertiaryAlt"
+    | "neutralLight"
     | "neutralLighter"
     | "white",
 };
@@ -62,10 +63,22 @@ export function Text(props: TextProps) {
   return <span className={classNames}>{children ? children : ""}</span>;
 }
 
-type ListProps = {
+type ListItemProps = {
   children?: React.Element<*>,
+};
+export function ListItem(props: ListItemProps) {
+  const { children } = props;
+  return <li>{children ? children : null}</li>;
+}
+
+type ListProps = {
+  children?: React.Element<ListItem>,
 };
 export function List(props: ListProps) {
   const { children } = props;
-  return <ul style={{ listStyle: "none" }}>{children ? children : null}</ul>;
+  return (
+    <ul style={{ listStyle: "none", paddingLeft: "1em" }}>
+      {children ? children : null}
+    </ul>
+  );
 }

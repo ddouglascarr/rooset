@@ -12,9 +12,8 @@ type Props = {
 type State = {|
   status: "LOADING" | "ERROR" | "READY",
   data?: {|
-    firstName: String,
-    lastName: String,
     username: String,
+    displayName: String,
   |},
 |};
 
@@ -31,9 +30,8 @@ export default class Persona extends React.Component {
         ? this.setState({
             status: "READY",
             data: {
-              firstName: m.firstName,
-              lastName: m.lastName,
               username: m.username,
+              displayName: m.displayName,
             },
           })
         : this.setState({ status: "ERROR" }),
