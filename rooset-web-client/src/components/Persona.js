@@ -44,7 +44,7 @@ export default class Persona extends React.Component {
     return (
       <FabricPersona
         size={PersonaSize[size]}
-        primaryText={state.data ? state.data.username : "..."}
+        primaryText={state.data ? state.data.displayName : "..."}
         style={{ marginTop: "2px", marginBottom: "2px" }}
       />
     );

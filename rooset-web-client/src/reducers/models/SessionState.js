@@ -3,8 +3,9 @@ import * as Immutable from "immutable";
 import ImmutableModel from "flow-immutable-models";
 
 export type SessionStateModelType = {
-  status: "LOGGED_IN" | "REQUESTING" | "LOGGED_OUT",
-  username: string,
+  status: "LOGGED_IN" | "REQUESTING" | "LOGGED_OUT" | "ERROR",
+  username?: string,
+  errorMessage?: string,
 };
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -22,25 +23,42 @@ export class SessionState extends ImmutableModel {
   }
 
   toJS(): SessionStateModelType {
-    return {
+    const js: SessionStateModelType = {
       status: this.status,
-      username: this.username,
     };
+
+    if (this.username != null) {
+      js.username = this.username;
+    }
+
+    if (this.errorMessage != null) {
+      js.errorMessage = this.errorMessage;
+    }
+
+    return js;
   }
 
-  get status(): 'LOGGED_IN' | 'REQUESTING' | 'LOGGED_OUT' {
+  get status(): 'LOGGED_IN' | 'REQUESTING' | 'LOGGED_OUT' | 'ERROR' {
     return this._state.get('status');
   }
 
-  setStatus(status: 'LOGGED_IN' | 'REQUESTING' | 'LOGGED_OUT'): this {
+  setStatus(status: 'LOGGED_IN' | 'REQUESTING' | 'LOGGED_OUT' | 'ERROR'): this {
     return this.clone(this._state.set('status', status));
   }
 
-  get username(): string {
+  get username(): ?string {
     return this._state.get('username');
   }
 
-  setUsername(username: string): this {
+  setUsername(username: ?string): this {
     return this.clone(this._state.set('username', username));
+  }
+
+  get errorMessage(): ?string {
+    return this._state.get('errorMessage');
+  }
+
+  setErrorMessage(errorMessage: ?string): this {
+    return this.clone(this._state.set('errorMessage', errorMessage));
   }
 }

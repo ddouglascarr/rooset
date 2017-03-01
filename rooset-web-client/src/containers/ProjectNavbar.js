@@ -13,7 +13,7 @@ class ProjectNavbar extends React.Component {
       <div className="project-header ms-bgColor-black ms-fontColor-neutralLight ms-font-m">
         <Grid>
           <GridRow>
-              <GridCol lgWidth={2} rightAlign>
+              <GridCol lgWidth={2} >
                 <Text size="xxl" weight="semibold" inverse>Rooset</Text>
               </GridCol>
           </GridRow>
