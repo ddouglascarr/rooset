@@ -142,7 +142,7 @@ export function Content(props: ContentProps) {
     <GridCol lgWidth={10}>
       <div
         className="ms-bgColor-white"
-        style={{ maxWidth: "1024px", minHeight: "768px" }}
+        style={{ maxWidth: "970px", minHeight: "768px" }}
       >
         {children ? children : null}
       </div>
