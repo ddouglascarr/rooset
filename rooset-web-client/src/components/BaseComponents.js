@@ -184,6 +184,7 @@ export function Page(props: PageProps) {
   return (
     <div className="App ms-Fabric ms-font-m ms-bgColor-neutralLight">
       {children ? children : null}
+      <div id="page-footer" style={{ minHeight: "384px" }} />
     </div>
   );
 }
