@@ -30,7 +30,7 @@ class App extends React.Component {
     return (
       <Provider store={this.state.store}>
         <Router>
-          <div className="App ms-Fabric ms-font-m ms-bgColor-neutralPrimary">
+          <div className="App ms-Fabric ms-font-m ms-bgColor-neutralLight">
             <ProjectNavbar />
             <Switch>
               <Route exact path="/" component={HomePage} />

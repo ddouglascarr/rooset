@@ -15,6 +15,21 @@ export function Container({ children }: ContainerProps) {
   return <div className="container">{children ? children : null}</div>;
 }
 
+type ContentProps = {
+  children?: React.Children,
+};
+export function Content(props: ContentProps) {
+  const { children } = props;
+  return (
+    <div
+      className="ms-bgColor-white"
+      style={{ maxWidth: "1024px", minHeight: "768px" }}
+    >
+      {children ? children : null}
+    </div>
+  );
+}
+
 type GridProps = {
   children?: React.Children,
 };
@@ -124,7 +139,8 @@ class _LinkButton extends React.Component {
     const { children, to } = this.props;
     return (
       <Link to={to} className="ms-Button ms-Button--default">
-        <span className="ms-Button-label">{children}</span></Link>
+        <span className="ms-Button-label">{children}</span>
+      </Link>
     );
   }
 }

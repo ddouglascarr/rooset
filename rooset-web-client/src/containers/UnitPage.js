@@ -6,6 +6,7 @@ import { UnitState } from "../reducers/models/UnitState";
 import { RootState } from "../reducers/models/RootState";
 import type { Action } from "../actions/Action";
 import {
+  Content,
   Grid,
   GridRow,
   GridCol,
@@ -28,7 +29,7 @@ class UnitPage extends React.Component {
     return (
       <Grid>
         <GridRow>
-          <GridCol lgWidth={2} backgroundColor="neutralLight">
+          <GridCol lgWidth={2}>
             <List>
               <ListItem>
                 <Text weight="semibold" size="l">Areas</Text>
@@ -49,6 +50,9 @@ class UnitPage extends React.Component {
                 </List>
               </ListItem>
             </List>
+          </GridCol>
+          <GridCol lgWidth={10}>
+            <Content />
           </GridCol>
         </GridRow>
       </Grid>
