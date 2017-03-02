@@ -20,7 +20,12 @@ class SessionContainer extends React.Component {
   }
 
   renderLoggedOut() {
-    return <LinkButton to="/login">Login</LinkButton>;
+    const { location } = this.props;
+    const to = {
+      pathname: "/login",
+      state: { from: location ? location.pathname : window.location.pathname },
+    };
+    return <LinkButton to={to}>Login</LinkButton>;
   }
 
   render() {
@@ -36,5 +41,5 @@ const mapState = state => {
   return { session: state.session };
 };
 
-export { SessionContainer };
+// export { SessionContainer };
 export default connect(mapState)(SessionContainer);

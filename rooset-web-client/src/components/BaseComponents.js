@@ -2,6 +2,7 @@
 // Flow #1964 dictates he janky props.children usage. If its fixed, refactor
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   TextField as FabricTextField,
   Button as FabricButton,
@@ -113,7 +114,7 @@ export class ActionButton extends React.Component {
 
 type LinkButtonProps = {
   context: any,
-  to: string,
+  to: Link,
   children?: React.Children,
 };
 class _LinkButton extends React.Component {
@@ -121,7 +122,10 @@ class _LinkButton extends React.Component {
 
   render() {
     const { children, to } = this.props;
-    return <FabricButton href={to}>{children}</FabricButton>
+    return (
+      <Link to={to} className="ms-Button ms-Button--default">
+        <span className="ms-Button-label">{children}</span></Link>
+    );
   }
 }
 export const LinkButton = connect(state => {
