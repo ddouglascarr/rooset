@@ -1,6 +1,7 @@
 // @flow
 // Flow #1964 dictates he janky props.children usage. If its fixed, refactor
 import React from "react";
+import { connect } from "react-redux";
 import {
   TextField as FabricTextField,
   Button as FabricButton,
@@ -97,18 +98,32 @@ export function TextField(props: TextFieldProps) {
   return <FabricTextField label={label} value={value} onChanged={onChange} />;
 }
 
-type ButtonProps = {
+type ActionButtonProps = {
   onClick: () => void,
   children?: React.Children,
 };
 export class ActionButton extends React.Component {
-  props: ButtonProps;
+  props: ActionButtonProps;
 
   render() {
     const { children, onClick } = this.props;
-    return (
-      <FabricButton onClick={onClick} >{ children }</FabricButton>
-    )
+    return <FabricButton onClick={onClick}>{children}</FabricButton>;
   }
-
 }
+
+type LinkButtonProps = {
+  context: any,
+  to: string,
+  children?: React.Children,
+};
+class _LinkButton extends React.Component {
+  props: LinkButtonProps;
+
+  render() {
+    const { children, to } = this.props;
+    return <FabricButton href={to}>{children}</FabricButton>
+  }
+}
+export const LinkButton = connect(state => {
+  return {};
+})(_LinkButton);
