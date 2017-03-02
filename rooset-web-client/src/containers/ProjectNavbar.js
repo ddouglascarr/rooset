@@ -18,7 +18,7 @@ class ProjectNavbar extends React.Component {
               <GridCol lgWidth={2} >
                 <Text size="xxl" weight="semibold" inverse>Rooset</Text>
               </GridCol>
-                <div><SessionContainer /></div>
+                <div style={{ textAlign: "right" }}><SessionContainer /></div>
           </GridRow>
         </Grid>
       </div>
