@@ -5,7 +5,7 @@ import type { Middleware, MiddlewareAPI, Dispatch } from "redux";
 import type { State } from "../reducers/rootReducer";
 
 export interface IProcessManager {
-  respond(State, Dispatch<Action>, Action): void,
+  respond(State, Dispatch<Action>, Action): Promise<void>,
 }
 
 export class AbstractProcessManager {

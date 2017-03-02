@@ -16,12 +16,12 @@ import { getUnitUrlParameterName } from "../services/urlParameterService";
 export default class PageProcessManager
   extends AbstractProcessManager
   implements IProcessManager {
-  respond(state: State, dispatch: Dispatch<Action>, action: Action): void {
+  respond(state: State, dispatch: Dispatch<Action>, action: Action): Promise<void> {
     switch (action.type) {
       case "DISPLAY_UNIT_PAGE_ACTION":
-        displayUnitPage(state, dispatch, action);
-        break;
-      default: // nothing, want to return regarless of dispatch.
+        return displayUnitPage(state, dispatch, action);
+      default:
+        return Promise.resolve();// nothing, want to return regarless of dispatch.
     }
   }
 }
@@ -36,8 +36,9 @@ async function displayUnitPage(state, dispatch, action: DisplayUnitPageAction) {
         message: `no unit at ${action.payload.urlParameterName}`,
       }),
     );
-    return;
+    return Promise.resolve();
   }
   dispatch(buildUnitQueryRequest({ id: unitId }));
   dispatch(buildUnitMemberQueryRequest({ id: unitId }));
+  return Promise.resolve();
 }
