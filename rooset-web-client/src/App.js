@@ -10,7 +10,6 @@ import UnitPage from "./containers/UnitPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import configureStore from "./store";
 import { buildDisplayUnitPageAction } from "./actions/PageAction";
-import { Page } from "./components/BaseComponents";
 import "office-ui-fabric-react/dist/css/fabric.css";
 
 class App extends React.Component {
@@ -38,22 +37,22 @@ class App extends React.Component {
               <Route path="/" render={() => <div>404</div>} />
             </Switch>
 
-          {/* for dispatching redux route events */}
-          <Switch>
-            <Route exact path="/login" render={() => null} />
-            <Route
-              exact
-              path="/:unitId"
-              render={({ match }) => {
-                dispatch(
-                  buildDisplayUnitPageAction({
-                    urlParameterName: match.params.unitId,
-                  }),
-                );
-                return null;
-              }}
-            />
-          </Switch>
+            {/* for dispatching redux route events */}
+            <Switch>
+              <Route exact path="/login" render={() => null} />
+              <Route
+                exact
+                path="/:unitId"
+                render={({ match }) => {
+                  dispatch(
+                    buildDisplayUnitPageAction({
+                      urlParameterName: match.params.unitId,
+                    }),
+                  );
+                  return null;
+                }}
+              />
+            </Switch>
           </div>
         </Router>
       </Provider>

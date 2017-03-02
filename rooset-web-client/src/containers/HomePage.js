@@ -1,18 +1,25 @@
 import React from "react";
-import { Grid, GridRow, GridCol } from "../components/BaseComponents";
-import { Button } from "office-ui-fabric-react";
+import {
+  Page,
+  PageBody,
+  Content,
+  LeftSideBar,
+  Text,
+} from "../components/BaseComponents";
+import Navbar from "../components/Navbar";
 
 export default class HomePage extends React.Component {
   render() {
     return (
-      <Grid>
-        <GridRow>
-          <GridCol lgWidth={3} />
-          <GridCol lgWidth={9}>
-            <Button>Foobar</Button>
-          </GridCol>
-        </GridRow>
-      </Grid>
+      <Page>
+        <Navbar />
+        <PageBody>
+          <LeftSideBar />
+          <Content>
+            <Text weight="semibold" size="xxl">Welcome to Rooset</Text>
+          </Content>
+        </PageBody>
+      </Page>
     );
   }
 }

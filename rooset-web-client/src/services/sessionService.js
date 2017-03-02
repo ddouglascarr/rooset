@@ -8,7 +8,7 @@ export async function performLoginRequest(
   const body = new FormData();
   body.set("username", username);
   body.set("password", password);
-  const resp = await fetch("/login", {
+  await fetch("/login", {
     method: "POST",
     body,
   })

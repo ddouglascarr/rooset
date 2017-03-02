@@ -33,7 +33,7 @@ async function loginRequest(
 ): Promise<void> {
   const { username, password } = action.payload;
   try {
-    const resp = await performLoginRequest(username, password);
+    await performLoginRequest(username, password);
     dispatch(buildLoginResponseAction({ username }));
   } catch (err) {
     dispatch(

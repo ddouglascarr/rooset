@@ -7,9 +7,6 @@ import { RootState } from "../reducers/models/RootState";
 import type { Action } from "../actions/Action";
 import {
   Content,
-  Grid,
-  GridRow,
-  GridCol,
   Text,
   List,
   ListItem,

@@ -5,13 +5,14 @@ import type { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
-  Grid,
-  GridRow,
-  GridCol,
-  Text,
+  Content,
+  LeftSideBar,
+  Page,
+  PageBody,
   TextField,
   ActionButton,
 } from "../components/BaseComponents";
+import Navbar from "../components/Navbar";
 import { buildLoginRequestAction } from "../actions/SessionAction";
 import type { SessionState } from "../reducers/models/SessionState";
 
@@ -38,12 +39,12 @@ class LoginPage extends React.Component {
   login() {
     const { dispatch } = this.props;
     const { username, password } = this.state;
-    dispatch(buildLoginRequestAction({username, password}));
+    dispatch(buildLoginRequestAction({ username, password }));
   }
 
   renderRedirect() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
-    return <Redirect to={from} />
+    const { from } = this.props.location.state || { from: { pathname: "/" } };
+    return <Redirect to={from} />;
   }
 
   render() {
@@ -51,10 +52,11 @@ class LoginPage extends React.Component {
     const { session } = this.props;
     if (session.status === "LOGGED_IN") return this.renderRedirect();
     return (
-      <Grid>
-        <GridRow>
-          <GridCol lgWidth={2} backgroundColor="neutralLight" />
-          <GridCol lgWidth={10} backgroundColor="white">
+      <Page>
+        <Navbar />
+        <PageBody>
+          <LeftSideBar />
+          <Content>
             <TextField
               label="Username"
               value={username}
@@ -68,10 +70,9 @@ class LoginPage extends React.Component {
             <ActionButton onClick={() => this.login()}>
               Login
             </ActionButton>
-          </GridCol>
-
-        </GridRow>
-      </Grid>
+          </Content>
+        </PageBody>
+      </Page>
     );
   }
 }

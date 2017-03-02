@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Grid, GridRow, GridCol, Text  } from "../components/BaseComponents";
-import { Link } from "react-router-dom";
 import SessionContainer from "../containers/SessionContainer";
 
 import "../components/style/project.css";
