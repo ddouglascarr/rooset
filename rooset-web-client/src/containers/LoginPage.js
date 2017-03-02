@@ -3,6 +3,7 @@
 import React from "react";
 import type { Dispatch } from "redux";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import {
   Grid,
   GridRow,
@@ -22,6 +23,7 @@ type LoginPageState = {
 type LoginPageProps = {
   dispatch: Dispatch<*>,
   session: SessionState,
+  location: any,
 };
 
 class LoginPage extends React.Component {
@@ -39,9 +41,15 @@ class LoginPage extends React.Component {
     dispatch(buildLoginRequestAction({username, password}));
   }
 
+  renderRedirect() {
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    return <Redirect to={from} />
+  }
+
   render() {
     const { username, password } = this.state;
     const { session } = this.props;
+    if (session.status === "LOGGED_IN") return this.renderRedirect();
     return (
       <Grid>
         <GridRow>
