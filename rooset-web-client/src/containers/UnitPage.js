@@ -13,7 +13,11 @@ import {
   Text,
   List,
   ListItem,
+  LeftSideBar,
+  Page,
+  PageBody,
 } from "../components/BaseComponents";
+import Navbar from "../components/Navbar";
 import Persona from "../components/Persona";
 
 type Props = {
@@ -27,35 +31,36 @@ class UnitPage extends React.Component {
   render() {
     const { unit } = this.props;
     return (
-      <Grid>
-        <GridRow>
-          <GridCol lgWidth={2}>
-            <List>
-              <ListItem>
-                <Text weight="semibold" size="l">Areas</Text>
-                <List>
-                  {unit.data.areas.map((a, k) => (
-                    <ListItem key={k}><Text size="l">{a.get("name")}</Text></ListItem>
-                  ))}
-                </List>
-              </ListItem>
-              <ListItem>
-                <Text weight="semibold" size="l">Members</Text>
-                <List>
-                  {unit.data.members.map((memberId, k) => (
-                    <ListItem key={k}>
-                      <Persona id={memberId} key={k} size="small" />
-                    </ListItem>
-                  ))}
-                </List>
-              </ListItem>
-            </List>
-          </GridCol>
-          <GridCol lgWidth={10}>
-            <Content />
-          </GridCol>
-        </GridRow>
-      </Grid>
+      <Page>
+      <Navbar />
+      <PageBody>
+        <LeftSideBar>
+          <List>
+            <ListItem>
+              <Text weight="semibold" size="l">Areas</Text>
+              <List>
+                {unit.data.areas.map((a, k) => (
+                  <ListItem key={k}>
+                    <Text size="l">{a.get("name")}</Text>
+                  </ListItem>
+                ))}
+              </List>
+            </ListItem>
+            <ListItem>
+              <Text weight="semibold" size="l">Members</Text>
+              <List>
+                {unit.data.members.map((memberId, k) => (
+                  <ListItem key={k}>
+                    <Persona id={memberId} key={k} size="small" />
+                  </ListItem>
+                ))}
+              </List>
+            </ListItem>
+          </List>
+        </LeftSideBar>
+        <Content />
+      </PageBody>
+      </Page>
     );
   }
 }

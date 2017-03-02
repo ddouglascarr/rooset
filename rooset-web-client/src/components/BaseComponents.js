@@ -15,21 +15,6 @@ export function Container({ children }: ContainerProps) {
   return <div className="container">{children ? children : null}</div>;
 }
 
-type ContentProps = {
-  children?: React.Children,
-};
-export function Content(props: ContentProps) {
-  const { children } = props;
-  return (
-    <div
-      className="ms-bgColor-white"
-      style={{ maxWidth: "1024px", minHeight: "768px" }}
-    >
-      {children ? children : null}
-    </div>
-  );
-}
-
 type GridProps = {
   children?: React.Children,
 };
@@ -147,3 +132,58 @@ class _LinkButton extends React.Component {
 export const LinkButton = connect(state => {
   return {};
 })(_LinkButton);
+
+type ContentProps = {
+  children?: React.Children,
+};
+export function Content(props: ContentProps) {
+  const { children } = props;
+  return (
+    <GridCol lgWidth={10}>
+      <div
+        className="ms-bgColor-white"
+        style={{ maxWidth: "1024px", minHeight: "768px" }}
+      >
+        {children ? children : null}
+      </div>
+    </GridCol>
+  );
+}
+
+type LeftSideBarProps = {
+  children?: React.Children,
+};
+export function LeftSideBar(props: LeftSideBarProps) {
+  const { children } = props;
+  return (
+    <GridCol lgWidth={2}>
+      {children ? children : null}
+    </GridCol>
+  );
+}
+
+type PageBodyProps = {
+  children?: React.Children<LeftSideBar | Content>,
+};
+export function PageBody(props: PageBodyProps) {
+  const { children } = props;
+  return (
+    <Grid>
+      <GridRow>
+        {children ? children : null}
+      </GridRow>
+    </Grid>
+  );
+}
+
+type PageProps = {
+  children?: React.Children<PageBody>,
+};
+export function Page(props: PageProps) {
+  const { children } = props;
+  return (
+    <div className="App ms-Fabric ms-font-m ms-bgColor-neutralLight">
+      {children ? children : null}
+    </div>
+  );
+}

@@ -3,12 +3,11 @@
 import React from "react";
 import { Grid, GridRow, GridCol, Text  } from "../components/BaseComponents";
 import { Link } from "react-router-dom";
-import SessionContainer from "./SessionContainer";
+import SessionContainer from "../containers/SessionContainer";
 
 import "../components/style/project.css";
 
 class ProjectNavbar extends React.Component {
-  static contextTypes: { router: Object };
 
   render() {
     return (
@@ -25,7 +24,5 @@ class ProjectNavbar extends React.Component {
     );
   }
 }
-
-ProjectNavbar.contextTypes = { router: React.PropTypes.object };
 
 export default ProjectNavbar;
