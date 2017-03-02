@@ -1,7 +1,7 @@
 // @flow
 jest.mock("../../services/sessionService");
 
-import SessionProcessManager from "../sessionProcessManager";
+import SessionProcessManager from "../SessionProcessManager";
 const performLoginRequest: any = require(
   "../../services/sessionService",
 ).performLoginRequest;
@@ -13,28 +13,22 @@ import { initialState } from "../../reducers/rootReducer";
 const dispatch = jest.fn();
 
 describe("sessionProcessManager", () => {
-  it("LOGIN_REQUEST", () => {
+  it("LOGIN_REQUEST", async () => {
     performLoginRequest.mockReturnValue(
       Promise.resolve({ username: "testuser" }),
     );
     const sessionProcessManager = new SessionProcessManager();
-    return sessionProcessManager
-      .respond(
-        initialState,
-        dispatch,
-        buildLoginRequestAction({
-          username: "testuser",
-          password: "password1",
-        }),
-      )
-      .then(() => {
-        expect(performLoginRequest).toHaveBeenCalledWith(
-          "testuser",
-          "password1",
-        );
-        expect(dispatch).toHaveBeenCalledWith(
-          buildLoginResponseAction({ username: "testuser" }),
-        );
-      });
+    await sessionProcessManager.respond(
+      initialState,
+      dispatch,
+      buildLoginRequestAction({
+        username: "testuser",
+        password: "password1",
+      }),
+    );
+    expect(performLoginRequest).toHaveBeenCalledWith("testuser", "password1");
+    expect(dispatch).toHaveBeenCalledWith(
+      buildLoginResponseAction({ username: "testuser" }),
+    );
   });
 });

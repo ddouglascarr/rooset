@@ -1,6 +1,10 @@
 // @flow
 // Flow #1964 dictates he janky props.children usage. If its fixed, refactor
 import React from "react";
+import {
+  TextField as FabricTextField,
+  Button as FabricButton,
+} from "office-ui-fabric-react";
 
 type ContainerProps = {
   children?: React.Children,
@@ -81,4 +85,30 @@ export function List(props: ListProps) {
       {children ? children : null}
     </ul>
   );
+}
+
+type TextFieldProps = {
+  label: string,
+  onChange: () => void,
+  value: string,
+};
+export function TextField(props: TextFieldProps) {
+  const { label, onChange, value } = props;
+  return <FabricTextField label={label} value={value} onChanged={onChange} />;
+}
+
+type ButtonProps = {
+  onClick: () => void,
+  children?: React.Children,
+};
+export class ActionButton extends React.Component {
+  props: ButtonProps;
+
+  render() {
+    const { children, onClick } = this.props;
+    return (
+      <FabricButton onClick={onClick} >{ children }</FabricButton>
+    )
+  }
+
 }

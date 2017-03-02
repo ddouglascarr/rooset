@@ -38,12 +38,6 @@ class App extends React.Component {
                 exact
                 path="/login"
                 component={LoginPage}
-                onEnter={(nextState, replace, cb) => {
-                  console.log(nextState);
-                  console.log("foobar");
-                  cb();
-                }}
-                componentDidUpdate={() => console.log("login did mount")}
               />
               <Route exact path="/:unitId" component={UnitPage} />
               <Route path="/" render={() => <div>404</div>} />

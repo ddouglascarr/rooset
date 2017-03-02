@@ -8,6 +8,7 @@ import createLogger from "redux-logger";
 import rootReducer, { initialState } from "./reducers/rootReducer";
 // import rootSaga from "./sagas/rootSaga";
 import PageProcessManager from "./processManagers/PageProcessManager";
+import SessionProcessManager from "./processManagers/SessionProcessManager";
 import {
   httpRequestProcessManager,
 } from "./processManagers/httpRequestProcessManager";
@@ -34,6 +35,7 @@ export default function configureStore(): Store<State, Action> {
       loggerMiddleware,
       // sagaMiddleware,
       buildProcessManagerMiddleware(new PageProcessManager()),
+      buildProcessManagerMiddleware(new SessionProcessManager()),
       httpRequestProcessManager,
     ),
   );
