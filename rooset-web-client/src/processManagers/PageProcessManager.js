@@ -27,7 +27,6 @@ export default class PageProcessManager
 }
 
 async function displayUnitPage(state, dispatch, action: DisplayUnitPageAction) {
-  console.log("Unit Page displayed");
   const unitId = await getUnitUrlParameterName(action.payload.urlParameterName);
   if (!unitId) {
     dispatch(
