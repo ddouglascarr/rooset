@@ -76,7 +76,7 @@ public class ${testClassname}
     testingEventStoreService.initProjections();
 
     testUser = new UserModel(
-      "no1TestUser420", "foo", "bar", "foo@bar.com",
+      "no1TestUser420", "Test User", "foo", "bar", "foo@bar.com",
       passwordEncoder.encode("password1"));
 
     headers = new HttpHeaders();

@@ -1,0 +1,9 @@
+
+#!/bin/bash
+
+WORKDIR=`dirname "$(readlink -f "$0")"`
+cd $WORKDIR
+
+
+mkdir -p ${RATK_GEN_QUERY_ACTION_JS_DEST_DIR}
+node src/generateActions.js
