@@ -7,6 +7,8 @@ import { fetchPublicUserData } from "../services/userService";
 type Props = {
   id: Uuid,
   size: "tiny" | "extraSmall" | "small" | "regular" | "large" | "extraLarge",
+  hidePersonaDetails?: boolean,
+  onClick?: (event: any) => void,
 };
 
 type State = {|
@@ -39,13 +41,16 @@ export default class Persona extends React.Component {
   }
 
   render() {
+    const { onClick, hidePersonaDetails } = this.props;
     const { state } = this;
     const size = this.props.size || "regular";
     return (
       <FabricPersona
+        onClick={onClick}
         size={PersonaSize[size]}
         primaryText={state.data ? state.data.displayName : "..."}
         style={{ marginTop: "2px", marginBottom: "2px" }}
+        hidePersonaDetails={hidePersonaDetails}
       />
     );
   }

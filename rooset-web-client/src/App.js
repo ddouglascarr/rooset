@@ -10,6 +10,7 @@ import UnitPage from "./containers/UnitPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import configureStore from "./store";
 import { buildDisplayUnitPageAction } from "./actions/PageAction";
+import { buildSessionRequestAction } from "./actions/SessionAction";
 import "office-ui-fabric-react/dist/css/fabric.css";
 
 class App extends React.Component {
@@ -22,6 +23,10 @@ class App extends React.Component {
     this.state = {
       store: configureStore(new Map()),
     };
+  }
+
+  componentDidMount() {
+    this.state.store.dispatch(buildSessionRequestAction());
   }
 
   render() {

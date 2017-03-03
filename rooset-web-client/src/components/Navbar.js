@@ -22,7 +22,17 @@ class ProjectNavbar extends React.Component {
               <Text size="xxl" weight="semibold" inverse>Rooset</Text>
             </GridCol>
             <GridCol lgWidth={10}>
-            <div className="" style={{ textAlign: "right" }}><SessionContainer /></div>
+              <div
+                className=""
+                id="navbar-right-items"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                }}
+              >
+                <SessionContainer />
+              </div>
             </GridCol>
           </GridRow>
         </Grid>

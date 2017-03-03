@@ -6,7 +6,7 @@ export type Int = number;
 export type Uint = number;
 export type Ullong = number;
 
-export type Uuid = UUID<4>;
+export type Uuid = string;
 
 export type Area = {|
   areaId: Uuid,

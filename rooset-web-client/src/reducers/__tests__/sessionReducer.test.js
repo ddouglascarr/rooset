@@ -2,8 +2,10 @@
 import sessionReducer from "../sessionReducer";
 import {
   buildLoginRequestAction,
-  buildLoginResponseAction,
   buildLoginErrorAction,
+  buildSessionRequestAction,
+  buildSessionErrorAction,
+  buildSessionResponseAction,
 } from "../../actions/SessionAction";
 import { initialState } from "../rootReducer";
 
@@ -21,22 +23,6 @@ describe("sessionReducer", () => {
 
     expect(newState.toJS()).toEqual({
       status: "REQUESTING",
-      username: "testuser",
-    });
-  });
-
-  it("handle LOGIN_RESPONSE", () => {
-    const prevState = sessionReducer(
-      mockState,
-      buildLoginRequestAction({ username: "testuser", password: "password1" }),
-    );
-    const newState = sessionReducer(
-      prevState,
-      buildLoginResponseAction({ username: "testuser" }),
-    );
-    expect(newState.toJS()).toEqual({
-      status: "LOGGED_IN",
-      username: "testuser",
     });
   });
 
@@ -51,8 +37,65 @@ describe("sessionReducer", () => {
     );
     expect(newState.toJS()).toEqual({
       status: "ERROR",
-      username: "testuser",
       errorMessage: "wrong username / password",
+    });
+  });
+
+  it("handle SESSION_REQUEST", () => {
+    const prevState = mockState;
+    const newState = sessionReducer(prevState, buildSessionRequestAction());
+    expect(newState.toJS()).toEqual({
+      status: "REQUESTING",
+    });
+  });
+
+  it("handle SESSION_ERROR", () => {
+    const prevState = mockState.setStatus("REQUESTING");
+    const newState = sessionReducer(prevState, buildSessionErrorAction());
+    expect(newState.toJS()).toEqual({
+      status: "LOGGED_OUT",
+    });
+  });
+
+  it("handle SESSION_RESPONSE", () => {
+    const prevState = mockState.setStatus("REQUESTING");
+    const newState = sessionReducer(
+      prevState,
+      buildSessionResponseAction({
+        displayName: "Determined Poitras",
+        id: "464b1ebb-32c1-460c-8e9e-444444444444",
+        username: "determinedPoitras",
+      }),
+    );
+    expect(newState.toJS()).toEqual({
+      status: "LOGGED_IN",
+      data: {
+        displayName: "Determined Poitras",
+        id: "464b1ebb-32c1-460c-8e9e-444444444444",
+        username: "determinedPoitras",
+      },
+    });
+  });
+
+  it("SESSION_RESPONSE should clear errorMessage", () => {
+    const prevState = mockState
+      .setStatus("REQUESTING")
+      .setErrorMessage("Wrong username / password");
+    const newState = sessionReducer(
+      prevState,
+      buildSessionResponseAction({
+        displayName: "Determined Poitras",
+        id: "464b1ebb-32c1-460c-8e9e-444444444444",
+        username: "determinedPoitras",
+      }),
+    );
+    expect(newState.toJS()).toEqual({
+      status: "LOGGED_IN",
+      data: {
+        displayName: "Determined Poitras",
+        id: "464b1ebb-32c1-460c-8e9e-444444444444",
+        username: "determinedPoitras",
+      },
     });
   });
 });
