@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { LinkButton } from "../components/BaseComponents";
 import Persona from "../components/Persona";
 import type { SessionState } from "../reducers/models/SessionState";
+import { ContextualMenu } from "office-ui-fabric-react";
 
 type Props = {
   location: any,
@@ -13,18 +14,56 @@ type Props = {
   dispatch: Dispatch<*>,
 };
 
+type State = {
+  isMenuVisible: boolean,
+  target?: any,
+};
+
 class SessionContainer extends React.Component {
   props: Props;
+  state: State;
+
+  constructor() {
+    super();
+    this.state = { isMenuVisible: false };
+  }
+
+  renderMenu() {
+    const { data } = this.props.session;
+    if (!data) return null;
+    return (
+      <ContextualMenu
+        items={[
+          {
+            key: "foo",
+            name: "Foo",
+          },
+          { key: "bar", name: "Bar" },
+        ]}
+        target={this.state.target}
+        isBeakVisible={true}
+      />
+    );
+  }
 
   renderLoggedIn() {
     const { data } = this.props.session;
+    const { isMenuVisible } = this.state;
     return (
-      <Persona
-        id={data ? data.id : ""}
-        size="small"
-        hidePersonaDetails={true}
-        onClick={() => console.log("SessionContainer clicked")}
-      />
+      <div>
+        <Persona
+          id={data ? data.id : ""}
+          size="small"
+          hidePersonaDetails={true}
+          onClick={(e) => {
+            this.setState({
+              isMenuVisible: !isMenuVisible,
+              target: e.target
+            });
+          }}
+        />
+        {isMenuVisible ? this.renderMenu() : null}
+      </div>
     );
   }
 

@@ -8,7 +8,7 @@ type Props = {
   id: Uuid,
   size: "tiny" | "extraSmall" | "small" | "regular" | "large" | "extraLarge",
   hidePersonaDetails?: boolean,
-  onClick?: () => void,
+  onClick?: (event: any) => void,
 };
 
 type State = {|
