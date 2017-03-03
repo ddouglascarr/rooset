@@ -18,6 +18,7 @@ describe("sessionService", () => {
       const expectedRequest = new Request("/session", {
         method: "GET",
         headers: new Headers().set("Accept", "application/json"),
+        credentials: "same-origin"
       });
 
       fetch.mockReturnValueOnce(Promise.resolve(mockResponse));
@@ -41,6 +42,7 @@ describe("sessionService", () => {
       const expectedRequest = new Request("/session", {
         method: "GET",
         headers: new Headers().set("Accept", "application/json"),
+        credentials: "same-origin"
       });
       const expectedGetSessionResp: GetSessionResponse = {
         displayName: "Determined Poitras",

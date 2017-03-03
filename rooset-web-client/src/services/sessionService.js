@@ -12,6 +12,7 @@ export async function performLoginRequest(
   await fetch("/login", {
     method: "POST",
     body,
+    credentials: "same-origin"
   });
   return { username: "" };
 }
@@ -25,6 +26,7 @@ export async function getSession(): Promise<?GetSessionResponse> {
   const httpResp = await fetch(new Request("/session", {
     headers: new Headers().set("Accept", "application/json"),
     method: "GET",
+    credentials: "same-origin"
   }));
   if (httpResp.ok) {
     const body = await httpResp.json();

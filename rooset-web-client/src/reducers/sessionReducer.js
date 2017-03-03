@@ -1,6 +1,6 @@
 // @flow
 import type { Action } from "../actions/Action";
-import { SessionState } from "./models/SessionState";
+import { SessionState, SessionStateData } from "./models/SessionState";
 import type {
   LoginRequestAction,
   LoginErrorAction,
@@ -65,6 +65,6 @@ function sessionResponse(
 ): SessionState {
   return state
     .setStatus("LOGGED_IN")
-    .setData(fromJS(action.payload))
+    .setData(SessionStateData.fromJS(action.payload))
     .setErrorMessage(null);
 }
