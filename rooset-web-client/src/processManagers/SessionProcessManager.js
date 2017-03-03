@@ -7,8 +7,8 @@ import type {
   SessionRequestAction,
 } from "../actions/SessionAction";
 import {
-  buildLoginResponseAction,
   buildLoginErrorAction,
+  buildSessionRequestAction,
   buildSessionResponseAction,
   buildSessionErrorAction,
 } from "../actions/SessionAction";
@@ -41,7 +41,7 @@ async function loginRequest(
   const { username, password } = action.payload;
   try {
     await performLoginRequest(username, password);
-    dispatch(buildLoginResponseAction({ username }));
+    dispatch(buildSessionRequestAction());
   } catch (err) {
     dispatch(
       buildLoginErrorAction({

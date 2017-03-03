@@ -8,7 +8,6 @@ const performLoginRequest: any = require(
 const getSession: any = require("../../services/sessionService").getSession;
 import {
   buildLoginRequestAction,
-  buildLoginResponseAction,
   buildSessionErrorAction,
   buildSessionRequestAction,
   buildSessionResponseAction,
@@ -31,9 +30,7 @@ describe("sessionProcessManager", () => {
       }),
     );
     expect(performLoginRequest).toHaveBeenCalledWith("testuser", "password1");
-    expect(dispatch).toHaveBeenCalledWith(
-      buildLoginResponseAction({ username: "testuser" }),
-    );
+    expect(dispatch).toHaveBeenCalledWith(buildSessionRequestAction());
   });
 
   it("SESSION_REQUEST session is active", async () => {
