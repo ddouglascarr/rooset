@@ -94,7 +94,7 @@ Http api.
 
 
 
-rooset-web-client *
+rooset-web-client
 -----------------
 
 Single page web application, the UI for the system:
