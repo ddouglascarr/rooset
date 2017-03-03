@@ -17,12 +17,13 @@ class SessionContainer extends React.Component {
   props: Props;
 
   renderLoggedIn() {
-    const { session } = this.props;
+    const { data } = this.props.session;
     return (
       <Persona
-        id={session.data ? session.data.id : ""}
+        id={data ? data.id : ""}
         size="small"
         hidePersonaDetails={true}
+        onClick={() => console.log("SessionContainer clicked")}
       />
     );
   }
