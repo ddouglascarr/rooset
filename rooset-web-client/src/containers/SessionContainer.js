@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { LinkButton } from "../components/BaseComponents";
 import Persona from "../components/Persona";
 import type { SessionState } from "../reducers/models/SessionState";
-import { ContextualMenu } from "office-ui-fabric-react";
+import { ContextualMenu, ContextualMenuItemType } from "office-ui-fabric-react";
 
 type Props = {
   location: any,
@@ -29,16 +29,27 @@ class SessionContainer extends React.Component {
   }
 
   renderMenu() {
-    const { data } = this.props.session;
+    const { session, dispatch } = this.props;
+    const { data } = session;
     if (!data) return null;
     return (
       <ContextualMenu
         items={[
           {
-            key: "foo",
-            name: "Foo",
+            key: "heading",
+            name: "Signed in as",
+            itemType: ContextualMenuItemType.Header,
           },
-          { key: "bar", name: "Bar" },
+          { key: "displayName", name: data.displayName },
+          { key: "divider-0", itemType: ContextualMenuItemType.Divider },
+          {
+            key: "log-out",
+            name: "Sign out",
+            onClick: () => {
+              console.log("Logout clicked")
+              this.setState({ isMenuVisible: false });
+            }
+          },
         ]}
         target={this.state.target}
         isBeakVisible={true}
@@ -55,10 +66,10 @@ class SessionContainer extends React.Component {
           id={data ? data.id : ""}
           size="small"
           hidePersonaDetails={true}
-          onClick={(e) => {
+          onClick={e => {
             this.setState({
               isMenuVisible: !isMenuVisible,
-              target: e.target
+              target: e.target,
             });
           }}
         />
