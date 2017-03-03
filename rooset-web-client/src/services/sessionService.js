@@ -1,6 +1,7 @@
 // @flow
+import type { Uuid } from "../types";
 
-export type PerformLoginResponse = {| username: string |}
+export type PerformLoginResponse = {| username: string |};
 export async function performLoginRequest(
   username: string,
   password: string,
@@ -11,6 +12,27 @@ export async function performLoginRequest(
   await fetch("/login", {
     method: "POST",
     body,
-  })
+  });
   return { username: "" };
+}
+
+export type GetSessionResponse = {|
+  id: string,
+  username: string,
+  displayName: string,
+|};
+export async function getSession(): Promise<?GetSessionResponse> {
+  const httpResp = await fetch(new Request("/session", {
+    headers: new Headers().set("Accept", "application/json"),
+    method: "GET",
+  }));
+  if (httpResp.ok) {
+    const body = await httpResp.json();
+    return {
+      username: body.username,
+      id: body.id,
+      displayName: body.displayName,
+    };
+  }
+  return null;
 }
