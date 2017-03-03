@@ -6,6 +6,7 @@ export type LOGIN_ERROR = "LOGIN_ERROR";
 export type SESSION_REQUEST = "SESSION_REQUEST";
 export type SESSION_RESPONSE = "SESSION_RESPONSE";
 export type SESSION_ERROR = "SESSION_ERROR";
+export type SESSION_END = "SESSION_END";
 
 type LoginRequestActionPayload = {| username: string, password: string |};
 export type LoginRequestAction = {
@@ -64,9 +65,17 @@ export function buildSessionResponseAction(
   };
 }
 
+type SessionEndAction = {|
+  type: SESSION_END,
+|};
+export function buildSessionEndAction(): SessionEndAction {
+  return { type: "SESSION_END" };
+}
+
 export type SessionAction =
   | LoginRequestAction
   | LoginErrorAction
   | SessionRequestAction
   | SessionErrorAction
-  | SessionResponseAction;
+  | SessionResponseAction
+  | SessionEndAction;

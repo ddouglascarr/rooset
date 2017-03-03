@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { LinkButton } from "../components/BaseComponents";
 import Persona from "../components/Persona";
 import type { SessionState } from "../reducers/models/SessionState";
+import { buildSessionEndAction } from "../actions/SessionAction";
 import { ContextualMenu, ContextualMenuItemType } from "office-ui-fabric-react";
 
 type Props = {
@@ -46,8 +47,8 @@ class SessionContainer extends React.Component {
             key: "log-out",
             name: "Sign out",
             onClick: () => {
-              console.log("Logout clicked")
               this.setState({ isMenuVisible: false });
+              dispatch(buildSessionEndAction());
             }
           },
         ]}

@@ -1,4 +1,6 @@
 // @flow
+/* eslint  no-use-before-define:0 */
+
 import * as Immutable from "immutable";
 import ImmutableModel from "flow-immutable-models";
 import type { Uuid } from "../../types";

@@ -8,7 +8,6 @@ import type {
   SessionErrorAction,
   SessionResponseAction,
 } from "../actions/SessionAction";
-import { fromJS } from "immutable";
 
 export default function sessionReducer(
   state: SessionState,
