@@ -4,7 +4,7 @@ import React from "react";
 import type { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { LinkButton } from "../components/BaseComponents";
-import Persona from "../components/Persona"
+import Persona from "../components/Persona";
 import type { SessionState } from "../reducers/models/SessionState";
 
 type Props = {
@@ -18,7 +18,13 @@ class SessionContainer extends React.Component {
 
   renderLoggedIn() {
     const { session } = this.props;
-    return <Persona id={session.data ? session.data.id : ""} size="small" />;
+    return (
+      <Persona
+        id={session.data ? session.data.id : ""}
+        size="small"
+        hidePersonaDetails={true}
+      />
+    );
   }
 
   renderLoggedOut() {
