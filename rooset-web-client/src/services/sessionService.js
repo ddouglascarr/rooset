@@ -17,7 +17,7 @@ export async function performLoginRequest(
 }
 
 export type GetSessionResponse = {|
-  id: string,
+  id: Uuid,
   username: string,
   displayName: string,
 |};
