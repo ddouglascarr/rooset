@@ -1,7 +1,7 @@
 const {
   applyUriTemplate,
   findDeclarationByType,
-} = require('../../../../../ratk-declarations-utils');
+} = require('ratk-declaration-utils');
 const fs = require('fs');
 
 module.exports = (testDecl, queryDeclDir, reducerDir) => {

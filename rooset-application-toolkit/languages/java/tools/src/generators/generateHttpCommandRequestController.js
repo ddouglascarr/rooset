@@ -6,7 +6,7 @@ const {
 } = require('../utils');
 const {
   getPathVariables,
-} = require('../../../../../ratk-declarations-utils');
+} = require('ratk-declaration-utils');
 const typenameMap = require('../templates/typenameMap');
 const generateMessageStatements = require('./generateMessageStatements');
 

@@ -5,7 +5,7 @@ const {
   generateSchemas,
   getDeclarations,
   findCommandSchemaByType,
-} = require('../../../../ratk-declarations-utils');
+} = require('ratk-declaration-utils');
 const {
   generateFilenameFromMsgType,
   getMsgTypeFromSchema,

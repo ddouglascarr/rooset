@@ -52,38 +52,6 @@ set(RATK_GEN_TEST_DECL_DIR "${RATK_DECL_BASE_DIR}/tests"
     CACHE PATH "Location of test ratk declarations")
 
 
-# run npm install on cpp tools
-message(STATUS "Installing node.js dependencies")
-execute_process(
-    COMMAND npm install
-    WORKING_DIRECTORY ${RATK_TOOLS_DIR}
-    RESULT_VARIABLE rv
-    OUTPUT_VARIABLE exout)
-if (rv STRGREATER 0)
-  message(STATUS "npm install failed: ${rv}")
-  message(STATUS ${exout})
-else()
-  message(STATUS ${exout})
-endif()
-
-
-
-# run npm install on ratk-declarations
-message(STATUS "Installing node.js dependencies")
-execute_process(
-    COMMAND npm install
-    WORKING_DIRECTORY ${RATK_TOOLS_DIR}/../../../ratk-declarations-utils
-    RESULT_VARIABLE rv
-    OUTPUT_VARIABLE exout)
-if (rv STRGREATER 0)
-  message(STATUS "npm install failed: ${rv}")
-  message(STATUS ${exout})
-else()
-  message(STATUS ${exout})
-endif()
-
-
-
 set(SET_ENV ${CMAKE_COMMAND} -E
   env RATK_GEN_BASE_SCHEMA_FILE=${RATK_GEN_BASE_SCHEMA_FILE}
   env RATK_GEN_COMMAND_CPP_DEST_DIR=${RATK_GEN_COMMAND_CPP_DEST_DIR}
