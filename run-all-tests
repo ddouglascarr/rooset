@@ -2,4 +2,5 @@
 set -o errexit -o nounset -o pipefail
 
 ./rooset-domain-command-posix/run-all-tests
+./rooset-domain-query-reducers/run-all-tests
 ./rooset-http-api/run-all-tests
