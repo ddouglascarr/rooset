@@ -3,7 +3,7 @@ Rooset
 
 Rooset is a democratic structured decision system.
 
-[![Circle CI](https://circleci.com/gh/ddouglascarr/rooset.png?style=shield&circle-token=df883778b8696aba14f9b77e350c90a587702517)]
+![Circle CI](https://circleci.com/gh/ddouglascarr/rooset.png?style=shield&circle-token=df883778b8696aba14f9b77e350c90a587702517)
 
 Dependencies
 =============
