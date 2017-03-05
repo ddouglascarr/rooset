@@ -23,7 +23,7 @@ Install
 ```
   $ git clone https://github.com/ddouglascarr/rooset
   $ cd rooset
-  $ git submodules --update --recursive
+  $ git submodule update -- init
   $ ./configure
 ```
 
