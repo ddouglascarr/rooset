@@ -12,7 +12,7 @@ database:
   override:
     - createuser rooset
     - createdb --owner=rooset rooset_http_integration_testing
-    - psql -c 'ALTER USER "user_name" WITH PASSWORD 'new_password';'
+    - psql -c "ALTER USER rooset WITH PASSWORD 'rooset';"
 compile:
   override:
     - docker build -t circle-rooset --file circle.Dockerfile .
