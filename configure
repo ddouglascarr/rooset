@@ -7,8 +7,8 @@ cd ${SCRIPTDIR}
 
 # setup all javascript packages
 npm install
-npm run lerna clean --yes
-npm run lerna boostrap --yes
+npm run lerna --yes clean
+npm run lerna --yes bootsrap
 
 # configure and compile domain-command-posix
 ./rooset-domain-command-posix/configure
