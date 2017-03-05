@@ -7,7 +7,7 @@ cd ${SCRIPTDIR}
 
 # setup all javascript packages
 npm install
-npm run lerna --yes clean
+echo "y" | npm run lerna clean
 npm run lerna --yes bootstrap
 
 # configure and compile domain-command-posix

@@ -1,0 +1,21 @@
+machine:
+  services:
+    - docker
+
+checkout:
+  post:
+    - git submodule update --init --recursive
+
+database:
+  pre:
+    - sudo -u ubuntu -c "createuser --create-db rooset"
+    - sudo -u ubuntu -c "createdb --owner=rooset rooset_http_api_integration_testing"
+    - psql -u ubuntu -c "ALTER USER rooset WITH PASSWORD 'rooset';"
+
+compile:
+  override:
+    - docker build -t circle-rooset --file circle.Dockerfile .
+
+test:
+  override:
+    - docker run --expose 5432:5432 circle-rooset
