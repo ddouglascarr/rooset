@@ -1,6 +1,8 @@
 machine:
   services:
     - docker
+  environment:
+    ROOSET_RDB_SUPERUSER: ubuntu
 
 #checkout:
 #  post:
