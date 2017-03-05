@@ -18,4 +18,5 @@ compile:
 
 test:
   override:
-    - docker run --expose 5432:5432 circle-rooset
+    - docker run -t --expose 5432:5432 circle-rooset -c "./configure"
+    - docker run -t --expose 5432:5432 circle-rooset -c "./run-all-tests"

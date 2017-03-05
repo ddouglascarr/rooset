@@ -14,6 +14,10 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
   apt-get install -y nodejs
 
+RUN apt-get install -y \
+  libcurl4-openssl-dev \
+  libboost-all-dev
+
 ADD . /opt/rooset
 WORKDIR /opt/rooset
 RUN git submodule update --init --recursive
