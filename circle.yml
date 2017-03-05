@@ -17,4 +17,4 @@ compile:
 
 test:
   override:
-    - docker run -t --net=host circle-rooset -c "./configure && ./run-all-tests"
+    - docker run -t --net=host circle-rooset -c "./run-all-tests"
