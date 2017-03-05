@@ -8,6 +8,11 @@ machine:
 #  post:
 #    - git submodule update --init --recursive
 
+database:
+  override:
+    - createuser rooset
+    - createdb --owner=rooset rooset_http_integration_testing
+    - psql -c 'ALTER USER "user_name" WITH PASSWORD 'new_password';'
 compile:
   override:
     - docker build -t circle-rooset --file circle.Dockerfile .
