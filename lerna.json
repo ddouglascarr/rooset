@@ -4,7 +4,8 @@
     "rooset-application-toolkit/ratk-declaration-utils",
     "rooset-application-toolkit/languages/cpp/tools",
     "rooset-application-toolkit/languages/java/tools",
-    "rooset-application-toolkit/languages/js/tools"
+    "rooset-application-toolkit/languages/js/tools",
+    "rooset-domain-query-reducers"
   ],
   "version": "0.1.0"
 }

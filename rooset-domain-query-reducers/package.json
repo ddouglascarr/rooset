@@ -20,7 +20,8 @@
     "btoa": "^1.1.2",
     "lodash": "^4.17.4",
     "node-fetch": "^1.6.3",
-    "uuid4": "^1.0.0"
+    "uuid4": "^1.0.0",
+    "ratk-declaration-utils": "^0.1.0"
   },
   "devDependencies": {
     "jest": "^18.1.0"

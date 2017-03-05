@@ -8,7 +8,7 @@ const {
   findSchema,
   assertMessageCompliesWithSchema,
   getDeclarations,
-} = require("../../rooset-application-toolkit/ratk-declarations-utils");
+} = require("ratk-declaration-utils");
 
 const EVENTSTORE_HOST = "localhost";
 const EVENTSTORE_PORT = "2113";
