@@ -8,7 +8,7 @@ spring:
       'ddl-auto': validate
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/rooset_http_api
+    url: jdbc:postgresql://${ROOSET_RDB_HOST}:${ROOSET_RDB_PORT}/rooset_http_api
     username: rooset
     password: rooset
     driverClassName: org.postgresql.Driver
@@ -20,8 +20,8 @@ rooset:
   'domain-command-bin': '@basedir@/../rooset-domain-command-posix/build/rooset-command'
 
 get-event-store:
-  port: 2113
-  host: localhost
+  port: ${ROOSET_EVENT_STORE_PORT}
+  host: ${ROOSET_EVENT_STORE_HOST}
   binPath: '' # Not used in production, testing only
 
 
@@ -34,7 +34,7 @@ spring:
     hibernate:
       'ddl-auto': create-drop
   datasource:
-    url: jdbc:postgresql://localhost:5432/rooset_http_api_testing
+    url: jdbc:postgresql://${ROOSET_RDB_HOST}:${ROOSET_RDB_PORT}/rooset_http_api_testing
 
 
 ---
@@ -46,11 +46,11 @@ spring:
     hibernate:
       'ddl-auto': create-drop
   datasource:
-    url: jdbc:postgresql://localhost:5432/rooset_http_api_integration_testing
+    url: jdbc:postgresql://${ROOSET_RDB_HOST}:${ROOSET_RDB_PORT}/rooset_http_api_integration_testing
 
 
 get-event-store:
-  port: 2113
-  host: localhost
+  port: ${ROOSET_EVENT_STORE_PORT}
+  host: ${ROOSET_EVENT_STORE_HOST}
   binPath: '/opt/EventStore'
   'init-all-projections-bin': '@basedir@/../rooset-domain-query-reducers/init-all-projections'

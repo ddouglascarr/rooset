@@ -18,6 +18,9 @@ RUN apt-get install -y \
   libcurl4-openssl-dev \
   libboost-all-dev
 
+ENV ROOSET_RDB_HOST database
+ENV ROOSET_RDB_PORT 5432
+
 ADD . /opt/rooset
 WORKDIR /opt/rooset
 RUN git submodule update --init --recursive
