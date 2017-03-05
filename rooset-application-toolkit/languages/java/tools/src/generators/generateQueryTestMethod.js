@@ -2,7 +2,7 @@ const { camelCase } = require('lodash');
 const {
   applyUriTemplate,
   findDeclarationByType,
-} = require('../../../../../ratk-declarations-utils');
+} = require('ratk-declaration-utils');
 
 
 module.exports = (scenario, config) => {

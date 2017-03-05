@@ -6,7 +6,7 @@ const {
 } = require('../utils');
 const {
   getPathVariables,
-} = require('../../../../../ratk-declarations-utils');
+} = require('ratk-declaration-utils');
 const generateMessageStatements = require('./generateMessageStatements');
 
 module.exports = function(javaBasePackage, declaration, commandSchema) {

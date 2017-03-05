@@ -3,7 +3,7 @@ const {
   updateDir,
   getConfigFromEnv,
   getTests,
-} = require('../../../../ratk-declarations-utils');
+} = require('ratk-declaration-utils');
 
 const generateTestFile = require('./generators/generateTestFile');
 const generateCMakeList = require('./generators/generateCMakeList');

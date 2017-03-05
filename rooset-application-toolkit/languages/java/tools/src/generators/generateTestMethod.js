@@ -2,7 +2,7 @@ const { camelCase, map, merge, chain } = require('lodash');
 const {
   findHttpCommandRequestByUri,
   findCommandSchemaByType,
-} = require('../../../../../ratk-declarations-utils');
+} = require('ratk-declaration-utils');
 const { getTypenameFromRef } = require('../utils');
 
 

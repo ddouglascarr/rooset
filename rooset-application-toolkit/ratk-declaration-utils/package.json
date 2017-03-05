@@ -1,5 +1,5 @@
 {
-  "name": "rooset-schema",
+  "name": "ratk-declaration-utils",
   "version": "0.1.0",
   "description": "Shema for Rooset Domain Objects",
   "main": "index.js",

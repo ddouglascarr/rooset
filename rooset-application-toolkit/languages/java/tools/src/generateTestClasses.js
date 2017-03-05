@@ -3,7 +3,7 @@ const {
   updateDir,
   getConfigFromEnv,
   getTests,
-} = require('../../../../ratk-declarations-utils');
+} = require('ratk-declaration-utils');
 const {
   generateFilenameFromMsgType,
   getMsgTypeFromSchema,

@@ -3,7 +3,7 @@ const {
   updateDir,
   getConfigFromEnv,
   getDeclarations,
-} = require("../../../../ratk-declarations-utils");
+} = require("ratk-declaration-utils");
 const generateQueryActions = require("./generators/generateQueryActions");
 const generateExecuteHttpRequest = require(
   "./generators/generateExecuteHttpRequests"

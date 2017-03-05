@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ddouglascarr/rooset#readme",
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "ratk-declaration-utils": "^0.1.0"
   }
 }

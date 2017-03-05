@@ -5,7 +5,7 @@ const {
   getTests,
   findSchema,
   assertMessageCompliesWithSchema,
-} = require('../../../../ratk-declarations-utils');
+} = require('ratk-declaration-utils');
 const generateQueryTest = require('./generators/generateQueryTest');
 
 
