@@ -64,7 +64,7 @@ ${testBlocks.join("\n")}
 
       // perform query
       .then(() => {
-        const url = "http://localhost:2113/projection/${queryType}${applyUriTemplate(queryDecl.projectionUri, { id: scenario.then.outcome.payload.id })}";
+        const url = "http://localhost:2113/projection/${queryType}${applyUriTemplate(queryDecl.projectionUri, scenario.when.action.payload )}";
         return fetch(url);
       })
 
@@ -84,5 +84,3 @@ ${testBlocks.join("\n")}
   }
 
 };
-
-
