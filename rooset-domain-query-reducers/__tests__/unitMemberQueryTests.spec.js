@@ -29,7 +29,7 @@ describe("Unit Member Query Tests", () => {
       // persist events
       .then(() => {
           return Promise.resolve()
-         .then(() => { return persistEvent({"type":"UNIT_CREATED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","requesterId":"464b1ebb-32c1-460c-8e9e-333333333333","name":"Test Unit","description":"The Test Unit"}}); })
+         .then(() => { return persistEvent({"type":"UNIT_CREATED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","requesterId":"464b1ebb-32c1-460c-8e9e-333333333333","name":"Test Unit","description":"The Test Unit","urlParameterName":"test-unit"}}); })
        .then(() => { return persistEvent({"type":"PRIVILEGE_GRANTED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","requesterId":"464b1ebb-32c1-460c-8e9e-333333333333","memberId":"464b1ebb-32c1-460c-8e9e-111111111111","pollingRight":true,"votingRight":true,"initiativeRight":true,"managementRight":false,"weight":2}}); })
        .then(() => { return persistEvent({"type":"PRIVILEGE_GRANTED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","requesterId":"464b1ebb-32c1-460c-8e9e-333333333333","memberId":"464b1ebb-32c1-460c-8e9e-222222222222","pollingRight":true,"votingRight":true,"initiativeRight":false,"managementRight":false,"weight":1}}); })
           .then((resp) => Promise.resolve({foo: 'bar'}))

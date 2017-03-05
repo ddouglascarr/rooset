@@ -3,6 +3,7 @@ Rooset
 
 Rooset is a democratic structured decision system.
 
+![Circle CI](https://circleci.com/gh/ddouglascarr/rooset.png?style=shield&circle-token=df883778b8696aba14f9b77e350c90a587702517)
 
 Dependencies
 =============
@@ -23,7 +24,7 @@ Install
 ```
   $ git clone https://github.com/ddouglascarr/rooset
   $ cd rooset
-  $ git submodules --update --recursive
+  $ git submodule update -- init
   $ ./configure
 ```
 

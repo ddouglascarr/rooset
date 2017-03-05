@@ -5,9 +5,11 @@ set -o errexit -o nounset -o pipefail
 SCRIPTDIR=`dirname "$(readlink -f "$0")"`
 cd ${SCRIPTDIR}
 
+source ${SCRIPTDIR}/etc/set-env
+
 # setup all javascript packages
 npm install
-npm run lerna --yes clean
+echo "y" | npm run lerna clean
 npm run lerna --yes bootstrap
 
 # configure and compile domain-command-posix
