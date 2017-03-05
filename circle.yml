@@ -1,8 +1,6 @@
 machine:
   services:
     - docker
-  environment:
-    ROOSET_RDB_SUPERUSER: ubuntu
 
 #checkout:
 #  post:
@@ -11,7 +9,7 @@ machine:
 database:
   override:
     - createuser rooset
-    - createdb --owner=rooset rooset_http_integration_testing
+    - createdb --owner=rooset rooset_http_api_integration_testing
     - psql -c "ALTER USER rooset WITH PASSWORD 'rooset';"
 compile:
   override:
@@ -19,4 +17,4 @@ compile:
 
 test:
   override:
-    - docker run -t -e ROOSET_RDB_SUPERUSER='ubuntu' --net=host circle-rooset -c "./configure && ./run-all-tests"
+    - docker run -t --net=host circle-rooset -c "./run-all-tests"
