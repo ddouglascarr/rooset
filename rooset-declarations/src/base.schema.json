@@ -19,6 +19,10 @@
     "bool": {
       "type": "boolean"
     },
+    "contentType": {
+      "type": "string",
+      "enum": [ "STATEMENT", "GIT_PATCH" ]
+    },
     "date": {
       "type": "integer",
       "minimum": 0,
@@ -59,6 +63,9 @@
     "initiativeArray": {
       "type": "array",
       "items": { "$ref": "#/definitions/initiative" }
+    },
+    "jsonObject": {
+      "type": "object"
     },
     "member": {
       "type": "object",
