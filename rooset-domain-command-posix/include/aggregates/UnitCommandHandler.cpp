@@ -155,3 +155,36 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Se
   PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
   return unique_ptr<UnitPolicySetEvent>(new UnitPolicySetEvent(c));
 }
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const CreateConcernCommand& c)
+{
+  return nullptr;
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const DeactivateConcernCommand& c)
+{
+  return nullptr;
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const AddAreaConcernCommand& c)
+{
+  return nullptr;
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const RemoveAreaConcernCommand& c)
+{
+  return nullptr;
+}
+  

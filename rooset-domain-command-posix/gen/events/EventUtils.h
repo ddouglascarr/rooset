@@ -6,10 +6,14 @@
 #include "ratk/MessageUtils.h"
 #include "ratk/JsonUtils.h"
 
+#include "events/AreaConcernAddedEvent.h"
+#include "events/AreaConcernRemovedEvent.h"
 #include "events/AreaCreatedEvent.h"
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
 #include "events/CompetingInitiativeCreatedEvent.h"
+#include "events/ConcernCreatedEvent.h"
+#include "events/ConcernDeactivatedEvent.h"
 #include "events/DelegationBlockedForAreaEvent.h"
 #include "events/DelegationBlockedForIssueEvent.h"
 #include "events/DelegationUnblockedForAreaEvent.h"
@@ -46,6 +50,20 @@ namespace rooset {
       const string msgType = d["type"].GetString();
 
       
+      if (msgType == "AREA_CONCERN_ADDED_EVENT") {
+        JsonUtils::validate(AreaConcernAddedEvent::schema, d);
+        const AreaConcernAddedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, AreaConcernAddedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "AREA_CONCERN_REMOVED_EVENT") {
+        JsonUtils::validate(AreaConcernRemovedEvent::schema, d);
+        const AreaConcernRemovedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, AreaConcernRemovedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
       if (msgType == "AREA_CREATED_EVENT") {
         JsonUtils::validate(AreaCreatedEvent::schema, d);
         const AreaCreatedEvent evt(d);
@@ -71,6 +89,20 @@ namespace rooset {
         JsonUtils::validate(CompetingInitiativeCreatedEvent::schema, d);
         const CompetingInitiativeCreatedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, CompetingInitiativeCreatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "CONCERN_CREATED_EVENT") {
+        JsonUtils::validate(ConcernCreatedEvent::schema, d);
+        const ConcernCreatedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, ConcernCreatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "CONCERN_DEACTIVATED_EVENT") {
+        JsonUtils::validate(ConcernDeactivatedEvent::schema, d);
+        const ConcernDeactivatedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, ConcernDeactivatedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 

@@ -1,7 +1,7 @@
 
 #pragma once
 namespace rooset {
-  enum class ContentType
+  enum class InitiativeContentType
   {
     STATEMENT,
 GIT_PATCH

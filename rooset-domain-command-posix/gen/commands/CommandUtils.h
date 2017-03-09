@@ -7,6 +7,7 @@
 #include "ratk/MessageUtils.h"
 #include "ratk/JsonUtils.h"
 
+#include "commands/AddAreaConcernCommand.h"
 #include "commands/AssessIssueAdmissionQuorumCommand.h"
 #include "commands/BlockDelegationForAreaCommand.h"
 #include "commands/BlockDelegationForIssueCommand.h"
@@ -16,10 +17,13 @@
 #include "commands/CompleteIssueVotingPhaseCommand.h"
 #include "commands/CreateAreaCommand.h"
 #include "commands/CreateCompetingInitiativeCommand.h"
+#include "commands/CreateConcernCommand.h"
 #include "commands/CreateNewInitiativeCommand.h"
 #include "commands/CreateUnitCommand.h"
+#include "commands/DeactivateConcernCommand.h"
 #include "commands/GiveInitiativeSupportCommand.h"
 #include "commands/GrantPrivilegeCommand.h"
+#include "commands/RemoveAreaConcernCommand.h"
 #include "commands/RevokeInitiativeSupportCommand.h"
 #include "commands/SetAreaDelegationCommand.h"
 #include "commands/SetIssueBallotCommand.h"
@@ -45,6 +49,12 @@ namespace rooset {
       const string msgType = d["type"].GetString();
 
       
+      if (msgType == "ADD_AREA_CONCERN_COMMAND") {
+        JsonUtils::validate(AddAreaConcernCommand::schema, d);
+        const AddAreaConcernCommand cmd(d);
+        return commandHandler.evaluate(cmd);
+      }
+
       if (msgType == "ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND") {
         JsonUtils::validate(AssessIssueAdmissionQuorumCommand::schema, d);
         const AssessIssueAdmissionQuorumCommand cmd(d);
@@ -99,6 +109,12 @@ namespace rooset {
         return commandHandler.evaluate(cmd);
       }
 
+      if (msgType == "CREATE_CONCERN_COMMAND") {
+        JsonUtils::validate(CreateConcernCommand::schema, d);
+        const CreateConcernCommand cmd(d);
+        return commandHandler.evaluate(cmd);
+      }
+
       if (msgType == "CREATE_NEW_INITIATIVE_COMMAND") {
         JsonUtils::validate(CreateNewInitiativeCommand::schema, d);
         const CreateNewInitiativeCommand cmd(d);
@@ -111,6 +127,12 @@ namespace rooset {
         return commandHandler.evaluate(cmd);
       }
 
+      if (msgType == "DEACTIVATE_CONCERN_COMMAND") {
+        JsonUtils::validate(DeactivateConcernCommand::schema, d);
+        const DeactivateConcernCommand cmd(d);
+        return commandHandler.evaluate(cmd);
+      }
+
       if (msgType == "GIVE_INITIATIVE_SUPPORT_COMMAND") {
         JsonUtils::validate(GiveInitiativeSupportCommand::schema, d);
         const GiveInitiativeSupportCommand cmd(d);
@@ -120,6 +142,12 @@ namespace rooset {
       if (msgType == "GRANT_PRIVILEGE_COMMAND") {
         JsonUtils::validate(GrantPrivilegeCommand::schema, d);
         const GrantPrivilegeCommand cmd(d);
+        return commandHandler.evaluate(cmd);
+      }
+
+      if (msgType == "REMOVE_AREA_CONCERN_COMMAND") {
+        JsonUtils::validate(RemoveAreaConcernCommand::schema, d);
+        const RemoveAreaConcernCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 

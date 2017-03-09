@@ -19,10 +19,6 @@
     "bool": {
       "type": "boolean"
     },
-    "contentType": {
-      "type": "string",
-      "enum": [ "STATEMENT", "GIT_PATCH" ]
-    },
     "date": {
       "type": "integer",
       "minimum": 0,
@@ -31,6 +27,10 @@
     "duration": {
       "type": "integer",
       "description": "Length of duration in seconds"
+    },
+    "initiativeContentType": {
+      "type": "string",
+      "enum": [ "STATEMENT", "GIT_PATCH" ]
     },
     "keyNamePair": {
       "type": "object",
