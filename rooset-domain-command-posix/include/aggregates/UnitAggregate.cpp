@@ -77,3 +77,25 @@ void rooset::UnitAggregate::handleEvent(const UnitPolicySetEvent & e)
     e.issueQuorumDen,
   };
 }
+
+
+void rooset::UnitAggregate::handleEvent(const ConcernCreatedEvent& e)
+{
+  
+}
+
+
+void rooset::UnitAggregate::handleEvent(const ConcernDeactivatedEvent& e)
+{
+  
+}
+
+
+
+void rooset::UnitAggregate::handleEvent(const AreaConcernAddedEvent& e)
+{}
+
+
+
+void rooset::UnitAggregate::handleEvent(const AreaConcernRemovedEvent& e)
+{}

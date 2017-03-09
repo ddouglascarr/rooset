@@ -13,7 +13,11 @@
 #include "events/AreaDelegationUnsetEvent.h"
 #include "events/UnitPolicySetEvent.h"
 #include "events/DelegationBlockedForAreaEvent.h"
-#include "events/DelegationUnblockedForAreaEvent.h"
+#include "events/DelegationUnblockedForAreaEvent.h"  
+#include "events/ConcernCreatedEvent.h"
+#include "events/ConcernDeactivatedEvent.h"
+#include "events/AreaConcernAddedEvent.h"
+#include "events/AreaConcernRemovedEvent.h"
 
 using namespace std;
 
@@ -59,6 +63,10 @@ namespace rooset {
     void handleEvent(const AreaDelegationUnsetEvent& e);
     void handleEvent(const DelegationBlockedForAreaEvent& e);
     void handleEvent(const DelegationUnblockedForAreaEvent& e);
+    void handleEvent(const ConcernCreatedEvent& e);
+    void handleEvent(const ConcernDeactivatedEvent& e);
+    void handleEvent(const AreaConcernAddedEvent& e);
+    void handleEvent(const AreaConcernRemovedEvent& e);
 
     void handleEvent(const UnitPolicySetEvent& e);
 
