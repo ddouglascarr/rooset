@@ -2,6 +2,8 @@ module.exports = {
   bool: 'java.lang.Boolean',
   email: 'java.lang.String',
   defeatStrength: 'org.rooset.httpapi.enums.DefeatStrength',
+  initiativeContentType: 'org.rooset.httpapi.enums.InitiativeContentType',
+  jsonObject: 'String',
   schulzeBallot: 'org.rooset.httpapi.models.SchulzeBallot',
   string: 'String',
   uuid: 'java.util.UUID',
