@@ -30,13 +30,16 @@ namespace rooset {
     static const SchemaDocument schema;
 
     const uuid id;
+        const uuid requesterId;
         const uuid concernId;
 
     
         ConcernDeactivatedEvent(
             uuid id,
+            uuid requesterId,
             uuid concernId) :
             id(id),
+            requesterId(requesterId),
             concernId(concernId)
         {}
   
@@ -45,6 +48,7 @@ namespace rooset {
         ConcernDeactivatedEvent(const Document& d) :
         
             id(JsonUtils::parseUuid(d["payload"]["id"])),
+            requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
             concernId(JsonUtils::parseUuid(d["payload"]["concernId"]))
         {}
   
@@ -52,6 +56,7 @@ namespace rooset {
     
     ConcernDeactivatedEvent(const DeactivateConcernCommand& c):
         id(c.id),
+requesterId(c.requesterId),
 concernId(c.concernId)
     {}
   
@@ -73,6 +78,11 @@ concernId(c.concernId)
           payload.AddMember(
               "id",
               JsonUtils::serializeUuid(id, d->GetAllocator()),
+              d->GetAllocator());
+
+          payload.AddMember(
+              "requesterId",
+              JsonUtils::serializeUuid(requesterId, d->GetAllocator()),
               d->GetAllocator());
 
           payload.AddMember(

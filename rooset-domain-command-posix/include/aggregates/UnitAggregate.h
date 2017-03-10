@@ -4,6 +4,7 @@
 #include <map>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include "ratk/uuid.h"
+#include "enums/IssueContentType.h"
 #include "events/UnitCreatedEvent.h"
 #include "events/AreaCreatedEvent.h"
 #include "events/PrivilegeGrantedEvent.h"
@@ -45,6 +46,11 @@ namespace rooset {
     unsigned int issueQuorumDen;
   };
 
+  struct Concern {
+    bool active;
+    
+  };
+  
   class UnitAggregate
   {
   private:

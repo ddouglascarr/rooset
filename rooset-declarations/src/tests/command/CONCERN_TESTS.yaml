@@ -1,0 +1,191 @@
+label: Concern Tests
+key: concern-command
+type: DOMAIN_COMMAND_TEST
+
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-000000000000
+  - &managerId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &areaId 464b1ebb-32c1-460c-8e9e-222222222222
+  - &concernId 464b1ebb-32c1-460c-8e9e-333333333333
+  - &policyId 464b1ebb-32c1-460c-8e9e-888888888888
+  - &voter0 464b1ebb-32c1-460c-8e9f-000000000000
+
+  - &unitCreatedEvt
+    type: UNIT_CREATED_EVENT
+    payload:
+      id: *unitId
+      requesterId: *managerId
+      name: Test Unit
+      description: The Test Unit
+      urlParameterName: test-unit
+
+  - &privGrantedEvtVoter0
+    type: PRIVILEGE_GRANTED_EVENT
+    payload:
+      id: *unitId
+      requesterId: *managerId
+      memberId: *voter0
+      votingRight: true
+      managementRight: false
+      pollingRight: false
+      initiativeRight: true
+      weight: 1
+
+  - &createConcernCmd
+    type: CREATE_CONCERN_COMMAND
+    payload:
+      id: *unitId
+      concernId: *concernId
+      requesterId: *voter0
+      name: Test concernId
+      initiativeContentType: "STATEMENT"
+      config: {}
+
+
+  - &notFoundErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: ITEM_NOT_FOUND_EXCEPTION
+      message: ''
+  - &unprivilegedErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: UNPRIVILEGED_EXCEPTION
+      message: ''
+  - &conflictErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: CONFLICT_EXCEPTION
+      message: ''
+
+scenarios:
+
+
+  -
+    label: A non-manager user cannot create a concern
+    given:
+      key: unit-created
+      precondition:
+        - *unitCreatedEvt
+        - *privGrantedEvtVoter0
+    when:
+      description: A non-manager issues CREATE_CONCERN_COMMAND
+      action:
+        type: CREATE_CONCERN_COMMAND
+        payload:
+          id: *unitId
+          concernId: *concernId
+          requesterId: *voter0
+          name: Test concernId
+          initiativeContentType: "STATEMENT"
+          config: {}
+
+    then:
+      description: It is not allowed
+      outcome: *unprivilegedErr
+
+  -
+    label: A manager can create a concernId
+    given: unit-created
+    when:
+      description: A manager issues CREATE_CONCERN_COMMAND
+      action:
+        type: CREATE_CONCERN_COMMAND
+        payload:
+          id: *unitId
+          concernId: *concernId
+          requesterId: *managerId
+          name: Test concernId
+          initiativeContentType: "STATEMENT"
+          config: {}
+    then:
+      description: CONCERN_CREATED_EVENT emitted
+      outcome: &concernCreatedEvt
+        type: CONCERN_CREATED_EVENT
+        payload:
+          id: *unitId
+          concernId: *concernId
+          requesterId: *voter0
+          name: Test concernId
+          initiativeContentType: "STATEMENT"
+          config: {}
+
+  -
+    label: A non-manager cannot deactivate a concern
+    given: unit-created
+    when:
+      description: A non-manager issues a DEACTIVATE_CONCERN_COMMAND
+      action:
+        type: DEACTIVATE_CONCERN_COMMAND
+        paylaod:
+          id: *unitId
+          requesterId: *voter0
+          concernId: *concernId
+
+    then:
+      description: It is not allowed
+      outcome: *unprivilegedErr
+
+
+  -
+    label: A concern must exist for it to be deactivated
+    given: unit-created
+    when:
+      description: A manager issues a DEACTIVATE_CONCERN_COMMAND
+      action:
+        type: DEACTIVATE_CONCERN_COMMAND
+        paylaod:
+          id: *unitId
+          requesterId: *managerId
+          concernId: *concernId
+    then:
+      description: Not found error
+      outcome: *notFoundErr
+
+
+  -
+    label: A manager may deactivate a concernId
+    given:
+      description: A concern has been created
+      precondition:
+        - *unitCreatedEvt
+        - *concernCreatedEvt
+    when:
+      description: A manager issues a DEACTIVATE_CONCERN_COMMAND
+      action:
+        type: DEACTIVATE_CONCERN_COMMAND
+        paylaod:
+          id: *unitId
+          requesterId: *managerId
+          concernId: *concernId
+    then:
+      description: Event emitted
+      outcome: &concernDeactivatedEvt
+        type: CONCERN_DEACTIVATED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          concernId: *concernId
+
+  -
+    label: A concern must be active to be deactivated
+    given:
+      description: A concern is already deactivated
+      precondition:
+        - *unitCreatedEvt
+        - *concernCreatedEvt
+        - *concernDeactivatedEvt
+    when:
+      description: A manager issues another DEACTIVATE_CONCERN_COMMAND
+      action:
+        type: DEACTIVATE_CONCERN_COMMAND
+        paylaod:
+          id: *unitId
+          requesterId: *managerId
+          concernId: *concernId
+    then:
+      description: A conflict error is given
+      outcome: *conflictErr
