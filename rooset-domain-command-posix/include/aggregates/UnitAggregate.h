@@ -48,7 +48,7 @@ namespace rooset {
 
   struct Concern {
     bool active;
-    InitiativeContentType issueContentType;
+    InitiativeContentType initiativeContentType;
     string config;
   };
   

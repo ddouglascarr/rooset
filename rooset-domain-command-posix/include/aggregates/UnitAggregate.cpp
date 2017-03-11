@@ -81,13 +81,20 @@ void rooset::UnitAggregate::handleEvent(const UnitPolicySetEvent & e)
 
 void rooset::UnitAggregate::handleEvent(const ConcernCreatedEvent& e)
 {
-  
+  Concern concern { 
+    true, 
+    e.initiativeContentType,
+    e.config 
+  };
+  concerns[e.concernId] = concern;
 }
 
 
 void rooset::UnitAggregate::handleEvent(const ConcernDeactivatedEvent& e)
 {
-  
+  auto concern = concerns.at(e.concernId);
+  concern.active = false;
+  concerns[e.concernId] = concern;
 }
 
 

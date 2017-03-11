@@ -161,14 +161,11 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Se
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
     const CreateConcernCommand& c)
 {
-  /*
   const auto unit = repository->load(c.id);
   PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
   CommandHandlerUtils::assertMapExcludes<decltype(unit->getConcerns()), uuid>(
       unit->getConcerns(), c.concernId, "This concern already exists");
   return make_unique<ConcernCreatedEvent>(c);
-  */
-  return nullptr;
 }
 
 

@@ -110,7 +110,7 @@ scenarios:
         payload:
           id: *unitId
           concernId: *concernId
-          requesterId: *voter0
+          requesterId: *managerId
           name: Test concern
           description: The Test Concern
           initiativeContentType: "STATEMENT"
