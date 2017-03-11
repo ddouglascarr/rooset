@@ -13,7 +13,7 @@ namespace rooset {
 
 
 
-string rooset::JsonUtils::serialize(const rapidjson::Document& d)
+string rooset::JsonUtils::serialize(const rapidjson::Value& d)
 {
   rapidjson::StringBuffer buffer;
   rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);

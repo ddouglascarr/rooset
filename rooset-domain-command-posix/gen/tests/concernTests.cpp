@@ -73,7 +73,7 @@ TEST(concern_tests, a_non_manager_user_cannot_create_a_concern)
     "name": "Test concern",
     "description": "The Test Concern",
     "initiativeContentType": "STATEMENT",
-    "config": "{}"
+    "config": {}
   }
 })json");
   try {
@@ -148,9 +148,10 @@ TEST(concern_tests, a_manager_can_create_a_concern_id)
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "concernId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "requesterId": "464b1ebb-32c1-460c-8e9f-000000000000",
-    "name": "Test concernId",
+    "name": "Test concern",
+    "description": "The Test Concern",
     "initiativeContentType": "STATEMENT",
-    "config": "{}"
+    "config": {}
   }
 })json");
   try {
@@ -166,9 +167,10 @@ TEST(concern_tests, a_manager_can_create_a_concern_id)
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "concernId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "name": "Test concernId",
+    "name": "Test concern",
+    "description": "The Test Concern",
     "initiativeContentType": "STATEMENT",
-    "config": "{}"
+    "config": {}
   }
 })json");
   try {
@@ -245,7 +247,7 @@ TEST(concern_tests, a_non_manager_cannot_deactivate_a_concern)
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "DEACTIVATE_CONCERN_COMMAND",
-  "paylaod": {
+  "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9f-000000000000",
     "concernId": "464b1ebb-32c1-460c-8e9e-333333333333"
@@ -334,7 +336,7 @@ TEST(concern_tests, a_concern_must_exist_for_it_to_be_deactivated)
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "DEACTIVATE_CONCERN_COMMAND",
-  "paylaod": {
+  "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "concernId": "464b1ebb-32c1-460c-8e9e-333333333333"
@@ -394,9 +396,10 @@ TEST(concern_tests, a_manager_may_deactivate_a_concern_id)
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "concernId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "requesterId": "464b1ebb-32c1-460c-8e9f-000000000000",
-    "name": "Test concernId",
+    "name": "Test concern",
+    "description": "The Test Concern",
     "initiativeContentType": "STATEMENT",
-    "config": "{}"
+    "config": {}
   }
 })json");
   shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
@@ -421,7 +424,7 @@ TEST(concern_tests, a_manager_may_deactivate_a_concern_id)
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "DEACTIVATE_CONCERN_COMMAND",
-  "paylaod": {
+  "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "concernId": "464b1ebb-32c1-460c-8e9e-333333333333"
@@ -472,9 +475,10 @@ TEST(concern_tests, a_concern_must_be_active_to_be_deactivated)
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "concernId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "requesterId": "464b1ebb-32c1-460c-8e9f-000000000000",
-    "name": "Test concernId",
+    "name": "Test concern",
+    "description": "The Test Concern",
     "initiativeContentType": "STATEMENT",
-    "config": "{}"
+    "config": {}
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -507,7 +511,7 @@ TEST(concern_tests, a_concern_must_be_active_to_be_deactivated)
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "DEACTIVATE_CONCERN_COMMAND",
-  "paylaod": {
+  "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "concernId": "464b1ebb-32c1-460c-8e9e-333333333333"

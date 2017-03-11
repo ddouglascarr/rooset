@@ -22,7 +22,7 @@ module.exports = {
                 d["payload"]["${v}"].GetStringLength())))`,
 
   jsonObject: v => `
-            ${v}(JsonUtils::parseString(d["payload"]["${v}"]))`,
+            ${v}(JsonUtils::serialize(d["payload"]["${v}"]))`,
 
   schulzeBallot: v => `
             ${v}(rooset::SchulzeBallot::parse(d["payload"]["${v}"]))`,

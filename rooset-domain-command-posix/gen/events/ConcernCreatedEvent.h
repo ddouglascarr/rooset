@@ -66,7 +66,7 @@ namespace rooset {
             description(JsonUtils::parseString(d["payload"]["description"])),
             initiativeContentType(EnumUtils::parseInitiativeContentType(
                 JsonUtils::parseString(d["payload"]["initiativeContentType"]))),
-            config(JsonUtils::parseString(d["payload"]["config"]))
+            config(JsonUtils::serialize(d["payload"]["config"]))
         {}
   
 
@@ -130,7 +130,7 @@ config(c.config)
 
           payload.AddMember(
               "config",
-              JsonUtils::serializeString(config, d->GetAllocator()),
+              JsonUtils::parse(config),
               d->GetAllocator());
 
       d->AddMember("payload", payload, d->GetAllocator());

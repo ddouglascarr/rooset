@@ -46,7 +46,7 @@ module.exports = {
   jsonObject: v => `
           payload.AddMember(
               "${v}",
-              JsonUtils::serializeString(${v}, d->GetAllocator()),
+              JsonUtils::parse(${v}),
               d->GetAllocator());`,
 
   schulzeBallot: v => {
