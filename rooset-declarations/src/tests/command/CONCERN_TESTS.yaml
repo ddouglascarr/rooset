@@ -350,6 +350,7 @@ scenarios:
         - *concernCreatedEvt
         - *areaCreatedEvt
         - *areaConcernAddedEvt
+        - *areaConcernRemovedEvt
     when:
       description: A manager tries to remove an already removed concern from an area
       action:
@@ -361,7 +362,7 @@ scenarios:
           requesterId: *managerId
     then:
       description: It is not allowed
-      outcome: *conflictErr
+      outcome: *notFoundErr
 
 
   -

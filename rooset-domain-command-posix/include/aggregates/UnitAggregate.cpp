@@ -100,9 +100,20 @@ void rooset::UnitAggregate::handleEvent(const ConcernDeactivatedEvent& e)
 
 
 void rooset::UnitAggregate::handleEvent(const AreaConcernAddedEvent& e)
-{}
+{
+  auto area = areas.at(e.areaId);
+  area.concerns.push_back(e.concernId);
+  areas[e.areaId] = area;
+}
 
 
 
 void rooset::UnitAggregate::handleEvent(const AreaConcernRemovedEvent& e)
-{}
+{
+  auto area = areas.at(e.areaId);
+  auto it = find(area.concerns.begin(), area.concerns.end(), e.concernId);
+  if (it != area.concerns.end()) {
+    area.concerns.erase(it);
+  }
+  areas[e.areaId] = area;
+}

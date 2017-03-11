@@ -1298,6 +1298,15 @@ TEST(concern_tests, duplicate_removes_should_fail)
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111"
   }
 })json");
+  givenEvents.push_back(u8R"json({
+  "type": "AREA_CONCERN_REMOVED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "concernId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111"
+  }
+})json");
   shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
       NiceMock<EventRepositoryMockImpl>>();
   eventRepository->setMockEvents(givenEvents);
@@ -1307,7 +1316,7 @@ TEST(concern_tests, duplicate_removes_should_fail)
   "type": "COMMAND_EVALUATION_EXCEPTION",
   "error": true,
   "payload": {
-    "code": "CONFLICT_EXCEPTION",
+    "code": "ITEM_NOT_FOUND_EXCEPTION",
     "message": ""
   }
 })json");
@@ -1413,6 +1422,15 @@ TEST(concern_tests, a_concern_may_be_re_added_to_an_area_if_it_has_been_removed)
 })json");
   givenEvents.push_back(u8R"json({
   "type": "AREA_CONCERN_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-000000000000",
+    "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "concernId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "AREA_CONCERN_REMOVED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",

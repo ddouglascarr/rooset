@@ -192,7 +192,25 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
     const AddAreaConcernCommand& c)
 {
-  return nullptr;
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  
+  const auto concerns = unit->getConcerns();
+  CommandHandlerUtils::assertMapContains<decltype(concerns), uuid>(
+      concerns, c.concernId, "The concern does not exist");
+  
+  const auto concern = concerns.at(c.concernId);
+  if (!concern.active) throw CommandEvaluationException(
+      ExceptionCode::CONFLICT_EXCEPTION,
+      "A concern must be active to be added to an area. This concern is not.");
+  
+  const auto area = unit->getAreas().at(c.areaId);
+  auto it = find(area.concerns.begin(), area.concerns.end(), c.concernId);
+  if (it != area.concerns.end()) throw CommandEvaluationException(
+      ExceptionCode::CONFLICT_EXCEPTION, 
+      "The concern has already been added to this area");
+  
+  return make_unique<AreaConcernAddedEvent>(c);
 }
 
 
@@ -200,6 +218,13 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
     const RemoveAreaConcernCommand& c)
 {
-  return nullptr;
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  
+  const auto area = unit->getAreas().at(c.areaId);
+  CommandHandlerUtils::assertVectorContains<uuid>(
+      area.concerns, c.concernId, "This concern is not part of the area");
+  
+  return make_unique<AreaConcernRemovedEvent>(c);
 }
   
