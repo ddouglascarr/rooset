@@ -1,6 +1,6 @@
 ---
 label: Unit Aggregate - Policy
-key: unit-aggregate-policy-command
+key: policy-command
 type: DOMAIN_COMMAND_TEST
 mocks:
   - &unitCreatedEvent

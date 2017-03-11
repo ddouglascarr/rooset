@@ -24,7 +24,7 @@ mocks:
     directMajorityNonNegative: 1
     noReverseBeatPath: false
     noMultistageMajority: false
-    
+
   - &unitPolicySetEvent
     type: UNIT_POLICY_SET_EVENT
     payload:
@@ -56,7 +56,7 @@ scenarios:
 
   -
     label: Requester must have management rights
-    given: unit-aggregate-policy-command/unit-created
+    given: policy-command/unit-created
     when:
       label: A non-member makes a policy set request
       action: &localAction
@@ -79,7 +79,7 @@ scenarios:
 
   -
     label: A unit manager can set the unit policy
-    given: unit-aggregate-policy-command/unit-created
+    given: policy-command/unit-created
     when:
       label: A manager makes a policy set request
       action:
@@ -93,4 +93,3 @@ scenarios:
     then:
       label: The policy is set
       outcome: *unitPolicySetEvent
-        
