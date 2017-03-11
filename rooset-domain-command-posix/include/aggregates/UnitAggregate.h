@@ -12,7 +12,7 @@
 #include "events/UnitDelegationUnsetEvent.h"
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
-#include "events/UnitPolicySetEvent.h"
+#include "events/PolicyAddedEvent.h"
 #include "events/DelegationBlockedForAreaEvent.h"
 #include "events/DelegationUnblockedForAreaEvent.h"  
 #include "events/ConcernCreatedEvent.h"
@@ -45,6 +45,8 @@ namespace rooset {
     bool active;
     unsigned int issueQuorumNum;
     unsigned int issueQuorumDen;
+    unsigned int initiativeQuorumNum;
+    unsigned int initiativeQuorumDen;
   };
 
   struct Concern {
@@ -66,6 +68,7 @@ namespace rooset {
     UnitAggregate(const UnitCreatedEvent& e);
     void handleEvent(const AreaCreatedEvent& e);
     void handleEvent(const PrivilegeGrantedEvent& e);
+    void handleEvent(const PolicyAddedEvent& e);
     void handleEvent(const UnitDelegationSetEvent& e);
     void handleEvent(const UnitDelegationUnsetEvent& e);
     void handleEvent(const AreaDelegationSetEvent& e);
@@ -77,7 +80,6 @@ namespace rooset {
     void handleEvent(const AreaConcernAddedEvent& e);
     void handleEvent(const AreaConcernRemovedEvent& e);
 
-    void handleEvent(const UnitPolicySetEvent& e);
 
     inline auto getPrivileges() const { return privileges; }
     inline auto getDelegations() const { return delegations; }

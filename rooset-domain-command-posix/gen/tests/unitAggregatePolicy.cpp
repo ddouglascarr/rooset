@@ -37,7 +37,7 @@ TEST(unit_aggregate_policy, add_policy)
   CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
-  "type": "UNIT_POLICY_ADDED_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -57,11 +57,11 @@ TEST(unit_aggregate_policy, add_policy)
   }
 })json");
   try {
-  JsonUtils::validate(UnitPolicyAddedEvent::schema, expected_doc);
+  JsonUtils::validate(PolicyAddedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  UnitPolicyAddedEvent expected(expected_doc);
+  PolicyAddedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
   "type": "ADD_POLICY_COMMAND",

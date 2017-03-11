@@ -16,7 +16,7 @@
 #include "commands/UnsetAreaDelegationCommand.h"
 #include "commands/BlockDelegationForAreaCommand.h"
 #include "commands/UnblockDelegationForAreaCommand.h"
-#include "commands/SetUnitPolicyCommand.h"
+#include "commands/AddPolicyCommand.h"
 #include "commands/CreateConcernCommand.h"
 #include "commands/DeactivateConcernCommand.h"
 #include "commands/AddAreaConcernCommand.h"
@@ -48,7 +48,7 @@ namespace rooset {
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const UnsetAreaDelegationCommand& c);
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const BlockDelegationForAreaCommand& c);
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const UnblockDelegationForAreaCommand& c);
-    virtual unique_ptr<ProjectEvent<Document>> evaluate(const SetUnitPolicyCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const AddPolicyCommand& c);
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const CreateConcernCommand& c);
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const DeactivateConcernCommand& c);
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const AddAreaConcernCommand& c);

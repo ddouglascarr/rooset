@@ -31,7 +31,7 @@ mocks:
     type: ADD_POLICY_COMMAND
     payload: *addPolicyCommandPayload
   - &policyAddedEvent
-    type: UNIT_POLICY_ADDED_EVENT
+    type: POLICY_ADDED_EVENT
     payload:
       id: 464b1ebb-32c1-460c-8e9e-111111111111
       requesterId: 464b1ebb-32c1-460c-8e9e-333333333333

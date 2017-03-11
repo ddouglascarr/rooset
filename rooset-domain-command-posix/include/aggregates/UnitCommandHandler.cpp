@@ -149,11 +149,11 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Un
 
 
 
-unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const SetUnitPolicyCommand& c)
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const AddPolicyCommand& c)
 {
   auto unit = repository->load(c.id);
   PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
-  return unique_ptr<UnitPolicySetEvent>(new UnitPolicySetEvent(c));
+  return make_unique<PolicyAddedEvent>(c);
 }
 
 
