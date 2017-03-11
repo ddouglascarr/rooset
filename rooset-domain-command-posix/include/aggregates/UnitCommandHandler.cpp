@@ -175,15 +175,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
 {
   const auto unit = repository->load(c.id);
   PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
-  const auto concerns = unit->getConcerns();
-  CommandHandlerUtils::assertMapContains<decltype(concerns), uuid>(
-      concerns, c.concernId, "The concern does not exist");
-  const auto concern = concerns.at(c.concernId);
-  if (!concern.active) {
-    throw CommandEvaluationException(
-        ExceptionCode::CONFLICT_EXCEPTION,
-        "The concern is already deactivated");
-  }
+  const Concern concern = CommandHandlerUtils::getActive<Concern>(
+      unit->getConcerns(), c.concernId);
   return make_unique<ConcernDeactivatedEvent>(c);
 }
 
@@ -195,14 +188,8 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
   const auto unit = repository->load(c.id);
   PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
   
-  const auto concerns = unit->getConcerns();
-  CommandHandlerUtils::assertMapContains<decltype(concerns), uuid>(
-      concerns, c.concernId, "The concern does not exist");
-  
-  const auto concern = concerns.at(c.concernId);
-  if (!concern.active) throw CommandEvaluationException(
-      ExceptionCode::CONFLICT_EXCEPTION,
-      "A concern must be active to be added to an area. This concern is not.");
+  const auto concern = CommandHandlerUtils::getActive<Concern>(
+      unit->getConcerns(), c.concernId);
   
   const auto area = unit->getAreas().at(c.areaId);
   auto it = find(area.concerns.begin(), area.concerns.end(), c.concernId);

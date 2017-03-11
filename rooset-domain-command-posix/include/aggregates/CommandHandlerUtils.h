@@ -48,6 +48,23 @@ namespace rooset {
             message);
       }
     }
+    
+    template<typename Item>
+    static Item getActive(const map<uuid, Item> m, const uuid id) 
+    {
+      auto it = m.find(id);
+      if (it == m.end()) throw CommandEvaluationException(
+          ExceptionCode::ITEM_NOT_FOUND_EXCEPTION,
+          "Cannot find item");
+      
+      const Item i = it->second;
+      
+      if (!i.active) throw CommandEvaluationException(
+          ExceptionCode::CONFLICT_EXCEPTION,
+          "Item is not active");
+      
+      return i;      
+    }
 
   };
 }
