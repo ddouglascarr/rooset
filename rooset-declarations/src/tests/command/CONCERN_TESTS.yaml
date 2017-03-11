@@ -9,6 +9,7 @@ mocks:
   - &concernId 464b1ebb-32c1-460c-8e9e-333333333333
   - &policyId 464b1ebb-32c1-460c-8e9e-888888888888
   - &voter0 464b1ebb-32c1-460c-8e9f-000000000000
+  - &wrongId 464b1ebb-32c1-460c-8e9f-777777777777
 
   - &unitCreatedEvt
     type: UNIT_CREATED_EVENT
@@ -41,6 +42,15 @@ mocks:
       initiativeContentType: "STATEMENT"
       config: {}
 
+  - &areaCreatedEvt
+    type: AREA_CREATED_EVENT
+    payload:
+      id: *unitId
+      requesterId: *managerId
+      areaId: *areaId
+      name: test area
+      description: the test area
+      externalReference: 'area.com'
 
   - &notFoundErr
     type: COMMAND_EVALUATION_EXCEPTION
@@ -192,3 +202,180 @@ scenarios:
     then:
       description: A conflict error is given
       outcome: *conflictErr
+
+
+  -
+    label: A non-manager cannot add a concern to an area
+    given:
+      key: area-created
+      description: An area exists in a unit with a concern
+      precondition:
+        - *unitCreatedEvt
+        - *privGrantedEvtVoter0
+        - *concernCreatedEvt
+        - *areaCreatedEvt
+    when:
+      description: A non-manager tries to add a concern to an areaCreatedEvt
+      action:
+        type: ADD_AREA_CONCERN_COMMAND
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *voter0
+    then:
+      description: It is not allowed
+      outcome: *unprivilegedErr
+
+
+  -
+    label: A concern must exist to be added to an area
+    given: area-created
+    when:
+      description: a manager tries to add a non-existant concern to an areaId
+      action:
+        type: ADD_AREA_CONCERN_COMMAND
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *wrongId
+          requesterId: *managerId
+    then:
+      description: It is not allowed
+      outcome: *notFoundErr
+
+
+  -
+    label: A concern must be active to be added to an area
+    given:
+      description: a deactivated concern is present in the unit
+      precondition:
+        - *unitCreatedEvt
+        - *privGrantedEvtVoter0
+        - *concernCreatedEvt
+        - *areaCreatedEvt
+        - *concernDeactivatedEvt
+    when:
+      description: A manager tries to add a deactivated concern to an area
+      action:
+        type: ADD_AREA_CONCERN_COMMAND
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+    then:
+      description: it is not allowed
+      outcome: *conflictErr
+
+
+  -
+    label: A manager can add an active concern to an area
+    given: area-created
+    when:
+      description: A manager tries to add an active concern to an area
+      action:
+        type: ADD_AREA_CONCERN_COMMAND
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+    then:
+      description: An AREA_CONCERN_ADDED_EVENT is emitted
+      outcome: &areaConcernAddedEvt
+        type: AREA_CONCERN_ADDED_EVENT
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+
+  -
+    label: Duplicate concern add should fail
+    given:
+      key: concern-added-to-area
+      description: A concern has been added to an area
+      precondition:
+        - *unitCreatedEvt
+        - *privGrantedEvtVoter0
+        - *concernCreatedEvt
+        - *areaCreatedEvt
+        - *areaConcernAddedEvt
+    when:
+      description: A manger tries to add an already present concern to an area
+      action:
+        type: ADD_AREA_CONCERN_COMMAND
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+    then:
+      description: It is not allowed
+      outcome: *conflictErr
+
+
+  -
+    label: A manager can remove a concern from an area
+    given: concern-added-to-area
+    when:
+      description: A manager tries to remove a concern that has been added to an area
+      action:
+        type: REMOVE_AREA_CONCERN_COMMAND
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+    then:
+      description: An AREA_CONCERN_REMOVED_EVENT is emitted
+      outcome: &areaConcernRemovedEvt
+        type: AREA_CONCERN_REMOVED_EVENT
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+
+
+  -
+    label: Duplicate removes should fail
+    given:
+      key: concern-removed-from-area
+      description: A concern has been removed from an area
+      precondition:
+        - *unitCreatedEvt
+        - *privGrantedEvtVoter0
+        - *concernCreatedEvt
+        - *areaCreatedEvt
+        - *areaConcernAddedEvt
+    when:
+      description: A manager tries to remove an already removed concern from an area
+      action:
+        type: REMOVE_AREA_CONCERN_COMMAND
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+    then:
+      description: It is not allowed
+      outcome: *conflictErr
+
+
+  -
+    label: A concern may be re-added to an area if it has been removed
+    given: concern-removed-from-area
+    when:
+      description: A manager tries to add a remove concern to an area
+      action:
+        type: ADD_AREA_CONCERN_COMMAND
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+    then:
+      description: A AREA_CONCERN_ADDED_EVENT is emitted
+      outcome: *areaConcernAddedEvt
