@@ -8,6 +8,7 @@
 #include "ratk/JsonUtils.h"
 
 #include "commands/AddAreaConcernCommand.h"
+#include "commands/AddPolicyCommand.h"
 #include "commands/AssessIssueAdmissionQuorumCommand.h"
 #include "commands/BlockDelegationForAreaCommand.h"
 #include "commands/BlockDelegationForIssueCommand.h"
@@ -29,7 +30,6 @@
 #include "commands/SetIssueBallotCommand.h"
 #include "commands/SetIssueDelegationCommand.h"
 #include "commands/SetUnitDelegationCommand.h"
-#include "commands/SetUnitPolicyCommand.h"
 #include "commands/UnblockDelegationForAreaCommand.h"
 #include "commands/UnblockDelegationForIssueCommand.h"
 #include "commands/UnsetAreaDelegationCommand.h"
@@ -52,6 +52,12 @@ namespace rooset {
       if (msgType == "ADD_AREA_CONCERN_COMMAND") {
         JsonUtils::validate(AddAreaConcernCommand::schema, d);
         const AddAreaConcernCommand cmd(d);
+        return commandHandler.evaluate(cmd);
+      }
+
+      if (msgType == "ADD_POLICY_COMMAND") {
+        JsonUtils::validate(AddPolicyCommand::schema, d);
+        const AddPolicyCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
@@ -178,12 +184,6 @@ namespace rooset {
       if (msgType == "SET_UNIT_DELEGATION_COMMAND") {
         JsonUtils::validate(SetUnitDelegationCommand::schema, d);
         const SetUnitDelegationCommand cmd(d);
-        return commandHandler.evaluate(cmd);
-      }
-
-      if (msgType == "SET_UNIT_POLICY_COMMAND") {
-        JsonUtils::validate(SetUnitPolicyCommand::schema, d);
-        const SetUnitPolicyCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 

@@ -11,13 +11,13 @@ mocks:
       name: Test Unit
       description: The Test Unit
       urlParameterName: test-unit
-  - &setUnitPolicyCommandPayload
+  - &addPolicyCommandPayload
       id: 464b1ebb-32c1-460c-8e9e-111111111111
       requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
       policyId: 464b1ebb-32c1-460c-8e9e-222222222222
       name: Test Policy
       description: The Test Policy
-      polling: false
+      votingAlgorithm: SCHULZE
       maxAdmissionTime: 604800000
       minAdmissionTime: 0
       discussionTime: 604800000
@@ -25,26 +25,20 @@ mocks:
       votingTime: 604800000
       issueQuorumNum: 1
       issueQuorumDen: 10
-      defeatStrength: SIMPLE
-      directMajorityNum: 1
-      directMajorityDen: 2
-      directMajorityStrict: true
-      directMajorityPositive: 1
-      directMajorityNonNegative: 1
-      noReverseBeatPath: false
-      noMultistageMajority: false
-  - &setUnitPolicyCommand
-    type: SET_UNIT_POLICY_COMMAND
-    payload: *setUnitPolicyCommandPayload
-  - &unitPolicySetEvent
-    type: UNIT_POLICY_SET_EVENT
+      initiativeQuorumNum: 1
+      initiativeQuorumDen: 10
+  - &addPolicyCommand
+    type: ADD_POLICY_COMMAND
+    payload: *addPolicyCommandPayload
+  - &policyAddedEvent
+    type: UNIT_POLICY_ADDED_EVENT
     payload:
       id: 464b1ebb-32c1-460c-8e9e-111111111111
       requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
       policyId: 464b1ebb-32c1-460c-8e9e-222222222222
       name: Test Policy
       description: The Test Policy
-      polling: false
+      votingAlgorithm: SCHULZE
       maxAdmissionTime: 604800000
       minAdmissionTime: 0
       discussionTime: 604800000
@@ -52,34 +46,28 @@ mocks:
       votingTime: 604800000
       issueQuorumNum: 1
       issueQuorumDen: 10
-      defeatStrength: SIMPLE
-      directMajorityNum: 1
-      directMajorityDen: 2
-      directMajorityStrict: true
-      directMajorityPositive: 1
-      directMajorityNonNegative: 1
-      noReverseBeatPath: false
-      noMultistageMajority: false
+      initiativeQuorumNum: 1
+      initiativeQuorumDen: 10
 
 scenarios:
 
   -
-    label: Set policy
+    label: Add policy
     given:
       label: Unit Created
       key: unit-created
       precondition:
         - *unitCreatedEvent
-    when: *setUnitPolicyCommand
-    then: *unitPolicySetEvent
+    when: *addPolicyCommand
+    then: *policyAddedEvent
 
   -
     label: requester must have managment rights
     given: unit-created
     when:
-      <<: *setUnitPolicyCommand
+      <<: *addPolicyCommand
       payload:
-        <<: *setUnitPolicyCommandPayload
+        <<: *addPolicyCommandPayload
         requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
     then:
       type: COMMAND_EVALUATION_EXCEPTION

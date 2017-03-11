@@ -129,6 +129,10 @@
         }
       }
     },
+    "votingAlgorithm": {
+      "type": "string",
+      "enum": ["SCHULZE"]
+    },
     "string": {
       "type": "string"
     },

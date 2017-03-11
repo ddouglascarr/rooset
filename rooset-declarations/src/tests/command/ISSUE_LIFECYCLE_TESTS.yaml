@@ -28,14 +28,14 @@ mocks:
       externalReference: 'area.com'
 
   - &unitPolicySetEvent
-    type: UNIT_POLICY_SET_EVENT
+    type: POLICY_ADDED_EVENT
     payload:
       id: *unitId
       requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
       policyId: 464b1ebb-32c1-460c-8e9e-888888888888
       name: Test Policy
       description: The Test Policy
-      polling: false
+      votingAlgorithm: SCHULZE
       maxAdmissionTime: 604800000
       minAdmissionTime: 0
       discussionTime: 604800000
@@ -43,14 +43,8 @@ mocks:
       votingTime: 604800000
       issueQuorumNum: 1
       issueQuorumDen: 5
-      defeatStrength: SIMPLE
-      directMajorityNum: 1
-      directMajorityDen: 2
-      directMajorityStrict: true
-      directMajorityPositive: 1
-      directMajorityNonNegative: 1
-      noReverseBeatPath: false
-      noMultistageMajority: false
+      initiativeQuorumNum: 1
+      initiativeQuorumDen: 5
 
   - &privGrantedEvtVoter4
     type: PRIVILEGE_GRANTED_EVENT

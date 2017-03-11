@@ -26,11 +26,11 @@ ${CMAKE_CURRENT_SOURCE_DIR}/IssueDiscussionPhaseCompletedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/IssueVerificationPhaseCompletedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/IssueVotingPhaseCompletedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/NewInitiativeCreatedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/PolicyAddedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/PrivilegeGrantedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnitCreatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnitDelegationSetEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnitDelegationUnsetEvent.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/UnitPolicySetEvent.cpp
 
   CACHE FILEPATH "Generated source files")
 

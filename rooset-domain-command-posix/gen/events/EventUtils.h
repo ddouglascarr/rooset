@@ -31,11 +31,11 @@
 #include "events/IssueVerificationPhaseCompletedEvent.h"
 #include "events/IssueVotingPhaseCompletedEvent.h"
 #include "events/NewInitiativeCreatedEvent.h"
+#include "events/PolicyAddedEvent.h"
 #include "events/PrivilegeGrantedEvent.h"
 #include "events/UnitCreatedEvent.h"
 #include "events/UnitDelegationSetEvent.h"
 #include "events/UnitDelegationUnsetEvent.h"
-#include "events/UnitPolicySetEvent.h"
 
 namespace rooset {
 
@@ -225,6 +225,13 @@ namespace rooset {
         return;
       }
 
+      if (msgType == "POLICY_ADDED_EVENT") {
+        JsonUtils::validate(PolicyAddedEvent::schema, d);
+        const PolicyAddedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, PolicyAddedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
       if (msgType == "PRIVILEGE_GRANTED_EVENT") {
         JsonUtils::validate(PrivilegeGrantedEvent::schema, d);
         const PrivilegeGrantedEvent evt(d);
@@ -250,13 +257,6 @@ namespace rooset {
         JsonUtils::validate(UnitDelegationUnsetEvent::schema, d);
         const UnitDelegationUnsetEvent evt(d);
         MessageUtils::applyEvent<Aggregate, UnitDelegationUnsetEvent>(aggregate, evt, onMethodMissing);
-        return;
-      }
-
-      if (msgType == "UNIT_POLICY_SET_EVENT") {
-        JsonUtils::validate(UnitPolicySetEvent::schema, d);
-        const UnitPolicySetEvent evt(d);
-        MessageUtils::applyEvent<Aggregate, UnitPolicySetEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 

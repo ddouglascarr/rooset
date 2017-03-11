@@ -2,6 +2,7 @@
 
 set(RATK_GEN_COMMAND_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/AddAreaConcernCommand.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/AddPolicyCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/AssessIssueAdmissionQuorumCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/BlockDelegationForAreaCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/BlockDelegationForIssueCommand.cpp
@@ -23,7 +24,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/SetAreaDelegationCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/SetIssueBallotCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/SetIssueDelegationCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/SetUnitDelegationCommand.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/SetUnitPolicyCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnblockDelegationForAreaCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnblockDelegationForIssueCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnsetAreaDelegationCommand.cpp

@@ -16,7 +16,7 @@ using ::testing::NiceMock;
 namespace rooset_unit_aggregate_policy_tests {
 
 
-TEST(unit_aggregate_policy, set_policy)
+TEST(unit_aggregate_policy, add_policy)
 {
   
   vector<string> givenEvents;
@@ -37,14 +37,14 @@ TEST(unit_aggregate_policy, set_policy)
   CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "UNIT_POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -52,32 +52,26 @@ TEST(unit_aggregate_policy, set_policy)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 10
   }
 })json");
   try {
-  JsonUtils::validate(UnitPolicySetEvent::schema, expected_doc);
+  JsonUtils::validate(UnitPolicyAddedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  UnitPolicySetEvent expected(expected_doc);
+  UnitPolicyAddedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
-  "type": "SET_UNIT_POLICY_COMMAND",
+  "type": "ADD_POLICY_COMMAND",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -85,22 +79,16 @@ TEST(unit_aggregate_policy, set_policy)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 10
   }
 })json");
   try {
-  JsonUtils::validate(SetUnitPolicyCommand::schema, cmd_doc);
+  JsonUtils::validate(AddPolicyCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetUnitPolicyCommand cmd(cmd_doc);
+  AddPolicyCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -155,14 +143,14 @@ TEST(unit_aggregate_policy, requester_must_have_managment_rights)
   CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
-  "type": "SET_UNIT_POLICY_COMMAND",
+  "type": "ADD_POLICY_COMMAND",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
     "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -170,22 +158,16 @@ TEST(unit_aggregate_policy, requester_must_have_managment_rights)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 10
   }
 })json");
   try {
-  JsonUtils::validate(SetUnitPolicyCommand::schema, cmd_doc);
+  JsonUtils::validate(AddPolicyCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  SetUnitPolicyCommand cmd(cmd_doc);
+  AddPolicyCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);

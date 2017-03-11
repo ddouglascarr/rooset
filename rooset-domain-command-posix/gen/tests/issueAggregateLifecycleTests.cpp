@@ -56,14 +56,14 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -71,14 +71,8 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -225,14 +219,14 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -240,14 +234,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -381,14 +369,14 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -396,14 +384,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -559,14 +541,14 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -574,14 +556,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -719,14 +695,14 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -734,14 +710,8 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -896,14 +866,14 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -911,14 +881,8 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1052,14 +1016,14 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -1067,14 +1031,8 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1238,14 +1196,14 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -1253,14 +1211,8 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1407,14 +1359,14 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -1422,14 +1374,8 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1575,14 +1521,14 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_ADDED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -1590,14 +1536,8 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({

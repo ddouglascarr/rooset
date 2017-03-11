@@ -88,6 +88,14 @@ module.exports = {
     `;
   },
 
+  votingAlgorithm: v => `
+          payload.AddMember(
+              "${v}",
+              JsonUtils::serializeString(
+                  EnumUtils::serializeVotingAlgorithm(${v}),
+                  d->GetAllocator()),
+              d->GetAllocator());`,
+
   date: v => {
     const v_value = `${v}_value`;
     return `

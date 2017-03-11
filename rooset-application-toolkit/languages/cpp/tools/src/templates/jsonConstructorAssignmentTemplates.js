@@ -41,6 +41,10 @@ module.exports = {
                 d["payload"]["${v}"],
                 [&](const rapidjson::Value& v) { return JsonUtils::parseUuid(v); }))`,
 
+  votingAlgorithm: v => `
+            ${v}(EnumUtils::parseVotingAlgorithm(
+                JsonUtils::parseString(d["payload"]["${v}"])))`,
+
   date: v => `
             ${v}(d["payload"]["${v}"].GetUint())`,
 
