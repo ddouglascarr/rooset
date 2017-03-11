@@ -15,5 +15,5 @@ properties:
     type: initiativeContentType
     description: The type of content initiatives of this concern
   config:
-    type: jsonObject
+    type: string
     description: Content configuration, different for each contentType

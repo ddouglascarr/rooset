@@ -66,7 +66,7 @@ namespace rooset {
             name(JsonUtils::parseString(d["payload"]["name"])),
             description(JsonUtils::parseString(d["payload"]["description"])),
             initiativeContentType(EnumUtils::parseInitiativeContentType(
-                JsonUtils::parseString(d["paylaod"]["initiativeContentType"]))),
+                JsonUtils::parseString(d["payload"]["initiativeContentType"]))),
             config(JsonUtils::parseString(d["payload"]["config"]))
         {}
   

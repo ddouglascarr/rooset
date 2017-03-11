@@ -9,7 +9,7 @@ module.exports = {
 
   initiativeContentType: v => `
             ${v}(EnumUtils::parseInitiativeContentType(
-                JsonUtils::parseString(d["paylaod"]["${v}"])))`,
+                JsonUtils::parseString(d["payload"]["${v}"])))`,
 
   defeatStrength: v => `
             ${v}(EnumUtils::parseDefeatStrength(string(
@@ -23,7 +23,7 @@ module.exports = {
 
   jsonObject: v => `
             ${v}(JsonUtils::parseString(d["payload"]["${v}"]))`,
-            
+
   schulzeBallot: v => `
             ${v}(rooset::SchulzeBallot::parse(d["payload"]["${v}"]))`,
 

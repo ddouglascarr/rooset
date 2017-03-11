@@ -4,7 +4,7 @@ module.exports = {
   defeatStrength: "rooset::DefeatStrength",
   exceptionCode: "rooset::ExceptionCode",
   initiativeContentType: "rooset::InitiativeContentType",
-  jsonObject: "string",
+  jsonObject: "rapidjson::Value",
   schulzeBallot: "rooset::SchulzeBallot",
   string: "string",
   uuid: "uuid",

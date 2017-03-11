@@ -4,7 +4,7 @@
 #include <map>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include "ratk/uuid.h"
-#include "enums/IssueContentType.h"
+#include "enums/InitiativeContentType.h"
 #include "events/UnitCreatedEvent.h"
 #include "events/AreaCreatedEvent.h"
 #include "events/PrivilegeGrantedEvent.h"
@@ -48,7 +48,8 @@ namespace rooset {
 
   struct Concern {
     bool active;
-    
+    InitiativeContentType issueContentType;
+    string config;
   };
   
   class UnitAggregate
@@ -58,6 +59,7 @@ namespace rooset {
     map<uuid, MemberPrivilege> privileges;
     map<uuid, uuid> delegations;
     map<uuid, Policy> policies;
+    map<uuid, Concern> concerns;
 
   public:
     UnitAggregate(const UnitCreatedEvent& e);
@@ -80,5 +82,6 @@ namespace rooset {
     inline auto getDelegations() const { return delegations; }
     inline auto getAreas() const { return areas; }
     inline auto getPolicies() const { return policies; }
+    inline auto getConcerns() const { return concerns; }
   };
 }

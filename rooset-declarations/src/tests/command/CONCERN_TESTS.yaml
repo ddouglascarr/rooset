@@ -39,7 +39,7 @@ mocks:
       requesterId: *voter0
       name: Test concernId
       initiativeContentType: "STATEMENT"
-      config: {}
+      config: "{}"
 
 
   - &notFoundErr
@@ -79,9 +79,10 @@ scenarios:
           id: *unitId
           concernId: *concernId
           requesterId: *voter0
-          name: Test concernId
+          name: Test concern
+          description: The Test Concern
           initiativeContentType: "STATEMENT"
-          config: {}
+          config: "{}"
 
     then:
       description: It is not allowed
@@ -100,7 +101,7 @@ scenarios:
           requesterId: *managerId
           name: Test concernId
           initiativeContentType: "STATEMENT"
-          config: {}
+          config: "{}"
     then:
       description: CONCERN_CREATED_EVENT emitted
       outcome: &concernCreatedEvt
@@ -111,7 +112,7 @@ scenarios:
           requesterId: *voter0
           name: Test concernId
           initiativeContentType: "STATEMENT"
-          config: {}
+          config: "{}"
 
   -
     label: A non-manager cannot deactivate a concern

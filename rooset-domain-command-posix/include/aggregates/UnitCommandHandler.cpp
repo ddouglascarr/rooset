@@ -161,6 +161,13 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Se
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
     const CreateConcernCommand& c)
 {
+  /*
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  CommandHandlerUtils::assertMapExcludes<decltype(unit->getConcerns()), uuid>(
+      unit->getConcerns(), c.concernId, "This concern already exists");
+  return make_unique<ConcernCreatedEvent>(c);
+  */
   return nullptr;
 }
 
@@ -169,7 +176,18 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
     const DeactivateConcernCommand& c)
 {
-  return nullptr;
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  const auto concerns = unit->getConcerns();
+  CommandHandlerUtils::assertMapContains<decltype(concerns), uuid>(
+      concerns, c.concernId, "The concern does not exist");
+  const auto concern = concerns.at(c.concernId);
+  if (!concern.active) {
+    throw CommandEvaluationException(
+        ExceptionCode::CONFLICT_EXCEPTION,
+        "The concern is already deactivated");
+  }
+  return make_unique<ConcernDeactivatedEvent>(c);
 }
 
 
