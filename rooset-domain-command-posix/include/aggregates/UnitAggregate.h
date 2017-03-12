@@ -12,7 +12,7 @@
 #include "events/UnitDelegationUnsetEvent.h"
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
-#include "events/PolicyAddedEvent.h"
+#include "events/PolicyCreatedEvent.h"
 #include "events/PolicyDeactivatedEvent.h"
 #include "events/DelegationBlockedForAreaEvent.h"
 #include "events/DelegationUnblockedForAreaEvent.h"  
@@ -69,7 +69,7 @@ namespace rooset {
     UnitAggregate(const UnitCreatedEvent& e);
     void handleEvent(const AreaCreatedEvent& e);
     void handleEvent(const PrivilegeGrantedEvent& e);
-    void handleEvent(const PolicyAddedEvent& e);
+    void handleEvent(const PolicyCreatedEvent& e);
     void handleEvent(const PolicyDeactivatedEvent& e);
     void handleEvent(const UnitDelegationSetEvent& e);
     void handleEvent(const UnitDelegationUnsetEvent& e);

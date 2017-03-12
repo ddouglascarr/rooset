@@ -41,4 +41,4 @@ properties:
   initiativeQuorumDen:
     type: uint
     description: The denominator used to determine whether an initiative quorum has been reached in the VERIFICATION phase
-commandConstructor: ADD_POLICY_COMMAND
+commandConstructor: CREATE_POLICY_COMMAND

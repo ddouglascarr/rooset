@@ -56,7 +56,7 @@ TEST(issue_aggregate_lifecycle_tests, requester_must_have_voting_rights)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -219,7 +219,7 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_give_support)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -369,7 +369,7 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_give_suppo
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -541,7 +541,7 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -695,7 +695,7 @@ TEST(issue_aggregate_lifecycle_tests, give_initiative_support_should_fail_on_dup
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -866,7 +866,7 @@ TEST(issue_aggregate_lifecycle_tests, initiative_must_exist_to_revoke_support)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1016,7 +1016,7 @@ TEST(issue_aggregate_lifecycle_tests, issue_must_be_in_right_phase_to_revoke_sup
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1196,7 +1196,7 @@ TEST(issue_aggregate_lifecycle_tests, support_must_have_been_given_to_revoke_sup
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1359,7 +1359,7 @@ TEST(issue_aggregate_lifecycle_tests, revoke_initiative_support)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1521,7 +1521,7 @@ TEST(issue_aggregate_lifecycle_tests, should_fail_on_duplicate_revokation_of_sup
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",

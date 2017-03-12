@@ -50,7 +50,7 @@ TEST(unit_aggregate_policy, a_manager_can_add_a_policy)
   CommandHandler commandHandler(eventRepository); 
   
   auto expected_doc = JsonUtils::parse(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -70,14 +70,14 @@ TEST(unit_aggregate_policy, a_manager_can_add_a_policy)
   }
 })json");
   try {
-  JsonUtils::validate(PolicyAddedEvent::schema, expected_doc);
+  JsonUtils::validate(PolicyCreatedEvent::schema, expected_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("expected schema invalid");
   }
-  PolicyAddedEvent expected(expected_doc);
+  PolicyCreatedEvent expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
-  "type": "ADD_POLICY_COMMAND",
+  "type": "CREATE_POLICY_COMMAND",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -97,11 +97,11 @@ TEST(unit_aggregate_policy, a_manager_can_add_a_policy)
   }
 })json");
   try {
-  JsonUtils::validate(AddPolicyCommand::schema, cmd_doc);
+  JsonUtils::validate(CreatePolicyCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  AddPolicyCommand cmd(cmd_doc);
+  CreatePolicyCommand cmd(cmd_doc);
   
   auto result = commandHandler.evaluate(cmd);
   if (result == nullptr) throw invalid_argument("command handler returned nullptr");
@@ -169,7 +169,7 @@ TEST(unit_aggregate_policy, a_non_manager_cannot_add_a_policy)
   CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
-  "type": "ADD_POLICY_COMMAND",
+  "type": "CREATE_POLICY_COMMAND",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-777777777777",
@@ -189,11 +189,11 @@ TEST(unit_aggregate_policy, a_non_manager_cannot_add_a_policy)
   }
 })json");
   try {
-  JsonUtils::validate(AddPolicyCommand::schema, cmd_doc);
+  JsonUtils::validate(CreatePolicyCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  AddPolicyCommand cmd(cmd_doc);
+  CreatePolicyCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -250,7 +250,7 @@ TEST(unit_aggregate_policy, a_manager_cannot_add_an_already_existing_policy)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -290,7 +290,7 @@ TEST(unit_aggregate_policy, a_manager_cannot_add_an_already_existing_policy)
   CommandEvaluationException expected(expected_doc);
   
   auto cmd_doc = JsonUtils::parse(u8R"json({
-  "type": "ADD_POLICY_COMMAND",
+  "type": "CREATE_POLICY_COMMAND",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -310,11 +310,11 @@ TEST(unit_aggregate_policy, a_manager_cannot_add_an_already_existing_policy)
   }
 })json");
   try {
-  JsonUtils::validate(AddPolicyCommand::schema, cmd_doc);
+  JsonUtils::validate(CreatePolicyCommand::schema, cmd_doc);
   } catch (invalid_argument e) {
     throw invalid_argument("cmd schema invalid");
   }
-  AddPolicyCommand cmd(cmd_doc);
+  CreatePolicyCommand cmd(cmd_doc);
   
   try {
     commandHandler.evaluate(cmd);
@@ -371,7 +371,7 @@ TEST(unit_aggregate_policy, a_non_manager_cannot_deactivate_a_policy_id)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -480,7 +480,7 @@ TEST(unit_aggregate_policy, a_manager_can_deactivate_a_policy)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -580,7 +580,7 @@ TEST(unit_aggregate_policy, a_manager_cannot_deactive_a_policy_that_is_already_d
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",

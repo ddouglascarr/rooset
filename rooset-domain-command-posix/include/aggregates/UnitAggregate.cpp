@@ -88,7 +88,7 @@ void rooset::UnitAggregate::handleEvent(const DelegationUnblockedForAreaEvent& e
 
 
 
-void rooset::UnitAggregate::handleEvent(const PolicyAddedEvent & e)
+void rooset::UnitAggregate::handleEvent(const PolicyCreatedEvent & e)
 {
   policies[e.policyId] = {
     e.name,

@@ -31,7 +31,7 @@
 #include "events/IssueVerificationPhaseCompletedEvent.h"
 #include "events/IssueVotingPhaseCompletedEvent.h"
 #include "events/NewInitiativeCreatedEvent.h"
-#include "events/PolicyAddedEvent.h"
+#include "events/PolicyCreatedEvent.h"
 #include "events/PolicyDeactivatedEvent.h"
 #include "events/PrivilegeGrantedEvent.h"
 #include "events/UnitCreatedEvent.h"
@@ -226,10 +226,10 @@ namespace rooset {
         return;
       }
 
-      if (msgType == "POLICY_ADDED_EVENT") {
-        JsonUtils::validate(PolicyAddedEvent::schema, d);
-        const PolicyAddedEvent evt(d);
-        MessageUtils::applyEvent<Aggregate, PolicyAddedEvent>(aggregate, evt, onMethodMissing);
+      if (msgType == "POLICY_CREATED_EVENT") {
+        JsonUtils::validate(PolicyCreatedEvent::schema, d);
+        const PolicyCreatedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, PolicyCreatedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 

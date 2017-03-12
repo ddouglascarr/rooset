@@ -4,28 +4,27 @@
 #include <memory>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include "ratk/uuid.h"
-#include "ratk/ProjectCommand.h"
+#include "ratk/ProjectEvent.h"
 #include "rapidjson/document.h"
 #include "rapidjson/allocators.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/schema.h"
-#include "ratk/IdUtils.h"
 #include "ratk/JsonUtils.h"
 #include "enums/EnumUtils.h"
 #include "aggregates/SchulzeBallot.h"
+#include "commands/CreatePolicyCommand.h"
 
 using namespace std;
 using namespace rooset;
 using namespace rapidjson;
 
-
 namespace rooset {
 
-  class AddPolicyCommand : public ProjectCommand<Document>
+  class PolicyCreatedEvent : public ProjectEvent<Document>
   {
   private:
-    const string MESSAGE_TYPE = "ADD_POLICY_COMMAND";
+    const string MESSAGE_TYPE = "POLICY_CREATED_EVENT";
 
   public:
     static const SchemaDocument schema;
@@ -47,7 +46,7 @@ namespace rooset {
         const unsigned int initiativeQuorumDen;
 
     
-        AddPolicyCommand(
+        PolicyCreatedEvent(
             uuid id,
             uuid requesterId,
             uuid policyId,
@@ -82,7 +81,7 @@ namespace rooset {
   
 
     
-        AddPolicyCommand(const Document& d) :
+        PolicyCreatedEvent(const Document& d) :
         
             id(JsonUtils::parseUuid(d["payload"]["id"])),
             requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
@@ -101,6 +100,26 @@ namespace rooset {
             initiativeQuorumNum(d["payload"]["initiativeQuorumNum"].GetUint()),
             initiativeQuorumDen(d["payload"]["initiativeQuorumDen"].GetUint())
         {}
+  
+
+    
+    PolicyCreatedEvent(const CreatePolicyCommand& c):
+        id(c.id),
+requesterId(c.requesterId),
+policyId(c.policyId),
+name(c.name),
+description(c.description),
+votingAlgorithm(c.votingAlgorithm),
+maxAdmissionTime(c.maxAdmissionTime),
+minAdmissionTime(c.minAdmissionTime),
+discussionTime(c.discussionTime),
+verificationTime(c.verificationTime),
+votingTime(c.votingTime),
+issueQuorumNum(c.issueQuorumNum),
+issueQuorumDen(c.issueQuorumDen),
+initiativeQuorumNum(c.initiativeQuorumNum),
+initiativeQuorumDen(c.initiativeQuorumDen)
+    {}
   
 
     unique_ptr<Document> serialize() const override
@@ -190,11 +209,17 @@ namespace rooset {
       return d;
     }
 
-    string getEventType() const override
+    string getMessageType() const override
     {
       return MESSAGE_TYPE;
+    }
+
+    uuid getAggregateId() const override
+    {
+      return id;
     }
 
   };
 
 };
+  

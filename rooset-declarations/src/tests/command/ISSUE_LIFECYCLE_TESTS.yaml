@@ -28,7 +28,7 @@ mocks:
       externalReference: 'area.com'
 
   - &unitPolicySetEvent
-    type: POLICY_ADDED_EVENT
+    type: POLICY_CREATED_EVENT
     payload:
       id: *unitId
       requesterId: 464b1ebb-32c1-460c-8e9e-333333333333

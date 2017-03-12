@@ -56,7 +56,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -198,7 +198,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -329,7 +329,7 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -458,7 +458,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -587,7 +587,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -746,7 +746,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -897,7 +897,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
@@ -1065,7 +1065,7 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "POLICY_ADDED_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
     "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",

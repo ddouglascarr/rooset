@@ -55,7 +55,7 @@ mocks:
       weight: 1
 
   - &unitPolicySetEvt
-    type: POLICY_ADDED_EVENT
+    type: POLICY_CREATED_EVENT
     payload:
       id: *unitId
       requesterId: *managerId

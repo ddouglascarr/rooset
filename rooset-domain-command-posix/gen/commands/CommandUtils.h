@@ -8,7 +8,6 @@
 #include "ratk/JsonUtils.h"
 
 #include "commands/AddAreaConcernCommand.h"
-#include "commands/AddPolicyCommand.h"
 #include "commands/AssessIssueAdmissionQuorumCommand.h"
 #include "commands/BlockDelegationForAreaCommand.h"
 #include "commands/BlockDelegationForIssueCommand.h"
@@ -20,6 +19,7 @@
 #include "commands/CreateCompetingInitiativeCommand.h"
 #include "commands/CreateConcernCommand.h"
 #include "commands/CreateNewInitiativeCommand.h"
+#include "commands/CreatePolicyCommand.h"
 #include "commands/CreateUnitCommand.h"
 #include "commands/DeactivateConcernCommand.h"
 #include "commands/DeactivatePolicyCommand.h"
@@ -53,12 +53,6 @@ namespace rooset {
       if (msgType == "ADD_AREA_CONCERN_COMMAND") {
         JsonUtils::validate(AddAreaConcernCommand::schema, d);
         const AddAreaConcernCommand cmd(d);
-        return commandHandler.evaluate(cmd);
-      }
-
-      if (msgType == "ADD_POLICY_COMMAND") {
-        JsonUtils::validate(AddPolicyCommand::schema, d);
-        const AddPolicyCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
@@ -125,6 +119,12 @@ namespace rooset {
       if (msgType == "CREATE_NEW_INITIATIVE_COMMAND") {
         JsonUtils::validate(CreateNewInitiativeCommand::schema, d);
         const CreateNewInitiativeCommand cmd(d);
+        return commandHandler.evaluate(cmd);
+      }
+
+      if (msgType == "CREATE_POLICY_COMMAND") {
+        JsonUtils::validate(CreatePolicyCommand::schema, d);
+        const CreatePolicyCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 
