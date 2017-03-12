@@ -1,0 +1,82 @@
+---
+label: Concern Http Tests
+key: concern-http
+type: HTTP_API_TEST
+
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-000000000000
+  - &managerId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &areaId 464b1ebb-32c1-460c-8e9e-222222222222
+  - &concernId 464b1ebb-32c1-460c-8e9e-333333333333
+  - &policyId 464b1ebb-32c1-460c-8e9e-888888888888
+  - &voter0 464b1ebb-32c1-460c-8e9f-000000000000
+  - &wrongId 464b1ebb-32c1-460c-8e9f-777777777777
+
+scenarios:
+
+
+  -
+    label: A unit manager can create a concern
+    given: concern-command/unit-created
+    when:
+      description: A makes a create concern request
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/concerns
+        method: POST
+        requesterId: *managerId
+        generate:
+          concernId: *concernId
+        body:
+          name: Test concern
+          description: The Test Concern
+          initiativeContentType: "STATEMENT"
+          config: {}
+    then:
+      description: The concern is created
+      outcome:
+        type: CONCERN_CREATED_EVENT
+        payload:
+          id: *unitId
+          concernId: *concernId
+          requesterId: *managerId
+          name: Test concern
+          description: The Test Concern
+          initiativeContentType: "STATEMENT"
+          config: {}
+
+
+  -
+    label: A unit manager can deactivate a concern
+    given: concern-command/concern-created
+    when:
+      description: A manager makes a deactivate concern request
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/concerns/464b1ebb-32c1-460c-8e9e-333333333333
+        method: DELETE
+        requesterId: *managerId
+    then:
+      description: The concern is deactivated
+      outcome:
+        type: CONCERN_DEACTIVATED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          concernId: *concernId
+
+
+#  -
+#    label: A unit manager can add a concern to an area
+
+
+#  -
+#    label: A unit manager can remove a concern from an area
+
+
+#  -
+#    label: A unit manager can add a policy to a concern
+
+
+#  -
+#    label: A unit manager can remove a policy from a concern

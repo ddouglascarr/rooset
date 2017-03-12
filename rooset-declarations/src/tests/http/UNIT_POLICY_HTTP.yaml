@@ -71,7 +71,7 @@ scenarios:
 
 
   -
-    label: A unit manager create unit policy
+    label: A unit manager may create unit policy
     given: policy-command/unit-created
     when:
       label: A manager makes a policy create request

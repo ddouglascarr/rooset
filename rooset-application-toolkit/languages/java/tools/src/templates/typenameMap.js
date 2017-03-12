@@ -3,7 +3,7 @@ module.exports = {
   email: "java.lang.String",
   defeatStrength: "org.rooset.httpapi.enums.DefeatStrength",
   initiativeContentType: "org.rooset.httpapi.enums.InitiativeContentType",
-  jsonObject: "String",
+  jsonObject: "JSONObject",
   schulzeBallot: "org.rooset.httpapi.models.SchulzeBallot",
   string: "String",
   uuid: "java.util.UUID",

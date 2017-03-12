@@ -189,6 +189,7 @@ scenarios:
   -
     label: A manager may deactivate a concernId
     given:
+      key: concern-created
       description: A concern has been created
       precondition:
         - *unitCreatedEvt
