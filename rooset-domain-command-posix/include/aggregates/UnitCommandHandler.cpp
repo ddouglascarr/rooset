@@ -227,3 +227,18 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
   return make_unique<AreaConcernRemovedEvent>(c);
 }
   
+
+  
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const AddConcernPolicyCommand& c)
+{
+  return nullptr;
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const RemoveConcernPolicyCommand& c)
+{
+  return nullptr;
+}

@@ -52,6 +52,32 @@ mocks:
       description: the test area
       externalReference: 'area.com'
 
+  - &policyCreatedEvt
+    type: POLICY_CREATED_EVENT
+    payload:
+      id: *unitId
+      requesterId: *managerId
+      policyId: *policyId
+      name: Test Policy
+      description: The Test Policy
+      votingAlgorithm: SCHULZE
+      maxAdmissionTime: 604800000
+      minAdmissionTime: 0
+      discussionTime: 604800000
+      verificationTime: 604800000
+      votingTime: 604800000
+      issueQuorumNum: 1
+      issueQuorumDen: 10
+      initiativeQuorumNum: 1
+      initiativeQuorumDen: 10
+
+  - &policyDeactivatedEvent
+    type: POLICY_DEACTIVATED_EVENT
+    payload:
+      id: *unitId
+      requesterId: *managerId
+      policyId: *policyId
+
   - &notFoundErr
     type: COMMAND_EVALUATION_EXCEPTION
     error: true
@@ -81,6 +107,7 @@ scenarios:
       precondition:
         - *unitCreatedEvt
         - *privGrantedEvtVoter0
+        - *policyCreatedEvt
     when:
       description: A non-manager issues CREATE_CONCERN_COMMAND
       action:
@@ -380,3 +407,152 @@ scenarios:
     then:
       description: A AREA_CONCERN_ADDED_EVENT is emitted
       outcome: *areaConcernAddedEvt
+
+
+  -
+    label: A non-manager cannot add a policy to a concern-command
+    given:
+      key: policy-concern-created
+      description: A unit is created with a policy and a concern
+      precondition:
+        - *unitCreatedEvt
+        - *privGrantedEvtVoter0
+        - *concernCreatedEvt
+        - *policyCreatedEvt
+    when:
+      description: A non-manager tries to add a policy to a concern
+      action:
+        type: ADD_CONCERN_POLICY_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *voter0
+          policyId: *policyId
+          concernId: *concernId
+    then:
+      description: It is not allowed
+      outcome: *unprivilegedErr
+
+
+  -
+    label: A manager cannot add a non-active policy to a concern-command
+    given:
+      description: A policy has been deactivated
+      precondition:
+        - *unitCreatedEvt
+        - *privGrantedEvtVoter0
+        - *concernCreatedEvt
+        - *policyCreatedEvt
+        -
+          type: POLICY_DEACTIVATED_EVENT
+          payload:
+            id: *unitId
+            requesterId: *managerId
+            policyId: *policyId
+    when:
+      description: A manger tries to add a non-actve policy to a concern
+      action:
+        type: ADD_CONCERN_POLICY_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+          concernId: *concernId
+    then:
+      description: It is not allowed
+      outcome: *conflictErr
+
+
+  -
+    label: A manager can add a policy to a concern
+    given: policy-concern-created
+    when:
+      description: A manger tries to add a non-actve policy to a concern
+      action:
+        type: ADD_CONCERN_POLICY_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+          concernId: *concernId
+    then:
+      description: A CONCERN_POLICY_ADDED_EVENT is emitted
+      outcome: &concernPolicyAddedEvt
+        type: CONCERN_POLICY_ADDED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+          concernId: *concernId
+
+
+  -
+    label: A manager cannot add a policy to a concern that has already been added
+    given:
+      key: concern-policy-added
+      description: A policy has been added to a concern
+      precondition:
+        - *unitCreatedEvt
+        - *privGrantedEvtVoter0
+        - *concernCreatedEvt
+        - *policyCreatedEvt
+        - *concernPolicyAddedEvt
+    when:
+      description: A manager tries to re-add the same policy
+      action:
+        type: ADD_CONCERN_POLICY_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+          concernId: *concernId
+    then:
+      description: It is not allowed
+      outcome: *conflictErr
+
+
+  -
+    label: A manager can remove a policy from a concern
+    given: concern-policy-added
+    when:
+      description: A manager tries to remove the policy from the concern
+      action:
+        type: REMOVE_CONCERN_POLICY_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+          concernId: *concernId
+    then:
+      description: A CONCERN_POLICY_REMOVED_EVENT is emitted
+      outcome: &concernPolicyRemovedEvt
+        type: CONCERN_POLICY_REMOVED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+          concernId: *concernId
+
+
+  -
+    label: A manager cannot remove a policy from a concern if it has already been removed
+    given:
+      description: A policy has been added and removed from a concern
+      precondition:
+        - *unitCreatedEvt
+        - *privGrantedEvtVoter0
+        - *concernCreatedEvt
+        - *policyCreatedEvt
+        - *concernPolicyAddedEvt
+        - *concernPolicyRemovedEvt
+    when:
+      description: A manager tries to remove the already removed policy from the concern
+      action:
+        type: REMOVE_CONCERN_POLICY_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+          concernId: *concernId
+    then:
+      description: It is not allowed
+      outcome: *notFoundErr

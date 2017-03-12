@@ -14,6 +14,8 @@
 #include "events/CompetingInitiativeCreatedEvent.h"
 #include "events/ConcernCreatedEvent.h"
 #include "events/ConcernDeactivatedEvent.h"
+#include "events/ConcernPolicyAddedEvent.h"
+#include "events/ConcernPolicyRemovedEvent.h"
 #include "events/DelegationBlockedForAreaEvent.h"
 #include "events/DelegationBlockedForIssueEvent.h"
 #include "events/DelegationUnblockedForAreaEvent.h"
@@ -104,6 +106,20 @@ namespace rooset {
         JsonUtils::validate(ConcernDeactivatedEvent::schema, d);
         const ConcernDeactivatedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, ConcernDeactivatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "CONCERN_POLICY_ADDED_EVENT") {
+        JsonUtils::validate(ConcernPolicyAddedEvent::schema, d);
+        const ConcernPolicyAddedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, ConcernPolicyAddedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "CONCERN_POLICY_REMOVED_EVENT") {
+        JsonUtils::validate(ConcernPolicyRemovedEvent::schema, d);
+        const ConcernPolicyRemovedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, ConcernPolicyRemovedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 

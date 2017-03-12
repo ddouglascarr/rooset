@@ -1,0 +1,12 @@
+---
+properties:
+  id:
+    type: uuid
+    description: unit id
+  requesterId:
+    type: uuid
+  concernId:
+    type: uuid
+  policyId:
+    type: uuid
+commandConstructor: ADD_CONCERN_POLICY_COMMAND

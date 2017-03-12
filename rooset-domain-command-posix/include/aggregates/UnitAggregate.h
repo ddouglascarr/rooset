@@ -20,6 +20,8 @@
 #include "events/ConcernDeactivatedEvent.h"
 #include "events/AreaConcernAddedEvent.h"
 #include "events/AreaConcernRemovedEvent.h"
+#include "events/ConcernPolicyAddedEvent.h"
+#include "events/ConcernPolicyRemovedEvent.h"
 
 using namespace std;
 
@@ -81,6 +83,8 @@ namespace rooset {
     void handleEvent(const ConcernDeactivatedEvent& e);
     void handleEvent(const AreaConcernAddedEvent& e);
     void handleEvent(const AreaConcernRemovedEvent& e);
+    void handleEvent(const ConcernPolicyAddedEvent& e);
+    void handleEvent(const ConcernPolicyRemovedEvent& e);
 
 
     inline auto getPrivileges() const { return privileges; }

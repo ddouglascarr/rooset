@@ -22,6 +22,8 @@
 #include "commands/DeactivateConcernCommand.h"
 #include "commands/AddAreaConcernCommand.h"
 #include "commands/RemoveAreaConcernCommand.h"
+#include "commands/AddConcernPolicyCommand.h"
+#include "commands/RemoveConcernPolicyCommand.h"
 
 namespace rooset {
 
@@ -55,5 +57,7 @@ namespace rooset {
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const DeactivateConcernCommand& c);
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const AddAreaConcernCommand& c);
     virtual unique_ptr<ProjectEvent<Document>> evaluate(const RemoveAreaConcernCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const AddConcernPolicyCommand& c);
+    virtual unique_ptr<ProjectEvent<Document>> evaluate(const RemoveConcernPolicyCommand& c);
   };
 }

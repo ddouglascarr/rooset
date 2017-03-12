@@ -150,3 +150,13 @@ void rooset::UnitAggregate::handleEvent(const AreaConcernRemovedEvent& e)
   }
   areas[e.areaId] = area;
 }
+
+
+
+void rooset::UnitAggregate::handleEvent(const ConcernPolicyAddedEvent& e)
+{}
+
+
+
+void rooset::UnitAggregate::handleEvent(const ConcernPolicyRemovedEvent& e)
+{}

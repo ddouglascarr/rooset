@@ -9,6 +9,8 @@ ${CMAKE_CURRENT_SOURCE_DIR}/AreaDelegationUnsetEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CompetingInitiativeCreatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/ConcernCreatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/ConcernDeactivatedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/ConcernPolicyAddedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/ConcernPolicyRemovedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/DelegationBlockedForAreaEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/DelegationBlockedForIssueEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/DelegationUnblockedForAreaEvent.cpp
