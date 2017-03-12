@@ -1,0 +1,9 @@
+---
+type: CREATE_POLICY_HTTP_COMMAND_REQUEST
+commandTarget: CREATE_POLICY_COMMAND
+description: Create a policy for a unit
+method: PUT
+uri: /units/{id}/policy
+userIdMapping: requesterId
+generate:
+  - policyId
