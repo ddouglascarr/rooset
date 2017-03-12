@@ -97,7 +97,9 @@ function assessResponse(then) {
   }
 
   return `
-    assertTrue("2xx response expected", response.getStatusCode().is2xxSuccessful());
+    assertTrue(
+        "2xx response expected, was " + response.getStatusCode() + " " + response.toString(),
+        response.getStatusCode().is2xxSuccessful());
     UUID aggregateId = UUID.fromString(responseBody.getString("id"));
     JSONObject event = testingEventStoreService.getLastEventForAggregate(aggregateId);
     String expectedEvent = ${JSON.stringify(JSON.stringify(then))};
