@@ -66,8 +66,28 @@ scenarios:
           concernId: *concernId
 
 
-#  -
-#    label: A unit manager can add a concern to an area
+  -
+    label: A unit manager can add a concern to an area
+    given: concern-command/area-created
+    when:
+      description: A manager makes an add area concern requeste
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/areas/464b1ebb-32c1-460c-8e9e-222222222222/concerns
+        method: POST
+        requesterId: *managerId
+        body:
+          concernId: *concernId
+    then:
+      description: The concern is added to the area
+      outcome:
+        type: AREA_CONCERN_ADDED_EVENT
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+
 
 
 #  -
