@@ -10,8 +10,8 @@ resp:
     type: string
   description:
     type: string
-  policy:
-    type: policy
+  policies:
+    type: policyArray
   areas:
     type: areaArray
 projectionUri: "/state?partition={id}"

@@ -13,11 +13,16 @@ mocks:
       policyId: *policyId
       name: Test Policy
       description: The Test Policy
+      votingAlgorithm: SCHULZE
+      maxAdmissionTime: 604800000
+      minAdmissionTime: 0
       discussionTime: 604800000
       verificationTime: 604800000
       votingTime: 604800000
       issueQuorumNum: 1
       issueQuorumDen: 10
+      initiativeQuorumNum: 1
+      initiativeQuorumDen: 10
 
 
 scenarios:
@@ -54,22 +59,12 @@ scenarios:
             description: "The Test Unit"
             urlParameterName: "test-unit"
         -
-          type: UNIT_POLICY_SET_EVENT
+          type: POLICY_CREATED_EVENT
           payload:
             <<: *policyQueryBody
             id: *unitId
             requesterId: *managerId
-            polling: false
-            maxAdmissionTime: 604800000
-            minAdmissionTime: 0
-            defeatStrength: SIMPLE
-            directMajorityNum: 1
-            directMajorityDen: 2
-            directMajorityStrict: true
-            directMajorityPositive: 1
-            directMajorityNonNegative: 1
-            noReverseBeatPath: false
-            noMultistageMajority: false
+
         -
           type: AREA_CREATED_EVENT
           payload:
@@ -102,7 +97,8 @@ scenarios:
           id: *unitId
           name: "Test Unit"
           description: "The Test Unit"
-          policy: *policyQueryBody
+          policies:
+            - *policyQueryBody
           areas:
             -
               areaId: *areaId0

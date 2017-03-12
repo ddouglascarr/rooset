@@ -8,7 +8,7 @@ fromAll()
       name: "",
       description: "",
       areas: [],
-      policy: null,
+      policies: [],
     };
   },
 
@@ -18,19 +18,24 @@ fromAll()
     s.description = e.body.payload.description;
   },
 
-  UNIT_POLICY_SET_EVENT: function(s, e) {
+  POLICY_CREATED_EVENT: function(s, e) {
     const p = e.body.payload;
     const policy = {
       policyId: p.policyId,
       name: p.name,
       description: p.description,
+      votingAlgorithm: p.votingAlgorithm,
+      minAdmissionTime: p.minAdmissionTime,
+      maxAdmissionTime: p.maxAdmissionTime,
       discussionTime: p.discussionTime,
       verificationTime: p.verificationTime,
       votingTime: p.votingTime,
       issueQuorumNum: p.issueQuorumNum,
       issueQuorumDen: p.issueQuorumDen,
+      initiativeQuorumNum: p.initiativeQuorumNum,
+      initiativeQuorumDen: p.initiativeQuorumDen,
     };
-    s.policy = policy;
+    s.policies.push(policy);
   },
 
   AREA_CREATED_EVENT: function(s, e) {
