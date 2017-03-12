@@ -4,11 +4,16 @@ key: unit-policy-http
 type: HTTP_API_TEST
 
 mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &managerId 464b1ebb-32c1-460c-8e9e-333333333333
+  - &policyId 464b1ebb-32c1-460c-8e9e-222222222222
+  - &wrongId 464b1ebb-32c1-460c-8e9e-777777777777
+  - &voter0 464b1ebb-32c1-460c-8e9f-000000000000
 
-  - &setPolicyBody
+  - &createPolicyBody
     name: Test Policy
     description: The Test Policy
-    polling: false
+    votingAlgorithm: SCHULZE
     maxAdmissionTime: 604800000
     minAdmissionTime: 0
     discussionTime: 604800000
@@ -16,24 +21,18 @@ mocks:
     votingTime: 604800000
     issueQuorumNum: 1
     issueQuorumDen: 10
-    defeatStrength: SIMPLE
-    directMajorityNum: 1
-    directMajorityDen: 2
-    directMajorityStrict: true
-    directMajorityPositive: 1
-    directMajorityNonNegative: 1
-    noReverseBeatPath: false
-    noMultistageMajority: false
+    initiativeQuorumNum: 1
+    initiativeQuorumDen: 10
 
-  - &unitPolicySetEvent
-    type: UNIT_POLICY_SET_EVENT
+  - &policyCreatedEvent
+    type: POLICY_CREATED_EVENT
     payload:
       id: 464b1ebb-32c1-460c-8e9e-111111111111
       requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
       policyId: 464b1ebb-32c1-460c-8e9e-222222222222
       name: Test Policy
       description: The Test Policy
-      polling: false
+      votingAlgorithm: SCHULZE
       maxAdmissionTime: 604800000
       minAdmissionTime: 0
       discussionTime: 604800000
@@ -41,14 +40,8 @@ mocks:
       votingTime: 604800000
       issueQuorumNum: 1
       issueQuorumDen: 10
-      defeatStrength: SIMPLE
-      directMajorityNum: 1
-      directMajorityDen: 2
-      directMajorityStrict: true
-      directMajorityPositive: 1
-      directMajorityNonNegative: 1
-      noReverseBeatPath: false
-      noMultistageMajority: false
+      initiativeQuorumNum: 1
+      initiativeQuorumDen: 10
 
 
 scenarios:
@@ -66,7 +59,7 @@ scenarios:
         requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
         generate:
           policyId: 464b1ebb-32c1-460c-8e9e-222222222222
-        body: *setPolicyBody
+        body: *createPolicyBody
     then:
       label: The request is not allowed
       outcome:
@@ -86,10 +79,10 @@ scenarios:
         type: HTTP_REQUEST
         uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policy
         method: PUT
-        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        requesterId: *managerId
         generate:
-          policyId: 464b1ebb-32c1-460c-8e9e-222222222222
-        body: *setPolicyBody
+          policyId: *policyId
+        body: *createPolicyBody
     then:
       label: The policy is set
-      outcome: *unitPolicySetEvent
+      outcome: *policyCreatedEvent
