@@ -91,7 +91,7 @@ scenarios:
   -
     label: A manager can add a policy
     given:
-      label: A unit is created
+      description: A unit is created
       key: unit-created
       precondition:
         - *unitCreatedEvent
@@ -108,24 +108,24 @@ scenarios:
         <<: *addPolicyCommandPayload
         requesterId: *wrongId
     then:
-      label: It is not allowed
+      description: It is not allowed
       outcome: *unprivilegedErr
 
 
   -
     label: A manager cannot add an already existing policy
     given:
-      label: A policy has been added
+      description: A policy has been added
       key: policy-added
       precondition:
         - *unitCreatedEvent
         - *privGrantedEvtVoter0
         - *policyAddedEvent
     when:
-      label: A manager tries to add the same policy again
+      description: A manager tries to add the same policy again
       action: *addPolicyCommand
     then:
-      label: It is not allowed
+      description: It is not allowed
       outcome: *conflictErr
 
 
@@ -133,7 +133,7 @@ scenarios:
     label: A non-manager cannot deactivate a policyId
     given: policy-added
     when:
-      label: A non-manager tries to deactivate a policy
+      description: A non-manager tries to deactivate a policy
       action:
         type: DEACTIVATE_POLICY_COMMAND
         payload:
@@ -141,7 +141,7 @@ scenarios:
           requesterId: *voter0
           policyId: *policyId
     then:
-      label: It is not allowed
+      description: It is not allowed
       outcome: *unprivilegedErr
 
 
@@ -149,7 +149,7 @@ scenarios:
     label: A manager can deactivate a policy
     given: policy-added
     when:
-      label: A manager tries to deactivate a policy
+      description: A manager tries to deactivate a policy
       action:
         type: DEACTIVATE_POLICY_COMMAND
         payload:
@@ -157,7 +157,7 @@ scenarios:
           requesterId: *managerId
           policyId: *policyId
     then:
-      label: A POLICY_DEACTIVATED_EVENT is emitted
+      description: A POLICY_DEACTIVATED_EVENT is emitted
       outcome: &policyDeactivatedEvent
         type: POLICY_DEACTIVATED_EVENT
         payload:
@@ -169,14 +169,14 @@ scenarios:
   -
     label: A manager cannot deactive a policy that is already deactivated
     given:
-      label: A policy has been deactivated
+      description: A policy has been deactivated
       precondition:
         - *unitCreatedEvent
         - *privGrantedEvtVoter0
         - *policyAddedEvent
         - *policyDeactivatedEvent
     when:
-      label: A manager tries to deactivate the same policy
+      description: A manager tries to deactivate the same policy
       action:
         type: DEACTIVATE_POLICY_COMMAND
         payload:
@@ -184,5 +184,5 @@ scenarios:
           requesterId: *managerId
           policyId: *policyId
     then:
-      label: It is not allowed
+      description: It is not allowed
       outcome: *conflictErr
