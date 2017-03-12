@@ -2,8 +2,8 @@
 type: CREATE_POLICY_HTTP_COMMAND_REQUEST
 commandTarget: CREATE_POLICY_COMMAND
 description: Create a policy for a unit
-method: PUT
-uri: /units/{id}/policy
+method: POST
+uri: /units/{id}/policies
 userIdMapping: requesterId
 generate:
   - policyId

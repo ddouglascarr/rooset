@@ -1,0 +1,7 @@
+---
+  type: DEACTIVATE_POLICY_HTTP_COMMAND_REQUEST
+  commandTarget: DEACTIVATE_POLICY_COMMAND
+  description: Deactivate a policy for a unit
+  method: DELETE
+  uri: /units/{id}/policies/{policyId}
+  userIdMapping: requesterId
