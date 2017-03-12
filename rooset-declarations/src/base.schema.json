@@ -120,12 +120,21 @@
       "properties": {
         "approve": {
           "type": "array",
-          "items": { "$ref": "#definitions/uuidArray" }
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/uuid" }
+          }
         },
-        "abstain": { "$ref": "#definitions/uuidArray" },
+        "abstain": {
+           "type": "array",
+           "items": { "$ref": "#/definitions/uuid" }
+        },
         "disapprove": {
           "type": "array",
-          "items": { "$ref": "#definitions/uuidArray" }
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/uuid" }
+          }
         }
       }
     },
