@@ -232,7 +232,15 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
     const AddConcernPolicyCommand& c)
 {
-  return nullptr;
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  
+  const Concern concern = unit->getConcerns().at(c.concernId);
+  CommandHandlerUtils::getActive<Policy>(unit->getPolicies(), c.policyId);
+  CommandHandlerUtils::assertVectorExcludes<uuid>(
+      concern.policies, c.policyId, "The policy is already part of the concern");
+  
+  return make_unique<ConcernPolicyAddedEvent>(c);
 }
 
 
@@ -240,5 +248,12 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
     const RemoveConcernPolicyCommand& c)
 {
-  return nullptr;
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  
+  const Concern concern = unit->getConcerns().at(c.concernId);
+  CommandHandlerUtils::assertVectorContains<uuid>(
+      concern.policies, c.policyId, "The policy is not part of the concern");
+  
+  return make_unique<ConcernPolicyRemovedEvent>(c);
 }

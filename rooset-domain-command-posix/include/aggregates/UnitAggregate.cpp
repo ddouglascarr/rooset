@@ -116,7 +116,8 @@ void rooset::UnitAggregate::handleEvent(const ConcernCreatedEvent& e)
   Concern concern { 
     true, 
     e.initiativeContentType,
-    e.config 
+    {},
+    e.config
   };
   concerns[e.concernId] = concern;
 }
@@ -154,9 +155,20 @@ void rooset::UnitAggregate::handleEvent(const AreaConcernRemovedEvent& e)
 
 
 void rooset::UnitAggregate::handleEvent(const ConcernPolicyAddedEvent& e)
-{}
+{
+  auto concern = concerns.at(e.concernId);
+  concern.policies.push_back(e.policyId);
+  concerns[e.concernId] = concern;
+}
 
 
 
 void rooset::UnitAggregate::handleEvent(const ConcernPolicyRemovedEvent& e)
-{}
+{
+  Concern concern = concerns.at(e.concernId);
+  auto it = find(concern.policies.begin(), concern.policies.end(), e.policyId);
+  if (it != concern.policies.end()) {
+    concern.policies.erase(it);
+  }
+  concerns[e.concernId] = concern;
+}

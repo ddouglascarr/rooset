@@ -55,6 +55,7 @@ namespace rooset {
   struct Concern {
     bool active;
     InitiativeContentType initiativeContentType;
+    vector<uuid> policies;
     string config;
   };
   
