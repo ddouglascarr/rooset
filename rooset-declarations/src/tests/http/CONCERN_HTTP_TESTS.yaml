@@ -112,8 +112,28 @@ scenarios:
           requesterId: *managerId
 
 
-#  -
-#    label: A unit manager can add a policy to a concern
+  -
+    label: A unit manager can add a policy to a concern
+    given: concern-command/policy-concern-created
+    when:
+      description: A manager makes an add concern policy requeste
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/concerns/464b1ebb-32c1-460c-8e9e-333333333333/policies
+        method: POST
+        requesterId: *managerId
+        body:
+          policyId: *policyId
+    then:
+      description: The policy is added to the concern
+      outcome:
+        type: CONCERN_POLICY_ADDED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+          concernId: *concernId
+
 
 
 #  -
