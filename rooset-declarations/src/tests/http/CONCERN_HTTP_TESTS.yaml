@@ -12,6 +12,7 @@ mocks:
   - &voter0 464b1ebb-32c1-460c-8e9f-000000000000
   - &wrongId 464b1ebb-32c1-460c-8e9f-777777777777
 
+
 scenarios:
 
 
@@ -70,7 +71,7 @@ scenarios:
     label: A unit manager can add a concern to an area
     given: concern-command/area-created
     when:
-      description: A manager makes an add area concern requeste
+      description: A manager makes an add area concern request
       action:
         type: HTTP_REQUEST
         uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/areas/464b1ebb-32c1-460c-8e9e-222222222222/concerns
@@ -90,8 +91,25 @@ scenarios:
 
 
 
-#  -
-#    label: A unit manager can remove a concern from an area
+  -
+    label: A unit manager can remove a concern from an area
+    given: concern-command/concern-added-to-area
+    when:
+      description: A manager makes a remove area concern request
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/areas/464b1ebb-32c1-460c-8e9e-222222222222/concerns/464b1ebb-32c1-460c-8e9e-333333333333
+        method: DELETE
+        requesterId: *managerId
+    then:
+      description: The concern is removed from the area
+      outcome:
+        type: AREA_CONCERN_REMOVED_EVENT
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
 
 
 #  -
