@@ -28,6 +28,15 @@ namespace rooset {
             message);
       }
     }
+    
+    template<typename Item>
+    static void assertMapExcludesKey(map<uuid, Item> m, uuid key, string message)
+    {
+      auto it = m.find(key);
+      if (it != m.end()) throw CommandEvaluationException(
+          ExceptionCode::CONFLICT_EXCEPTION,
+          message);
+    }
 
     template<typename Item>
     static void assertVectorContains(vector<Item> items, Item item, string message)

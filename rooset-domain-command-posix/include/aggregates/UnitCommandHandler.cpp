@@ -153,10 +153,22 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Ad
 {
   auto unit = repository->load(c.id);
   PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  CommandHandlerUtils::assertMapExcludesKey<Policy>(
+      unit->getPolicies(), c.policyId, "The policy already exists");
   return make_unique<PolicyAddedEvent>(c);
 }
 
 
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const DeactivatePolicyCommand& c)
+{
+  auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  CommandHandlerUtils::getActive<Policy>(unit->getPolicies(), c.policyId);
+  return make_unique<PolicyDeactivatedEvent>(c);
+}
+
+    
 
 unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
     const CreateConcernCommand& c)

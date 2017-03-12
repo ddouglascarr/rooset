@@ -3,6 +3,12 @@ label: Unit Aggregate - Policy
 key: policy-command
 type: DOMAIN_COMMAND_TEST
 mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &managerId 464b1ebb-32c1-460c-8e9e-333333333333
+  - &policyId 464b1ebb-32c1-460c-8e9e-222222222222
+  - &wrongId 464b1ebb-32c1-460c-8e9e-777777777777
+  - &voter0 464b1ebb-32c1-460c-8e9f-000000000000
+
   - &unitCreatedEvent
     type: UNIT_CREATED_EVENT
     payload:
@@ -49,29 +55,134 @@ mocks:
       initiativeQuorumNum: 1
       initiativeQuorumDen: 10
 
+  - &privGrantedEvtVoter0
+    type: PRIVILEGE_GRANTED_EVENT
+    payload:
+      id: *unitId
+      requesterId: *managerId
+      memberId: *voter0
+      votingRight: true
+      managementRight: false
+      pollingRight: false
+      initiativeRight: true
+      weight: 1
+
+  - &notFoundErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: ITEM_NOT_FOUND_EXCEPTION
+      message: ''
+  - &unprivilegedErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: UNPRIVILEGED_EXCEPTION
+      message: ''
+  - &conflictErr
+    type: COMMAND_EVALUATION_EXCEPTION
+    error: true
+    payload:
+      code: CONFLICT_EXCEPTION
+      message: ''
+
 scenarios:
 
   -
-    label: Add policy
+    label: A manager can add a policy
     given:
-      label: Unit Created
+      label: A unit is created
       key: unit-created
       precondition:
         - *unitCreatedEvent
+        - *privGrantedEvtVoter0
     when: *addPolicyCommand
     then: *policyAddedEvent
 
   -
-    label: requester must have managment rights
+    label: A non-manager cannot add a policy
     given: unit-created
     when:
       <<: *addPolicyCommand
       payload:
         <<: *addPolicyCommandPayload
-        requesterId: 464b1ebb-32c1-460c-8e9e-777777777777
+        requesterId: *wrongId
     then:
-      type: COMMAND_EVALUATION_EXCEPTION
-      error: true
-      payload:
-        code: UNPRIVILEGED_EXCEPTION
-        message: ''
+      label: It is not allowed
+      outcome: *unprivilegedErr
+
+
+  -
+    label: A manager cannot add an already existing policy
+    given:
+      label: A policy has been added
+      key: policy-added
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter0
+        - *policyAddedEvent
+    when:
+      label: A manager tries to add the same policy again
+      action: *addPolicyCommand
+    then:
+      label: It is not allowed
+      outcome: *conflictErr
+
+
+  -
+    label: A non-manager cannot deactivate a policyId
+    given: policy-added
+    when:
+      label: A non-manager tries to deactivate a policy
+      action:
+        type: DEACTIVATE_POLICY_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *voter0
+          policyId: *policyId
+    then:
+      label: It is not allowed
+      outcome: *unprivilegedErr
+
+
+  -
+    label: A manager can deactivate a policy
+    given: policy-added
+    when:
+      label: A manager tries to deactivate a policy
+      action:
+        type: DEACTIVATE_POLICY_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+    then:
+      label: A POLICY_DEACTIVATED_EVENT is emitted
+      outcome: &policyDeactivatedEvent
+        type: POLICY_DEACTIVATED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+
+
+  -
+    label: A manager cannot deactive a policy that is already deactivated
+    given:
+      label: A policy has been deactivated
+      precondition:
+        - *unitCreatedEvent
+        - *privGrantedEvtVoter0
+        - *policyAddedEvent
+        - *policyDeactivatedEvent
+    when:
+      label: A manager tries to deactivate the same policy
+      action:
+        type: DEACTIVATE_POLICY_COMMAND
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+    then:
+      label: It is not allowed
+      outcome: *conflictErr

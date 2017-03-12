@@ -16,6 +16,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/CreateConcernCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CreateNewInitiativeCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CreateUnitCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/DeactivateConcernCommand.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/DeactivatePolicyCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/GiveInitiativeSupportCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/GrantPrivilegeCommand.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/RemoveAreaConcernCommand.cpp

@@ -1,15 +1,21 @@
 #include <vector>
 #include "UnitAggregate.h"
 
+
+
 rooset::UnitAggregate::UnitAggregate(const UnitCreatedEvent & e)
 {
   privileges[e.requesterId] = MemberPrivilege{ false, false, false, true };
 }
 
+
+
 void rooset::UnitAggregate::handleEvent(const AreaCreatedEvent & e)
 {
   areas[e.areaId] = Area{ e.name, map<uuid, uuid>() };
 }
+
+
 
 void rooset::UnitAggregate::handleEvent(const PrivilegeGrantedEvent & e)
 {
@@ -17,10 +23,14 @@ void rooset::UnitAggregate::handleEvent(const PrivilegeGrantedEvent & e)
       e.pollingRight, e.votingRight, e.initiativeRight, e.managementRight, e.weight };
 }
 
+
+
 void rooset::UnitAggregate::handleEvent(const UnitDelegationSetEvent & e)
 {
   delegations[e.trusterId] = e.trusteeId;
 }
+
+
 
 void rooset::UnitAggregate::handleEvent(const UnitDelegationUnsetEvent & e)
 {
@@ -29,6 +39,8 @@ void rooset::UnitAggregate::handleEvent(const UnitDelegationUnsetEvent & e)
     delegations.erase(it);
   }
 }
+
+
 
 void rooset::UnitAggregate::handleEvent(const AreaDelegationSetEvent & e)
 {
@@ -39,6 +51,8 @@ void rooset::UnitAggregate::handleEvent(const AreaDelegationSetEvent & e)
   if (i != area.blockedDelegations.end()) area.blockedDelegations.erase(i);
 }
 
+
+
 void rooset::UnitAggregate::handleEvent(const AreaDelegationUnsetEvent & e)
 {
   auto& areaDelegations = areas.at(e.areaId).delegations;
@@ -47,6 +61,8 @@ void rooset::UnitAggregate::handleEvent(const AreaDelegationUnsetEvent & e)
     areaDelegations.erase(it);
   }
 }
+
+
 
 void rooset::UnitAggregate::handleEvent(const DelegationBlockedForAreaEvent& e)
 {
@@ -59,6 +75,8 @@ void rooset::UnitAggregate::handleEvent(const DelegationBlockedForAreaEvent& e)
   }
 }
 
+
+
 void rooset::UnitAggregate::handleEvent(const DelegationUnblockedForAreaEvent& e)
 {
   auto& blockedAreaDelegations = areas.at(e.areaId).blockedDelegations;
@@ -67,6 +85,8 @@ void rooset::UnitAggregate::handleEvent(const DelegationUnblockedForAreaEvent& e
     blockedAreaDelegations.erase(it);
   }
 }
+
+
 
 void rooset::UnitAggregate::handleEvent(const PolicyAddedEvent & e)
 {
@@ -81,6 +101,16 @@ void rooset::UnitAggregate::handleEvent(const PolicyAddedEvent & e)
 }
 
 
+
+void rooset::UnitAggregate::handleEvent(const PolicyDeactivatedEvent& e)
+{
+  Policy policy = policies.at(e.policyId);
+  policy.active = false;
+  policies[e.policyId] = policy;
+}
+
+    
+
 void rooset::UnitAggregate::handleEvent(const ConcernCreatedEvent& e)
 {
   Concern concern { 
@@ -90,6 +120,7 @@ void rooset::UnitAggregate::handleEvent(const ConcernCreatedEvent& e)
   };
   concerns[e.concernId] = concern;
 }
+
 
 
 void rooset::UnitAggregate::handleEvent(const ConcernDeactivatedEvent& e)

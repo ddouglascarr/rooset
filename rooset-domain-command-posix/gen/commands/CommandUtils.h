@@ -22,6 +22,7 @@
 #include "commands/CreateNewInitiativeCommand.h"
 #include "commands/CreateUnitCommand.h"
 #include "commands/DeactivateConcernCommand.h"
+#include "commands/DeactivatePolicyCommand.h"
 #include "commands/GiveInitiativeSupportCommand.h"
 #include "commands/GrantPrivilegeCommand.h"
 #include "commands/RemoveAreaConcernCommand.h"
@@ -136,6 +137,12 @@ namespace rooset {
       if (msgType == "DEACTIVATE_CONCERN_COMMAND") {
         JsonUtils::validate(DeactivateConcernCommand::schema, d);
         const DeactivateConcernCommand cmd(d);
+        return commandHandler.evaluate(cmd);
+      }
+
+      if (msgType == "DEACTIVATE_POLICY_COMMAND") {
+        JsonUtils::validate(DeactivatePolicyCommand::schema, d);
+        const DeactivatePolicyCommand cmd(d);
         return commandHandler.evaluate(cmd);
       }
 

@@ -1,0 +1,10 @@
+---
+properties:
+  id:
+    type: uuid
+    description: Unit Id
+  requesterId:
+    type: uuid
+  policyId:
+    type: uuid
+commandConstructor: DEACTIVATE_POLICY_COMMAND

@@ -32,6 +32,7 @@
 #include "events/IssueVotingPhaseCompletedEvent.h"
 #include "events/NewInitiativeCreatedEvent.h"
 #include "events/PolicyAddedEvent.h"
+#include "events/PolicyDeactivatedEvent.h"
 #include "events/PrivilegeGrantedEvent.h"
 #include "events/UnitCreatedEvent.h"
 #include "events/UnitDelegationSetEvent.h"
@@ -229,6 +230,13 @@ namespace rooset {
         JsonUtils::validate(PolicyAddedEvent::schema, d);
         const PolicyAddedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, PolicyAddedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "POLICY_DEACTIVATED_EVENT") {
+        JsonUtils::validate(PolicyDeactivatedEvent::schema, d);
+        const PolicyDeactivatedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, PolicyDeactivatedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 
