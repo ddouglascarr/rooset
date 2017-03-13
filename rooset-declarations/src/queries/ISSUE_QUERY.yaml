@@ -15,6 +15,8 @@ resp:
     type: uuid
   policyId:
     type: uuid
+  concernId:
+    type: uuid
   created:
     type: date
     description: Date the first initiative was created
@@ -28,4 +30,3 @@ resp:
     description: Active initiatives
 projectionUri: "/state?partition={id}"
 httpUri: "/issues/{id}"
-

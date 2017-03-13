@@ -12,6 +12,8 @@ resp:
     type: string
   policies:
     type: policyArray
+  concerns:
+    type: concernArray
   areas:
     type: areaArray
 projectionUri: "/state?partition={id}"

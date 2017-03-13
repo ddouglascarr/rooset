@@ -8,7 +8,8 @@
         "areaId": { "$ref": "#/definitions/uuid" },
         "name": { "$ref": "#/definitions/string" },
         "description": { "$ref": "#/definitions/string" },
-        "externalReference": { "$ref": "#/definitions/string" }
+        "externalReference": { "$ref": "#/definitions/string" },
+        "concerns": { "$ref": "#/defnitions/uuidArray" }
       },
       "required": ["areaId", "name", "description", "externalReference"]
     },
@@ -18,6 +19,18 @@
     },
     "bool": {
       "type": "boolean"
+    },
+    "concern": {
+      "concernId": { "$ref": "#/definitions/uuid" },
+      "name": { "$ref": "#/definitions/string" },
+      "description": { "$ref": "#/definitions/string" },
+      "policies": { "$ref": "#/definitions/policyArray" },
+      "initiativeContentType": { "$ref": "#/definitions/initiativeContentType" },
+      "config": { "$ref": "#/definitions/jsonObject" }
+    },
+    "concernArray": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/concern" }
     },
     "date": {
       "type": "integer",
