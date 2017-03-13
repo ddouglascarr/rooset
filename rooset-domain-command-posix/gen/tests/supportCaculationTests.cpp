@@ -149,11 +149,9 @@ TEST(support_caculation_tests, test_compiles)
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -432,11 +430,9 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_asses
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -638,11 +634,9 @@ TEST(support_caculation_tests, issue_must_be_in_admission_phase_for_quorum_compl
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -844,11 +838,9 @@ TEST(support_caculation_tests, short_of_quorum_should_continue_on_assessment)
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -1097,11 +1089,9 @@ TEST(support_caculation_tests, short_of_quorum_should_fail_on_complete)
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -1350,11 +1340,9 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_assessment)
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -1627,11 +1615,9 @@ TEST(support_caculation_tests, over_quorum_should_pass_on_complete)
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");

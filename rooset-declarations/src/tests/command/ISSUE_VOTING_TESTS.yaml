@@ -9,6 +9,7 @@ mocks:
   - &areaId 464b1ebb-32c1-460c-8e9e-222222222222
   - &issueId 464b1ebb-32c1-460c-8e9e-333333333333
   - &policyId 464b1ebb-32c1-460c-8e9e-888888888888
+  - &concernId 464b1ebb-32c1-460c-8e9a-111111111111
   - &initiativeB 464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb
   - &initiativeC 464b1ebb-32c1-460c-8e9e-cccccccccccc
   - &initiativeD 464b1ebb-32c1-460c-8e9e-dddddddddddd
@@ -92,11 +93,9 @@ mocks:
       unitId: *unitId
       areaId: *areaId
       policyId: *policyId
+      concernId: *concernId
       name: 'Test Initiative'
-      polling: false
-      externalReference: ''
       content: 'mock content'
-      textSearchData: 'foo, bar'
       created: 1483586759
 
   - &competingInitiativeCreatedPayload
@@ -104,9 +103,7 @@ mocks:
     requesterId: *voter1
     initiativeId: REPLACE ME
     name: 'Test Competing Initiative'
-    externalReference: 'foobar'
     content: 'mock competing content'
-    textSearchData: 'bing, bong'
     created: replace me
 
   - &issueVerificationPhaseCompletedEvt

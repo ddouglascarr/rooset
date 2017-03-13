@@ -5,6 +5,8 @@ type: DOMAIN_COMMAND_TEST
 
 mocks:
 
+  - &concernId 464b1ebb-32c1-460c-8e9a-111111111111
+
   - &unitCreatedEvt
     type: UNIT_CREATED_EVENT
     payload:
@@ -52,11 +54,9 @@ mocks:
       unitId: 464b1ebb-32c1-460c-8e9e-111111111111
       areaId: 464b1ebb-32c1-460c-8e9e-333333333333
       policyId: 464b1ebb-32c1-460c-8e9e-222222222222
+      concernId: *concernId
       name: 'Test Initiative'
-      polling: false
-      externalReference: ''
       content: 'mock content'
-      textSearchData: 'foo, bar'
       created: 1483586759
 
 
