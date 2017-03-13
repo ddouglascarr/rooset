@@ -59,6 +59,7 @@ ${testBlocks.join("\n")}
       .then(() => {
           return Promise.resolve()
   ${setEvents.join("\n")}
+          .then(() => new Promise((r) => { setTimeout(r, 100); }))
           .then((resp) => Promise.resolve({foo: 'bar'}))
       })
 
