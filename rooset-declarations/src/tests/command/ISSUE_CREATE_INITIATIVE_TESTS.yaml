@@ -4,14 +4,17 @@ key: issue-creation-command
 type: DOMAIN_COMMAND_TEST
 
 mocks:
-  - &concernId 464b1ebb-32c1-460c-8e9e-111111111111
   - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
   - &managerId 464b1ebb-32c1-460c-8e9e-222222222222
   - &areaId 464b1ebb-32c1-460c-8e9e-333333333333
   - &policyId 464b1ebb-32c1-460c-8e9e-888888888888
+  - &otherPolicyId 464b1ebb-32c1-460c-8e9e-008888888880
+  - &concernId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &otherConcernId 464b1ebb-32c1-460c-8e9e-001122334455
   - &voter1Id 464b1ebb-32c1-460c-8e9e-444444444444
   - &voter2Id 464b1ebb-32c1-460c-8e9e-555555555555
   - &voter3Id 464b1ebb-32c1-460c-8e9e-999999999999
+  - &wrongId 464b1ebb-32c1-460c-8e9a-123412341234
 
   - &issueId 464b1ebb-32c1-460c-8e9e-666666666666
   - &initiative1Id 464b1ebb-32c1-4601-8e91-111111111111
@@ -52,6 +55,63 @@ mocks:
       issueQuorumDen: 10
       initiativeQuorumNum: 2
       initiativeQuorumDen: 10
+  - &otherPolicyCreatedEvent
+    type: POLICY_CREATED_EVENT
+    payload:
+      id: *unitId
+      requesterId: *managerId
+      policyId: *otherPolicyId
+      name: Other Policy
+      description: The other Policy
+      votingAlgorithm: SCHULZE
+      maxAdmissionTime: 604800000
+      minAdmissionTime: 0
+      discussionTime: 604800000
+      verificationTime: 604800000
+      votingTime: 604800000
+      issueQuorumNum: 1
+      issueQuorumDen: 10
+      initiativeQuorumNum: 2
+      initiativeQuorumDen: 10
+
+  - &concernCreatedEvent
+    type: CONCERN_CREATED_EVENT
+    payload:
+      id: *unitId
+      concernId: *concernId
+      requesterId: *managerId
+      name: Test concern
+      description: The Test Concern
+      initiativeContentType: "STATEMENT"
+      config: {}
+
+  - &otherConcernCreatedEvent
+    type: CONCERN_CREATED_EVENT
+    payload:
+      id: *unitId
+      concernId: *otherConcernId
+      requesterId: *managerId
+      name: Test concern
+      description: The Test Concern
+      initiativeContentType: "STATEMENT"
+      config: {}
+
+  - &areaConcernAddedEvent
+    type: AREA_CONCERN_ADDED_EVENT
+    payload:
+      id: *unitId
+      areaId: *areaId
+      concernId: *concernId
+      requesterId: *managerId
+
+  - &concernPolicyAddedEvent
+    type: CONCERN_POLICY_ADDED_EVENT
+    payload:
+      id: *unitId
+      requesterId: *managerId
+      policyId: *policyId
+      concernId: *concernId
+
   - &privGrantedEvtVoter1
     type: PRIVILEGE_GRANTED_EVENT
     payload:
@@ -185,6 +245,36 @@ scenarios:
     then: *notFoundErr
 
   -
+    label: An initiator cannot create a new initiative with a policy not in the concern
+    given: area-created
+    when:
+      description: An initiator tries to create a new initiative with a policy not in the concerns of the area
+      action:
+        type: CREATE_NEW_INITIATIVE_COMMAND
+        payload:
+          <<: *createNewInitiativeCmdPayload
+          concernId: *otherConcernId
+    then:
+      description: It is not allowed
+      outcome: *notFoundErr
+
+
+  -
+    label: An initiator cannot create a new initiative with a concern not in the area
+    given: area-created
+    when:
+      description: An initiator tries to create a new initiative with a concern not in the policies of the areas concerns
+      action:
+        type: CREATE_NEW_INITIATIVE_COMMAND
+        payload:
+          <<: *createNewInitiativeCmdPayload
+          policyId: *otherPolicyId
+    then:
+      description: It is not allowed
+      outcome: *notFoundErr
+
+
+  -
     label: An initiator can create a new initiative
     given:
       description: A unit with an area, policy and concern is created
@@ -192,10 +282,15 @@ scenarios:
       precondition:
         - *unitCreatedEvent
         - *areaCreatedEvent
-        - *privGrantedEvtVoter1
         - *policyCreatedEvent
+        - *otherPolicyCreatedEvent
+        - *concernCreatedEvent
+        - *otherConcernCreatedEvent
+        - *concernPolicyAddedEvent
+        - *areaConcernAddedEvent
+        - *privGrantedEvtVoter1
     when:
-      description: An initiative tries to create a new initiative
+      description: An initiator tries to create a new initiative
       action:
         type: CREATE_NEW_INITIATIVE_COMMAND
         payload: *createNewInitiativeCmdPayload
@@ -210,8 +305,11 @@ scenarios:
     given:
       - *unitCreatedEvent
       - *areaCreatedEvent
-      - *privGrantedEvtVoter1
       - *policyCreatedEvent
+      - *concernCreatedEvent
+      - *concernPolicyAddedEvent
+      - *areaConcernAddedEvent
+      - *privGrantedEvtVoter1
       -
         type: NEW_INITIATIVE_CREATED_EVENT
         payload: *createNewInitiativeCmdPayload
@@ -235,6 +333,9 @@ scenarios:
         - *privGrantedEvtVoter1
         - *privGrantedEvtVoter3
         - *policyCreatedEvent
+        - *concernCreatedEvent
+        - *concernPolicyAddedEvent
+        - *areaConcernAddedEvent
         -
           type: NEW_INITIATIVE_CREATED_EVENT
           payload: *createNewInitiativeCmdPayload
