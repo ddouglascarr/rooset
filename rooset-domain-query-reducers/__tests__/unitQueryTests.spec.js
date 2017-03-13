@@ -22,7 +22,6 @@ describe("Unit Query Tests", () => {
 
     it("Query Url Parameter name", () => {
       // init projection
-      const reducerFileContent = "fromCategory(\"aggregate\")\n.partitionBy(function(event) {\n  return event.body.payload.urlParameterName || \"na\";\n})\n.when({\n  $init: function() {\n    return { id: null };\n  },\n\n  UNIT_CREATED_EVENT: function(s, e) {\n    s.id = e.body.payload.id;\n  }\n})\n";
       return Promise.resolve()
       .then(() => initAllProjections())
 
@@ -60,7 +59,6 @@ describe("Unit Query Tests", () => {
 
     it("Query active unit", () => {
       // init projection
-      const reducerFileContent = "fromCategory(\"aggregate\")\n.foreachStream()\n.when({\n\n  $init: function() {\n    return {\n      id: null,\n      name: \"\",\n      description: \"\",\n      areas: [],\n      policies: [],\n      concerns: [],\n    };\n  },\n\n  UNIT_CREATED_EVENT: function(s, e) {\n    s.id = e.body.payload.id;\n    s.name = e.body.payload.name;\n    s.description = e.body.payload.description;\n  },\n\n  POLICY_CREATED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    const policy = {\n      policyId: p.policyId,\n      name: p.name,\n      description: p.description,\n      votingAlgorithm: p.votingAlgorithm,\n      minAdmissionTime: p.minAdmissionTime,\n      maxAdmissionTime: p.maxAdmissionTime,\n      discussionTime: p.discussionTime,\n      verificationTime: p.verificationTime,\n      votingTime: p.votingTime,\n      issueQuorumNum: p.issueQuorumNum,\n      issueQuorumDen: p.issueQuorumDen,\n      initiativeQuorumNum: p.initiativeQuorumNum,\n      initiativeQuorumDen: p.initiativeQuorumDen,\n    };\n    s.policies.push(policy);\n  },\n\n  CONCERN_CREATED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    const concern = {\n      concernId: p.concernId,\n      name: p.name,\n      description: p.description,\n      initiativeContentType: p.initiativeContentType,\n      policies: [],\n      config: p.config,\n    };\n    s.concerns.push(concern);\n  },\n\n  CONCERN_POLICY_ADDED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    let concern = s.concerns.find(c => c.concernId === p.concernId);\n    concern.policies.push(p.policyId);\n  },\n\n  AREA_CREATED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    const area = {\n      areaId: p.areaId,\n      name: p.name,\n      description: p.description,\n      externalReference: p.externalReference,\n      concerns: [],\n    };\n    s.areas.push(area);\n  },\n\n  AREA_CONCERN_ADDED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    const area = s.areas.find(a => a.areaId === p.areaId);\n    area.concerns.push(p.concernId);\n  },\n\n});\n";
       return Promise.resolve()
       .then(() => initAllProjections())
 

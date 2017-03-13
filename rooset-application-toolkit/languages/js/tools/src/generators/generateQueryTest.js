@@ -43,15 +43,10 @@ ${testBlocks.join("\n")}
 
     const queryType = scenario.when.action.type.split('_REQUEST')[0];
     const queryDecl = findDeclarationByType(queryDeclDir, queryType);
-    const reducerFileContent = fs.readFileSync(
-        `${reducerDir}/${queryType}.js`, "utf8");
-    if (!reducerFileContent) throw new Error(`could not read ${queryType} reducer`);
-
 
     return `
     it("${scenario.label}", () => {
       // init projection
-      const reducerFileContent = ${JSON.stringify(reducerFileContent)};
       return Promise.resolve()
       .then(() => initAllProjections())
 
