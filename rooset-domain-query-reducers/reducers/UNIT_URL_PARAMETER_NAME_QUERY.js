@@ -1,4 +1,4 @@
-fromAll()
+fromCategory("aggregate")
 .partitionBy(function(event) {
   return event.body.payload.urlParameterName || "na";
 })

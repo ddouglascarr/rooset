@@ -12,5 +12,5 @@ resp:
     type: memberArray
   totalWeight:
     type: ullong
-projectionUri: "/state?partition={id}"
+projectionUri: "/state?partition=aggregate-{id}"
 httpUri: "/units/{id}/members"

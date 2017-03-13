@@ -138,7 +138,7 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
     CloseableHttpClient httpClient = HttpClients.custom().build();
     try {
       HttpGet get = new HttpGet("http://" + getEventStoreHost + ":" + getEventStorePort +
-          "/streams/" + aggregateId.toString());
+          "/streams/aggregate-" + aggregateId.toString());
       get.addHeader("Accept", "application/vnd.eventstore.atom+json");
       CloseableHttpResponse resp = httpClient.execute(get);
       String respBodyStr = EntityUtils.toString(resp.getEntity());
@@ -174,7 +174,7 @@ public class TestingEventStoreServiceImpl implements TestingEventStoreService
     CloseableHttpClient httpClient = HttpClients.custom().build();
     try {
       HttpPost post = new HttpPost("http://" + getEventStoreHost + ":" + getEventStorePort +
-          "/streams/" + aggregateId);
+          "/streams/aggregate-" + aggregateId);
       post.addHeader("Content-Type", "application/json");
       post.addHeader("ES-EventType", eventType);
       post.addHeader("ES-EventId", UUID.randomUUID().toString());

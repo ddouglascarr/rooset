@@ -12,7 +12,7 @@ module.exports = (testDecl, queryDeclDir, reducerDir) => {
 const fetch = require("node-fetch");
 const {
   startEventStore,
-  initProjection,
+  initAllProjections,
   persistEvent,
  } = require('../utils/eventStoreUtils');
 
@@ -43,22 +43,18 @@ ${testBlocks.join("\n")}
 
     const queryType = scenario.when.action.type.split('_REQUEST')[0];
     const queryDecl = findDeclarationByType(queryDeclDir, queryType);
-    const reducerFileContent = fs.readFileSync(
-        `${reducerDir}/${queryType}.js`, "utf8");
-    if (!reducerFileContent) throw new Error(`could not read ${queryType} reducer`);
-
 
     return `
     it("${scenario.label}", () => {
       // init projection
-      const reducerFileContent = ${JSON.stringify(reducerFileContent)};
       return Promise.resolve()
-      .then(() =>  initProjection("${queryType}", reducerFileContent))
+      .then(() => initAllProjections())
 
       // persist events
       .then(() => {
           return Promise.resolve()
   ${setEvents.join("\n")}
+          .then(() => new Promise((r) => { setTimeout(r, 100); }))
           .then((resp) => Promise.resolve({foo: 'bar'}))
       })
 
