@@ -13,7 +13,7 @@ rooset::uuid rooset::EventRepositoryGetEventStoreHttpImpl::save(
   auto resp = httpTools->post(
       host, port,
       getPostHeaders(eventId, eventType),
-      "/streams/" + idTools->serialize(aggregateId),
+      "/streams/aggregate-" + idTools->serialize(aggregateId),
       JsonUtils::serialize(*e.serialize()));
 
   if (resp.status != 201) throw CommandEvaluationException(
@@ -34,7 +34,7 @@ vector<rapidjson::Document> rooset::EventRepositoryGetEventStoreHttpImpl
   auto resp = httpTools->get(
       host, port,
       getGetHeaders(),
-      "/streams/" + idTools->serialize(aggregateId));
+      "/streams/aggregate-" + idTools->serialize(aggregateId));
 
   if (resp.status != 200) throw CommandEvaluationException(
       ExceptionCode::ITEM_NOT_FOUND_EXCEPTION,
@@ -49,7 +49,7 @@ vector<rapidjson::Document> rooset::EventRepositoryGetEventStoreHttpImpl
   }
   if (lastUri == "") {
     getEventRange(events, "http://" + host + ":" + port + "/streams/" +
-        idTools->serialize(aggregateId));
+        "aggregate-" + idTools->serialize(aggregateId));
   } else {
     getEventRange(events, lastUri);
   }
@@ -63,7 +63,7 @@ void rooset::EventRepositoryGetEventStoreHttpImpl::assertAggregateDoesNotExist(
 {
   HttpResponse resp = httpTools->get(
       host, port, getGetHeaders(),
-      "/streams/" + idTools->serialize(aggregateId));
+      "/streams/aggregate-" + idTools->serialize(aggregateId));
   if (resp.status != 404) throw CommandEvaluationException(
       ExceptionCode::CONFLICT_EXCEPTION,
       "The aggregate (" + idTools->serialize(aggregateId) + ") should not exist, but it does");

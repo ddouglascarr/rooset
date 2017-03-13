@@ -31,7 +31,8 @@ function startEventStore() {
     const child = spawn("eventstored", ["--mem-db", "--run-projections=all"]);
     child.on("error", err => reject(err));
     child.stdout.on("data", chunk => {
-      if (chunk.includes("Sub System 'Projections' initialized")) return resolve(child);
+      if (chunk.includes(
+          "Sub System 'Projections' initialized")) return resolve(child);
     });
   });
 }
@@ -77,7 +78,7 @@ function persistEvent(event) {
   });
 
   return fetch(
-    `http://${EVENTSTORE_HOST}:${EVENTSTORE_PORT}/streams/${streamId}`,
+    `http://${EVENTSTORE_HOST}:${EVENTSTORE_PORT}/streams/aggregate-${streamId}`,
     { body: JSON.stringify(event), headers: localHeaders, method: "POST" }
   ).then(resp => {
     if (!resp.ok) throw new Error(
