@@ -22,7 +22,7 @@ describe("Unit Query Tests", () => {
 
     it("Query Url Parameter name", () => {
       // init projection
-      const reducerFileContent = "fromAll()\n.partitionBy(function(event) {\n  return event.body.payload.urlParameterName || \"na\";\n})\n.when({\n  $init: function() {\n    return { id: null };\n  },\n\n  UNIT_CREATED_EVENT: function(s, e) {\n    s.id = e.body.payload.id;\n  }\n})\n";
+      const reducerFileContent = "fromCategory(\"aggregate\")\n.partitionBy(function(event) {\n  return event.body.payload.urlParameterName || \"na\";\n})\n.when({\n  $init: function() {\n    return { id: null };\n  },\n\n  UNIT_CREATED_EVENT: function(s, e) {\n    s.id = e.body.payload.id;\n  }\n})\n";
       return Promise.resolve()
       .then(() => initAllProjections())
 

@@ -1,4 +1,4 @@
-fromAll()
+fromCategory("aggregate")
 .foreachStream()
 .when({
 
