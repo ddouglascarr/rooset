@@ -16,5 +16,5 @@ resp:
     type: concernArray
   areas:
     type: areaArray
-projectionUri: "/state?partition={id}"
+projectionUri: "/state?partition=aggregate-{id}"
 httpUri: "/units/{id}"

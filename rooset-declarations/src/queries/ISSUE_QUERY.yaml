@@ -28,5 +28,5 @@ resp:
   initiatives:
     type: keyNamePairArray
     description: Active initiatives
-projectionUri: "/state?partition={id}"
+projectionUri: "/state?partition=aggregate-{id}"
 httpUri: "/issues/{id}"

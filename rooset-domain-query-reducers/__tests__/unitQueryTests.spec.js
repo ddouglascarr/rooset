@@ -78,7 +78,7 @@ describe("Unit Query Tests", () => {
 
       // perform query
       .then(() => {
-        const url = "http://localhost:2113/projection/UNIT_QUERY/state?partition=464b1ebb-32c1-460c-8e9e-000000000000";
+        const url = "http://localhost:2113/projection/UNIT_QUERY/state?partition=aggregate-464b1ebb-32c1-460c-8e9e-000000000000";
         return fetch(url);
       })
 

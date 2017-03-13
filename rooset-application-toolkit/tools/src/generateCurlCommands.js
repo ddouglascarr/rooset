@@ -1,5 +1,5 @@
 const uuid = require('uuid4');
-const { getTestPrecondition } = require('../../ratk-declarations-utils');
+const { getTestPrecondition } = require('../../ratk-declaration-utils');
 
 module.exports = (testSpec, preconditionKey) => {
   const events = getTestPrecondition(testSpec, preconditionKey)
