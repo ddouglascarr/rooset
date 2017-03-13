@@ -1,6 +1,7 @@
 #include "IssueCommandHandler.h"
 #include <stdexcept>
 #include <algorithm>
+#include <memory>
 #include "IssueCommandHandler.h"
 #include "exceptions/CommandEvaluationException.h"
 #include "PrivilegeUtils.h"
@@ -14,9 +15,18 @@ unique_ptr<ProjectEvent<Document>> rooset::IssueCommandHandler::evaluate(
   issueRepository->assertAggregateDoesNotExist(c.id);
   auto unit = unitRepository->load(c.unitId);
   PrivilegeUtils::assertInitiativeRight(*unit, c.requesterId);
-  CommandHandlerUtils::assertMapContains<decltype(unit->getAreas()), uuid>(
-      unit->getAreas(), c.areaId, "Unit does not contain this area");
-  return unique_ptr<NewInitiativeCreatedEvent>(new NewInitiativeCreatedEvent(c));
+  const Area area = CommandHandlerUtils::getActive<Area>(
+      unit->getAreas(), c.areaId);
+  const Concern concern = CommandHandlerUtils::getActive<Concern>(
+      unit->getConcerns(), c.concernId);
+  const Policy policy = CommandHandlerUtils::getActive<Policy>(
+      unit->getPolicies(), c.policyId);
+  CommandHandlerUtils::assertVectorContains<uuid>(
+      area.concerns, c.concernId, "The concern is not of the area");
+  CommandHandlerUtils::assertVectorContains<uuid>(
+      concern.policies, c.policyId, "The policy is not of the concern");
+  
+  return make_unique<NewInitiativeCreatedEvent>(c);
 }
 
 

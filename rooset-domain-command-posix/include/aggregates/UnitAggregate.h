@@ -41,6 +41,7 @@ namespace rooset {
     map<uuid, uuid> delegations;
     vector<uuid> blockedDelegations;
     vector<uuid> concerns;
+    bool active;
   };
 
   struct Policy {

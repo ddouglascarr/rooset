@@ -12,7 +12,13 @@ rooset::UnitAggregate::UnitAggregate(const UnitCreatedEvent & e)
 
 void rooset::UnitAggregate::handleEvent(const AreaCreatedEvent & e)
 {
-  areas[e.areaId] = Area{ e.name, map<uuid, uuid>() };
+  areas[e.areaId] = Area {
+    e.name, 
+    {},
+    {},
+    {},
+    true
+  };
 }
 
 
