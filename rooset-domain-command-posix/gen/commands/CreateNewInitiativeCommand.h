@@ -35,12 +35,10 @@ namespace rooset {
         const uuid initiativeId;
         const uuid unitId;
         const uuid areaId;
+        const uuid concernId;
         const uuid policyId;
         const string name;
-        const bool polling;
-        const string externalReference;
         const string content;
-        const string textSearchData;
         const unsigned int created;
 
     
@@ -50,24 +48,20 @@ namespace rooset {
             uuid initiativeId,
             uuid unitId,
             uuid areaId,
+            uuid concernId,
             uuid policyId,
             string name,
-            bool polling,
-            string externalReference,
             string content,
-            string textSearchData,
             unsigned int created) :
             id(id),
             requesterId(requesterId),
             initiativeId(initiativeId),
             unitId(unitId),
             areaId(areaId),
+            concernId(concernId),
             policyId(policyId),
             name(name),
-            polling(polling),
-            externalReference(externalReference),
             content(content),
-            textSearchData(textSearchData),
             created(created)
         {}
   
@@ -80,12 +74,10 @@ namespace rooset {
             initiativeId(JsonUtils::parseUuid(d["payload"]["initiativeId"])),
             unitId(JsonUtils::parseUuid(d["payload"]["unitId"])),
             areaId(JsonUtils::parseUuid(d["payload"]["areaId"])),
+            concernId(JsonUtils::parseUuid(d["payload"]["concernId"])),
             policyId(JsonUtils::parseUuid(d["payload"]["policyId"])),
             name(JsonUtils::parseString(d["payload"]["name"])),
-            polling(d["payload"]["polling"].GetBool()),
-            externalReference(JsonUtils::parseString(d["payload"]["externalReference"])),
             content(JsonUtils::parseString(d["payload"]["content"])),
-            textSearchData(JsonUtils::parseString(d["payload"]["textSearchData"])),
             created(d["payload"]["created"].GetUint())
         {}
   
@@ -130,6 +122,11 @@ namespace rooset {
               d->GetAllocator());
 
           payload.AddMember(
+              "concernId",
+              JsonUtils::serializeUuid(concernId, d->GetAllocator()),
+              d->GetAllocator());
+
+          payload.AddMember(
               "policyId",
               JsonUtils::serializeUuid(policyId, d->GetAllocator()),
               d->GetAllocator());
@@ -139,23 +136,9 @@ namespace rooset {
               JsonUtils::serializeString(name, d->GetAllocator()),
               d->GetAllocator());
 
-          Value polling_value;
-          polling_value.SetBool(polling);
-          payload.AddMember("polling", polling_value, d->GetAllocator());
-
-          payload.AddMember(
-              "externalReference",
-              JsonUtils::serializeString(externalReference, d->GetAllocator()),
-              d->GetAllocator());
-
           payload.AddMember(
               "content",
               JsonUtils::serializeString(content, d->GetAllocator()),
-              d->GetAllocator());
-
-          payload.AddMember(
-              "textSearchData",
-              JsonUtils::serializeString(textSearchData, d->GetAllocator()),
               d->GetAllocator());
 
           Value created_value;

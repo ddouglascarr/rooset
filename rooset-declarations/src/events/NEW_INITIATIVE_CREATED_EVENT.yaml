@@ -12,15 +12,11 @@ properties:
     type: uuid
   policyId:
     type: uuid
+  concernId:
+    type: uuid
   name:
     type: string
-  polling:
-    type: bool
-  externalReference:
-    type: string
   content:
-    type: string
-  textSearchData:
     type: string
   created:
     type: date
