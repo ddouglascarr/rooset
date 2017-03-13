@@ -5,30 +5,41 @@ type: DOMAIN_COMMAND_TEST
 
 mocks:
   - &concernId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &managerId 464b1ebb-32c1-460c-8e9e-222222222222
+  - &areaId 464b1ebb-32c1-460c-8e9e-333333333333
+  - &policyId 464b1ebb-32c1-460c-8e9e-888888888888
+  - &voter1Id 464b1ebb-32c1-460c-8e9e-444444444444
+  - &voter2Id 464b1ebb-32c1-460c-8e9e-555555555555
+  - &voter3Id 464b1ebb-32c1-460c-8e9e-999999999999
+
+  - &issueId 464b1ebb-32c1-460c-8e9e-666666666666
+  - &initiative1Id 464b1ebb-32c1-4601-8e91-111111111111
+
 
   - &unitCreatedEvent
     type: UNIT_CREATED_EVENT
     payload:
-      id: 464b1ebb-32c1-460c-8e9e-111111111111
-      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
+      id: *unitId
+      requesterId: *managerId
       name: Test Unit
       description: The Test Unit
       urlParameterName: test-unit
   - &areaCreatedEvent
     type: AREA_CREATED_EVENT
     payload:
-      id: 464b1ebb-32c1-460c-8e9e-111111111111
-      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
-      areaId: 464b1ebb-32c1-460c-8e9e-333333333333
+      id: *unitId
+      requesterId: *managerId
+      areaId: *areaId
       name: test area
       description: the test area
       externalReference: 'area.com'
-  - &unitPolicySetEvent
+  - &policyCreatedEvent
     type: POLICY_CREATED_EVENT
     payload:
-      id: 464b1ebb-32c1-460c-8e9e-111111111111
-      requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
-      policyId: 464b1ebb-32c1-460c-8e9e-888888888888
+      id: *unitId
+      requesterId: *managerId
+      policyId: *policyId
       name: Test Policy
       description: The Test Policy
       votingAlgorithm: SCHULZE
@@ -41,34 +52,34 @@ mocks:
       issueQuorumDen: 10
       initiativeQuorumNum: 2
       initiativeQuorumDen: 10
-  - &privGrantedEvtVoter4
+  - &privGrantedEvtVoter1
     type: PRIVILEGE_GRANTED_EVENT
     payload:
-      id: 464b1ebb-32c1-460c-8e9e-111111111111
-      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
-      memberId: 464b1ebb-32c1-460c-8e9e-444444444444
+      id: *unitId
+      requesterId: *managerId
+      memberId: *voter1Id
       pollingRight: true
       votingRight: true
       initiativeRight: true
       managementRight: true
       weight: 1
-  - &privGrantedEvtVoter5
+  - &privGrantedEvtVoter2
     type: PRIVILEGE_GRANTED_EVENT
     payload:
-      id: 464b1ebb-32c1-460c-8e9e-111111111111
-      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
-      memberId: 464b1ebb-32c1-460c-8e9e-555555555555
+      id: *unitId
+      requesterId: *managerId
+      memberId: *voter2Id
       pollingRight: true
       votingRight: true
       initiativeRight: false
       managementRight: true
       weight: 1
-  - &privGrantedEvtVoter9
+  - &privGrantedEvtVoter3
     type: PRIVILEGE_GRANTED_EVENT
     payload:
-      id: 464b1ebb-32c1-460c-8e9e-111111111111
-      requesterId: 464b1ebb-32c1-460c-8e9e-222222222222
-      memberId: 464b1ebb-32c1-460c-8e9e-999999999999
+      id: *unitId
+      requesterId: *managerId
+      memberId: *voter3Id
       pollingRight: true
       votingRight: true
       initiativeRight: true
@@ -76,20 +87,20 @@ mocks:
       weight: 1
 
   - &createNewInitiativeCmdPayload
-    id: 464b1ebb-32c1-460c-8e9e-666666666666
-    requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
-    initiativeId: 464b1ebb-32c1-460c-8e9e-777777777777
-    unitId: 464b1ebb-32c1-460c-8e9e-111111111111
-    areaId: 464b1ebb-32c1-460c-8e9e-333333333333
-    policyId: 464b1ebb-32c1-460c-8e9e-888888888888
+    id: *issueId
+    requesterId: *voter1Id
+    initiativeId: *initiative1Id
+    unitId: *unitId
+    areaId: *areaId
+    policyId: *policyId
     concernId: *concernId
     name: 'Test Initiative'
     content: 'mock content'
     created: 1483586759
 
   - &createCompetingInitiativeCmdPayload
-    id: 464b1ebb-32c1-460c-8e9e-666666666666
-    requesterId: 464b1ebb-32c1-460c-8e9e-999999999999
+    id: *issueId
+    requesterId: *voter3Id
     initiativeId: 464b1ebb-32c1-460c-8e9e-000000000000
     name: 'Test Competing Initiative'
     content: 'mock competing content'
@@ -98,9 +109,9 @@ mocks:
   - &issueVerificationPhaseCompletedEvt
     type: ISSUE_VERIFICATION_PHASE_COMPLETED_EVENT
     payload:
-      id: 464b1ebb-32c1-460c-8e9e-666666666666
+      id: *issueId
       passingInitiatives:
-        - 464b1ebb-32c1-460c-8e9e-777777777777
+        - *initiative1Id
 
   - &notFoundErr
     type: COMMAND_EVALUATION_EXCEPTION
@@ -131,27 +142,27 @@ mocks:
 scenarios:
 
   -
-    label: To Create New Initiative Member must have initiative rights
+    label: A non-initiator cannot create a new initiative
     given:
       - *unitCreatedEvent
       - *areaCreatedEvent
-      - *privGrantedEvtVoter5
-      - *unitPolicySetEvent
+      - *privGrantedEvtVoter2
+      - *policyCreatedEvent
     when:
       type: CREATE_NEW_INITIATIVE_COMMAND
       payload:
         <<: *createNewInitiativeCmdPayload
-        requesterId: 464b1ebb-32c1-460c-8e9e-555555555555
+        requesterId: *voter2Id
     then: *unprivilegedErr
 
   -
-    label: To create competing initiative member must have initiative rights
+    label: A non-initiator cannot create a competing initiative
     given:
       - *unitCreatedEvent
       - *areaCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter5
-      - *unitPolicySetEvent
+      - *privGrantedEvtVoter1
+      - *privGrantedEvtVoter2
+      - *policyCreatedEvent
       -
         type: NEW_INITIATIVE_CREATED_EVENT
         payload: *createNewInitiativeCmdPayload
@@ -159,43 +170,48 @@ scenarios:
       type: CREATE_COMPETING_INITIATIVE_COMMAND
       payload:
         <<: *createCompetingInitiativeCmdPayload
-        requesterId: 464b1ebb-32c1-460c-8e9e-555555555555
+        requesterId: *voter2Id
     then: *unprivilegedErr
 
   -
-    label: Area Must Exsist
+    label: An initiator cannot create a new initiative with a non-existant area
     given:
       - *unitCreatedEvent
-      - *privGrantedEvtVoter4
-      - *unitPolicySetEvent
+      - *privGrantedEvtVoter1
+      - *policyCreatedEvent
     when:
       type: CREATE_NEW_INITIATIVE_COMMAND
       payload: *createNewInitiativeCmdPayload
     then: *notFoundErr
 
   -
-    label: Create New Initiative
+    label: An initiator can create a new initiative
     given:
+      description: A unit with an area, policy and concern is created
       key: area-created
       precondition:
         - *unitCreatedEvent
         - *areaCreatedEvent
-        - *privGrantedEvtVoter4
-        - *unitPolicySetEvent
+        - *privGrantedEvtVoter1
+        - *policyCreatedEvent
     when:
-      type: CREATE_NEW_INITIATIVE_COMMAND
-      payload: *createNewInitiativeCmdPayload
+      description: An initiative tries to create a new initiative
+      action:
+        type: CREATE_NEW_INITIATIVE_COMMAND
+        payload: *createNewInitiativeCmdPayload
     then:
-      type: NEW_INITIATIVE_CREATED_EVENT
-      payload: *createNewInitiativeCmdPayload
+      description: Event emitted
+      outcome:
+        type: NEW_INITIATIVE_CREATED_EVENT
+        payload: *createNewInitiativeCmdPayload
 
   -
-    label: Should prevent double creation of issues
+    label: An initiator cannot create an issue that already exists
     given:
       - *unitCreatedEvent
       - *areaCreatedEvent
-      - *privGrantedEvtVoter4
-      - *unitPolicySetEvent
+      - *privGrantedEvtVoter1
+      - *policyCreatedEvent
       -
         type: NEW_INITIATIVE_CREATED_EVENT
         payload: *createNewInitiativeCmdPayload
@@ -210,15 +226,15 @@ scenarios:
         message: ''
 
   -
-    label: Create Competing Initiative
+    label: An initiator can create a competing initiative
     given:
       key: issue-created
       precondition:
         - *unitCreatedEvent
         - *areaCreatedEvent
-        - *privGrantedEvtVoter4
-        - *privGrantedEvtVoter9
-        - *unitPolicySetEvent
+        - *privGrantedEvtVoter1
+        - *privGrantedEvtVoter3
+        - *policyCreatedEvent
         -
           type: NEW_INITIATIVE_CREATED_EVENT
           payload: *createNewInitiativeCmdPayload
@@ -234,9 +250,9 @@ scenarios:
     given:
       - *unitCreatedEvent
       - *areaCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter9
-      - *unitPolicySetEvent
+      - *privGrantedEvtVoter1
+      - *privGrantedEvtVoter3
+      - *policyCreatedEvent
       -
         type: NEW_INITIATIVE_CREATED_EVENT
         payload: *createNewInitiativeCmdPayload
@@ -249,13 +265,13 @@ scenarios:
     then: *conflictErr
 
   -
-    label: Can not create competing initiatives after VERIFICATION phase
+    label: A member can not create competing initiatives after VERIFICATION phase
     given:
       - *unitCreatedEvent
       - *areaCreatedEvent
-      - *privGrantedEvtVoter4
-      - *privGrantedEvtVoter9
-      - *unitPolicySetEvent
+      - *privGrantedEvtVoter1
+      - *privGrantedEvtVoter3
+      - *policyCreatedEvent
       -
         type: NEW_INITIATIVE_CREATED_EVENT
         payload: *createNewInitiativeCmdPayload

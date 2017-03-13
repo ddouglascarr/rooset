@@ -16,7 +16,7 @@ using ::testing::NiceMock;
 namespace rooset_issue_aggregate_create_initiatives_tests_tests {
 
 
-TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_must_have_initiative_rights)
+TEST(issue_aggregate_create_initiatives_tests, a_non_initiator_cannot_create_a_new_initiative)
 {
   
   vector<string> givenEvents;
@@ -59,7 +59,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
   "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
@@ -100,7 +100,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-555555555555",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
@@ -143,7 +143,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_member_must_have_initiative_rights)
+TEST(issue_aggregate_create_initiatives_tests, a_non_initiator_cannot_create_a_competing_initiative)
 {
   
   vector<string> givenEvents;
@@ -199,7 +199,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
   "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
@@ -220,7 +220,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
@@ -294,7 +294,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
+TEST(issue_aggregate_create_initiatives_tests, an_initiator_cannot_create_a_new_initiative_with_a_non_existant_area)
 {
   
   vector<string> givenEvents;
@@ -326,7 +326,7 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
   "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
@@ -367,7 +367,7 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
@@ -410,7 +410,7 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
+TEST(issue_aggregate_create_initiatives_tests, an_initiator_can_create_a_new_initiative)
 {
   
   vector<string> givenEvents;
@@ -453,7 +453,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
   "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
@@ -479,7 +479,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
@@ -501,7 +501,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
@@ -535,7 +535,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of_issues)
+TEST(issue_aggregate_create_initiatives_tests, an_initiator_cannot_create_an_issue_that_already_exists)
 {
   
   vector<string> givenEvents;
@@ -578,7 +578,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
@@ -599,7 +599,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
@@ -634,7 +634,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
@@ -677,7 +677,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
+TEST(issue_aggregate_create_initiatives_tests, an_initiator_can_create_a_competing_initiative)
 {
   
   vector<string> givenEvents;
@@ -733,7 +733,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
   "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
@@ -754,7 +754,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
@@ -878,7 +878,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
@@ -899,7 +899,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
@@ -984,7 +984,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiatives_after_verification_phase)
+TEST(issue_aggregate_create_initiatives_tests, a_member_can_not_create_competing_initiatives_after_verification_phase)
 {
   
   vector<string> givenEvents;
@@ -1040,7 +1040,7 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
   "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
@@ -1061,7 +1061,7 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
@@ -1076,7 +1076,7 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "passingInitiatives": [
-      "464b1ebb-32c1-460c-8e9e-777777777777"
+      "464b1ebb-32c1-4601-8e91-111111111111"
     ]
   }
 })json");
