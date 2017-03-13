@@ -33,9 +33,7 @@ namespace rooset {
         const uuid requesterId;
         const uuid initiativeId;
         const string name;
-        const string externalReference;
         const string content;
-        const string textSearchData;
         const unsigned int created;
 
     
@@ -44,17 +42,13 @@ namespace rooset {
             uuid requesterId,
             uuid initiativeId,
             string name,
-            string externalReference,
             string content,
-            string textSearchData,
             unsigned int created) :
             id(id),
             requesterId(requesterId),
             initiativeId(initiativeId),
             name(name),
-            externalReference(externalReference),
             content(content),
-            textSearchData(textSearchData),
             created(created)
         {}
   
@@ -66,9 +60,7 @@ namespace rooset {
             requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
             initiativeId(JsonUtils::parseUuid(d["payload"]["initiativeId"])),
             name(JsonUtils::parseString(d["payload"]["name"])),
-            externalReference(JsonUtils::parseString(d["payload"]["externalReference"])),
             content(JsonUtils::parseString(d["payload"]["content"])),
-            textSearchData(JsonUtils::parseString(d["payload"]["textSearchData"])),
             created(d["payload"]["created"].GetUint())
         {}
   
@@ -79,9 +71,7 @@ namespace rooset {
 requesterId(c.requesterId),
 initiativeId(c.initiativeId),
 name(c.name),
-externalReference(c.externalReference),
 content(c.content),
-textSearchData(c.textSearchData),
 created(c.created)
     {}
   
@@ -121,18 +111,8 @@ created(c.created)
               d->GetAllocator());
 
           payload.AddMember(
-              "externalReference",
-              JsonUtils::serializeString(externalReference, d->GetAllocator()),
-              d->GetAllocator());
-
-          payload.AddMember(
               "content",
               JsonUtils::serializeString(content, d->GetAllocator()),
-              d->GetAllocator());
-
-          payload.AddMember(
-              "textSearchData",
-              JsonUtils::serializeString(textSearchData, d->GetAllocator()),
               d->GetAllocator());
 
           Value created_value;

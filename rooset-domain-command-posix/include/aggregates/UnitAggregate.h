@@ -4,6 +4,7 @@
 #include <map>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include "ratk/uuid.h"
+#include "enums/InitiativeContentType.h"
 #include "events/UnitCreatedEvent.h"
 #include "events/AreaCreatedEvent.h"
 #include "events/PrivilegeGrantedEvent.h"
@@ -11,9 +12,16 @@
 #include "events/UnitDelegationUnsetEvent.h"
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
-#include "events/UnitPolicySetEvent.h"
+#include "events/PolicyCreatedEvent.h"
+#include "events/PolicyDeactivatedEvent.h"
 #include "events/DelegationBlockedForAreaEvent.h"
-#include "events/DelegationUnblockedForAreaEvent.h"
+#include "events/DelegationUnblockedForAreaEvent.h"  
+#include "events/ConcernCreatedEvent.h"
+#include "events/ConcernDeactivatedEvent.h"
+#include "events/AreaConcernAddedEvent.h"
+#include "events/AreaConcernRemovedEvent.h"
+#include "events/ConcernPolicyAddedEvent.h"
+#include "events/ConcernPolicyRemovedEvent.h"
 
 using namespace std;
 
@@ -32,6 +40,8 @@ namespace rooset {
     string name;
     map<uuid, uuid> delegations;
     vector<uuid> blockedDelegations;
+    vector<uuid> concerns;
+    bool active;
   };
 
   struct Policy {
@@ -39,8 +49,17 @@ namespace rooset {
     bool active;
     unsigned int issueQuorumNum;
     unsigned int issueQuorumDen;
+    unsigned int initiativeQuorumNum;
+    unsigned int initiativeQuorumDen;
   };
 
+  struct Concern {
+    bool active;
+    InitiativeContentType initiativeContentType;
+    vector<uuid> policies;
+    string config;
+  };
+  
   class UnitAggregate
   {
   private:
@@ -48,23 +67,32 @@ namespace rooset {
     map<uuid, MemberPrivilege> privileges;
     map<uuid, uuid> delegations;
     map<uuid, Policy> policies;
+    map<uuid, Concern> concerns;
 
   public:
     UnitAggregate(const UnitCreatedEvent& e);
     void handleEvent(const AreaCreatedEvent& e);
     void handleEvent(const PrivilegeGrantedEvent& e);
+    void handleEvent(const PolicyCreatedEvent& e);
+    void handleEvent(const PolicyDeactivatedEvent& e);
     void handleEvent(const UnitDelegationSetEvent& e);
     void handleEvent(const UnitDelegationUnsetEvent& e);
     void handleEvent(const AreaDelegationSetEvent& e);
     void handleEvent(const AreaDelegationUnsetEvent& e);
     void handleEvent(const DelegationBlockedForAreaEvent& e);
     void handleEvent(const DelegationUnblockedForAreaEvent& e);
+    void handleEvent(const ConcernCreatedEvent& e);
+    void handleEvent(const ConcernDeactivatedEvent& e);
+    void handleEvent(const AreaConcernAddedEvent& e);
+    void handleEvent(const AreaConcernRemovedEvent& e);
+    void handleEvent(const ConcernPolicyAddedEvent& e);
+    void handleEvent(const ConcernPolicyRemovedEvent& e);
 
-    void handleEvent(const UnitPolicySetEvent& e);
 
     inline auto getPrivileges() const { return privileges; }
     inline auto getDelegations() const { return delegations; }
     inline auto getAreas() const { return areas; }
     inline auto getPolicies() const { return policies; }
+    inline auto getConcerns() const { return concerns; }
   };
 }

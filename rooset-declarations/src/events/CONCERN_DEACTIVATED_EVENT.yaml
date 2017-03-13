@@ -1,0 +1,11 @@
+---
+properties:
+  id:
+    type: uuid
+    description: Unit Id
+  requesterId:
+    type: uuid
+  concernId:
+    type: uuid
+
+commandConstructor: DEACTIVATE_CONCERN_COMMAND

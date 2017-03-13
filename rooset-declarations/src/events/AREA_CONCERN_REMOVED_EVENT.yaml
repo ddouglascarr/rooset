@@ -1,0 +1,14 @@
+---
+properties:
+  id:
+    type: uuid
+    description: Unit Id
+  areaId:
+    type: uuid
+  requesterId:
+    type: uuid
+  concernId:
+    type: uuid
+    description: The concern to remove from the area
+
+commandConstructor: REMOVE_AREA_CONCERN_COMMAND

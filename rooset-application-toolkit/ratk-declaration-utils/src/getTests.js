@@ -38,8 +38,8 @@ module.exports = (_srcPath, testType, doStripMetadata = true) => {
           return YAML.load(filename)
         } catch(err) {
           console.log(`failed to parse ${filename}`);
-          console.log(err);
-          throw err;
+          console.log(err.stack);
+          throw new Error(err.message + filename);
         }
       })
   return chain(jsonTests.concat(yamlTests))
@@ -77,7 +77,7 @@ module.exports = (_srcPath, testType, doStripMetadata = true) => {
         when: when.action ? when.action : when,
         then: then.outcome ? then.outcome : then,
       };
-      
+
       if (!isArray(out.given)) throw new Error(JSON.stringify(out, null, 2));
 
       return out;
@@ -125,4 +125,3 @@ module.exports = (_srcPath, testType, doStripMetadata = true) => {
 
 
 }
-

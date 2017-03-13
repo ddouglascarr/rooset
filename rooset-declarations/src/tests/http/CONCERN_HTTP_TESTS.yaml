@@ -1,0 +1,157 @@
+---
+label: Concern Http Tests
+key: concern-http
+type: HTTP_API_TEST
+
+mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-000000000000
+  - &managerId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &areaId 464b1ebb-32c1-460c-8e9e-222222222222
+  - &concernId 464b1ebb-32c1-460c-8e9e-333333333333
+  - &policyId 464b1ebb-32c1-460c-8e9e-888888888888
+  - &voter0 464b1ebb-32c1-460c-8e9f-000000000000
+  - &wrongId 464b1ebb-32c1-460c-8e9f-777777777777
+
+
+scenarios:
+
+
+  -
+    label: A unit manager can create a concern
+    given: concern-command/unit-created
+    when:
+      description: A makes a create concern request
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/concerns
+        method: POST
+        requesterId: *managerId
+        generate:
+          concernId: *concernId
+        body:
+          name: Test concern
+          description: The Test Concern
+          initiativeContentType: "STATEMENT"
+          config: {}
+    then:
+      description: The concern is created
+      outcome:
+        type: CONCERN_CREATED_EVENT
+        payload:
+          id: *unitId
+          concernId: *concernId
+          requesterId: *managerId
+          name: Test concern
+          description: The Test Concern
+          initiativeContentType: "STATEMENT"
+          config: {}
+
+
+  -
+    label: A unit manager can deactivate a concern
+    given: concern-command/concern-created
+    when:
+      description: A manager makes a deactivate concern request
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/concerns/464b1ebb-32c1-460c-8e9e-333333333333
+        method: DELETE
+        requesterId: *managerId
+    then:
+      description: The concern is deactivated
+      outcome:
+        type: CONCERN_DEACTIVATED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          concernId: *concernId
+
+
+  -
+    label: A unit manager can add a concern to an area
+    given: concern-command/area-created
+    when:
+      description: A manager makes an add area concern request
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/areas/464b1ebb-32c1-460c-8e9e-222222222222/concerns
+        method: POST
+        requesterId: *managerId
+        body:
+          concernId: *concernId
+    then:
+      description: The concern is added to the area
+      outcome:
+        type: AREA_CONCERN_ADDED_EVENT
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+
+
+
+  -
+    label: A unit manager can remove a concern from an area
+    given: concern-command/concern-added-to-area
+    when:
+      description: A manager makes a remove area concern request
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/areas/464b1ebb-32c1-460c-8e9e-222222222222/concerns/464b1ebb-32c1-460c-8e9e-333333333333
+        method: DELETE
+        requesterId: *managerId
+    then:
+      description: The concern is removed from the area
+      outcome:
+        type: AREA_CONCERN_REMOVED_EVENT
+        payload:
+          id: *unitId
+          areaId: *areaId
+          concernId: *concernId
+          requesterId: *managerId
+
+
+  -
+    label: A unit manager can add a policy to a concern
+    given: concern-command/policy-concern-created
+    when:
+      description: A manager makes an add concern policy requeste
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/concerns/464b1ebb-32c1-460c-8e9e-333333333333/policies
+        method: POST
+        requesterId: *managerId
+        body:
+          policyId: *policyId
+    then:
+      description: The policy is added to the concern
+      outcome:
+        type: CONCERN_POLICY_ADDED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+          concernId: *concernId
+
+
+
+  -
+    label: A unit manager can remove a policy from a concern
+    given: concern-command/concern-policy-added
+    when:
+      description: A manager makes a remove concern policy requeste
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-000000000000/concerns/464b1ebb-32c1-460c-8e9e-333333333333/policies/464b1ebb-32c1-460c-8e9e-888888888888
+        method: DELETE
+        requesterId: *managerId
+    then:
+      description: The policy is removed from the concern
+      outcome:
+        type: CONCERN_POLICY_REMOVED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId
+          concernId: *concernId

@@ -4,27 +4,28 @@
 #include <memory>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include "ratk/uuid.h"
-#include "ratk/ProjectEvent.h"
+#include "ratk/ProjectCommand.h"
 #include "rapidjson/document.h"
 #include "rapidjson/allocators.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/schema.h"
+#include "ratk/IdUtils.h"
 #include "ratk/JsonUtils.h"
 #include "enums/EnumUtils.h"
 #include "aggregates/SchulzeBallot.h"
-#include "commands/SetUnitPolicyCommand.h"
 
 using namespace std;
 using namespace rooset;
 using namespace rapidjson;
 
+
 namespace rooset {
 
-  class UnitPolicySetEvent : public ProjectEvent<Document>
+  class CreatePolicyCommand : public ProjectCommand<Document>
   {
   private:
-    const string MESSAGE_TYPE = "UNIT_POLICY_SET_EVENT";
+    const string MESSAGE_TYPE = "CREATE_POLICY_COMMAND";
 
   public:
     static const SchemaDocument schema;
@@ -34,7 +35,7 @@ namespace rooset {
         const uuid policyId;
         const string name;
         const string description;
-        const bool polling;
+        const rooset::VotingAlgorithm votingAlgorithm;
         const unsigned int maxAdmissionTime;
         const unsigned int minAdmissionTime;
         const unsigned int discussionTime;
@@ -42,23 +43,17 @@ namespace rooset {
         const unsigned int votingTime;
         const unsigned int issueQuorumNum;
         const unsigned int issueQuorumDen;
-        const rooset::DefeatStrength defeatStrength;
-        const unsigned int directMajorityNum;
-        const unsigned int directMajorityDen;
-        const bool directMajorityStrict;
-        const unsigned int directMajorityPositive;
-        const unsigned int directMajorityNonNegative;
-        const bool noReverseBeatPath;
-        const bool noMultistageMajority;
+        const unsigned int initiativeQuorumNum;
+        const unsigned int initiativeQuorumDen;
 
     
-        UnitPolicySetEvent(
+        CreatePolicyCommand(
             uuid id,
             uuid requesterId,
             uuid policyId,
             string name,
             string description,
-            bool polling,
+            rooset::VotingAlgorithm votingAlgorithm,
             unsigned int maxAdmissionTime,
             unsigned int minAdmissionTime,
             unsigned int discussionTime,
@@ -66,20 +61,14 @@ namespace rooset {
             unsigned int votingTime,
             unsigned int issueQuorumNum,
             unsigned int issueQuorumDen,
-            rooset::DefeatStrength defeatStrength,
-            unsigned int directMajorityNum,
-            unsigned int directMajorityDen,
-            bool directMajorityStrict,
-            unsigned int directMajorityPositive,
-            unsigned int directMajorityNonNegative,
-            bool noReverseBeatPath,
-            bool noMultistageMajority) :
+            unsigned int initiativeQuorumNum,
+            unsigned int initiativeQuorumDen) :
             id(id),
             requesterId(requesterId),
             policyId(policyId),
             name(name),
             description(description),
-            polling(polling),
+            votingAlgorithm(votingAlgorithm),
             maxAdmissionTime(maxAdmissionTime),
             minAdmissionTime(minAdmissionTime),
             discussionTime(discussionTime),
@@ -87,26 +76,21 @@ namespace rooset {
             votingTime(votingTime),
             issueQuorumNum(issueQuorumNum),
             issueQuorumDen(issueQuorumDen),
-            defeatStrength(defeatStrength),
-            directMajorityNum(directMajorityNum),
-            directMajorityDen(directMajorityDen),
-            directMajorityStrict(directMajorityStrict),
-            directMajorityPositive(directMajorityPositive),
-            directMajorityNonNegative(directMajorityNonNegative),
-            noReverseBeatPath(noReverseBeatPath),
-            noMultistageMajority(noMultistageMajority)
+            initiativeQuorumNum(initiativeQuorumNum),
+            initiativeQuorumDen(initiativeQuorumDen)
         {}
   
 
     
-        UnitPolicySetEvent(const Document& d) :
+        CreatePolicyCommand(const Document& d) :
         
             id(JsonUtils::parseUuid(d["payload"]["id"])),
             requesterId(JsonUtils::parseUuid(d["payload"]["requesterId"])),
             policyId(JsonUtils::parseUuid(d["payload"]["policyId"])),
             name(JsonUtils::parseString(d["payload"]["name"])),
             description(JsonUtils::parseString(d["payload"]["description"])),
-            polling(d["payload"]["polling"].GetBool()),
+            votingAlgorithm(EnumUtils::parseVotingAlgorithm(
+                JsonUtils::parseString(d["payload"]["votingAlgorithm"]))),
             maxAdmissionTime(d["payload"]["maxAdmissionTime"].GetUint()),
             minAdmissionTime(d["payload"]["minAdmissionTime"].GetUint()),
             discussionTime(d["payload"]["discussionTime"].GetUint()),
@@ -114,43 +98,9 @@ namespace rooset {
             votingTime(d["payload"]["votingTime"].GetUint()),
             issueQuorumNum(d["payload"]["issueQuorumNum"].GetUint()),
             issueQuorumDen(d["payload"]["issueQuorumDen"].GetUint()),
-            defeatStrength(EnumUtils::parseDefeatStrength(string(
-                d["payload"]["defeatStrength"].GetString(),
-                d["payload"]["defeatStrength"].GetStringLength()))),
-            directMajorityNum(d["payload"]["directMajorityNum"].GetUint()),
-            directMajorityDen(d["payload"]["directMajorityDen"].GetUint()),
-            directMajorityStrict(d["payload"]["directMajorityStrict"].GetBool()),
-            directMajorityPositive(d["payload"]["directMajorityPositive"].GetUint()),
-            directMajorityNonNegative(d["payload"]["directMajorityNonNegative"].GetUint()),
-            noReverseBeatPath(d["payload"]["noReverseBeatPath"].GetBool()),
-            noMultistageMajority(d["payload"]["noMultistageMajority"].GetBool())
+            initiativeQuorumNum(d["payload"]["initiativeQuorumNum"].GetUint()),
+            initiativeQuorumDen(d["payload"]["initiativeQuorumDen"].GetUint())
         {}
-  
-
-    
-    UnitPolicySetEvent(const SetUnitPolicyCommand& c):
-        id(c.id),
-requesterId(c.requesterId),
-policyId(c.policyId),
-name(c.name),
-description(c.description),
-polling(c.polling),
-maxAdmissionTime(c.maxAdmissionTime),
-minAdmissionTime(c.minAdmissionTime),
-discussionTime(c.discussionTime),
-verificationTime(c.verificationTime),
-votingTime(c.votingTime),
-issueQuorumNum(c.issueQuorumNum),
-issueQuorumDen(c.issueQuorumDen),
-defeatStrength(c.defeatStrength),
-directMajorityNum(c.directMajorityNum),
-directMajorityDen(c.directMajorityDen),
-directMajorityStrict(c.directMajorityStrict),
-directMajorityPositive(c.directMajorityPositive),
-directMajorityNonNegative(c.directMajorityNonNegative),
-noReverseBeatPath(c.noReverseBeatPath),
-noMultistageMajority(c.noMultistageMajority)
-    {}
   
 
     unique_ptr<Document> serialize() const override
@@ -192,9 +142,12 @@ noMultistageMajority(c.noMultistageMajority)
               JsonUtils::serializeString(description, d->GetAllocator()),
               d->GetAllocator());
 
-          Value polling_value;
-          polling_value.SetBool(polling);
-          payload.AddMember("polling", polling_value, d->GetAllocator());
+          payload.AddMember(
+              "votingAlgorithm",
+              JsonUtils::serializeString(
+                  EnumUtils::serializeVotingAlgorithm(votingAlgorithm),
+                  d->GetAllocator()),
+              d->GetAllocator());
 
           Value maxAdmissionTime_value;
           maxAdmissionTime_value.SetUint(maxAdmissionTime);
@@ -224,55 +177,24 @@ noMultistageMajority(c.noMultistageMajority)
           issueQuorumDen_value.SetUint(issueQuorumDen);
           payload.AddMember("issueQuorumDen", issueQuorumDen_value, d->GetAllocator());     
 
-          Value defeatStrength_value;
-          auto defeatStrength_str = EnumUtils::serializeDefeatStrength(defeatStrength);
-          defeatStrength_value.SetString(defeatStrength_str.c_str(), defeatStrength_str.size(), d->GetAllocator());
-          payload.AddMember("defeatStrength", defeatStrength_value, d->GetAllocator());    
+          Value initiativeQuorumNum_value;
+          initiativeQuorumNum_value.SetUint(initiativeQuorumNum);
+          payload.AddMember("initiativeQuorumNum", initiativeQuorumNum_value, d->GetAllocator());     
 
-          Value directMajorityNum_value;
-          directMajorityNum_value.SetUint(directMajorityNum);
-          payload.AddMember("directMajorityNum", directMajorityNum_value, d->GetAllocator());     
-
-          Value directMajorityDen_value;
-          directMajorityDen_value.SetUint(directMajorityDen);
-          payload.AddMember("directMajorityDen", directMajorityDen_value, d->GetAllocator());     
-
-          Value directMajorityStrict_value;
-          directMajorityStrict_value.SetBool(directMajorityStrict);
-          payload.AddMember("directMajorityStrict", directMajorityStrict_value, d->GetAllocator());
-
-          Value directMajorityPositive_value;
-          directMajorityPositive_value.SetUint(directMajorityPositive);
-          payload.AddMember("directMajorityPositive", directMajorityPositive_value, d->GetAllocator());     
-
-          Value directMajorityNonNegative_value;
-          directMajorityNonNegative_value.SetUint(directMajorityNonNegative);
-          payload.AddMember("directMajorityNonNegative", directMajorityNonNegative_value, d->GetAllocator());     
-
-          Value noReverseBeatPath_value;
-          noReverseBeatPath_value.SetBool(noReverseBeatPath);
-          payload.AddMember("noReverseBeatPath", noReverseBeatPath_value, d->GetAllocator());
-
-          Value noMultistageMajority_value;
-          noMultistageMajority_value.SetBool(noMultistageMajority);
-          payload.AddMember("noMultistageMajority", noMultistageMajority_value, d->GetAllocator());
+          Value initiativeQuorumDen_value;
+          initiativeQuorumDen_value.SetUint(initiativeQuorumDen);
+          payload.AddMember("initiativeQuorumDen", initiativeQuorumDen_value, d->GetAllocator());     
 
       d->AddMember("payload", payload, d->GetAllocator());
 
       return d;
     }
 
-    string getMessageType() const override
+    string getEventType() const override
     {
       return MESSAGE_TYPE;
-    }
-
-    uuid getAggregateId() const override
-    {
-      return id;
     }
 
   };
 
 };
-  

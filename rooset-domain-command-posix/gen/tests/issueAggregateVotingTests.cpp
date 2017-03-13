@@ -32,14 +32,14 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -47,14 +47,8 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -77,11 +71,9 @@ TEST(issue_aggregate_voting_tests, must_be_in_voting_phase_to_cast_ballot)
     "unitId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -189,14 +181,14 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -204,14 +196,8 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -234,11 +220,9 @@ TEST(issue_aggregate_voting_tests, voter_must_be_privileged)
     "unitId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -344,14 +328,14 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -359,14 +343,8 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -389,11 +367,9 @@ TEST(issue_aggregate_voting_tests, to_unset_a_ballot_the_ballot_must_exist)
     "unitId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -484,14 +460,14 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -499,14 +475,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -529,11 +499,9 @@ TEST(issue_aggregate_voting_tests, unset_ballot)
     "unitId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -636,14 +604,14 @@ TEST(issue_aggregate_voting_tests, set_ballot)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -651,14 +619,8 @@ TEST(issue_aggregate_voting_tests, set_ballot)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -694,11 +656,9 @@ TEST(issue_aggregate_voting_tests, set_ballot)
     "unitId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -809,14 +769,14 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -824,14 +784,8 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -854,11 +808,9 @@ TEST(issue_aggregate_voting_tests, unset_ballot_should_fail_on_duplicate)
     "unitId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -978,14 +930,14 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -993,14 +945,8 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1023,11 +969,9 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "unitId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -1038,9 +982,7 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "requesterId": "464b1ebb-32c1-460c-8e9f-111111111111",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "name": "Test Competing Initiative",
-    "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong",
     "created": 1484817333
   }
 })json");
@@ -1051,9 +993,7 @@ TEST(issue_aggregate_voting_tests, should_pick_single_winner_in_schulze_ex_1)
     "requesterId": "464b1ebb-32c1-460c-8e9f-111111111111",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-dddddddddddd",
     "name": "Test Competing Initiative",
-    "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong",
     "created": 1484817320
   }
 })json");
@@ -1380,14 +1320,14 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -1395,14 +1335,8 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1425,11 +1359,9 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "unitId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -1440,9 +1372,7 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "requesterId": "464b1ebb-32c1-460c-8e9f-111111111111",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-cccccccccccc",
     "name": "Test Competing Initiative",
-    "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong",
     "created": 1484817333
   }
 })json");
@@ -1453,9 +1383,7 @@ TEST(issue_aggregate_voting_tests, should_time_based_tie_break_on_2_schulze_winn
     "requesterId": "464b1ebb-32c1-460c-8e9f-111111111111",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-dddddddddddd",
     "name": "Test Competing Initiative",
-    "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong",
     "created": 1484817332
   }
 })json");
@@ -1785,14 +1713,14 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-000000000000",
     "requesterId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -1800,14 +1728,8 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 5,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 1,
+    "initiativeQuorumDen": 5
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1830,11 +1752,9 @@ TEST(issue_aggregate_voting_tests, status_quo_should_be_able_to_be_winner)
     "unitId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "areaId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9a-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");

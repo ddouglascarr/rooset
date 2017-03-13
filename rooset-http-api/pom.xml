@@ -186,6 +186,7 @@
                                 <RATK_GEN_HTTP_COMMAND_REQUEST_DECL_DIR>${basedir}/../rooset-declarations/src/httpCommandRequests</RATK_GEN_HTTP_COMMAND_REQUEST_DECL_DIR>
                                 <RATK_GEN_COMMAND_DECL_DIR>${basedir}/../rooset-declarations/src/commands</RATK_GEN_COMMAND_DECL_DIR>
                                 <RATK_GEN_TEST_DECL_DIR>${basedir}/../rooset-declarations/src/tests</RATK_GEN_TEST_DECL_DIR>
+                                <RATK_GEN_EVENT_DECL_DIR>${basedir}/../rooset-declarations/src/events</RATK_GEN_EVENT_DECL_DIR>
                                 <RATK_GEN_BASE_SCHEMA_FILE>${basedir}/../rooset-declarations/src/base.schema.json</RATK_GEN_BASE_SCHEMA_FILE>
                                 <RATK_GEN_JAVA_BASE_PACKAGE>org.rooset.httpapi</RATK_GEN_JAVA_BASE_PACKAGE>
                             </environmentVariables>

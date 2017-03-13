@@ -1,0 +1,7 @@
+---
+  type: REMOVE_CONCERN_POLICY_HTTP_COMMAND_REQUEST
+  commandTarget: REMOVE_CONCERN_POLICY_COMMAND
+  description: Remove a policy from a concern
+  method: DELETE
+  uri: /units/{id}/concerns/{concernId}/policies/{policyId}
+  userIdMapping: requesterId

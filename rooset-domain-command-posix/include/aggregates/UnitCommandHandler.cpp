@@ -149,9 +149,111 @@ unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const Un
 
 
 
-unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const SetUnitPolicyCommand& c)
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const CreatePolicyCommand& c)
 {
   auto unit = repository->load(c.id);
   PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
-  return unique_ptr<UnitPolicySetEvent>(new UnitPolicySetEvent(c));
+  CommandHandlerUtils::assertMapExcludesKey<Policy>(
+      unit->getPolicies(), c.policyId, "The policy already exists");
+  return make_unique<PolicyCreatedEvent>(c);
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(const DeactivatePolicyCommand& c)
+{
+  auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  CommandHandlerUtils::getActive<Policy>(unit->getPolicies(), c.policyId);
+  return make_unique<PolicyDeactivatedEvent>(c);
+}
+
+    
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const CreateConcernCommand& c)
+{
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  CommandHandlerUtils::assertMapExcludes<decltype(unit->getConcerns()), uuid>(
+      unit->getConcerns(), c.concernId, "This concern already exists");
+  return make_unique<ConcernCreatedEvent>(c);
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const DeactivateConcernCommand& c)
+{
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  const Concern concern = CommandHandlerUtils::getActive<Concern>(
+      unit->getConcerns(), c.concernId);
+  return make_unique<ConcernDeactivatedEvent>(c);
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const AddAreaConcernCommand& c)
+{
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  
+  const auto concern = CommandHandlerUtils::getActive<Concern>(
+      unit->getConcerns(), c.concernId);
+  
+  const auto area = unit->getAreas().at(c.areaId);
+  auto it = find(area.concerns.begin(), area.concerns.end(), c.concernId);
+  if (it != area.concerns.end()) throw CommandEvaluationException(
+      ExceptionCode::CONFLICT_EXCEPTION, 
+      "The concern has already been added to this area");
+  
+  return make_unique<AreaConcernAddedEvent>(c);
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const RemoveAreaConcernCommand& c)
+{
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  
+  const auto area = unit->getAreas().at(c.areaId);
+  CommandHandlerUtils::assertVectorContains<uuid>(
+      area.concerns, c.concernId, "This concern is not part of the area");
+  
+  return make_unique<AreaConcernRemovedEvent>(c);
+}
+  
+
+  
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const AddConcernPolicyCommand& c)
+{
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  
+  const Concern concern = unit->getConcerns().at(c.concernId);
+  CommandHandlerUtils::getActive<Policy>(unit->getPolicies(), c.policyId);
+  CommandHandlerUtils::assertVectorExcludes<uuid>(
+      concern.policies, c.policyId, "The policy is already part of the concern");
+  
+  return make_unique<ConcernPolicyAddedEvent>(c);
+}
+
+
+
+unique_ptr<ProjectEvent<Document>> rooset::UnitCommandHandler::evaluate(
+    const RemoveConcernPolicyCommand& c)
+{
+  const auto unit = repository->load(c.id);
+  PrivilegeUtils::assertManagementRight(*unit, c.requesterId);
+  
+  const Concern concern = unit->getConcerns().at(c.concernId);
+  CommandHandlerUtils::assertVectorContains<uuid>(
+      concern.policies, c.policyId, "The policy is not part of the concern");
+  
+  return make_unique<ConcernPolicyRemovedEvent>(c);
 }

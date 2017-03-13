@@ -17,7 +17,7 @@ namespace rooset {
 class JsonUtils
 {
 public:
-  static string serialize(const rapidjson::Document& d);
+  static string serialize(const rapidjson::Value& d);
 
   static rapidjson::Document parse(const string& json);
 

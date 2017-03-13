@@ -8,11 +8,7 @@ properties:
     type: uuid
   name:
     type: string
-  externalReference:
-    type: string
   content:
-    type: string
-  textSearchData:
     type: string
   created:
     type: date

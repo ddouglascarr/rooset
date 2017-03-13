@@ -8,7 +8,8 @@
         "areaId": { "$ref": "#/definitions/uuid" },
         "name": { "$ref": "#/definitions/string" },
         "description": { "$ref": "#/definitions/string" },
-        "externalReference": { "$ref": "#/definitions/string" }
+        "externalReference": { "$ref": "#/definitions/string" },
+        "concerns": { "$ref": "#/defnitions/uuidArray" }
       },
       "required": ["areaId", "name", "description", "externalReference"]
     },
@@ -19,6 +20,18 @@
     "bool": {
       "type": "boolean"
     },
+    "concern": {
+      "concernId": { "$ref": "#/definitions/uuid" },
+      "name": { "$ref": "#/definitions/string" },
+      "description": { "$ref": "#/definitions/string" },
+      "policies": { "$ref": "#/definitions/policyArray" },
+      "initiativeContentType": { "$ref": "#/definitions/initiativeContentType" },
+      "config": { "$ref": "#/definitions/jsonObject" }
+    },
+    "concernArray": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/concern" }
+    },
     "date": {
       "type": "integer",
       "minimum": 0,
@@ -27,6 +40,10 @@
     "duration": {
       "type": "integer",
       "description": "Length of duration in seconds"
+    },
+    "initiativeContentType": {
+      "type": "string",
+      "enum": [ "STATEMENT", "GIT_PATCH" ]
     },
     "keyNamePair": {
       "type": "object",
@@ -59,6 +76,9 @@
     "initiativeArray": {
       "type": "array",
       "items": { "$ref": "#/definitions/initiative" }
+    },
+    "jsonObject": {
+      "type": "object"
     },
     "member": {
       "type": "object",
@@ -93,6 +113,10 @@
         "issueQuorumDen": { "$ref": "#/definitions/unit" }
       }
     },
+    "policyArray": {
+      "type": "array",
+      "items": "#/definitions/policy"
+    },
     "uuid": {
       "type":"string",
       "pattern":"[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"
@@ -113,14 +137,27 @@
       "properties": {
         "approve": {
           "type": "array",
-          "items": { "$ref": "#definitions/uuidArray" }
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/uuid" }
+          }
         },
-        "abstain": { "$ref": "#definitions/uuidArray" },
+        "abstain": {
+           "type": "array",
+           "items": { "$ref": "#/definitions/uuid" }
+        },
         "disapprove": {
           "type": "array",
-          "items": { "$ref": "#definitions/uuidArray" }
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/uuid" }
+          }
         }
       }
+    },
+    "votingAlgorithm": {
+      "type": "string",
+      "enum": ["SCHULZE"]
     },
     "string": {
       "type": "string"

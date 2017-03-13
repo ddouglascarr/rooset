@@ -2,16 +2,19 @@ const { camelCase, map, merge, chain } = require('lodash');
 const {
   findHttpCommandRequestByUri,
   findCommandSchemaByType,
+  findEventSchemaByType,
+  assertMessageCompliesWithSchema,
 } = require('ratk-declaration-utils');
 const { getTypenameFromRef } = require('../utils');
 
 
 module.exports = (scenario) => {
   const testMethodName = camelCase(scenario.label);
+  validateScenarioMessages(scenario);
   const when = scenario.when;
   if (when.type !== 'HTTP_REQUEST') throw new Error(
       `Http Tests only support type HTTP_REQUEST, ${when.type} given`);
-  
+
   return `
   @Test
   public void ${testMethodName}() throws Exception
@@ -70,6 +73,8 @@ function declareRequest(when) {
 
 
 function persistGivenEvents(given) {
+
+
   return given
       .map((event) => `
         testingEventStoreService.saveEvent(new JSONObject(
@@ -92,7 +97,9 @@ function assessResponse(then) {
   }
 
   return `
-    assertTrue("2xx response expected", response.getStatusCode().is2xxSuccessful());
+    assertTrue(
+        "2xx response expected, was " + response.getStatusCode() + " " + response.toString(),
+        response.getStatusCode().is2xxSuccessful());
     UUID aggregateId = UUID.fromString(responseBody.getString("id"));
     JSONObject event = testingEventStoreService.getLastEventForAggregate(aggregateId);
     String expectedEvent = ${JSON.stringify(JSON.stringify(then))};
@@ -147,4 +154,17 @@ function stripMessageFromExceptionResponseBody(then) {
     newPayload.put("message", "");
     responseBody.put("payload", newPayload);
   `;
+}
+
+
+function validateScenarioMessages(scenario) {
+  scenario.given.forEach(e => {
+    const schema = findEventSchemaByType(e.type);
+    try {
+      assertMessageCompliesWithSchema(schema, e);
+    } catch(err) {
+      console.log(`error parsing ${scenario.label}`);
+      throw err;
+    }
+  });
 }

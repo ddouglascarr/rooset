@@ -16,7 +16,7 @@ using ::testing::NiceMock;
 namespace rooset_issue_aggregate_create_initiatives_tests_tests {
 
 
-TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_must_have_initiative_rights)
+TEST(issue_aggregate_create_initiatives_tests, a_non_initiator_cannot_create_a_new_initiative)
 {
   
   vector<string> givenEvents;
@@ -56,14 +56,14 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -71,14 +71,8 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
   }
 })json");
   shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
@@ -106,15 +100,13 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-555555555555",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -151,7 +143,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_new_initiative_member_m
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_member_must_have_initiative_rights)
+TEST(issue_aggregate_create_initiatives_tests, a_non_initiator_cannot_create_a_competing_initiative)
 {
   
   vector<string> givenEvents;
@@ -204,14 +196,14 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -219,14 +211,8 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -234,15 +220,13 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -273,9 +257,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
     "requesterId": "464b1ebb-32c1-460c-8e9e-555555555555",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "name": "Test Competing Initiative",
-    "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong",
     "created": 1483586759
   }
 })json");
@@ -312,7 +294,7 @@ TEST(issue_aggregate_create_initiatives_tests, to_create_competing_initiative_me
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
+TEST(issue_aggregate_create_initiatives_tests, an_initiator_cannot_create_a_new_initiative_with_a_non_existant_area)
 {
   
   vector<string> givenEvents;
@@ -341,14 +323,14 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -356,14 +338,8 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
   }
 })json");
   shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
@@ -391,15 +367,13 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -436,7 +410,7 @@ TEST(issue_aggregate_create_initiatives_tests, area_must_exsist)
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
+TEST(issue_aggregate_create_initiatives_tests, an_initiator_cannot_create_a_new_initiative_with_a_policy_not_in_the_concern)
 {
   
   vector<string> givenEvents;
@@ -463,6 +437,88 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
   }
 })json");
   givenEvents.push_back(u8R"json({
+  "type": "POLICY_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "name": "Test Policy",
+    "description": "The Test Policy",
+    "votingAlgorithm": "SCHULZE",
+    "maxAdmissionTime": 604800000,
+    "minAdmissionTime": 0,
+    "discussionTime": 604800000,
+    "verificationTime": 604800000,
+    "votingTime": 604800000,
+    "issueQuorumNum": 1,
+    "issueQuorumDen": 10,
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "POLICY_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-008888888880",
+    "name": "Other Policy",
+    "description": "The other Policy",
+    "votingAlgorithm": "SCHULZE",
+    "maxAdmissionTime": 604800000,
+    "minAdmissionTime": 0,
+    "discussionTime": 604800000,
+    "verificationTime": 604800000,
+    "votingTime": 604800000,
+    "issueQuorumNum": 1,
+    "issueQuorumDen": 10,
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test concern",
+    "description": "The Test Concern",
+    "initiativeContentType": "STATEMENT",
+    "config": {}
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "concernId": "464b1ebb-32c1-460c-8e9e-001122334455",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test concern",
+    "description": "The Test Concern",
+    "initiativeContentType": "STATEMENT",
+    "config": {}
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_POLICY_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "AREA_CONCERN_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -475,15 +531,109 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
     "weight": 1
   }
 })json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
+  
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "COMMAND_EVALUATION_EXCEPTION",
+  "error": true,
+  "payload": {
+    "code": "ITEM_NOT_FOUND_EXCEPTION",
+    "message": ""
+  }
+})json");
+  try {
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("expected schema invalid");
+  }
+  CommandEvaluationException expected(expected_doc);
+  
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "CREATE_NEW_INITIATIVE_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-666666666666",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
+    "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-001122334455",
+    "name": "Test Initiative",
+    "content": "mock content",
+    "created": 1483586759
+  }
+})json");
+  try {
+  JsonUtils::validate(CreateNewInitiativeCommand::schema, cmd_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("cmd schema invalid");
+  }
+  CreateNewInitiativeCommand cmd(cmd_doc);
+  
+  try {
+    commandHandler.evaluate(cmd);
+    throw invalid_argument("An exception was expected");
+  } catch(CommandEvaluationException e) {
+    auto resultDoc = e.serialize();
+    
+  // if docs don't match, assess the json output to make useful error report
+  auto expectedDoc = expected.serialize();
+  
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
+      
+  bool isPass = *resultDoc == *expectedDoc;
+  if (isPass) {
+    EXPECT_EQ(*resultDoc, *expectedDoc);
+  }  else {
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
+  };
+  }
+}
+
+
+TEST(issue_aggregate_create_initiatives_tests, an_initiator_cannot_create_a_new_initiative_with_a_concern_not_in_the_area)
+{
+  
+  vector<string> givenEvents;
+  
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "UNIT_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test Unit",
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "AREA_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "name": "test area",
+    "description": "the test area",
+    "externalReference": "area.com"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "POLICY_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -491,14 +641,272 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "POLICY_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-008888888880",
+    "name": "Other Policy",
+    "description": "The other Policy",
+    "votingAlgorithm": "SCHULZE",
+    "maxAdmissionTime": 604800000,
+    "minAdmissionTime": 0,
+    "discussionTime": 604800000,
+    "verificationTime": 604800000,
+    "votingTime": 604800000,
+    "issueQuorumNum": 1,
+    "issueQuorumDen": 10,
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test concern",
+    "description": "The Test Concern",
+    "initiativeContentType": "STATEMENT",
+    "config": {}
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "concernId": "464b1ebb-32c1-460c-8e9e-001122334455",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test concern",
+    "description": "The Test Concern",
+    "initiativeContentType": "STATEMENT",
+    "config": {}
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_POLICY_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "AREA_CONCERN_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "memberId": "464b1ebb-32c1-460c-8e9e-444444444444",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
+  }
+})json");
+  shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
+      NiceMock<EventRepositoryMockImpl>>();
+  eventRepository->setMockEvents(givenEvents);
+  CommandHandler commandHandler(eventRepository); 
+  
+  auto expected_doc = JsonUtils::parse(u8R"json({
+  "type": "COMMAND_EVALUATION_EXCEPTION",
+  "error": true,
+  "payload": {
+    "code": "ITEM_NOT_FOUND_EXCEPTION",
+    "message": ""
+  }
+})json");
+  try {
+  JsonUtils::validate(CommandEvaluationException::schema, expected_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("expected schema invalid");
+  }
+  CommandEvaluationException expected(expected_doc);
+  
+  auto cmd_doc = JsonUtils::parse(u8R"json({
+  "type": "CREATE_NEW_INITIATIVE_COMMAND",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-666666666666",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
+    "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "policyId": "464b1ebb-32c1-460c-8e9e-008888888880",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "name": "Test Initiative",
+    "content": "mock content",
+    "created": 1483586759
+  }
+})json");
+  try {
+  JsonUtils::validate(CreateNewInitiativeCommand::schema, cmd_doc);
+  } catch (invalid_argument e) {
+    throw invalid_argument("cmd schema invalid");
+  }
+  CreateNewInitiativeCommand cmd(cmd_doc);
+  
+  try {
+    commandHandler.evaluate(cmd);
+    throw invalid_argument("An exception was expected");
+  } catch(CommandEvaluationException e) {
+    auto resultDoc = e.serialize();
+    
+  // if docs don't match, assess the json output to make useful error report
+  auto expectedDoc = expected.serialize();
+  
+  // ignore the message from the test, and log it if the test fails
+  const string msg = (*resultDoc)["payload"]["message"].GetString();
+  (*expectedDoc)["payload"].RemoveMember("message");
+  (*resultDoc)["payload"].RemoveMember("message");
+  if (*expectedDoc != *resultDoc) cout << msg;
+      
+  bool isPass = *resultDoc == *expectedDoc;
+  if (isPass) {
+    EXPECT_EQ(*resultDoc, *expectedDoc);
+  }  else {
+    EXPECT_EQ(JsonUtils::serialize(*resultDoc),
+        JsonUtils::serialize(*expectedDoc));
+  };
+  }
+}
+
+
+TEST(issue_aggregate_create_initiatives_tests, an_initiator_can_create_a_new_initiative)
+{
+  
+  vector<string> givenEvents;
+  
+  givenEvents.push_back(u8R"json({
+  "type": "UNIT_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test Unit",
+    "description": "The Test Unit",
+    "urlParameterName": "test-unit"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "AREA_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "name": "test area",
+    "description": "the test area",
+    "externalReference": "area.com"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "POLICY_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "name": "Test Policy",
+    "description": "The Test Policy",
+    "votingAlgorithm": "SCHULZE",
+    "maxAdmissionTime": 604800000,
+    "minAdmissionTime": 0,
+    "discussionTime": 604800000,
+    "verificationTime": 604800000,
+    "votingTime": 604800000,
+    "issueQuorumNum": 1,
+    "issueQuorumDen": 10,
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "POLICY_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-008888888880",
+    "name": "Other Policy",
+    "description": "The other Policy",
+    "votingAlgorithm": "SCHULZE",
+    "maxAdmissionTime": 604800000,
+    "minAdmissionTime": 0,
+    "discussionTime": 604800000,
+    "verificationTime": 604800000,
+    "votingTime": 604800000,
+    "issueQuorumNum": 1,
+    "issueQuorumDen": 10,
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test concern",
+    "description": "The Test Concern",
+    "initiativeContentType": "STATEMENT",
+    "config": {}
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "concernId": "464b1ebb-32c1-460c-8e9e-001122334455",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test concern",
+    "description": "The Test Concern",
+    "initiativeContentType": "STATEMENT",
+    "config": {}
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_POLICY_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "AREA_CONCERN_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "PRIVILEGE_GRANTED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "memberId": "464b1ebb-32c1-460c-8e9e-444444444444",
+    "pollingRight": true,
+    "votingRight": true,
+    "initiativeRight": true,
+    "managementRight": true,
+    "weight": 1
   }
 })json");
   shared_ptr<EventRepositoryMockImpl> eventRepository = make_shared<
@@ -511,15 +919,13 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -535,15 +941,13 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -571,7 +975,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_new_initiative)
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of_issues)
+TEST(issue_aggregate_create_initiatives_tests, an_initiator_cannot_create_an_issue_that_already_exists)
 {
   
   vector<string> givenEvents;
@@ -598,6 +1002,56 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   }
 })json");
   givenEvents.push_back(u8R"json({
+  "type": "POLICY_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "name": "Test Policy",
+    "description": "The Test Policy",
+    "votingAlgorithm": "SCHULZE",
+    "maxAdmissionTime": 604800000,
+    "minAdmissionTime": 0,
+    "discussionTime": 604800000,
+    "verificationTime": 604800000,
+    "votingTime": 604800000,
+    "issueQuorumNum": 1,
+    "issueQuorumDen": 10,
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test concern",
+    "description": "The Test Concern",
+    "initiativeContentType": "STATEMENT",
+    "config": {}
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_POLICY_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "AREA_CONCERN_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
   "type": "PRIVILEGE_GRANTED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
@@ -611,45 +1065,17 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
-  "payload": {
-    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
-    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
-    "name": "Test Policy",
-    "description": "The Test Policy",
-    "polling": false,
-    "maxAdmissionTime": 604800000,
-    "minAdmissionTime": 0,
-    "discussionTime": 604800000,
-    "verificationTime": 604800000,
-    "votingTime": 604800000,
-    "issueQuorumNum": 1,
-    "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
-  }
-})json");
-  givenEvents.push_back(u8R"json({
   "type": "NEW_INITIATIVE_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -678,15 +1104,13 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -723,7 +1147,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
+TEST(issue_aggregate_create_initiatives_tests, an_initiator_can_create_a_competing_initiative)
 {
   
   vector<string> givenEvents;
@@ -776,14 +1200,14 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -791,14 +1215,38 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_CREATED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "name": "Test concern",
+    "description": "The Test Concern",
+    "initiativeContentType": "STATEMENT",
+    "config": {}
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "CONCERN_POLICY_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
+    "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111"
+  }
+})json");
+  givenEvents.push_back(u8R"json({
+  "type": "AREA_CONCERN_ADDED_EVENT",
+  "payload": {
+    "id": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222"
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -806,15 +1254,13 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -830,9 +1276,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
     "requesterId": "464b1ebb-32c1-460c-8e9e-999999999999",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "name": "Test Competing Initiative",
-    "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong",
     "created": 1483586759
   }
 })json");
@@ -850,9 +1294,7 @@ TEST(issue_aggregate_create_initiatives_tests, create_competing_initiative)
     "requesterId": "464b1ebb-32c1-460c-8e9e-999999999999",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "name": "Test Competing Initiative",
-    "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong",
     "created": 1483586759
   }
 })json");
@@ -933,14 +1375,14 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -948,14 +1390,8 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -963,15 +1399,13 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -982,9 +1416,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
     "requesterId": "464b1ebb-32c1-460c-8e9e-999999999999",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "name": "Test Competing Initiative",
-    "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong",
     "created": 1483586759
   }
 })json");
@@ -1015,9 +1447,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
     "requesterId": "464b1ebb-32c1-460c-8e9e-999999999999",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "name": "Test Competing Initiative",
-    "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong",
     "created": 1483586759
   }
 })json");
@@ -1054,7 +1484,7 @@ TEST(issue_aggregate_create_initiatives_tests, should_prevent_double_creation_of
 }
 
 
-TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiatives_after_verification_phase)
+TEST(issue_aggregate_create_initiatives_tests, a_member_can_not_create_competing_initiatives_after_verification_phase)
 {
   
   vector<string> givenEvents;
@@ -1107,14 +1537,14 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
   }
 })json");
   givenEvents.push_back(u8R"json({
-  "type": "UNIT_POLICY_SET_EVENT",
+  "type": "POLICY_CREATED_EVENT",
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-111111111111",
-    "requesterId": "464b1ebb-32c1-460c-8e9e-333333333333",
+    "requesterId": "464b1ebb-32c1-460c-8e9e-222222222222",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
     "name": "Test Policy",
     "description": "The Test Policy",
-    "polling": false,
+    "votingAlgorithm": "SCHULZE",
     "maxAdmissionTime": 604800000,
     "minAdmissionTime": 0,
     "discussionTime": 604800000,
@@ -1122,14 +1552,8 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
     "votingTime": 604800000,
     "issueQuorumNum": 1,
     "issueQuorumDen": 10,
-    "defeatStrength": "SIMPLE",
-    "directMajorityNum": 1,
-    "directMajorityDen": 2,
-    "directMajorityStrict": true,
-    "directMajorityPositive": 1,
-    "directMajorityNonNegative": 1,
-    "noReverseBeatPath": false,
-    "noMultistageMajority": false
+    "initiativeQuorumNum": 2,
+    "initiativeQuorumDen": 10
   }
 })json");
   givenEvents.push_back(u8R"json({
@@ -1137,15 +1561,13 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "requesterId": "464b1ebb-32c1-460c-8e9e-444444444444",
-    "initiativeId": "464b1ebb-32c1-460c-8e9e-777777777777",
+    "initiativeId": "464b1ebb-32c1-4601-8e91-111111111111",
     "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
     "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+    "concernId": "464b1ebb-32c1-460c-8e9e-111111111111",
     "name": "Test Initiative",
-    "polling": false,
-    "externalReference": "",
     "content": "mock content",
-    "textSearchData": "foo, bar",
     "created": 1483586759
   }
 })json");
@@ -1154,7 +1576,7 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
   "payload": {
     "id": "464b1ebb-32c1-460c-8e9e-666666666666",
     "passingInitiatives": [
-      "464b1ebb-32c1-460c-8e9e-777777777777"
+      "464b1ebb-32c1-4601-8e91-111111111111"
     ]
   }
 })json");
@@ -1185,9 +1607,7 @@ TEST(issue_aggregate_create_initiatives_tests, can_not_create_competing_initiati
     "requesterId": "464b1ebb-32c1-460c-8e9e-999999999999",
     "initiativeId": "464b1ebb-32c1-460c-8e9e-000000000000",
     "name": "Test Competing Initiative",
-    "externalReference": "foobar",
     "content": "mock competing content",
-    "textSearchData": "bing, bong",
     "created": 1483586759
   }
 })json");

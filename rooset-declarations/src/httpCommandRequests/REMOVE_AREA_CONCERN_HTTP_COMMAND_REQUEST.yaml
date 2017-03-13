@@ -1,0 +1,7 @@
+---
+  type: REMOVE_AREA_CONCERN_HTTP_COMMAND_REQUEST
+  commandTarget: REMOVE_AREA_CONCERN_COMMAND
+  description: Remove a concern from an area
+  method: DELETE
+  uri: /units/{id}/areas/{areaId}/concerns/{concernId}
+  userIdMapping: requesterId

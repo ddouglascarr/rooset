@@ -1,10 +1,16 @@
 
 
 set(RATK_GEN_EVENT_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/AreaCreatedEvent.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/AreaConcernAddedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/AreaConcernRemovedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/AreaCreatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/AreaDelegationSetEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/AreaDelegationUnsetEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/CompetingInitiativeCreatedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/ConcernCreatedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/ConcernDeactivatedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/ConcernPolicyAddedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/ConcernPolicyRemovedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/DelegationBlockedForAreaEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/DelegationBlockedForIssueEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/DelegationUnblockedForAreaEvent.cpp
@@ -22,11 +28,12 @@ ${CMAKE_CURRENT_SOURCE_DIR}/IssueDiscussionPhaseCompletedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/IssueVerificationPhaseCompletedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/IssueVotingPhaseCompletedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/NewInitiativeCreatedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/PolicyCreatedEvent.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/PolicyDeactivatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/PrivilegeGrantedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnitCreatedEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnitDelegationSetEvent.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UnitDelegationUnsetEvent.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/UnitPolicySetEvent.cpp
 
   CACHE FILEPATH "Generated source files")
 

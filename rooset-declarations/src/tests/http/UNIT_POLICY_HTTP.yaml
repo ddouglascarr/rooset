@@ -4,11 +4,16 @@ key: unit-policy-http
 type: HTTP_API_TEST
 
 mocks:
+  - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &managerId 464b1ebb-32c1-460c-8e9e-333333333333
+  - &policyId 464b1ebb-32c1-460c-8e9e-222222222222
+  - &wrongId 464b1ebb-32c1-460c-8e9e-777777777777
+  - &voter0 464b1ebb-32c1-460c-8e9f-000000000000
 
-  - &setPolicyBody
+  - &createPolicyBody
     name: Test Policy
     description: The Test Policy
-    polling: false
+    votingAlgorithm: SCHULZE
     maxAdmissionTime: 604800000
     minAdmissionTime: 0
     discussionTime: 604800000
@@ -16,24 +21,18 @@ mocks:
     votingTime: 604800000
     issueQuorumNum: 1
     issueQuorumDen: 10
-    defeatStrength: SIMPLE
-    directMajorityNum: 1
-    directMajorityDen: 2
-    directMajorityStrict: true
-    directMajorityPositive: 1
-    directMajorityNonNegative: 1
-    noReverseBeatPath: false
-    noMultistageMajority: false
-    
-  - &unitPolicySetEvent
-    type: UNIT_POLICY_SET_EVENT
+    initiativeQuorumNum: 1
+    initiativeQuorumDen: 10
+
+  - &policyCreatedEvent
+    type: POLICY_CREATED_EVENT
     payload:
       id: 464b1ebb-32c1-460c-8e9e-111111111111
       requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
       policyId: 464b1ebb-32c1-460c-8e9e-222222222222
       name: Test Policy
       description: The Test Policy
-      polling: false
+      votingAlgorithm: SCHULZE
       maxAdmissionTime: 604800000
       minAdmissionTime: 0
       discussionTime: 604800000
@@ -41,14 +40,8 @@ mocks:
       votingTime: 604800000
       issueQuorumNum: 1
       issueQuorumDen: 10
-      defeatStrength: SIMPLE
-      directMajorityNum: 1
-      directMajorityDen: 2
-      directMajorityStrict: true
-      directMajorityPositive: 1
-      directMajorityNonNegative: 1
-      noReverseBeatPath: false
-      noMultistageMajority: false
+      initiativeQuorumNum: 1
+      initiativeQuorumDen: 10
 
 
 scenarios:
@@ -56,17 +49,17 @@ scenarios:
 
   -
     label: Requester must have management rights
-    given: unit-aggregate-policy-command/unit-created
+    given: policy-command/unit-created
     when:
       label: A non-member makes a policy set request
       action: &localAction
         type: HTTP_REQUEST
-        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policy
-        method: PUT
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policies
+        method: POST
         requesterId: 464b1ebb-32c1-460c-8e9e-444444444444
         generate:
           policyId: 464b1ebb-32c1-460c-8e9e-222222222222
-        body: *setPolicyBody
+        body: *createPolicyBody
     then:
       label: The request is not allowed
       outcome:
@@ -78,19 +71,38 @@ scenarios:
 
 
   -
-    label: A unit manager can set the unit policy
-    given: unit-aggregate-policy-command/unit-created
+    label: A unit manager may create unit policy
+    given: policy-command/unit-created
     when:
-      label: A manager makes a policy set request
+      label: A manager makes a policy create request
       action:
         type: HTTP_REQUEST
-        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policy
-        method: PUT
-        requesterId: 464b1ebb-32c1-460c-8e9e-333333333333
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policies
+        method: POST
+        requesterId: *managerId
         generate:
-          policyId: 464b1ebb-32c1-460c-8e9e-222222222222
-        body: *setPolicyBody
+          policyId: *policyId
+        body: *createPolicyBody
     then:
       label: The policy is set
-      outcome: *unitPolicySetEvent
-        
+      outcome: *policyCreatedEvent
+
+
+  -
+    label: A unit manager can deactivate a unit policy
+    given: policy-command/policy-added
+    when:
+      label: A manager makes a deactivate request
+      action:
+        type: HTTP_REQUEST
+        uri: /units/464b1ebb-32c1-460c-8e9e-111111111111/policies/464b1ebb-32c1-460c-8e9e-222222222222
+        method: DELETE
+        requesterId: *managerId
+    then:
+      label: The policy is deactivated
+      outcome:
+        type: POLICY_DEACTIVATED_EVENT
+        payload:
+          id: *unitId
+          requesterId: *managerId
+          policyId: *policyId

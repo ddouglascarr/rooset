@@ -13,6 +13,7 @@ mocks:
   - &areaId 464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb
   - &issueId 464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa
   - &policyId 464b1ebb-32c1-460c-8e9e-cccccccccccc
+  - &concernId 464b1ebb-32c1-460c-8e9e-dddddddddddd
 
   - &newInitiativeCreatedEvt
     type: NEW_INITIATIVE_CREATED_EVENT
@@ -23,11 +24,9 @@ mocks:
       unitId: *unitId
       areaId: *areaId
       policyId: *policyId
+      concernId: *concernId
       name: "Paint the bike shed"
-      polling: false
-      externalReference: "1234"
       content: "Paint the bike shed red"
-      textSearchData: "bike, shed"
       created: 1487394829
 
   - &competingInitiativeCreatedEvtGreen
@@ -37,9 +36,7 @@ mocks:
       requesterId: *memberId2
       initiativeId: *initiativeId5
       name: "Paint it green"
-      externalReference: "5678"
       content: "Paint the bike shed green"
-      textSearchData: "bike, shed"
       created: 1487394950
 
   - &issueAdmissionQuorumPassedEvt
@@ -81,6 +78,7 @@ scenarios:
           unitId: *unitId
           areaId: *areaId
           policyId: *policyId
+          concernId: *concernId
           created: 1487394829
           issueState: ADMISSION
           resolved: false
@@ -112,6 +110,7 @@ scenarios:
           unitId: *unitId
           areaId: *areaId
           policyId: *policyId
+          concernId: *concernId
           created: 1487394829
           issueState: DISCUSSION
           resolved: false
@@ -143,6 +142,7 @@ scenarios:
           unitId: *unitId
           areaId: *areaId
           policyId: *policyId
+          concernId: *concernId
           created: 1487394829
           issueState: CANCELED_NO_INITIATIVE_ADMITTED
           resolved: true

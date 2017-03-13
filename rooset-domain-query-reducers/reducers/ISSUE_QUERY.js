@@ -8,6 +8,7 @@ fromAll()
       unitId: null,
       areaId: null,
       policyId: null,
+      concernId: null,
       created: 0,
       issueState: "ADMISSION",
       resolved: false,
@@ -21,6 +22,7 @@ fromAll()
     s.unitId = p.unitId;
     s.areaId = p.areaId;
     s.policyId = p.policyId;
+    s.concernId = p.concernId;
     s.created = p.created;
     s.initiatives.push({
       key: p.initiativeId,

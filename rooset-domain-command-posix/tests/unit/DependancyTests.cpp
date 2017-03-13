@@ -55,6 +55,36 @@ namespace roosetTesting {
     EXPECT_FALSE(std::regex_match("Foobar", urlParameterNameRegex));
     EXPECT_FALSE(std::regex_match("foo_bar", urlParameterNameRegex));
   }
+  
+  
+  
+  TEST(dependencies, rapidjson_copy_from)
+  {
+    rapidjson::Document a = JsonUtils::parse(u8R"json({
+      "a": 1,
+      "b": { "c": 2 }
+    })json");
+    rapidjson::Document b;
+    b.CopyFrom(a["b"], b.GetAllocator());
+    a["b"].SetInt(3);
+    
+    // a.b is reassigned
+    EXPECT_EQ(a["b"].GetInt(), 3);
+    // without affecting b
+    EXPECT_EQ(JsonUtils::serialize(b), u8R"json({"c":2})json");
+    
+    rapidjson::Document c;
+    c.SetObject();
+    rapidjson::Value c_bValue(b, b.GetAllocator());
+    
+    c.AddMember("b", c_bValue, c.GetAllocator());
+    // c has b included as a property
+    EXPECT_EQ(JsonUtils::serialize(c), u8R"json({"b":{"c":2}})json");
+    
+    // as a copy, not moved from b
+    EXPECT_EQ(JsonUtils::serialize(b), u8R"json({"c":2})json");
+    
+  }
 
   class MyTestFixture : public ::testing::Test
   {

@@ -1,15 +1,27 @@
 #include <vector>
 #include "UnitAggregate.h"
 
+
+
 rooset::UnitAggregate::UnitAggregate(const UnitCreatedEvent & e)
 {
   privileges[e.requesterId] = MemberPrivilege{ false, false, false, true };
 }
 
+
+
 void rooset::UnitAggregate::handleEvent(const AreaCreatedEvent & e)
 {
-  areas[e.areaId] = Area{ e.name, map<uuid, uuid>() };
+  areas[e.areaId] = Area {
+    e.name, 
+    {},
+    {},
+    {},
+    true
+  };
 }
+
+
 
 void rooset::UnitAggregate::handleEvent(const PrivilegeGrantedEvent & e)
 {
@@ -17,10 +29,14 @@ void rooset::UnitAggregate::handleEvent(const PrivilegeGrantedEvent & e)
       e.pollingRight, e.votingRight, e.initiativeRight, e.managementRight, e.weight };
 }
 
+
+
 void rooset::UnitAggregate::handleEvent(const UnitDelegationSetEvent & e)
 {
   delegations[e.trusterId] = e.trusteeId;
 }
+
+
 
 void rooset::UnitAggregate::handleEvent(const UnitDelegationUnsetEvent & e)
 {
@@ -29,6 +45,8 @@ void rooset::UnitAggregate::handleEvent(const UnitDelegationUnsetEvent & e)
     delegations.erase(it);
   }
 }
+
+
 
 void rooset::UnitAggregate::handleEvent(const AreaDelegationSetEvent & e)
 {
@@ -39,6 +57,8 @@ void rooset::UnitAggregate::handleEvent(const AreaDelegationSetEvent & e)
   if (i != area.blockedDelegations.end()) area.blockedDelegations.erase(i);
 }
 
+
+
 void rooset::UnitAggregate::handleEvent(const AreaDelegationUnsetEvent & e)
 {
   auto& areaDelegations = areas.at(e.areaId).delegations;
@@ -47,6 +67,8 @@ void rooset::UnitAggregate::handleEvent(const AreaDelegationUnsetEvent & e)
     areaDelegations.erase(it);
   }
 }
+
+
 
 void rooset::UnitAggregate::handleEvent(const DelegationBlockedForAreaEvent& e)
 {
@@ -59,6 +81,8 @@ void rooset::UnitAggregate::handleEvent(const DelegationBlockedForAreaEvent& e)
   }
 }
 
+
+
 void rooset::UnitAggregate::handleEvent(const DelegationUnblockedForAreaEvent& e)
 {
   auto& blockedAreaDelegations = areas.at(e.areaId).blockedDelegations;
@@ -68,12 +92,89 @@ void rooset::UnitAggregate::handleEvent(const DelegationUnblockedForAreaEvent& e
   }
 }
 
-void rooset::UnitAggregate::handleEvent(const UnitPolicySetEvent & e)
+
+
+void rooset::UnitAggregate::handleEvent(const PolicyCreatedEvent & e)
 {
   policies[e.policyId] = {
     e.name,
     true,
     e.issueQuorumNum,
     e.issueQuorumDen,
+    e.initiativeQuorumNum,
+    e.initiativeQuorumDen
   };
+}
+
+
+
+void rooset::UnitAggregate::handleEvent(const PolicyDeactivatedEvent& e)
+{
+  Policy policy = policies.at(e.policyId);
+  policy.active = false;
+  policies[e.policyId] = policy;
+}
+
+    
+
+void rooset::UnitAggregate::handleEvent(const ConcernCreatedEvent& e)
+{
+  Concern concern { 
+    true, 
+    e.initiativeContentType,
+    {},
+    e.config
+  };
+  concerns[e.concernId] = concern;
+}
+
+
+
+void rooset::UnitAggregate::handleEvent(const ConcernDeactivatedEvent& e)
+{
+  auto concern = concerns.at(e.concernId);
+  concern.active = false;
+  concerns[e.concernId] = concern;
+}
+
+
+
+void rooset::UnitAggregate::handleEvent(const AreaConcernAddedEvent& e)
+{
+  auto area = areas.at(e.areaId);
+  area.concerns.push_back(e.concernId);
+  areas[e.areaId] = area;
+}
+
+
+
+void rooset::UnitAggregate::handleEvent(const AreaConcernRemovedEvent& e)
+{
+  auto area = areas.at(e.areaId);
+  auto it = find(area.concerns.begin(), area.concerns.end(), e.concernId);
+  if (it != area.concerns.end()) {
+    area.concerns.erase(it);
+  }
+  areas[e.areaId] = area;
+}
+
+
+
+void rooset::UnitAggregate::handleEvent(const ConcernPolicyAddedEvent& e)
+{
+  auto concern = concerns.at(e.concernId);
+  concern.policies.push_back(e.policyId);
+  concerns[e.concernId] = concern;
+}
+
+
+
+void rooset::UnitAggregate::handleEvent(const ConcernPolicyRemovedEvent& e)
+{
+  Concern concern = concerns.at(e.concernId);
+  auto it = find(concern.policies.begin(), concern.policies.end(), e.policyId);
+  if (it != concern.policies.end()) {
+    concern.policies.erase(it);
+  }
+  concerns[e.concernId] = concern;
 }

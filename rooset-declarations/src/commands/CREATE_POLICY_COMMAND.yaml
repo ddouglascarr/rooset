@@ -1,0 +1,43 @@
+---
+properties:
+  id:
+    type: uuid
+    description: Unit Id
+  requesterId:
+    type: uuid
+  policyId:
+    type: uuid
+  name:
+    type: string
+  description:
+    type: string
+  votingAlgorithm:
+    type: votingAlgorithm
+    description: The althorithm used in the VOTING phase
+  maxAdmissionTime:
+    type: duration
+    description: The maximum time a new issue stays in ADMISSION before it is resolved
+  minAdmissionTime:
+    type: duration
+    description: The minimum time before an issue is passed the ADMISSION phase
+  discussionTime:
+    type: duration
+    description: duration of the DISCUSSION phase
+  verificationTime:
+    type: duration
+    description: duration of the VERIFICATION phase
+  votingTime:
+    type: duration
+    description: duration of the VOTING phase
+  issueQuorumNum:
+    type: uint
+    description: The numerator used to determine whether an issue quorum has been reached in the ADMISSION phase
+  issueQuorumDen:
+    type: uint
+    description: The denominator used to determine whether an issue quorum has been reached in the ADMISSION phase
+  initiativeQuorumNum:
+    type: uint
+    description: The numerator used to determine whether an issue quorum has been reached in the VERIFICATION phase
+  initiativeQuorumDen:
+    type: uint
+    description: The denominator used to determine whether an initiative quorum has been reached in the VERIFICATION phase

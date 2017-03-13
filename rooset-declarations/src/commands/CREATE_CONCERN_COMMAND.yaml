@@ -1,0 +1,19 @@
+---
+properties:
+  id:
+    type: uuid
+    description: Unit Id
+  concernId:
+    type: uuid
+  requesterId:
+    type: uuid
+  name:
+    type: string
+  description:
+    type: string
+  initiativeContentType:
+    type: initiativeContentType
+    description: The type of content initiatives of this concern
+  config:
+    type: jsonObject
+    description: Content configuration, different for each contentType

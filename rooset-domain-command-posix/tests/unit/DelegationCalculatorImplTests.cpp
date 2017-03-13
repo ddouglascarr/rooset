@@ -143,11 +143,9 @@ protected:
       "unitId": "464b1ebb-32c1-460c-8e9e-111111111111",
       "areaId": "464b1ebb-32c1-460c-8e9e-333333333333",
       "policyId": "464b1ebb-32c1-460c-8e9e-888888888888",
+      "concernId": "464b1ebb-32c1-460c-8e8e-ffffffffffff",
       "name": "Test Initiative",
-      "polling": false,
-      "externalReference": "",
       "content": "mock content",
-      "textSearchData": "foo, bar",
       "created": 1483586759
     }
   })json"));

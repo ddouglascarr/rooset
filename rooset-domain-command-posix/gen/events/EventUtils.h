@@ -6,10 +6,16 @@
 #include "ratk/MessageUtils.h"
 #include "ratk/JsonUtils.h"
 
+#include "events/AreaConcernAddedEvent.h"
+#include "events/AreaConcernRemovedEvent.h"
 #include "events/AreaCreatedEvent.h"
 #include "events/AreaDelegationSetEvent.h"
 #include "events/AreaDelegationUnsetEvent.h"
 #include "events/CompetingInitiativeCreatedEvent.h"
+#include "events/ConcernCreatedEvent.h"
+#include "events/ConcernDeactivatedEvent.h"
+#include "events/ConcernPolicyAddedEvent.h"
+#include "events/ConcernPolicyRemovedEvent.h"
 #include "events/DelegationBlockedForAreaEvent.h"
 #include "events/DelegationBlockedForIssueEvent.h"
 #include "events/DelegationUnblockedForAreaEvent.h"
@@ -27,11 +33,12 @@
 #include "events/IssueVerificationPhaseCompletedEvent.h"
 #include "events/IssueVotingPhaseCompletedEvent.h"
 #include "events/NewInitiativeCreatedEvent.h"
+#include "events/PolicyCreatedEvent.h"
+#include "events/PolicyDeactivatedEvent.h"
 #include "events/PrivilegeGrantedEvent.h"
 #include "events/UnitCreatedEvent.h"
 #include "events/UnitDelegationSetEvent.h"
 #include "events/UnitDelegationUnsetEvent.h"
-#include "events/UnitPolicySetEvent.h"
 
 namespace rooset {
 
@@ -46,6 +53,20 @@ namespace rooset {
       const string msgType = d["type"].GetString();
 
       
+      if (msgType == "AREA_CONCERN_ADDED_EVENT") {
+        JsonUtils::validate(AreaConcernAddedEvent::schema, d);
+        const AreaConcernAddedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, AreaConcernAddedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "AREA_CONCERN_REMOVED_EVENT") {
+        JsonUtils::validate(AreaConcernRemovedEvent::schema, d);
+        const AreaConcernRemovedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, AreaConcernRemovedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
       if (msgType == "AREA_CREATED_EVENT") {
         JsonUtils::validate(AreaCreatedEvent::schema, d);
         const AreaCreatedEvent evt(d);
@@ -71,6 +92,34 @@ namespace rooset {
         JsonUtils::validate(CompetingInitiativeCreatedEvent::schema, d);
         const CompetingInitiativeCreatedEvent evt(d);
         MessageUtils::applyEvent<Aggregate, CompetingInitiativeCreatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "CONCERN_CREATED_EVENT") {
+        JsonUtils::validate(ConcernCreatedEvent::schema, d);
+        const ConcernCreatedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, ConcernCreatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "CONCERN_DEACTIVATED_EVENT") {
+        JsonUtils::validate(ConcernDeactivatedEvent::schema, d);
+        const ConcernDeactivatedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, ConcernDeactivatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "CONCERN_POLICY_ADDED_EVENT") {
+        JsonUtils::validate(ConcernPolicyAddedEvent::schema, d);
+        const ConcernPolicyAddedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, ConcernPolicyAddedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "CONCERN_POLICY_REMOVED_EVENT") {
+        JsonUtils::validate(ConcernPolicyRemovedEvent::schema, d);
+        const ConcernPolicyRemovedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, ConcernPolicyRemovedEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 
@@ -193,6 +242,20 @@ namespace rooset {
         return;
       }
 
+      if (msgType == "POLICY_CREATED_EVENT") {
+        JsonUtils::validate(PolicyCreatedEvent::schema, d);
+        const PolicyCreatedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, PolicyCreatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
+      if (msgType == "POLICY_DEACTIVATED_EVENT") {
+        JsonUtils::validate(PolicyDeactivatedEvent::schema, d);
+        const PolicyDeactivatedEvent evt(d);
+        MessageUtils::applyEvent<Aggregate, PolicyDeactivatedEvent>(aggregate, evt, onMethodMissing);
+        return;
+      }
+
       if (msgType == "PRIVILEGE_GRANTED_EVENT") {
         JsonUtils::validate(PrivilegeGrantedEvent::schema, d);
         const PrivilegeGrantedEvent evt(d);
@@ -218,13 +281,6 @@ namespace rooset {
         JsonUtils::validate(UnitDelegationUnsetEvent::schema, d);
         const UnitDelegationUnsetEvent evt(d);
         MessageUtils::applyEvent<Aggregate, UnitDelegationUnsetEvent>(aggregate, evt, onMethodMissing);
-        return;
-      }
-
-      if (msgType == "UNIT_POLICY_SET_EVENT") {
-        JsonUtils::validate(UnitPolicySetEvent::schema, d);
-        const UnitPolicySetEvent evt(d);
-        MessageUtils::applyEvent<Aggregate, UnitPolicySetEvent>(aggregate, evt, onMethodMissing);
         return;
       }
 
