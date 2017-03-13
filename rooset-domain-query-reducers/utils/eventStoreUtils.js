@@ -24,7 +24,6 @@ module.exports = {
   initAllProjections,
   initSystemProjections,
   persistEvent,
-  getDeclarations,
 };
 
 function startEventStore() {

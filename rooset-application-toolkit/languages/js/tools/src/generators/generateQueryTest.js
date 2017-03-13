@@ -12,7 +12,7 @@ module.exports = (testDecl, queryDeclDir, reducerDir) => {
 const fetch = require("node-fetch");
 const {
   startEventStore,
-  initProjection,
+  initAllProjections,
   persistEvent,
  } = require('../utils/eventStoreUtils');
 
@@ -53,7 +53,7 @@ ${testBlocks.join("\n")}
       // init projection
       const reducerFileContent = ${JSON.stringify(reducerFileContent)};
       return Promise.resolve()
-      .then(() =>  initProjection("${queryType}", reducerFileContent))
+      .then(() => initAllProjections())
 
       // persist events
       .then(() => {

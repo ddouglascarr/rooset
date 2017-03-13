@@ -2,7 +2,7 @@
 const fetch = require("node-fetch");
 const {
   startEventStore,
-  initProjection,
+  initAllProjections,
   persistEvent,
  } = require('../utils/eventStoreUtils');
 
@@ -24,7 +24,7 @@ describe("Issue Query Tests", () => {
       // init projection
       const reducerFileContent = "fromAll()\n.foreachStream()\n.when({\n\n  $init: function() {\n    return {\n      id: null,\n      unitId: null,\n      areaId: null,\n      policyId: null,\n      concernId: null,\n      created: 0,\n      issueState: \"ADMISSION\",\n      resolved: false,\n      initiatives: [],\n    };\n  },\n\n  NEW_INITIATIVE_CREATED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    s.id = p.id;\n    s.unitId = p.unitId;\n    s.areaId = p.areaId;\n    s.policyId = p.policyId;\n    s.concernId = p.concernId;\n    s.created = p.created;\n    s.initiatives.push({\n      key: p.initiativeId,\n      name: p.name,\n    });\n  },\n\n  COMPETING_INITIATIVE_CREATED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    s.initiatives.push({\n      key: p.initiativeId,\n      name: p.name,\n    });\n  },\n\n  ISSUE_ADMISSION_QUORUM_PASSED_EVENT: function(s, e) {\n    s.issueState = \"DISCUSSION\";\n  },\n\n  ISSUE_ADMISSION_QUORUM_FAILED_EVENT: function(s, e) {\n    s.issueState = \"CANCELED_NO_INITIATIVE_ADMITTED\";\n    s.resolved = true;\n    s.initiatives = [];\n  },\n\n})\n";
       return Promise.resolve()
-      .then(() =>  initProjection("ISSUE_QUERY", reducerFileContent))
+      .then(() => initAllProjections())
 
       // persist events
       .then(() => {
@@ -56,7 +56,7 @@ describe("Issue Query Tests", () => {
       // init projection
       const reducerFileContent = "fromAll()\n.foreachStream()\n.when({\n\n  $init: function() {\n    return {\n      id: null,\n      unitId: null,\n      areaId: null,\n      policyId: null,\n      concernId: null,\n      created: 0,\n      issueState: \"ADMISSION\",\n      resolved: false,\n      initiatives: [],\n    };\n  },\n\n  NEW_INITIATIVE_CREATED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    s.id = p.id;\n    s.unitId = p.unitId;\n    s.areaId = p.areaId;\n    s.policyId = p.policyId;\n    s.concernId = p.concernId;\n    s.created = p.created;\n    s.initiatives.push({\n      key: p.initiativeId,\n      name: p.name,\n    });\n  },\n\n  COMPETING_INITIATIVE_CREATED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    s.initiatives.push({\n      key: p.initiativeId,\n      name: p.name,\n    });\n  },\n\n  ISSUE_ADMISSION_QUORUM_PASSED_EVENT: function(s, e) {\n    s.issueState = \"DISCUSSION\";\n  },\n\n  ISSUE_ADMISSION_QUORUM_FAILED_EVENT: function(s, e) {\n    s.issueState = \"CANCELED_NO_INITIATIVE_ADMITTED\";\n    s.resolved = true;\n    s.initiatives = [];\n  },\n\n})\n";
       return Promise.resolve()
-      .then(() =>  initProjection("ISSUE_QUERY", reducerFileContent))
+      .then(() => initAllProjections())
 
       // persist events
       .then(() => {
@@ -89,7 +89,7 @@ describe("Issue Query Tests", () => {
       // init projection
       const reducerFileContent = "fromAll()\n.foreachStream()\n.when({\n\n  $init: function() {\n    return {\n      id: null,\n      unitId: null,\n      areaId: null,\n      policyId: null,\n      concernId: null,\n      created: 0,\n      issueState: \"ADMISSION\",\n      resolved: false,\n      initiatives: [],\n    };\n  },\n\n  NEW_INITIATIVE_CREATED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    s.id = p.id;\n    s.unitId = p.unitId;\n    s.areaId = p.areaId;\n    s.policyId = p.policyId;\n    s.concernId = p.concernId;\n    s.created = p.created;\n    s.initiatives.push({\n      key: p.initiativeId,\n      name: p.name,\n    });\n  },\n\n  COMPETING_INITIATIVE_CREATED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    s.initiatives.push({\n      key: p.initiativeId,\n      name: p.name,\n    });\n  },\n\n  ISSUE_ADMISSION_QUORUM_PASSED_EVENT: function(s, e) {\n    s.issueState = \"DISCUSSION\";\n  },\n\n  ISSUE_ADMISSION_QUORUM_FAILED_EVENT: function(s, e) {\n    s.issueState = \"CANCELED_NO_INITIATIVE_ADMITTED\";\n    s.resolved = true;\n    s.initiatives = [];\n  },\n\n})\n";
       return Promise.resolve()
-      .then(() =>  initProjection("ISSUE_QUERY", reducerFileContent))
+      .then(() => initAllProjections())
 
       // persist events
       .then(() => {

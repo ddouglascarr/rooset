@@ -2,7 +2,7 @@
 const fetch = require("node-fetch");
 const {
   startEventStore,
-  initProjection,
+  initAllProjections,
   persistEvent,
  } = require('../utils/eventStoreUtils');
 
@@ -24,7 +24,7 @@ describe("Unit Member Query Tests", () => {
       // init projection
       const reducerFileContent = "fromAll()\n.foreachStream()\n.when({\n\n  $init: function() {\n    return {\n      id: null,\n      members: [],\n      totalWeight: 0,\n    };\n  },\n\n  UNIT_CREATED_EVENT: function(s, e) {\n    s.id = e.body.payload.id;\n  },\n\n  PRIVILEGE_GRANTED_EVENT: function(s, e) {\n    const p = e.body.payload;\n    s.members.push({\n      id: p.id,\n      memberId: p.memberId,\n      pollingRight: p.pollingRight,\n      votingRight: p.votingRight,\n      initiativeRight: p.initiativeRight,\n      managementRight: p.managementRight,\n      weight: p.weight,\n    });\n    s.totalWeight += p.weight;\n  },\n\n})\n";
       return Promise.resolve()
-      .then(() =>  initProjection("UNIT_MEMBER_QUERY", reducerFileContent))
+      .then(() => initAllProjections())
 
       // persist events
       .then(() => {
