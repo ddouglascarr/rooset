@@ -4,15 +4,22 @@ key: issue-http
 type: HTTP_API_TEST
 
 mocks:
-  - &issueId 464b1ebb-32c1-460c-8e9e-666666666666
-  - &voter0Id 464b1ebb-32c1-460c-8e9f-000000000000
-  - &voter4Id 464b1ebb-32c1-460c-8e9e-444444444444
-  - &voter9Id 464b1ebb-32c1-460c-8e9e-999999999999
-  - &areaId 464b1ebb-32c1-460c-8e9e-333333333333
-  - &initiativeId 464b1ebb-32c1-460c-8e9e-777777777777
-  - &competingInitiativeId 464b1ebb-32c1-460c-8e9e-000000000000
   - &unitId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &managerId 464b1ebb-32c1-460c-8e9e-222222222222
+  - &areaId 464b1ebb-32c1-460c-8e9e-333333333333
   - &policyId 464b1ebb-32c1-460c-8e9e-888888888888
+  - &otherPolicyId 464b1ebb-32c1-460c-8e9e-008888888880
+  - &concernId 464b1ebb-32c1-460c-8e9e-111111111111
+  - &otherConcernId 464b1ebb-32c1-460c-8e9e-001122334455
+  - &voter1Id 464b1ebb-32c1-460c-8e9e-444444444444
+  - &voter2Id 464b1ebb-32c1-460c-8e9e-555555555555
+  - &voter3Id 464b1ebb-32c1-460c-8e9e-999999999999
+  - &wrongId 464b1ebb-32c1-460c-8e9a-123412341234
+
+  - &issueId 464b1ebb-32c1-460c-8e9e-666666666666
+  - &initiativeId 464b1ebb-32c1-4601-8e91-111111111111
+  - &competingInitiativeId 464b1ebb-32c1-4601-8e91-222222222222
+
   - &created 1483586759
   - &competingCreated 1483586760
   - &initiativeB 464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb
@@ -23,28 +30,24 @@ mocks:
     type: NEW_INITIATIVE_CREATED_EVENT
     payload:
       id: *issueId
-      requesterId: *voter4Id
+      requesterId: *voter1Id
       initiativeId: *initiativeId
       unitId: *unitId
       areaId: *areaId
+      concernId: *concernId
       policyId: *policyId
       name: 'Test Initiative'
-      polling: false
-      externalReference: ''
       content: 'mock content'
-      textSearchData: 'foo, bar'
       created: *created
 
   - &competingInitiativeCreatedEvent
     type: COMPETING_INITIATIVE_CREATED_EVENT
     payload:
       id: *issueId
-      requesterId: *voter9Id
+      requesterId: *voter3Id
       initiativeId: *competingInitiativeId
       name: 'Test Competing Initiative'
-      externalReference: 'foobar'
       content: 'mock competing content'
-      textSearchData: 'bing, bong'
       created: *competingCreated
 
   # Support mocks, ids dont match up
@@ -77,7 +80,7 @@ scenarios:
         type: HTTP_REQUEST
         uri: /issues
         method: POST
-        requesterId: *voter4Id
+        requesterId: *voter1Id
         generate:
           id: *issueId
           initiativeId: *initiativeId
@@ -86,11 +89,9 @@ scenarios:
           unitId: *unitId
           areaId: *areaId
           policyId: *policyId
+          concernId: *concernId
           name: 'Test Initiative'
-          polling: false
-          externalReference: ''
           content: 'mock content'
-          textSearchData: 'foo, bar'
     then:
       outcome: *newInitiativeCreatedEvent
 
@@ -103,15 +104,13 @@ scenarios:
         type: HTTP_REQUEST
         uri: /issues/464b1ebb-32c1-460c-8e9e-666666666666/initiatives
         method: POST
-        requesterId: *voter9Id
+        requesterId: *voter3Id
         generate:
           initiativeId: *competingInitiativeId
           created: *competingCreated
         body:
           name: 'Test Competing Initiative'
-          externalReference: 'foobar'
           content: 'mock competing content'
-          textSearchData: 'bing, bong'
     then:
       outcome: *competingInitiativeCreatedEvent
 
@@ -155,7 +154,7 @@ scenarios:
         type: HTTP_REQUEST
         uri: /issues/464b1ebb-32c1-460c-8e9e-333333333333/ballot
         method: PUT
-        requesterId: *voter0Id
+        requesterId: *voter1Id
         body:
           ballot:
             approve:
@@ -172,7 +171,7 @@ scenarios:
         type: ISSUE_BALLOT_SET_EVENT
         payload:
           id: 464b1ebb-32c1-460c-8e9e-333333333333
-          requesterId: *voter0Id
+          requesterId: *voter1Id
           ballot:
             approve:
               -
@@ -193,11 +192,11 @@ scenarios:
         type: HTTP_REQUEST
         uri: /issues/464b1ebb-32c1-460c-8e9e-333333333333/ballot
         method: DELETE
-        requesterId: *voter0Id
+        requesterId: *voter1Id
     then:
       label: ISSUE_BALLOT_UNSET_EVENT recorded
       outcome:
         type: ISSUE_BALLOT_UNSET_EVENT
         payload:
           id: 464b1ebb-32c1-460c-8e9e-333333333333
-          requesterId: *voter0Id
+          requesterId: *voter1Id
