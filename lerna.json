@@ -5,7 +5,8 @@
     "rooset-application-toolkit/languages/cpp/tools",
     "rooset-application-toolkit/languages/java/tools",
     "rooset-application-toolkit/languages/js/tools",
-    "rooset-domain-query-reducers"
+    "rooset-domain-query-reducers",
+    "rooset-web-client"
   ],
   "version": "0.1.0"
 }
