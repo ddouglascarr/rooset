@@ -12,6 +12,7 @@ import type {
   Member,
   Ullong,
   Policy,
+  Concern,
 } from '../../types';
 import { template } from "lodash";
 
@@ -23,6 +24,7 @@ type IssueQueryResponsePayload = {|
   unitId: Uuid,
   areaId: Uuid,
   policyId: Uuid,
+  concernId: Uuid,
   created: Date,
   issueState: IssueState,
   resolved: boolean,
@@ -69,7 +71,8 @@ type UnitQueryResponsePayload = {|
   id: Uuid,
   name: string,
   description: string,
-  policy: Policy,
+  policies: Array<Policy>,
+  concerns: Array<Concern>,
   areas: Array<Area>
 |};
 

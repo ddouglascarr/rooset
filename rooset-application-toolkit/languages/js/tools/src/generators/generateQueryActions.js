@@ -19,6 +19,7 @@ import type {
   Member,
   Ullong,
   Policy,
+  Concern,
 } from '../../types';
 import { template } from "lodash";
 

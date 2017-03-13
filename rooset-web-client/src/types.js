@@ -8,11 +8,23 @@ export type Ullong = number;
 
 export type Uuid = string;
 
+export type InitiativeContentType = "STATEMENT";
+
+export type Concern = {|
+  concernId: Uuid,
+  name: string,
+  description: string,
+  policies: Array<Policy>,
+  initiativeContentType: InitiativeContentType,
+  config: any,
+|};
+
 export type Area = {|
   areaId: Uuid,
   name: string,
   description: string,
   externalReference: string,
+  concerns: Array<Uuid>,
 |};
 
 export type Date = number;
