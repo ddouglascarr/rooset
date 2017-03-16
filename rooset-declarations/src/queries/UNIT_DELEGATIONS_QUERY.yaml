@@ -14,5 +14,5 @@ resp:
     description: Area level delegations
     type: delegationArray
 
-projectionsUri: "/state?partition=unitDelegations-{id}_{trusterId}"
+projectionUri: "/state?partition=unitDelegations-{id}_{trusterId}"
 httpUri: "/units/{id}/members/{trusterId}/delegations"
