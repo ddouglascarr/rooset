@@ -30,7 +30,7 @@ describe("Unit Delegations Tests", () => {
           return Promise.resolve()
          .then(() => { return persistEvent({"type":"UNIT_DELEGATION_SET_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","trusterId":"464b1ebb-32c1-460c-8e9f-000000000000","trusteeId":"464b1ebb-32c1-460c-8e9f-111111111111"}}); })
        .then(() => { return persistEvent({"type":"AREA_DELEGATION_SET_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","areaId":"464b1ebb-32c1-460c-8e9e-222222222222","trusterId":"464b1ebb-32c1-460c-8e9f-000000000000","trusteeId":"464b1ebb-32c1-460c-8e9f-222222222222"}}); })
-       .then(() => { return persistEvent({"type":"AREA_DELEGATION_SET_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","areaId":"464b1ebb-32c1-460c-8e9e-222222222222","trusterId":"464b1ebb-32c1-460c-8e9f-000000000000","trusteeId":"464b1ebb-32c1-460c-8e9f-333333333333"}}); })
+       .then(() => { return persistEvent({"type":"AREA_DELEGATION_SET_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","areaId":"464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb","trusterId":"464b1ebb-32c1-460c-8e9f-000000000000","trusteeId":"464b1ebb-32c1-460c-8e9f-333333333333"}}); })
           .then(() => new Promise((r) => { setTimeout(r, 100); }))
           .then((resp) => Promise.resolve({foo: 'bar'}))
       })
@@ -46,7 +46,7 @@ describe("Unit Delegations Tests", () => {
         return resp.json();
       })
       .then(function(body) {
-        expect(body).toEqual({"unit":{"truteeId":"464b1ebb-32c1-460c-8e9f-111111111111","blocked":false},"areas":{"*area1Id":{"trusteeId":"464b1ebb-32c1-460c-8e9f-222222222222","blocked":false},"*area2Id":{"trusteeId":"464b1ebb-32c1-460c-8e9f-333333333333","blocked":false}}});
+        expect(body).toEqual({"unit":{"trusteeId":"464b1ebb-32c1-460c-8e9f-111111111111","blocked":false},"areas":{"464b1ebb-32c1-460c-8e9e-222222222222":{"trusteeId":"464b1ebb-32c1-460c-8e9f-222222222222","blocked":false},"464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb":{"trusteeId":"464b1ebb-32c1-460c-8e9f-333333333333","blocked":false}}});
         return Promise.resolve();
       });
     });

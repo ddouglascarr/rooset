@@ -43,7 +43,7 @@ scenarios:
           type: AREA_DELEGATION_SET_EVENT
           payload:
             id: *unitId
-            areaId: *area1Id
+            areaId: *area2Id
             trusterId: *voter0
             trusteeId: *voter3
     when:
@@ -57,13 +57,13 @@ scenarios:
         type: UNIT_DELEGATIONS_QUERY_RESPONSE
         payload:
           unit:
-            truteeId: *voter1
+            trusteeId: *voter1
             blocked: false
           areas:
-            *area1Id:
+            464b1ebb-32c1-460c-8e9e-222222222222:
               trusteeId: *voter2
               blocked: false
-            *area2Id:
+            464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb:
               trusteeId: *voter3
               blocked: false
 
