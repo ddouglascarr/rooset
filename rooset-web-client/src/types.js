@@ -16,7 +16,7 @@ export type Concern = {|
   description: string,
   policies: Array<Policy>,
   initiativeContentType: InitiativeContentType,
-  config: any,
+  config: any
 |};
 
 export type Area = {|
@@ -24,16 +24,21 @@ export type Area = {|
   name: string,
   description: string,
   externalReference: string,
-  concerns: Array<Uuid>,
+  concerns: Array<Uuid>
 |};
 
 export type Date = number;
+
+export type Delegation = {|
+  trusteeId: ?Uuid,
+  blocked: boolean
+|};
 
 export type Duration = number;
 
 export type KeyNamePair = {|
   key: Uuid,
-  name: string,
+  name: string
 |};
 
 export type Initiative = {|
@@ -42,7 +47,7 @@ export type Initiative = {|
   requesterid: Uuid,
   name: string,
   content: string,
-  created: Date,
+  created: Date
 |};
 
 export type Member = {|
@@ -52,13 +57,13 @@ export type Member = {|
   votingRight: boolean,
   initiativeRight: boolean,
   managementRight: boolean,
-  weight: number,
+  weight: number
 |};
 
 export type SchulzeBallot = {|
   approve: Array<Array<Uuid>>,
   abstain: Array<Uuid>,
-  disapprove: Array<Array<Uuid>>,
+  disapprove: Array<Array<Uuid>>
 |};
 
 export type Email = string;
@@ -100,10 +105,10 @@ export type Policy = {|
   verificationTime: Duration,
   votingTime: Duration,
   issueQuorumNum: Uint,
-  issueQuorumDen: Uint,
+  issueQuorumDen: Uint
 |};
 
 export type ExceptionPayload = {|
   code: ExceptionType,
-  message: string,
+  message: string
 |};

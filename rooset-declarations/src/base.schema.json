@@ -37,6 +37,14 @@
       "minimum": 0,
       "maximum": 4294967295
     },
+    "delegation": {
+      "type": "object",
+      "properties": {
+        "trusteeId": { "$ref": "#/definitions/uuidNullable" },
+        "blocked": "boolean"
+      },
+      "required": ["trusteeId", "blocked"]
+    },
     "duration": {
       "type": "integer",
       "description": "Length of duration in seconds"

@@ -9,5 +9,5 @@ fromCategory("aggregate").foreachStream().when({
 
 function linkToUnitDelegations(s, e) {
   const p = e.body.payload;
-  linkTo("unitDelegations-" + p.id, e);
+  linkTo("unitDelegations-" + p.id + "_" + p.trusterId, e);
 }
