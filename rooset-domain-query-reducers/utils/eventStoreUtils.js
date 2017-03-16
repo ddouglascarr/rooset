@@ -1,29 +1,30 @@
+const { last } = require("lodash");
 const spawn = require("child_process").spawn;
 const fetch = require("node-fetch");
 const uuid = require("uuid4");
 const fs = require("fs");
+const glob = require("glob");
 const btoa = require("btoa");
 const {
   getConfigFromEnv,
   findSchema,
   assertMessageCompliesWithSchema,
-  getDeclarations,
+  getDeclarations
 } = require("ratk-declaration-utils");
 
 const EVENTSTORE_HOST = "localhost";
 const EVENTSTORE_PORT = "2113";
 const HEADERS = {
   "Content-Type": "application/json",
-  "Authorization": "Basic " + btoa("admin:changeit"),
+  Authorization: "Basic " + btoa("admin:changeit")
 };
-
 
 module.exports = {
   startEventStore,
   initProjection,
   initAllProjections,
   initSystemProjections,
-  persistEvent,
+  persistEvent
 };
 
 function startEventStore() {
@@ -31,28 +32,45 @@ function startEventStore() {
     const child = spawn("eventstored", ["--mem-db", "--run-projections=all"]);
     child.on("error", err => reject(err));
     child.stdout.on("data", chunk => {
-      if (chunk.includes(
-          "Sub System 'Projections' initialized")) return resolve(child);
+      if (chunk.includes("Sub System 'Projections' initialized"))
+        return resolve(child);
     });
   });
 }
 
 function initAllProjections() {
+  checkQueryDecls();
+  const reducerSrcPath = `${__dirname}/../reducers`;
+
+  return glob
+    .sync(`${reducerSrcPath}/*.js`)
+    .reduce(
+      (p, reducerFilename) => {
+        const queryType = last(reducerFilename.split("/")).slice(0, -3);
+        const reducerContent = fs.readFileSync(reducerFilename, "utf8");
+        return p.then(() => initProjection(queryType, reducerContent));
+      },
+      Promise.resolve()
+    )
+    .then(() => initSystemProjections());
+}
+
+function checkQueryDecls() {
   const config = getConfigFromEnv({
-    querySrcPath: "RATK_GEN_QUERY_DECL_DIR",
+    querySrcPath: "RATK_GEN_QUERY_DECL_DIR"
   });
   config.reducerSrcPath = `${__dirname}/../reducers`;
 
   const reducerDecls = getDeclarations(config.querySrcPath);
-  return reducerDecls.reduce((p, decl) => {
+  return reducerDecls.forEach((decl) => {
     const type = decl.type;
     const reducerContent = fs.readFileSync(
-        `${config.reducerSrcPath}/${type}.js`, "utf8");
-    if (!reducerContent) throw new Error(
-        `no reducer for ${type} in ${config.reducerSrcPath}`);
-    return p.then(() => initProjection(type, reducerContent));
-  }, Promise.resolve())
-  .then(() => initSystemProjections());
+      `${config.reducerSrcPath}/${type}.js`,
+      "utf8"
+    );
+    if (!reducerContent)
+      throw new Error(`no reducer for ${type} in ${config.reducerSrcPath}`);
+  });
 }
 
 function initSystemProjections() {
@@ -67,8 +85,11 @@ function initProjection(queryType, fileContent) {
     "&emit=true" +
     "&trackemittedstreams=true";
 
-  return fetch(url, { method: "POST", body: fileContent, headers: HEADERS })
-  .then((resp) => {
+  return fetch(url, {
+    method: "POST",
+    body: fileContent,
+    headers: HEADERS
+  }).then(resp => {
     if (!resp.ok) throw new Error(resp.statusText);
     return Promise.resolve();
   });
@@ -87,8 +108,8 @@ function persistEvent(event) {
     `http://${EVENTSTORE_HOST}:${EVENTSTORE_PORT}/streams/aggregate-${streamId}`,
     { body: JSON.stringify(event), headers: localHeaders, method: "POST" }
   ).then(resp => {
-    if (!resp.ok) throw new Error(
-        `saving event ${type} failed ${resp.statusText}`);
+    if (!resp.ok)
+      throw new Error(`saving event ${type} failed ${resp.statusText}`);
     return Promise.resolve();
   });
 }

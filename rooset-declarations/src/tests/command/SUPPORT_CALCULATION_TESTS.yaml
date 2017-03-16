@@ -355,24 +355,27 @@ scenarios:
   -
     label: Short of quorum should fail on complete
     given:
-      - *unitCreatedEvt
-      - *areaCreatedEvt
-      - *unitPolicySetEvt
-      - *voterA
-      - *voterB
-      - *voterC
-      - *voterD
-      - *voterE
-      - *voterF
-      - *newInitiativeCreatedEvt
-      - *unitBtoA
-      - *unitCtoA
-      - *unitDtoA
-      - *unitEtoC
-      - *areaEtoF
-      - *areaDBlocked
-      - *issueCtoB
-      - *issueEBlocked
+      description: An issue is short of the quorum
+      key: issue-short-of-quorum
+      precondition:
+        - *unitCreatedEvt
+        - *areaCreatedEvt
+        - *unitPolicySetEvt
+        - *voterA
+        - *voterB
+        - *voterC
+        - *voterD
+        - *voterE
+        - *voterF
+        - *newInitiativeCreatedEvt
+        - *unitBtoA
+        - *unitCtoA
+        - *unitDtoA
+        - *unitEtoC
+        - *areaEtoF
+        - *areaDBlocked
+        - *issueCtoB
+        - *issueEBlocked
     when: *completeIssueAdmissionPhaseCmd
     then: *issueAdmissionQuorumFailedEvt
 
