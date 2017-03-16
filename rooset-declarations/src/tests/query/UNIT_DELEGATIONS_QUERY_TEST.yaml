@@ -67,8 +67,118 @@ scenarios:
               trusteeId: *voter3
               blocked: false
 
-#  -
-#    label: Unset unit and area delegations registered
+  -
+    label: Unset unit and area delegations registered
+    given:
+      description: A voter registers unit and area delegations
+      precondition:
+        -
+          type: UNIT_DELEGATION_SET_EVENT
+          payload:
+            id: *unitId
+            trusterId: *voter0
+            trusteeId: *voter1
+        -
+          type: AREA_DELEGATION_SET_EVENT
+          payload:
+            id: *unitId
+            areaId: *area1Id
+            trusterId: *voter0
+            trusteeId: *voter2
+        -
+          type: AREA_DELEGATION_SET_EVENT
+          payload:
+            id: *unitId
+            areaId: *area2Id
+            trusterId: *voter0
+            trusteeId: *voter3
+        -
+          type: UNIT_DELEGATION_UNSET_EVENT
+          payload:
+            id: *unitId
+            trusterId: *voter0
+        -
+          type: AREA_DELEGATION_UNSET_EVENT
+          payload:
+            id: *unitId
+            areaId: *area2Id
+            trusterId: *voter0
+    when:
+      action:
+        type: UNIT_DELEGATIONS_QUERY_REQUEST
+        payload:
+          id: *unitId
+          trusterId: *voter0
+    then:
+      outcome:
+        type: UNIT_DELEGATIONS_QUERY_RESPONSE
+        payload:
+          unit:
+            trusteeId: null
+            blocked: false
+          areas:
+            464b1ebb-32c1-460c-8e9e-222222222222:
+              trusteeId: *voter2
+              blocked: false
 
-#  -
-#    label: Blocking and unblocking delegations at area level
+
+
+  -
+    label: Blocking and unblocking delegations at area level
+    given:
+      precondition:
+        -
+          type: UNIT_DELEGATION_SET_EVENT
+          payload:
+            id: *unitId
+            trusterId: *voter0
+            trusteeId: *voter1
+        -
+          type: AREA_DELEGATION_SET_EVENT
+          payload:
+            id: *unitId
+            areaId: *area1Id
+            trusterId: *voter0
+            trusteeId: *voter2
+        -
+          type: AREA_DELEGATION_SET_EVENT
+          payload:
+            id: *unitId
+            areaId: *area2Id
+            trusterId: *voter0
+            trusteeId: *voter3
+        -
+          type: DELEGATION_BLOCKED_FOR_AREA_EVENT
+          payload:
+            id: *unitId
+            areaId: *area1Id
+            trusterId: *voter0
+        -
+          type: DELEGATION_BLOCKED_FOR_AREA_EVENT
+          payload:
+            id: *unitId
+            areaId: *area2Id
+            trusterId: *voter0
+        -
+          type: DELEGATION_UNBLOCKED_FOR_AREA_EVENT
+          payload:
+            id: *unitId
+            areaId: *area1Id
+            trusterId: *voter0
+    when:
+      action:
+        type: UNIT_DELEGATIONS_QUERY_REQUEST
+        payload:
+          id: *unitId
+          trusterId: *voter0
+    then:
+      outcome:
+        type: UNIT_DELEGATIONS_QUERY_RESPONSE
+        payload:
+          unit:
+            trusteeId: *voter1
+            blocked: false
+          areas:
+            464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb:
+              trusteeId: null
+              blocked: true
