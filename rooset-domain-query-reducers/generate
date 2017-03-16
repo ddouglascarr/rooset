@@ -1,0 +1,14 @@
+#!/bin/bash
+set -o errexit -o nounset -o pipefail
+
+WORKDIR=`dirname "$(readlink -f "$0")"`
+cd $WORKDIR
+
+export RATK_GEN_TEST_QUERY_JS_DEST_DIR=${WORKDIR}/__tests__
+export RATK_GEN_EVENT_DECL_DIR=${WORKDIR}/../rooset-declarations/src/events
+export RATK_GEN_TEST_DECL_DIR=${WORKDIR}/../rooset-declarations/src/tests
+export RATK_GEN_QUERY_DECL_DIR=${WORKDIR}/../rooset-declarations/src/queries
+export RATK_GEN_REDUCER_SRC_DIR=${WORKDIR}/reducers
+export RATK_GEN_BASE_SCHEMA_FILE=${WORKDIR}/../rooset-declarations/src/base.schema.json
+
+${WORKDIR}/../rooset-application-toolkit/languages/js/tools/generate-js-query-tests
