@@ -35,7 +35,7 @@ describe("Unit Query Tests", () => {
        .then(() => { return persistEvent({"type":"CONCERN_CREATED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","concernId":"464b1ebb-32c1-460c-8e9a-ffffffffffff","requesterId":"464b1ebb-32c1-460c-8e9e-444444444444","name":"Test Concern","description":"The Test Concern","initiativeContentType":"STATEMENT","config":{}}}); })
        .then(() => { return persistEvent({"type":"AREA_CONCERN_ADDED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","areaId":"464b1ebb-32c1-460c-8e9e-222222222222","concernId":"464b1ebb-32c1-460c-8e9a-ffffffffffff","requesterId":"464b1ebb-32c1-460c-8e9e-444444444444"}}); })
        .then(() => { return persistEvent({"type":"CONCERN_POLICY_ADDED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","requesterId":"464b1ebb-32c1-460c-8e9e-444444444444","policyId":"464b1ebb-32c1-460c-8e9e-333333333333","concernId":"464b1ebb-32c1-460c-8e9a-ffffffffffff"}}); })
-          .then(() => new Promise((r) => { setTimeout(r, 100); }))
+          .then(() => new Promise((r) => { setTimeout(r, 300); }))
           .then((resp) => Promise.resolve({foo: 'bar'}))
       })
 
@@ -72,7 +72,7 @@ describe("Unit Query Tests", () => {
        .then(() => { return persistEvent({"type":"CONCERN_CREATED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","concernId":"464b1ebb-32c1-460c-8e9a-ffffffffffff","requesterId":"464b1ebb-32c1-460c-8e9e-444444444444","name":"Test Concern","description":"The Test Concern","initiativeContentType":"STATEMENT","config":{}}}); })
        .then(() => { return persistEvent({"type":"AREA_CONCERN_ADDED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","areaId":"464b1ebb-32c1-460c-8e9e-222222222222","concernId":"464b1ebb-32c1-460c-8e9a-ffffffffffff","requesterId":"464b1ebb-32c1-460c-8e9e-444444444444"}}); })
        .then(() => { return persistEvent({"type":"CONCERN_POLICY_ADDED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-000000000000","requesterId":"464b1ebb-32c1-460c-8e9e-444444444444","policyId":"464b1ebb-32c1-460c-8e9e-333333333333","concernId":"464b1ebb-32c1-460c-8e9a-ffffffffffff"}}); })
-          .then(() => new Promise((r) => { setTimeout(r, 100); }))
+          .then(() => new Promise((r) => { setTimeout(r, 300); }))
           .then((resp) => Promise.resolve({foo: 'bar'}))
       })
 

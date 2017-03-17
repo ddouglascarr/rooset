@@ -1,9 +1,15 @@
 #!/bin/bash
-
-export FOO="${FOO:-bar}"
+WORKDIR=`dirname "$(readlink -f "${BASH_SOURCE[0]}")"`
 
 export ROOSET_RDB_HOST="${ROOSET_RDB_HOST:-localhost}"
 export ROOSET_RDB_PORT="${ROOSET_RDB_PORT:-5432}"
 export ROOSET_RDB_SUPERUSER="${ROOSET_RDB_SUPERUSER:-postgres}"
 export ROOSET_EVENT_STORE_HOST="${ROOSET_EVENT_STORE_HOST:-localhost}"
 export ROOSET_EVENT_STORE_PORT="${ROOSET_EVENT_STORE_PORT:-2113}"
+
+export RATK_GEN_TEST_QUERY_JS_DEST_DIR=${WORKDIR}/../rooset-domain-query-reducers/__tests__
+export RATK_GEN_EVENT_DECL_DIR=${WORKDIR}/../rooset-declarations/src/events
+export RATK_GEN_TEST_DECL_DIR=${WORKDIR}/../rooset-declarations/src/tests
+export RATK_GEN_QUERY_DECL_DIR=${WORKDIR}/../rooset-declarations/src/queries
+export RATK_GEN_REDUCER_SRC_DIR=${WORKDIR}/reducers
+export RATK_GEN_BASE_SCHEMA_FILE=${WORKDIR}/../rooset-declarations/src/base.schema.json

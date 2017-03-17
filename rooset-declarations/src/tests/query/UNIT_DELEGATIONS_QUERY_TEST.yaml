@@ -126,6 +126,7 @@ scenarios:
   -
     label: Blocking and unblocking delegations at area level
     given:
+      key: block-unblock-area
       precondition:
         -
           type: UNIT_DELEGATION_SET_EVENT
