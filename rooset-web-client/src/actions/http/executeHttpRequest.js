@@ -7,6 +7,9 @@ import {
   buildIssueQueryRequest,
   buildIssueQueryError,
   buildIssueQueryResponse,
+  buildUnitDelegationsQueryRequest,
+  buildUnitDelegationsQueryError,
+  buildUnitDelegationsQueryResponse,
   buildUnitMemberQueryRequest,
   buildUnitMemberQueryError,
   buildUnitMemberQueryResponse,
@@ -20,6 +23,7 @@ import {
 import type {
   QueryRequest,
   IssueQueryRequest,
+  UnitDelegationsQueryRequest,
   UnitMemberQueryRequest,
   UnitQueryRequest,
   UnitUrlParameterNameQueryRequest
@@ -30,6 +34,8 @@ export default async function(action: Action) :Promise<HttpAction> {
 
     case "ISSUE_QUERY_REQUEST":
       return executeIssueQueryHttpRequest(action)
+    case "UNIT_DELEGATIONS_QUERY_REQUEST":
+      return executeUnitDelegationsQueryHttpRequest(action)
     case "UNIT_MEMBER_QUERY_REQUEST":
       return executeUnitMemberQueryHttpRequest(action)
     case "UNIT_QUERY_REQUEST":
@@ -54,6 +60,19 @@ async function executeIssueQueryHttpRequest(
   const json = await resp.json();
   if (resp.ok) return buildIssueQueryResponse(json);
   return buildIssueQueryError(json.payload);
+}
+async function executeUnitDelegationsQueryHttpRequest(
+    action: UnitDelegationsQueryRequest) :Promise<HttpAction>
+{
+  const req = new Request(applyUriTemplate("/units/{id}/members/{trusterId}/delegations", action.payload), {
+    method: "GET",
+    headers: new Headers({"Content-Type": "application/json"}),
+    include: "same-origin",
+  });
+  const resp = await fetch(req);
+  const json = await resp.json();
+  if (resp.ok) return buildUnitDelegationsQueryResponse(json);
+  return buildUnitDelegationsQueryError(json.payload);
 }
 async function executeUnitMemberQueryHttpRequest(
     action: UnitMemberQueryRequest) :Promise<HttpAction>

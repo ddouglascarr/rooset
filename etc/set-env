@@ -13,3 +13,4 @@ export RATK_GEN_TEST_DECL_DIR=${WORKDIR}/../rooset-declarations/src/tests
 export RATK_GEN_QUERY_DECL_DIR=${WORKDIR}/../rooset-declarations/src/queries
 export RATK_GEN_REDUCER_SRC_DIR=${WORKDIR}/reducers
 export RATK_GEN_BASE_SCHEMA_FILE=${WORKDIR}/../rooset-declarations/src/base.schema.json
+export RATK_GEN_QUERY_ACTION_JS_DEST_DIR="${WORKDIR}/../rooset-web-client/src/actions/http"

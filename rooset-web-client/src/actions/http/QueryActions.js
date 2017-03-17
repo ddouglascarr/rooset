@@ -45,6 +45,26 @@ export function buildIssueQueryResponse(payload: IssueQueryResponsePayload) :Iss
 
 
 
+export type UNIT_DELEGATIONS_QUERY_RESPONSE = "UNIT_DELEGATIONS_QUERY_RESPONSE";
+type UnitDelegationsQueryResponsePayload = {|
+  unit: Delegation,
+  areas: undefined
+|};
+
+export type UnitDelegationsQueryResponse = {|
+  type: UNIT_DELEGATIONS_QUERY_RESPONSE,
+  payload: UnitDelegationsQueryResponsePayload,
+|}
+
+export function buildUnitDelegationsQueryResponse(payload: UnitDelegationsQueryResponsePayload) :UnitDelegationsQueryResponse {
+  return {
+    type: "UNIT_DELEGATIONS_QUERY_RESPONSE",
+    payload: payload,
+  }
+}
+
+
+
 export type UNIT_MEMBER_QUERY_RESPONSE = "UNIT_MEMBER_QUERY_RESPONSE";
 type UnitMemberQueryResponsePayload = {|
   id: Uuid,
@@ -126,6 +146,23 @@ export function buildIssueQueryError(payload: ExceptionPayload) {
 }
 
 
+export type UNIT_DELEGATIONS_QUERY_ERROR = "UNIT_DELEGATIONS_QUERY_ERROR";
+
+export type UnitDelegationsQueryError = {
+  type: UNIT_DELEGATIONS_QUERY_ERROR,
+  error: true,
+  payload: ExceptionPayload,
+};
+
+export function buildUnitDelegationsQueryError(payload: ExceptionPayload) {
+  return {
+    type: "UNIT_DELEGATIONS_QUERY_ERROR",
+    error:true,
+    payload,
+  };
+}
+
+
 export type UNIT_MEMBER_QUERY_ERROR = "UNIT_MEMBER_QUERY_ERROR";
 
 export type UnitMemberQueryError = {
@@ -198,6 +235,28 @@ export function buildIssueQueryRequest(payload: IssueQueryRequestPayload) :Issue
 }
 
 
+export type UNIT_DELEGATIONS_QUERY_REQUEST = "UNIT_DELEGATIONS_QUERY_REQUEST";
+
+type UnitDelegationsQueryRequestPayload = {|
+  id: Uuid,
+  trusterId: Uuid
+|};
+
+export type UnitDelegationsQueryRequest = {|
+  type: UNIT_DELEGATIONS_QUERY_REQUEST,
+  payload: UnitDelegationsQueryRequestPayload,
+  meta: {| isHttpRequest: true |},
+|};
+
+export function buildUnitDelegationsQueryRequest(payload: UnitDelegationsQueryRequestPayload) :UnitDelegationsQueryRequest {
+  return {
+    type: "UNIT_DELEGATIONS_QUERY_REQUEST",
+    payload,
+    meta: { isHttpRequest: true },
+  };
+}
+
+
 export type UNIT_MEMBER_QUERY_REQUEST = "UNIT_MEMBER_QUERY_REQUEST";
 
 type UnitMemberQueryRequestPayload = {|
@@ -263,18 +322,21 @@ export function buildUnitUrlParameterNameQueryRequest(payload: UnitUrlParameterN
 
 export type QueryRequest =
   | IssueQueryRequest
+  | UnitDelegationsQueryRequest
   | UnitMemberQueryRequest
   | UnitQueryRequest
   | UnitUrlParameterNameQueryRequest
 
 export type QueryResponse =
   | IssueQueryResponse
+  | UnitDelegationsQueryResponse
   | UnitMemberQueryResponse
   | UnitQueryResponse
   | UnitUrlParameterNameQueryResponse
 
 export type QueryError =
   | IssueQueryError
+  | UnitDelegationsQueryError
   | UnitMemberQueryError
   | UnitQueryError
   | UnitUrlParameterNameQueryError
