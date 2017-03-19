@@ -30,7 +30,7 @@ describe("Issue Query Tests", () => {
           return Promise.resolve()
          .then(() => { return persistEvent({"type":"NEW_INITIATIVE_CREATED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa","requesterId":"464b1ebb-32c1-460c-8e9e-111111111111","initiativeId":"464b1ebb-32c1-460c-8e9e-444444444444","unitId":"464b1ebb-32c1-460c-8e9e-000000000000","areaId":"464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb","policyId":"464b1ebb-32c1-460c-8e9e-cccccccccccc","concernId":"464b1ebb-32c1-460c-8e9e-dddddddddddd","name":"Paint the bike shed","content":"Paint the bike shed red","created":1487394829}}); })
        .then(() => { return persistEvent({"type":"COMPETING_INITIATIVE_CREATED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa","requesterId":"464b1ebb-32c1-460c-8e9e-222222222222","initiativeId":"464b1ebb-32c1-460c-8e9e-555555555555","name":"Paint it green","content":"Paint the bike shed green","created":1487394950}}); })
-          .then(() => new Promise((r) => { setTimeout(r, 100); }))
+          .then(() => new Promise((r) => { setTimeout(r, 300); }))
           .then((resp) => Promise.resolve({foo: 'bar'}))
       })
 
@@ -63,7 +63,7 @@ describe("Issue Query Tests", () => {
          .then(() => { return persistEvent({"type":"NEW_INITIATIVE_CREATED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa","requesterId":"464b1ebb-32c1-460c-8e9e-111111111111","initiativeId":"464b1ebb-32c1-460c-8e9e-444444444444","unitId":"464b1ebb-32c1-460c-8e9e-000000000000","areaId":"464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb","policyId":"464b1ebb-32c1-460c-8e9e-cccccccccccc","concernId":"464b1ebb-32c1-460c-8e9e-dddddddddddd","name":"Paint the bike shed","content":"Paint the bike shed red","created":1487394829}}); })
        .then(() => { return persistEvent({"type":"COMPETING_INITIATIVE_CREATED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa","requesterId":"464b1ebb-32c1-460c-8e9e-222222222222","initiativeId":"464b1ebb-32c1-460c-8e9e-555555555555","name":"Paint it green","content":"Paint the bike shed green","created":1487394950}}); })
        .then(() => { return persistEvent({"type":"ISSUE_ADMISSION_QUORUM_PASSED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"}}); })
-          .then(() => new Promise((r) => { setTimeout(r, 100); }))
+          .then(() => new Promise((r) => { setTimeout(r, 300); }))
           .then((resp) => Promise.resolve({foo: 'bar'}))
       })
 
@@ -96,7 +96,7 @@ describe("Issue Query Tests", () => {
          .then(() => { return persistEvent({"type":"NEW_INITIATIVE_CREATED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa","requesterId":"464b1ebb-32c1-460c-8e9e-111111111111","initiativeId":"464b1ebb-32c1-460c-8e9e-444444444444","unitId":"464b1ebb-32c1-460c-8e9e-000000000000","areaId":"464b1ebb-32c1-460c-8e9e-bbbbbbbbbbbb","policyId":"464b1ebb-32c1-460c-8e9e-cccccccccccc","concernId":"464b1ebb-32c1-460c-8e9e-dddddddddddd","name":"Paint the bike shed","content":"Paint the bike shed red","created":1487394829}}); })
        .then(() => { return persistEvent({"type":"COMPETING_INITIATIVE_CREATED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa","requesterId":"464b1ebb-32c1-460c-8e9e-222222222222","initiativeId":"464b1ebb-32c1-460c-8e9e-555555555555","name":"Paint it green","content":"Paint the bike shed green","created":1487394950}}); })
        .then(() => { return persistEvent({"type":"ISSUE_ADMISSION_QUORUM_FAILED_EVENT","payload":{"id":"464b1ebb-32c1-460c-8e9e-aaaaaaaaaaaa"}}); })
-          .then(() => new Promise((r) => { setTimeout(r, 100); }))
+          .then(() => new Promise((r) => { setTimeout(r, 300); }))
           .then((resp) => Promise.resolve({foo: 'bar'}))
       })
 

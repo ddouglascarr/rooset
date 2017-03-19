@@ -2,6 +2,8 @@ module.exports = {
   bool: "boolean",
   concern: "Concern",
   concernArray: "Array<Concern>",
+  delegation: "Delegation",
+  delegationArraay: "Array<Delegation>",
   email: "Email",
   schulzeBallot: "SchulzeBallot",
   string: "string",
