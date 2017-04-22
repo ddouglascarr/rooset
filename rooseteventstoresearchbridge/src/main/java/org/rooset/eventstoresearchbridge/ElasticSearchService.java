@@ -54,10 +54,10 @@ public class ElasticSearchService
     return queryName.toLowerCase();
   }
 
-  private void setEventStoreCheckpoint(String queryName, Integer eventStoreNumber)
+  private void setEventStoreCheckpoint(String queryName, Integer eventStoreEventNumber)
   {
     client.prepareIndex(parseQueryName(queryName), "checkpoint", "value")
-        .setSource(new JSONObject().put("eventStoreEventNumber", eventStoreNumber).toString())
+        .setSource(new JSONObject().put("eventStoreEventNumber", eventStoreEventNumber).toString())
         .get();
   }
 
