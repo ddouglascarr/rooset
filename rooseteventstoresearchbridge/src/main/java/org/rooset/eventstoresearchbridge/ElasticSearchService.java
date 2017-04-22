@@ -56,8 +56,8 @@ public class ElasticSearchService
 
   private void setEventStoreCheckpoint(String queryName, Integer eventStoreNumber)
   {
-    client.prepareIndex(parseQueryName(queryName), "checkpoint")
-        .setSource(new JSONObject().put("checkpoint", eventStoreNumber).toString())
+    client.prepareIndex(parseQueryName(queryName), "checkpoint", "value")
+        .setSource(new JSONObject().put("eventStoreEventNumber", eventStoreNumber).toString())
         .get();
   }
 
