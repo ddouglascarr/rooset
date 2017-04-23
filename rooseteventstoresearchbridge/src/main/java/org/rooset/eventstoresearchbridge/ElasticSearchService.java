@@ -1,10 +1,13 @@
 package org.rooset.eventstoresearchbridge;
 
+import org.apache.lucene.index.IndexNotFoundException;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Closeable;
@@ -39,20 +42,20 @@ public class ElasticSearchService
     IndexResponse response = client.prepareIndex(index, type, id)
         .setSource(body.toString())
         .get();
-    if (response.status().toString() != "OK") {
-      throw new RuntimeException("indexResponse failed: " response.status().toString());
-    }
     return response;
   }
 
   private Integer getEventStoreCheckpoint(String queryName)
   {
-    return 0;
-  }
+    if (!doesIndexExist(queryName)) return 0;
 
-  private String parseQueryName(String queryName)
-  {
-    return queryName.toLowerCase();
+    GetResponse resp = client
+        .prepareGet(parseQueryName(queryName), "checkpoint", "value")
+        .get();
+    JSONObject result = new JSONObject(resp.getSourceAsString());
+    Integer checkpoint = result.getInt("eventStoreEventNumber");
+    system.log().info("checkpoint: " + checkpoint);
+    return checkpoint;
   }
 
   private void setEventStoreCheckpoint(String queryName, Integer eventStoreEventNumber)
@@ -62,6 +65,18 @@ public class ElasticSearchService
         .get();
   }
 
+  private boolean doesIndexExist(String queryName)
+  {
+    return client.admin().indices()
+        .prepareExists(parseQueryName(queryName))
+        .execute().actionGet().isExists();
+  }
+
+  private String parseQueryName(String queryName)
+  {
+    return queryName.toLowerCase();
+  }
+
   public Closeable subscribeToQueryStream(final String queryName)
   {
     system.log().info("subscribing to " + queryName);
@@ -69,7 +84,7 @@ public class ElasticSearchService
     {
       public void onLiveProcessingStart(Closeable closeable)
       {
-        system.log().info("live processing started");
+        System.out.println("LIVE_PROCESSING_STARTED " + queryName);
       }
 
       public void onEvent(Event e, Closeable closeable)
