@@ -39,6 +39,9 @@ public class ElasticSearchService
     IndexResponse response = client.prepareIndex(index, type, id)
         .setSource(body.toString())
         .get();
+    if (response.status().toString() != "OK") {
+      throw new RuntimeException("indexResponse failed: " response.status().toString());
+    }
     return response;
   }
 
@@ -61,6 +64,7 @@ public class ElasticSearchService
 
   public Closeable subscribeToQueryStream(final String queryName)
   {
+    system.log().info("subscribing to " + queryName);
     return connection.subscribeToStreamFrom("$projections-" + queryName + "-result", new SubscriptionObserver<Event>()
     {
       public void onLiveProcessingStart(Closeable closeable)
@@ -80,8 +84,7 @@ public class ElasticSearchService
 
       public void onError(Throwable err)
       {
-        system.log().error(err.toString());
-
+        throw new RuntimeException(err.toString());
       }
 
       public void onClose()

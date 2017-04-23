@@ -1,10 +1,6 @@
 package org.rooset.eventstoresearchbridge;
 
 
-import akka.actor.ActorSystem;
-import eventstore.j.EsConnection;
-import eventstore.j.EsConnectionFactory;
-
 /**
  * Hello world!
  *
@@ -13,9 +9,11 @@ public class App
 {
   public static void main( String[] args )
   {
-    final ActorSystem system = ActorSystem.create();
-    final EsConnection connection = EsConnectionFactory.create(system);
+    if(args.length != 1) {
+      throw new RuntimeException("Must have 1 arguemnt, query name (eg ISSUE_QUERY)");
+    }
+    String queryName = args[0];
     final ElasticSearchService elasticSearchService = new ElasticSearchService();
-    elasticSearchService.subscribeToQueryStream("ISSUE_QUERY");
+    elasticSearchService.subscribeToQueryStream(queryName);
   }
 }
