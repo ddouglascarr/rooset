@@ -1,0 +1,24 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPTDIR=`dirname "$(readlink -f "$0")"`
+cd ${SCRIPTDIR}
+
+INDEXER_CMD="java -jar ${SCRIPTDIR}/target/rooset-event-store-search-bridge-1.0-SNAPSHOT-allinone.jar"
+
+${INDEXER_CMD} \
+  --query ISSUE_QUERY \
+  --index-name units \
+  --index-by unitId \
+  --search-id-by id \
+  --type-name issues \
+  &
+
+echo "Indexers started"
+
+# killing the script kills all indexers too
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+
+# keep alive until killed
+while true; do sleep 5; done
+
