@@ -13,7 +13,7 @@ public class App
   {
 
     Options options = new Options();
-    Option queryOpt = new Option("q", "query", true, "rooset query (eg ISSUE_QUERY");
+    Option queryOpt = new Option("q", "query", true, "rooset query (eg ISSUE_QUERY)");
     queryOpt.setRequired(true);
     options.addOption(queryOpt);
     Option typeNameOpt = new Option("t", "type-name", true, "search type name (eg issues)");
@@ -21,6 +21,9 @@ public class App
     Option indexByOpt = new Option("i", "index-by", true, "payload attribute to index by (eg unitId)");
     indexByOpt.setRequired(false);
     options.addOption(indexByOpt);
+    Option searchIdByOpt = new Option(
+            "s", "search-id-by", true, "payload attribute to use as search id (eg initiativeId)");
+    options.addOption(searchIdByOpt);
     Option indexNameOpt = new Option("n", "index-name", true, "name of index (eg. rooset-unit)");
     indexNameOpt.setRequired(true);
     options.addOption(indexNameOpt);
@@ -41,8 +44,9 @@ public class App
     String typeName = cmd.getOptionValue("type-name");
     String indexBy = cmd.getOptionValue("index-by");
     String indexName = cmd.getOptionValue("index-name");
+    String searchIdBy = cmd.getOptionValue("search-id-by");
 
     final ElasticSearchService elasticSearchService = new ElasticSearchService();
-    elasticSearchService.subscribeToQueryStream(query, typeName, indexBy, indexName);
+    elasticSearchService.subscribeToQueryStream(indexName, indexBy, typeName, searchIdBy, query);
   }
 }

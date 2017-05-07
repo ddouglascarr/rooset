@@ -91,7 +91,12 @@ public class ElasticSearchService
         .execute().actionGet().isExists();
   }
 
-  public Closeable subscribeToQueryStream(final String query, final String typeName, final String indexBy, final String indexName)
+  public Closeable subscribeToQueryStream(
+          final String indexName,
+          final String indexBy,
+          final String typeName,
+          final String searchIdBy,
+          final String query)
   {
     system.log().info("subscribing to " + query);
     return connection.subscribeToStreamFrom("$projections-" + query + "-result", new SubscriptionObserver<Event>()
@@ -104,7 +109,7 @@ public class ElasticSearchService
       public void onEvent(Event e, Closeable closeable)
       {
         JSONObject json = new JSONObject(e.data().data().value().decodeString("utf8"));
-        final String id = json.getString("id");
+        final String id = json.getString(searchIdBy);
         IndexResponse resp = prepareIndex(buildElasticSearchIndexName(indexName, indexBy, json), typeName, id, json);
         system.log().info(new Boolean(resp.status().toString() == "OK").toString());
         system.log().info("finished " + e.data().eventId());
