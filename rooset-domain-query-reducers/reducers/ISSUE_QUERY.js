@@ -49,3 +49,4 @@ fromCategory("aggregate")
   },
 
 })
+.outputState()

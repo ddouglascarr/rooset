@@ -16,6 +16,7 @@ A Linux environment with the following:
   - NodeJS 6.9 +
   - CMake 3.0 +
   - bash
+  - scala
 
 
 Install
