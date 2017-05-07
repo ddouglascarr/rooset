@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPTDIR=`dirname "$(readlink -f "$0")"`
 cd ${SCRIPTDIR}
 
-INDEXER_CMD="java -jar ${SCRIPTDIR}/target/rooset-event-store-search-bridge-1.0-SNAPSHOT-allinone.jar"
+INDEXER_CMD="java -jar ${SCRIPTDIR}/target/rooset-search-indexer-bridge-1.0-SNAPSHOT-allinone.jar"
 
 ${INDEXER_CMD} \
   --query ISSUE_QUERY \
