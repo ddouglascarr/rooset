@@ -6,6 +6,12 @@ set -eou pipefail
 # Starts a clean Rooset system for testing. 
 # All data will be lost on exit
 #
+# Usage:
+#   $ start-test-system <test-spec> <precondition>
+#
+# Example:
+#   $ start-test-system issue-voting-command single-winner-voting
+#
 ################################################################################
 
 SCRIPTDIR=`dirname "$(readlink -f "$0")"`
