@@ -17,6 +17,14 @@ DATA_DIR=/tmp/elasticsearch-testing
 LOG_DIR=/tmp/log/elasticsearch-testing
 PID_FILE=/tmp/elasticsearch-testing.pid
 
+# elasticsearch is weird, needs killing like this.
+killElasticsearch () {
+  echo "killing elasticsearch $(cat ${PID_FILE})"
+  kill -SIGTERM $(cat ${PID_FILE})
+}
+trap killElasticsearch EXIT
+
+
 $(rm -r ${DATA_DIR} &> /dev/null || true)
 mkdir -p ${DATA_DIR}
 mkdir -p ${LOG_DIR}
@@ -25,5 +33,7 @@ ${ELASTICSEARCH_BIN} \
   -p ${PID_FILE} \
   -Edefault.path.logs=${LOG_DIR} \
   -Edefault.path.data=${DATA_DIR} \
-  -Edefault.path.conf=${CONF_DIR}
+  -Edefault.path.conf=${CONF_DIR} 2>&1 &
+
+while true; do sleep 1; done
 

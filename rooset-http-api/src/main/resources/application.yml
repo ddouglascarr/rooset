@@ -24,6 +24,9 @@ get-event-store:
   host: ${ROOSET_EVENT_STORE_HOST}
   binPath: '' # Not used in production, testing only
 
+rooset-search:
+  host: ${ROOSET_SEARCH_HOST}
+  http-port: ${ROOSET_SEARCH_HTTP_PORT}
 
 ---
 
