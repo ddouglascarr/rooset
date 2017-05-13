@@ -13,7 +13,8 @@ cd $SCRIPTDIR
 
 EVENTSTORE_LOG_FILE="/tmp/rooset-testing-eventstore.log"
 EVENTSTORE_READY_LINE="Sub System 'Projections' initialized"
-ELASTICSTORE_READY_LINE="success"
+ELASTICSEARCH_LOG_FILE="/tmp/rooset-testins-elasticsearch.log"
+ELASTICSEARCH_READY_LINE="Node.*started"
 
 # Kill all processes on exit
 killAllJobs () {
@@ -27,7 +28,7 @@ waitForLogToHaveLine () {
   log_file=$1
   ready_line=$2
   echo "waiting for \"${ready_line}\" in ${log_file}"
-  ( tail --pid=$$ -f ${log_file} & ) | grep -q "${ready_line}"
+  ( tail --pid=$$ -f ${log_file} & ) | grep -E -q "${ready_line}"
 }
 
 
@@ -40,11 +41,12 @@ echo "eventstore ready"
 
 
 # Start elasticsearch with a fresh database
-#(
-#  ${SCRIPTDIR}/start-test-elasticsearch &
-#  elasticsearch_pid=$!
-#) | tee -a ${LOG_FILE} | grep -q "${ELASTICSEARCH_READY_LINE}"
-# echo "elasticsearch started with pid: ${elasticsearch_pid}"
+echo "starting elasticsearch"
+${SCRIPTDIR}/start-test-elasticsearch 2>&1 > ${ELASTICSEARCH_LOG_FILE} &
+echo "elasticsearch started with pid: ${!}"
+waitForLogToHaveLine "${ELASTICSEARCH_LOG_FILE}" "${ELASTICSEARCH_READY_LINE}"
+echo "elasticsearch ready"
+
 
 # Keep script alive
 while true; do sleep 5; done
