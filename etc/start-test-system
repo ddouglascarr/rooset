@@ -13,8 +13,10 @@ cd $SCRIPTDIR
 
 EVENTSTORE_LOG_FILE="/tmp/rooset-testing-eventstore.log"
 EVENTSTORE_READY_LINE="Sub System 'Projections' initialized"
-ELASTICSEARCH_LOG_FILE="/tmp/rooset-testins-elasticsearch.log"
+ELASTICSEARCH_LOG_FILE="/tmp/rooset-testing-elasticsearch.log"
 ELASTICSEARCH_READY_LINE="Node.*started"
+ROOSET_PROJECTIONS_LOG_FILE="/tmp/rooset-testing-projections.log"
+ROOSET_SEARCH_INDEXER_LOG_FILE="/tmp/rooset-testing-rooset-search-indexer.log"
 
 # Kill all processes on exit
 killAllJobs () {
@@ -33,7 +35,7 @@ waitForLogToHaveLine () {
 
 
 # Start eventstore with in-memory database
-echo "starting eventstore"
+echo "eventstore starting"
 eventstored --mem-db --run-projections=all 2>&1 > ${EVENTSTORE_LOG_FILE} &
 echo "eventstore started with pid: ${!}"
 waitForLogToHaveLine ${EVENTSTORE_LOG_FILE} "${EVENTSTORE_READY_LINE}"
@@ -41,12 +43,26 @@ echo "eventstore ready"
 
 
 # Start elasticsearch with a fresh database
-echo "starting elasticsearch"
+echo "elasticsearch starting"
 ${SCRIPTDIR}/start-test-elasticsearch 2>&1 > ${ELASTICSEARCH_LOG_FILE} &
 echo "elasticsearch started with pid: ${!}"
 waitForLogToHaveLine "${ELASTICSEARCH_LOG_FILE}" "${ELASTICSEARCH_READY_LINE}"
 echo "elasticsearch ready"
 
+# Init all projections
+echo "rooset-projections initializing"
+${SCRIPTDIR}/../rooset-domain-query-reducers/init-all-projections \
+    > ${ROOSET_PROJECTIONS_LOG_FILE}
+echo "rooset-projections initialized"
+
+# Start rooset-search-indexer
+echo "starting rooset-search-indexer"
+${SCRIPTDIR}/../rooset-search-indexer/start-all 2>&1 > ${ROOSET_SEARCH_INDEXER_LOG_FILE} &
+echo "rooset-search-indexer started with pid: ${!}"
+echo "rooset-search-indexer ready"
+
+# Everything is ready
+echo "test system ready"
 
 # Keep script alive
 while true; do sleep 5; done
