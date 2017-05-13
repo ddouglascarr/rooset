@@ -17,6 +17,7 @@ ELASTICSEARCH_LOG_FILE="/tmp/rooset-testing-elasticsearch.log"
 ELASTICSEARCH_READY_LINE="Node.*started"
 ROOSET_PROJECTIONS_LOG_FILE="/tmp/rooset-testing-projections.log"
 ROOSET_SEARCH_INDEXER_LOG_FILE="/tmp/rooset-testing-rooset-search-indexer.log"
+ROOSET_PERSIST_TEST_PRECONDITION_LOG_FILE="/tmp/rooset-testings-persist-precondition.log"
 
 # Kill all processes on exit
 killAllJobs () {
@@ -51,8 +52,7 @@ echo "elasticsearch ready"
 
 # Init all projections
 echo "rooset-projections initializing"
-${SCRIPTDIR}/../rooset-domain-query-reducers/init-all-projections \
-    > ${ROOSET_PROJECTIONS_LOG_FILE}
+${SCRIPTDIR}/../rooset-domain-query-reducers/init-all-projections > ${ROOSET_PROJECTIONS_LOG_FILE}
 echo "rooset-projections initialized"
 
 # Start rooset-search-indexer
@@ -63,6 +63,11 @@ echo "rooset-search-indexer ready"
 
 # Everything is ready
 echo "test system ready"
+
+# Persisting test precondition
+echo "persist-test-precondtion: ${@}"
+${SCRIPTDIR}/../rooset-application-toolkit/tools/persist-test-precondition $@ > ${ROOSET_PERSIST_TEST_PRECONDITION_LOG_FILE}
+echo "persist-test-precondition finished"
 
 # Keep script alive
 while true; do sleep 5; done
