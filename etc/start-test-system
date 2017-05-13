@@ -12,31 +12,32 @@ SCRIPTDIR=`dirname "$(readlink -f "$0")"`
 cd $SCRIPTDIR
 
 EVENTSTORE_LOG_FILE="/tmp/rooset-testing-eventstore.log"
-EVENTSTORE_PID_FILE="/tmp/rooset-testing-eventstore.pid"
-
 EVENTSTORE_READY_LINE="Sub System 'Projections' initialized"
 ELASTICSTORE_READY_LINE="success"
 
-# elasticsearch_pid=0
-# eventstore_pid=0
-
 # Kill all processes on exit
-kill_all_children () {
-  kill $(cat ${EVENTSTORE_PID_FILE})
-  # kill ${elasticsearch_pid}
-  echo "Killed all children"
+killAllJobs () {
+  echo "killing processes: $(jobs -p)"
+  kill $(jobs -p)
   exit 0
 }
-trap kill_all_children EXIT
+trap killAllJobs EXIT
+
+waitForLogToHaveLine () {
+  log_file=$1
+  ready_line=$2
+  echo "waiting for \"${ready_line}\" in ${log_file}"
+  ( tail --pid=$$ -f ${log_file} & ) | grep -q "${ready_line}"
+}
+
 
 # Start eventstore with in-memory database
 echo "starting eventstore"
-(
-  eventstored --mem-db --run-projections=all 2>&1 > ${EVENTSTORE_LOG_FILE} &
-  echo $! > ${EVENTSTORE_PID_FILE}
-)
-( tail --pid=$$ -f ${EVENTSTORE_LOG_FILE} & ) | grep -q "${EVENTSTORE_READY_LINE}"
-echo "eventstore started with pid: $(cat ${EVENTSTORE_PID_FILE})"
+eventstored --mem-db --run-projections=all 2>&1 > ${EVENTSTORE_LOG_FILE} &
+echo "eventstore started with pid: ${!}"
+waitForLogToHaveLine ${EVENTSTORE_LOG_FILE} "${EVENTSTORE_READY_LINE}"
+echo "eventstore ready"
+
 
 # Start elasticsearch with a fresh database
 #(
