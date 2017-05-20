@@ -2,7 +2,9 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 #include <string>
+#include <functional>
 #include <r3/r3.hpp>
 
 
@@ -91,5 +93,40 @@ TEST(dependencies_lib3, should_match_route_cpp_api)
 
   r3::Route unmatched2 = tree.match_route(unmatched2Entry);
   EXPECT_FALSE(unmatched2);
-
 }
+
+
+
+TEST(dependencies_lib3, pointer_to_vector_position)
+{
+  struct Route {
+    std::string path;
+    std::string value;
+    std::function<std::string()> handler;
+  };
+  std::vector<Route> routes = { 
+    {"/foo", "foo", []() { return "foo return value"; } }, 
+    {"/bar", "bar", []() { return "bar return value"; } },
+  };
+  r3::Tree tree(routes.size());
+  for (auto it = routes.begin(); it != routes.end(); ++it) {
+    tree.insert_routel(METHOD_GET, it->path.c_str(), it->path.length(), &*it);
+  }
+  
+  char* errStr;
+  int err = tree.compile(&errStr);
+  EXPECT_EQ(err, 0);
+  if (err != 0) {
+    free(errStr);
+  }
+  
+  r3::MatchEntry barEntry("/bar");
+  barEntry.set_request_method(METHOD_GET);
+  r3::Route matched = tree.match_route(barEntry);
+  EXPECT_TRUE(matched);
+
+  auto* route = static_cast<Route*>(matched.data());
+  EXPECT_EQ(route->value, "bar");
+  EXPECT_EQ(route->handler(), "bar return value");       
+}
+

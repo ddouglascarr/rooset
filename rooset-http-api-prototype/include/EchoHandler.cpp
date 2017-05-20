@@ -9,9 +9,9 @@
  */
 #include "EchoHandler.h"
 
-#include <iostream>
 #include <proxygen/httpserver/RequestHandler.h>
 #include <proxygen/httpserver/ResponseBuilder.h>
+#include <glog/logging.h>
 
 #include "EchoStats.h"
 
@@ -41,8 +41,8 @@ void EchoHandler::onBody(std::unique_ptr<folly::IOBuf> body) noexcept {
 void EchoHandler::onEOM() noexcept {
   auto bodyStr = body_->moveToFbString();
   bodyStr = "Hello " + bodyStr + ": " + path_;
-  std::cout << bodyStr << "\n";
-  std::cout << "What is the path: " + request_->getPath() + "\n";
+  LOG(INFO) << "bodyStr= " << bodyStr << "\n";
+  LOG(INFO) << "What is the path: " + request_->getPath() << "\n";
 
   ResponseBuilder(downstream_)
     .status(200, "OK")
