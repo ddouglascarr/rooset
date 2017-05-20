@@ -7,17 +7,20 @@ set(CMAKE_CXX_FLAGS "-std=c++1y -pthread -g -Wall")
 include_directories(${PROJECT_SOURCE_DIR}/include)
 add_subdirectory(include)
 
+set(EXTERNAL_LIBS
+  gflags
+  glog
+  wangle
+  folly
+  proxygenhttpserver
+  r3)
+
 add_executable(rooset-http-server
   ${PROJECT_SOURCE_DIR}/main.cpp
   ${ROOSET_HTTP_SERVER_SOURCES})
 
 target_link_libraries(rooset-http-server
-  gflags
-  glog
-  wangle
-  folly
-  proxygenhttpserver)
-
+  ${EXTERNAL_LIBS})
 
 # Testing
 set(gtest_disable_pthreads OFF)
@@ -32,11 +35,7 @@ enable_testing()
 add_subdirectory(${PROJECT_SOURCE_DIR}/tests/unit)
 add_executable(http-unit-tests ${HTTP_UNIT_TEST_SOURCES})
 target_link_libraries(http-unit-tests 
-  gflags
-  glog
-  wangle
-  folly
-  proxygenhttpserver
+  ${EXTERNAL_LIBS}
   gmock
   gmock_main)
 add_test(NAME unit COMMAND http-unit-tests)
