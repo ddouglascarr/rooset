@@ -1,0 +1,3 @@
+set(ROOSET_HTTP_SERVER_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/EchoHandler.cpp
+  CACHE FILEPATH "base sources")
