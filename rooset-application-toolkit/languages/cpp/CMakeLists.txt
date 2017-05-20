@@ -13,7 +13,7 @@ cmake_minimum_required(VERSION 3.0)
 #  - RATK_INCLUDE_DIRS Add to the root include_directories
 
 # cmake output libraries:
-#  - libratk link to anything requiring headers from RATK_INCLUDE_DIRS
+#  - ratk link to anything requiring headers from RATK_INCLUDE_DIRS
 
 
 # Locally useful
@@ -193,26 +193,26 @@ set(RATK_SOURCE_FILES
     CACHE PATH "Source dirs for ratk inrastructure, generated and dependencies")
 
 
-add_library(libratk ${RATK_SOURCE_FILES})
+add_library(ratk ${RATK_SOURCE_FILES})
 if(RATK_GEN_COMMANDS)
-  add_dependencies(libratk generate-commands)
+  add_dependencies(ratk generate-commands)
 endif()
 if(RATK_GEN_EVENTS)
-  add_dependencies(libratk generate-events)
+  add_dependencies(ratk generate-events)
 endif()
 if(RATK_GEN_ENUMS)
-  add_dependencies(libratk generate-enums)
+  add_dependencies(ratk generate-enums)
 endif()
 if(RATK_GEN_EXCEPTIONS)
-  add_dependencies(libratk generate-exceptions)
+  add_dependencies(ratk generate-exceptions)
 endif()
 if(RATK_GEN_TESTS)
-  add_dependencies(libratk generate-tests)
+  add_dependencies(ratk generate-tests)
 endif()
 
 
 set(RATK_DEP_LIBRARIES ${CURL_LIBRARIES})
 
 
-target_link_libraries(libratk ${RATK_DEP_LIBRARIES})
+target_link_libraries(ratk ${RATK_DEP_LIBRARIES})
 

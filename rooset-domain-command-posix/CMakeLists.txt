@@ -45,20 +45,20 @@ include_directories(${RATK_INCLUDE_DIRS})
 
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/include)
-add_library(librooset
+add_library(rooset
     ${LIBROOSET_SOURCES})
 
 
 add_executable(rooset-command
 	${PROJECT_SOURCE_DIR}/main.cpp)
-TARGET_LINK_LIBRARIES(rooset-command libratk librooset)
+TARGET_LINK_LIBRARIES(rooset-command ratk rooset)
 set_property(TARGET rooset-command PROPERTY CXX_STANDARD 14)
 set_property(TARGET rooset-command PROPERTY CXX_STANDARD_REQUIRED ON)
 
 
 enable_testing()
 add_executable(rooset-generated-tests ${RATK_GEN_TEST_SOURCES})
-target_link_libraries(rooset-generated-tests librooset libratk gmock gmock_main)
+target_link_libraries(rooset-generated-tests rooset ratk gmock gmock_main)
 set_property(TARGET rooset-generated-tests PROPERTY CXX_STANDARD 14)
 set_property(TARGET rooset-generated-tests PROPERTY CXX_STANDARD_REQUIRED ON)
 add_test(NAME generated COMMAND rooset-generated-tests)
@@ -66,7 +66,7 @@ add_test(NAME generated COMMAND rooset-generated-tests)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/tests/unit)
 add_executable(rooset-unit-tests ${ROOSET_UNIT_TEST_SOURCES})
-target_link_libraries(rooset-unit-tests librooset libratk gmock gmock_main)
+target_link_libraries(rooset-unit-tests rooset ratk gmock gmock_main)
 set_property(TARGET rooset-unit-tests PROPERTY CXX_STANDARD 14)
 set_property(TARGET rooset-unit-tests PROPERTY CXX_STANDARD_REQUIRED ON)
 add_test(NAME unit COMMAND rooset-unit-tests)
