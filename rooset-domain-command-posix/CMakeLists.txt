@@ -26,7 +26,8 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 set(gtest_disable_pthreads OFF)
 set(gmock_disable_pthreads OFF)
-add_subdirectory(${PROJECT_SOURCE_DIR}/deps/googletest)
+add_subdirectory($ENV{ROOSET_BASE_DIR}/deps/googletest
+  ${PROJECT_BINARY_DIR}/googletest)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 include_directories(${gmock_SOURCE_DIR}/include ${gmock_SOURCE_DIR})
 
