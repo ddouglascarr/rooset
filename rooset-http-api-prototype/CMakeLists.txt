@@ -17,3 +17,26 @@ target_link_libraries(rooset-http-server
   wangle
   folly
   proxygenhttpserver)
+
+
+# Testing
+set(gtest_disable_pthreads OFF)
+set(gmock_disable_pthreads OFF)
+add_subdirectory($ENV{ROOSET_BASE_DIR}/deps/googletest
+  ${PROJECT_BINARY_DIR}/googletest)
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(${gmock_SOURCE_DIR}/include ${gmock_SOURCE_DIR})
+
+enable_testing()
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/tests/unit)
+add_executable(http-unit-tests ${HTTP_UNIT_TEST_SOURCES})
+target_link_libraries(http-unit-tests 
+  gflags
+  glog
+  wangle
+  folly
+  proxygenhttpserver
+  gmock
+  gmock_main)
+add_test(NAME unit COMMAND http-unit-tests)
