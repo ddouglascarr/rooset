@@ -43,6 +43,7 @@ class EchoHandler : public proxygen::RequestHandler {
   std::unique_ptr<folly::IOBuf> body_;
   folly::fbstring URL_;
   folly::fbstring path_;
+  std::unique_ptr<proxygen::HTTPMessage> request_;
 };
 
 }

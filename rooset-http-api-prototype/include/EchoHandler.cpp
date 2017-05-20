@@ -27,6 +27,7 @@ void EchoHandler::onRequest(std::unique_ptr<HTTPMessage> headers) noexcept {
   URL_ = headers->getURL();
   path_ = headers->getPath();
   stats_->recordRequest();
+  request_ = move(headers);
 }
 
 void EchoHandler::onBody(std::unique_ptr<folly::IOBuf> body) noexcept {
@@ -41,7 +42,7 @@ void EchoHandler::onEOM() noexcept {
   auto bodyStr = body_->moveToFbString();
   bodyStr = "Hello " + bodyStr + ": " + path_;
   std::cout << bodyStr << "\n";
-  std::cout << "What is the path: " + path_ + "\n";
+  std::cout << "What is the path: " + request_->getPath() + "\n";
 
   ResponseBuilder(downstream_)
     .status(200, "OK")
