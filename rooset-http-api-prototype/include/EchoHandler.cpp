@@ -9,12 +9,14 @@
  */
 #include "EchoHandler.h"
 
+#include <iostream>
 #include <proxygen/httpserver/RequestHandler.h>
 #include <proxygen/httpserver/ResponseBuilder.h>
 
 #include "EchoStats.h"
 
 using namespace proxygen;
+using namespace folly;
 
 namespace EchoService {
 
@@ -22,6 +24,8 @@ EchoHandler::EchoHandler(EchoStats* stats): stats_(stats) {
 }
 
 void EchoHandler::onRequest(std::unique_ptr<HTTPMessage> headers) noexcept {
+  URL_ = headers->getURL();
+  path_ = headers->getPath();
   stats_->recordRequest();
 }
 
@@ -34,11 +38,16 @@ void EchoHandler::onBody(std::unique_ptr<folly::IOBuf> body) noexcept {
 }
 
 void EchoHandler::onEOM() noexcept {
+  auto bodyStr = body_->moveToFbString();
+  bodyStr = "Hello " + bodyStr + ": " + path_;
+  std::cout << bodyStr << "\n";
+  std::cout << "What is the path: " + path_ + "\n";
+
   ResponseBuilder(downstream_)
     .status(200, "OK")
     .header("Request-Number",
             folly::to<std::string>(stats_->getRequestCount()))
-    .body(std::move(body_))
+    .body(bodyStr)
     .sendWithEOM();
 }
 

@@ -41,6 +41,8 @@ class EchoHandler : public proxygen::RequestHandler {
   EchoStats* const stats_{nullptr};
 
   std::unique_ptr<folly::IOBuf> body_;
+  folly::fbstring URL_;
+  folly::fbstring path_;
 };
 
 }
