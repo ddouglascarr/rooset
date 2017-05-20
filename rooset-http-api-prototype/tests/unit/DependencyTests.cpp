@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include <r3/r3.h>
+#include <r3/r3.hpp>
 
 
 
@@ -14,7 +14,7 @@ TEST(dependencies, test_test_should_pass)
 
 
 
-TEST(dependencies_lib3, should_match_route)
+TEST(dependencies_lib3, should_match_route_c_api)
 {
   auto *n = r3_tree_create(10);
   int routeData1 = 1;
@@ -43,5 +43,53 @@ TEST(dependencies_lib3, should_match_route)
 
   auto* unmatched = r3_tree_matchl(n, "/bar", strlen("/bar"), NULL);
   EXPECT_FALSE(unmatched);
+
+  r3_tree_free(n);
 }
 
+
+
+TEST(dependencies_lib3, should_match_route_cpp_api)
+{
+  r3::Tree tree(10);
+
+  int routeData1 = 1;
+  int routeData2 = 2;
+  std::string routeFoo = "/foo";
+  std::string routeFooXBar  = "/foo/{x}/bar";
+  
+  tree.insert_routel(METHOD_GET, routeFoo.c_str(), routeFoo.length(), &routeData1);
+  tree.insert_routel(METHOD_GET, routeFooXBar.c_str(), routeFooXBar.length(), &routeData2);
+
+  char* errStr;
+  int err = tree.compile(&errStr);
+  EXPECT_EQ(err, 0);
+  if (err != 0) {
+    free(errStr);
+  }
+
+  r3::MatchEntry fooEntry("/foo");
+  fooEntry.set_request_method(METHOD_GET);
+  
+  r3::Route matchedFoo = tree.match_route(fooEntry);
+  EXPECT_TRUE(matchedFoo);
+  EXPECT_EQ(*static_cast<int*>(matchedFoo.data()), 1);
+  
+  r3::MatchEntry fooXBarEntry("/foo/123/bar");
+  fooXBarEntry.set_request_method(METHOD_GET);
+
+  r3::Route matchedFooXBar = tree.match_route(fooXBarEntry);
+  EXPECT_TRUE(matchedFooXBar);
+  EXPECT_EQ(*static_cast<int*>(matchedFooXBar.data()), 2);
+
+  fooXBarEntry.set_request_method(METHOD_POST);
+  r3::Route unmatched1 = tree.match_route(fooXBarEntry);
+  EXPECT_FALSE(unmatched1);
+
+  r3::MatchEntry unmatched2Entry("/foo/a/bar/123");
+  unmatched2Entry.set_request_method(METHOD_GET);
+
+  r3::Route unmatched2 = tree.match_route(unmatched2Entry);
+  EXPECT_FALSE(unmatched2);
+
+}

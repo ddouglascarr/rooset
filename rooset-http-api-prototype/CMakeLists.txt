@@ -5,6 +5,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1 )
 set(CMAKE_CXX_FLAGS "-std=c++1y -pthread -g -Wall")
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
+# r3.hpp uses angle brackets to import r3.h, needs to be top-level include
+include_directories(/usr/include/r3)
 add_subdirectory(include)
 
 set(EXTERNAL_LIBS
