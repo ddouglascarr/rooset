@@ -44,7 +44,9 @@ include_directories(${gmock_SOURCE_DIR}/include ${gmock_SOURCE_DIR})
 enable_testing()
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/tests/unit)
-add_executable(http-unit-tests ${HTTP_UNIT_TEST_SOURCES})
+add_executable(http-unit-tests 
+  ${HTTP_UNIT_TEST_SOURCES}
+  ${ROOSET_HTTP_SERVER_SOURCES})
 target_link_libraries(http-unit-tests 
   ${EXTERNAL_LIBS}
   gmock
@@ -52,7 +54,9 @@ target_link_libraries(http-unit-tests
 add_test(NAME unit COMMAND http-unit-tests)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/tests/integration)
-add_executable(http-integration-tests ${HTTP_INTEGRATION_TEST_SOURCES})
+add_executable(http-integration-tests 
+  ${HTTP_INTEGRATION_TEST_SOURCES}
+  ${ROOSET_HTTP_SERVER_SOURCES})
 target_link_libraries(http-integration-tests
   ${EXTERNAL_LIBS}
   gmock
