@@ -39,10 +39,15 @@ class EchoHandlerFactory : public proxygen::RequestHandlerFactory
 int main(int argc, char* argv[])
 {
   rooset::Server<EchoHandlerFactory> server("localhost", 11000);
+  
+  std::promise<void> p;
+  auto f = p.get_future();
 
-  auto t = server.start([]() {
-    LOG(INFO) << "server started" << "\n";
-  });
+  std::thread t = server.start([&p](){ p.set_value(); });
+  
+  f.get();
+  LOG(INFO) << "server started \n";
+  
   t.join();
   return 0;
 }
