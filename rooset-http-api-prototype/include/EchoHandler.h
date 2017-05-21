@@ -22,7 +22,7 @@ class EchoStats;
 
 class EchoHandler : public proxygen::RequestHandler {
  public:
-  explicit EchoHandler(EchoStats* stats);
+  explicit EchoHandler();
 
   void onRequest(std::unique_ptr<proxygen::HTTPMessage> headers)
       noexcept override;
@@ -38,8 +38,6 @@ class EchoHandler : public proxygen::RequestHandler {
   void onError(proxygen::ProxygenError err) noexcept override;
 
  private:
-  EchoStats* const stats_{nullptr};
-
   std::unique_ptr<folly::IOBuf> body_;
   folly::fbstring URL_;
   folly::fbstring path_;

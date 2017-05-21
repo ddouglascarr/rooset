@@ -25,7 +25,7 @@ class EchoHandlerFactory : public proxygen::RequestHandlerFactory
       proxygen::HTTPMessage*)
       noexcept override
   {
-    return new EchoHandler(stats_.get());
+    return new EchoHandler();
   }
 
  private:

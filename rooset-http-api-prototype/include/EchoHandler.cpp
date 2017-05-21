@@ -20,13 +20,12 @@ using namespace folly;
 
 namespace EchoService {
 
-EchoHandler::EchoHandler(EchoStats* stats): stats_(stats) {
-}
+EchoHandler::EchoHandler()
+{}
 
 void EchoHandler::onRequest(std::unique_ptr<HTTPMessage> headers) noexcept {
   URL_ = headers->getURL();
   path_ = headers->getPath();
-  stats_->recordRequest();
   request_ = move(headers);
 }
 
@@ -46,8 +45,6 @@ void EchoHandler::onEOM() noexcept {
 
   ResponseBuilder(downstream_)
     .status(200, "OK")
-    .header("Request-Number",
-            folly::to<std::string>(stats_->getRequestCount()))
     .body(bodyStr)
     .sendWithEOM();
 }
