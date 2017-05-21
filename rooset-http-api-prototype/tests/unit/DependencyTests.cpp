@@ -8,6 +8,7 @@
 #include <r3/r3.hpp>
 #include "http-server/HttpRoute.h"
 #include "rapidjson/document.h"
+#include <proxygen/httpserver/HTTPServer.h>
 
 
 
@@ -132,3 +133,12 @@ TEST(dependencies_lib3, pointer_to_vector_position)
   EXPECT_EQ(route->handler(), "bar return value");       
 }
 
+
+
+TEST(dependencies_folly, covert_between_stdstring_and_fbstring)
+{
+  std::string stdStr("Foo Bar");
+  folly::fbstring fbstr(stdStr);
+  
+  EXPECT_EQ(fbstr.toStdString(), "Foo Bar");
+}
