@@ -9,6 +9,7 @@
 #include "http-server/HttpRoute.h"
 #include "rapidjson/document.h"
 #include <proxygen/httpserver/HTTPServer.h>
+#include "http-server/HttpRouter.h"
 
 
 

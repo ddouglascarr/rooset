@@ -16,12 +16,12 @@ public:
   const bool isAuthenticated;
   const proxygen::HTTPMethod method;
   const std::string path;
-  const std::function<HttpRouteHandlerResponse()> handler;
+  const std::function<HttpRouteHandlerResponse()>& handler;
 
   inline HttpRoute(
-      bool isAuthenticated,
-      proxygen::HTTPMethod method,
-      std::string path,
+      const bool isAuthenticated,
+      const proxygen::HTTPMethod method,
+      const std::string path,
       decltype(handler) handler) :
       isAuthenticated(isAuthenticated),
       method(method),
