@@ -26,7 +26,14 @@ add_executable(rooset-http-server
 target_link_libraries(rooset-http-server
   ${EXTERNAL_LIBS})
 
+
+
+################################################################################
+#
 # Testing
+#
+################################################################################
+
 set(gtest_disable_pthreads OFF)
 set(gmock_disable_pthreads OFF)
 add_subdirectory($ENV{ROOSET_BASE_DIR}/deps/googletest
@@ -43,3 +50,11 @@ target_link_libraries(http-unit-tests
   gmock
   gmock_main)
 add_test(NAME unit COMMAND http-unit-tests)
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/tests/integration)
+add_executable(http-integration-tests ${HTTP_INTEGRATION_TEST_SOURCES})
+target_link_libraries(http-integration-tests
+  ${EXTERNAL_LIBS}
+  gmock
+  gmock_main)
+add_test(NAME integration COMMAND http-integration-tests)
