@@ -1,5 +1,6 @@
 #include <gflags/gflags.h>
 
+#include <future>
 #include "EchoHandler.h"
 #include "EchoStats.h"
 #include "http-server/Server.h"
@@ -39,7 +40,9 @@ int main(int argc, char* argv[])
 {
   rooset::Server<EchoHandlerFactory> server("localhost", 11000);
 
-  auto t = server.start();
+  auto t = server.start([]() {
+    LOG(INFO) << "server started" << "\n";
+  });
   t.join();
   return 0;
 }

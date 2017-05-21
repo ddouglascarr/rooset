@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <future>
 #include <folly/Memory.h>
 #include <folly/io/async/EventBaseManager.h>
 #include <proxygen/httpserver/HTTPServer.h>
@@ -40,11 +41,11 @@ public:
 
 
 
-  std::thread start()
+  std::thread start(std::function<void()> callback)
   {
     s.bind(ipConfigs);
-    std::thread t([&] () {
-      s.start();
+    std::thread t([&, this] () {
+      s.start(callback);
     });
 
     return t;
