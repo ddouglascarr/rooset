@@ -39,7 +39,7 @@ void EchoHandler::onBody(std::unique_ptr<folly::IOBuf> body) noexcept {
 }
 
 void EchoHandler::onEOM() noexcept {
-  auto bodyStr = body_->moveToFbString();
+  auto bodyStr = body_ ? body_->moveToFbString() : "";
   bodyStr = "Hello " + bodyStr + ": " + path_;
   LOG(INFO) << "bodyStr= " << bodyStr << "\n";
   LOG(INFO) << "What is the path: " + request_->getPath() << "\n";

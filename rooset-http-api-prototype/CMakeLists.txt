@@ -11,13 +11,20 @@ include_directories(
 include_directories(/usr/include/r3)
 add_subdirectory(include)
 
+# librooset, libratk
+include_directories($ENV{ROOSET_BASE_DIR}/rooset-domain-command-posix/gen)
+add_subdirectory($ENV{ROOSET_BASE_DIR}/rooset-application-toolkit/languages/cpp 
+  ${PROJECT_BINARY_DIR}/ratk)
+include_directories(${RATK_INCLUDE_DIRS})
+
 set(EXTERNAL_LIBS
   gflags
   glog
   wangle
   folly
   proxygenhttpserver
-  r3)
+  r3
+  ratk)
 
 add_executable(rooset-http-server
   ${PROJECT_SOURCE_DIR}/main.cpp
