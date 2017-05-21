@@ -38,6 +38,7 @@ rooset::HttpResponse rooset::HttpToolsCurlImpl::get(
 {
   auto conn = curl_easy_init();
   std::string body;
+  std::vector<string> respHeaders;
   char errorBuffer[CURL_ERROR_SIZE];
   long status = 0;
   CURLcode code;
@@ -63,6 +64,27 @@ rooset::HttpResponse rooset::HttpToolsCurlImpl::get(
 
   code = curl_easy_setopt(conn, CURLOPT_WRITEDATA, &body);
   assertCurlCodeOk(conn, code, errorBuffer, "failed to set write data");
+
+  code = curl_easy_setopt(
+      conn,
+      CURLOPT_HEADERFUNCTION,
+      [](void *buffer, size_t size, size_t nmemb, void *userp) {
+        char *d = static_cast<char*>(buffer);
+        auto* h = static_cast<vector<string>*>(userp);
+        
+        int result = 0;
+        if (h != nullptr) {
+          std::string header = "";
+          header.append(d, size * nmemb);
+          h->push_back(header);
+          result = size * nmemb;
+        }
+        return result;
+      });
+  assertCurlCodeOk(conn, code, errorBuffer, "failed to register header resp function");
+
+  code = curl_easy_setopt(conn, CURLOPT_WRITEHEADER, &respHeaders);
+  assertCurlCodeOk(conn, code, errorBuffer, "failed to register header resp variable");
 
   code = curl_easy_perform(conn);
   assertCurlCodeOk(conn, code, errorBuffer, "failed to perform request");
