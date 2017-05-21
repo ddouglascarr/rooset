@@ -7,17 +7,11 @@
 #include <proxygen/httpserver/RequestHandlerFactory.h>
 #include <unistd.h>
 
-
-
 namespace rooset {
 
-using folly::EventBase;
-using folly::EventBaseManager;
-using folly::SocketAddress;
 
 
-
-template<typename H>
+template<typename HandlerFactory>
 class Server
 {
 private:
@@ -64,6 +58,7 @@ public:
   }
 
 
+
 private:
 
 
@@ -76,11 +71,13 @@ private:
     options.shutdownOn = {SIGINT, SIGTERM};
     options.enableContentCompression = false;
     options.handlerFactories = proxygen::RequestHandlerChain()
-        .addThen<H>()
+        .addThen<HandlerFactory>()
         .build();
     options.h2cEnabled = true;
     return options;
   }
+
+
 
 };
 
