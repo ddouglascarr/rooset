@@ -65,22 +65,7 @@ rooset::HttpResponse rooset::HttpToolsCurlImpl::get(
   code = curl_easy_setopt(conn, CURLOPT_WRITEDATA, &body);
   assertCurlCodeOk(conn, code, errorBuffer, "failed to set write data");
 
-  code = curl_easy_setopt(
-      conn,
-      CURLOPT_HEADERFUNCTION,
-      [](void *buffer, size_t size, size_t nmemb, void *userp) {
-        char *d = static_cast<char*>(buffer);
-        auto* h = static_cast<vector<string>*>(userp);
-        
-        int result = 0;
-        if (h != nullptr) {
-          std::string header = "";
-          header.append(d, size * nmemb);
-          h->push_back(header);
-          result = size * nmemb;
-        }
-        return result;
-      });
+  code = curl_easy_setopt(conn, CURLOPT_HEADERFUNCTION, headerWriter);
   assertCurlCodeOk(conn, code, errorBuffer, "failed to register header resp function");
 
   code = curl_easy_setopt(conn, CURLOPT_WRITEHEADER, &respHeaders);
@@ -94,7 +79,7 @@ rooset::HttpResponse rooset::HttpToolsCurlImpl::get(
 
   curl_easy_reset(conn);
 
-  return HttpResponse(status, body);
+  return HttpResponse(status, body, respHeaders);
 }
 
 
@@ -108,6 +93,7 @@ rooset::HttpResponse rooset::HttpToolsCurlImpl::post(
 {
   auto conn = curl_easy_init();
   std::string body;
+  std::vector<string> respHeaders;
   char errorBuffer[CURL_ERROR_SIZE];
   long status = 0;
   CURLcode code;
@@ -147,9 +133,15 @@ rooset::HttpResponse rooset::HttpToolsCurlImpl::post(
   code = curl_easy_getinfo(conn, CURLINFO_RESPONSE_CODE, &status);
   assertCurlCodeOk(conn, code, errorBuffer, "failed to get status code");
 
+  code = curl_easy_setopt(conn, CURLOPT_HEADERFUNCTION, headerWriter);
+  assertCurlCodeOk(conn, code, errorBuffer, "failed to register header resp function");
+
+  code = curl_easy_setopt(conn, CURLOPT_WRITEHEADER, &respHeaders);
+  assertCurlCodeOk(conn, code, errorBuffer, "failed to register header resp variable");
+
   curl_easy_reset(conn);
 
-  return HttpResponse(status, body);
+  return HttpResponse(status, body, respHeaders);
 }
 
 
@@ -173,6 +165,21 @@ size_t rooset::HttpToolsCurlImpl::writer(
   return size * nmemb;
 }
 
+size_t rooset::HttpToolsCurlImpl::headerWriter(
+        char* buffer, size_t size, size_t nmemb, void* userp)
+{
+  char *d = static_cast<char*>(buffer);
+  auto* h = static_cast<std::vector<std::string>*>(userp);
+  
+  int result = 0;
+  if (h != nullptr) {
+    std::string header = "";
+    header.append(d, size * nmemb);
+    h->push_back(header);
+    result = size * nmemb;
+  }
+  return result;
+}
 
 
 bool rooset::HttpToolsCurlImpl::hasGlobalInitRun = false;

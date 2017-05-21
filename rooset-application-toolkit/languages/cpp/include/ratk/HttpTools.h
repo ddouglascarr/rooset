@@ -15,9 +15,7 @@ namespace rooset {
     inline HttpResponse(
         const long& status,
         const string& body) :
-        status(status),
-        body(body),
-        headers()
+        HttpResponse(status, body, {})
     {}
 
     inline HttpResponse(
