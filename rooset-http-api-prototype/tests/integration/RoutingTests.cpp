@@ -27,25 +27,50 @@ TEST(routing_tests, server_should_start_and_stop)
 
 
 
-TEST(routing_tests, echo_server)
+class RoutingTestsFixture : public ::testing::Test
 {
-  // starting server
-  rooset::Server<EchoHandlerFactory> server("localhost", 11005);
-  std::promise<void> p;
-  auto f = p.get_future();
-  std::thread t = server.start([&p](){ p.set_value(); });
-  
-  // setup curl
+public:
+  const std::string HOST = "localhost";
+  const int PORT = 11005;
   rooset::HttpToolsCurlImpl httpTools;
+  class TestHandlerFactory;
 
-  // wait for server to be ready before starting tests
-  f.get();
-  auto resp = httpTools.get("localhost", "11005", {}, "/foo");
+  RoutingTestsFixture() : httpTools() {};
+  ~RoutingTestsFixture() {};
+
+  template<typename S>
+  inline std::thread startServer(S& server)
+  {
+    std::promise<void> p;
+    auto f = p.get_future();
+    std::thread t = server.start([&p](){ p.set_value(); });
+    
+    f.get();
+    return t;
+  }
+};
+
+
+
+class RoutingTestsFixture::TestHandlerFactory
+{
+public:
+  TestHandlerFactory() {};
+  ~TestHandlerFactory() {};
+};
+
+
+
+TEST_F(RoutingTestsFixture, echo_server)
+{
+  rooset::Server<EchoHandlerFactory> server(HOST, PORT);
+  auto t = startServer<decltype(server)>(server);
+
+  auto resp = httpTools.get(HOST, std::to_string(PORT), {}, "/foo");
   EXPECT_EQ(resp.body, "Hello : /foo");
 
 
   // kill the server, and wait for the thread to close
   server.stop();
   t.join();
-
 }
