@@ -6,6 +6,8 @@
 #include <string>
 #include <functional>
 #include <r3/r3.hpp>
+#include "http-server/HttpRoute.h"
+#include "rapidjson/document.h"
 
 
 
