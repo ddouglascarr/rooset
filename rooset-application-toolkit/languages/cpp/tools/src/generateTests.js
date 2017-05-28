@@ -9,8 +9,8 @@ const generateTestFile = require('./generators/generateTestFile');
 const generateCMakeList = require('./generators/generateCMakeList');
 
 const config = getConfigFromEnv({
-  destPath: 'RATK_GEN_TEST_CPP_DEST_DIR',
-  srcPath: 'RATK_GEN_TEST_DECL_DIR',
+  destPath: 'RATK_CPP_TEST_DIR',
+  srcPath: 'RATK_DECL_TEST_DIR',
 });
 const files = {};
 

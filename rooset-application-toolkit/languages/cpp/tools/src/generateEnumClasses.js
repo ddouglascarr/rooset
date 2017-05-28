@@ -15,7 +15,7 @@ const generateEnumUtilsHeader = require('./generators/generateEnumUtilsHeader');
 const generateCMakeList = require('./generators/generateCMakeList');
 
 const config = getConfigFromEnv({
-  destPath: 'RATK_GEN_ENUM_CPP_DEST_DIR',
+  destPath: 'RATK_CPP_ENUM_DIR',
   baseSchemaLocation: 'RATK_GEN_BASE_SCHEMA_FILE',
 });
 const baseSchema = require(config.baseSchemaLocation);

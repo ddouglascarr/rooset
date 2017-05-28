@@ -15,10 +15,10 @@ const generateEventUtils = require('./generators/generateEventUtils');
 const generateCMakeList = require('./generators/generateCMakeList');
 
 const config = getConfigFromEnv({
-  destPath: 'RATK_GEN_EVENT_CPP_DEST_DIR',
-  srcPath: 'RATK_GEN_EVENT_DECL_DIR',
+  destPath: 'RATK_CPP_EVENT_DIR',
+  srcPath: 'RATK_DECL_EVENT_DIR',
   baseSchemaLocation: 'RATK_GEN_BASE_SCHEMA_FILE',
-  cmdSrcPath: 'RATK_GEN_COMMAND_DECL_DIR',
+  cmdSrcPath: 'RATK_DECL_COMMAND_DIR',
 });
 const baseSchema = require(config.baseSchemaLocation);
 const files = {};

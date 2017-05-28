@@ -13,8 +13,8 @@ const generateMessageCpp = require('./generators/generateMessageCpp');
 const generateCMakeList = require('./generators/generateCMakeList');
 
 const config = getConfigFromEnv({
-  destPath: 'RATK_GEN_EXCEPTION_CPP_DEST_DIR',
-  srcPath: 'RATK_GEN_EXCEPTION_DECL_DIR',
+  destPath: 'RATK_CPP_EXCEPTION_DIR',
+  srcPath: 'RATK_DECL_EXCEPTION_DIR',
   baseSchemaLocation: 'RATK_GEN_BASE_SCHEMA_FILE',
 });
 const baseSchema = require(config.baseSchemaLocation);
