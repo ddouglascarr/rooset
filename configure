@@ -12,6 +12,9 @@ npm install
 echo "y" | npm run lerna clean
 npm run lerna --yes bootstrap
 
+# generate source files
+./gen/generate
+
 # configure and compile domain-command-posix
 ./rooset-domain-command-posix/configure
 
