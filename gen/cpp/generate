@@ -7,8 +7,8 @@ mkdir -p ${RATK_CPP_ENUM_DIR}
 mkdir -p ${RATK_CPP_EXCEPTION_DIR}
 mkdir -p ${RATK_CPP_TEST_DIR}
 
-${RATK_GEN_CPP_TOOLS_DIR}/generate-cpp-commands
-${RATK_GEN_CPP_TOOLS_DIR}/generate-cpp-events
-${RATK_GEN_CPP_TOOLS_DIR}/generate-cpp-enums
-${RATK_GEN_CPP_TOOLS_DIR}/generate-cpp-exceptions
-${RATK_GEN_CPP_TOOLS_DIR}/generate-cpp-tests
+${RATK_CPP_TOOLS_DIR}/generate-cpp-commands
+${RATK_CPP_TOOLS_DIR}/generate-cpp-events
+${RATK_CPP_TOOLS_DIR}/generate-cpp-enums
+${RATK_CPP_TOOLS_DIR}/generate-cpp-exceptions
+${RATK_CPP_TOOLS_DIR}/generate-cpp-tests
