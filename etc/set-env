@@ -12,6 +12,9 @@ export ROOSET_SEARCH_HOST="${ROOSET_SEARCH_HOST:-localhost}"
 export ROOSET_SEARCH_HTTP_PORT="${ROOSET_SEARCH_HTTP_PORT:-9200}"
 export ROOSET_SEARCH_TCP_PORT="${ROOSET_SEARCH_TCP_PORT:-9300}"
 
+export RATK_DECL_BASE_DIR=${ROOSET_BASE_DIR}/rooset-declarations/src
+
+export RATK_DECL_COMMAND_DIR=${RATK_DECL_BASE_DIR}/commands
 export RATK_GEN_TEST_QUERY_JS_DEST_DIR=${WORKDIR}/../rooset-domain-query-reducers/__tests__
 export RATK_GEN_EVENT_DECL_DIR=${WORKDIR}/../rooset-declarations/src/events
 export RATK_GEN_TEST_DECL_DIR=${WORKDIR}/../rooset-declarations/src/tests
@@ -19,5 +22,15 @@ export RATK_GEN_QUERY_DECL_DIR=${WORKDIR}/../rooset-declarations/src/queries
 export RATK_GEN_REDUCER_SRC_DIR=${WORKDIR}/reducers
 export RATK_GEN_BASE_SCHEMA_FILE=${WORKDIR}/../rooset-declarations/src/base.schema.json
 export RATK_GEN_QUERY_ACTION_JS_DEST_DIR="${WORKDIR}/../rooset-web-client/src/actions/http"
+
+export RATK_CPP_TOOLS_DIR=${ROOSET_BASE_DIR}/rooset-application-toolkit/languages/cpp/tools
+export RATK_BASE_DIR=${ROOSET_BASE_DIR}/gen
+export RATK_CPP_DIR=${RATK_BASE_DIR}/cpp
+export RATK_CPP_COMMAND_DIR=${RATK_CPP_DIR}/commands
+export RATK_CPP_EVENT_DIR=${RATK_CPP_DIR}/events
+export RATK_CPP_ENUM_DIR=${RATK_CPP_DIR}/enums
+export RATK_CPP_EXCEPTION_DIR=${RATK_CPP_DIR}/exceptions
+export RATK_CPP_TEST_DIR=${RATK_CPP_DIR}/tests
+
 
 # PS1="(rooset) ${PS1}"

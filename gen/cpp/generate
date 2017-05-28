@@ -1,0 +1,10 @@
+#!/bin/bash
+
+mkdir -p ${RATK_CPP_DIR}
+mkdir -p ${RATK_CPP_COMMAND_DIR}
+mkdir -p ${RATK_CPP_EVENT_DIR}
+mkdir -p ${RATK_CPP_ENUM_DIR}
+mkdir -p ${RATK_CPP_EXCEPTION_DIR}
+mkdir -p ${RATK_CPP_TEST_DIR}
+
+${RATK_GEN_CPP_TOOLS_DIR}/generate-cpp-commands
