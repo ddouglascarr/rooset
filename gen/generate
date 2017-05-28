@@ -1,0 +1,3 @@
+#!/bin/bash
+
+${ROOSET_BASE_DIR}/gen/cpp/generate

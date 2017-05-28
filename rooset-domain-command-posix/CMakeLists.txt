@@ -32,22 +32,16 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 include_directories(${gmock_SOURCE_DIR}/include ${gmock_SOURCE_DIR})
 
 
-set(RATK_DECL_BASE_DIR ${PROJECT_SOURCE_DIR}/../rooset-declarations/src)
-set(RATK_GEN_DIR ${PROJECT_SOURCE_DIR}/gen)
-set(RATK_GEN_COMMANDS ON)
-set(RATK_GEN_EVENTS ON)
-set(RATK_GEN_ENUMS ON)
-set(RATK_GEN_EXCEPTIONS ON)
-set(RATK_GEN_TESTS ON)
-add_subdirectory(${PROJECT_SOURCE_DIR}/../rooset-application-toolkit/languages/cpp
+add_subdirectory($ENV{ROOSET_BASE_DIR}/rooset-application-toolkit/languages/cpp
     ${PROJECT_BINARY_DIR}/ratk)
+add_subdirectory($ENV{ROOSET_BASE_DIR}/gen/cpp ${PROJECT_BINARY_DIR}/gen)
 include_directories(${RATK_INCLUDE_DIRS})
-
+include_directories($ENV{RATK_CPP_DIR})
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/include)
 add_library(rooset-domain-command
+    ${RATK_GENERATED_SOURCES}
     ${LIBROOSET_SOURCES})
-
 
 add_executable(rooset-command
 	${PROJECT_SOURCE_DIR}/main.cpp)
@@ -57,7 +51,7 @@ set_property(TARGET rooset-command PROPERTY CXX_STANDARD_REQUIRED ON)
 
 
 enable_testing()
-add_executable(rooset-generated-tests ${RATK_GEN_TEST_SOURCES})
+add_executable(rooset-generated-tests ${RATK_GENERATED_TESTS})
 target_link_libraries(rooset-generated-tests rooset-domain-command ratk gmock gmock_main)
 set_property(TARGET rooset-generated-tests PROPERTY CXX_STANDARD 14)
 set_property(TARGET rooset-generated-tests PROPERTY CXX_STANDARD_REQUIRED ON)
