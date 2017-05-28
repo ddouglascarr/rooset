@@ -33,6 +33,9 @@ namespace rooset {
     static size_t writer(
         char* buffer, size_t size, size_t nmemb, std::string* userp);
 
+    static size_t headerWriter(
+        char* buffer, size_t size, size_t nmemb, void* userp);
+
     static bool hasGlobalInitRun;
   };
 }

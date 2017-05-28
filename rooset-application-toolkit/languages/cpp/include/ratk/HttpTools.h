@@ -10,8 +10,21 @@ namespace rooset {
   public:
     const long status;
     const string body;
-    HttpResponse(const long& status, const string& body) :
-        status(status), body(body)
+    const vector<string> headers;
+
+    inline HttpResponse(
+        const long& status,
+        const string& body) :
+        HttpResponse(status, body, {})
+    {}
+
+    inline HttpResponse(
+        const long& status,
+        const string& body,
+        const vector<string>& headers) :
+        status(status),
+        body(body),
+        headers(headers)
     {}
   };
 
