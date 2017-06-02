@@ -5,5 +5,5 @@ WORKDIR=`dirname "$(readlink -f "$0")"`
 cd $WORKDIR
 
 
-mkdir -p ${RATK_GEN_QUERY_ACTION_JS_DEST_DIR}
+mkdir -p ${RATK_JS_QUERY_ACTION_DIR}
 node src/generateActions.js

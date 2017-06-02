@@ -11,11 +11,11 @@ const generateQueryTest = require('./generators/generateQueryTest');
 
 const files = {};
 const config = getConfigFromEnv({
-  destPath: "RATK_GEN_TEST_QUERY_JS_DEST_DIR",
-  eventSrcPath: 'RATK_GEN_EVENT_DECL_DIR',
-  testSrcPath: "RATK_GEN_TEST_DECL_DIR",
-  querySrcPath: 'RATK_GEN_QUERY_DECL_DIR',
-  reducerSrcPath: 'RATK_GEN_REDUCER_SRC_DIR',
+  destPath: "RATK_JS_TEST_QUERY_DIR",
+  eventSrcPath: 'RATK_DECL_EVENT_DIR',
+  testSrcPath: "RATK_DECL_TEST_DIR",
+  querySrcPath: 'RATK_DECL_QUERY_DIR',
+  reducerSrcPath: 'RATK_REDUCER_SRC_DIR',
   baseSchemaLocation: 'RATK_GEN_BASE_SCHEMA_FILE',
 });
 const baseSchema = require(config.baseSchemaLocation);

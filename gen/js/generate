@@ -1,0 +1,3 @@
+#!/bin/bash
+
+${RATK_JS_TOOLS_DIR}/generate-js-actions

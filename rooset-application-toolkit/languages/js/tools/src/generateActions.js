@@ -11,8 +11,8 @@ const generateExecuteHttpRequest = require(
 
 const files = {};
 const config = getConfigFromEnv({
-  destPath: "RATK_GEN_QUERY_ACTION_JS_DEST_DIR",
-  querySrcPath: "RATK_GEN_QUERY_DECL_DIR",
+  destPath: "RATK_JS_QUERY_ACTION_DIR",
+  querySrcPath: "RATK_DECL_QUERY_DIR",
 });
 
 const queryDecls = getDeclarations(config.querySrcPath);
