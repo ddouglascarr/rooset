@@ -1,6 +1,11 @@
 #!/bin/bash
 WORKDIR=`dirname "$(readlink -f "${BASH_SOURCE[0]}")"`
 
+# use node 7.10
+if type "nvm" > /dev/null; then
+  nvm use 7.10
+fi
+
 export ROOSET_BASE_DIR=${WORKDIR}/..
 
 export ROOSET_RDB_HOST="${ROOSET_RDB_HOST:-localhost}"
