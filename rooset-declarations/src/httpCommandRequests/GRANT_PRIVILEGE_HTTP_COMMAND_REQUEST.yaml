@@ -1,7 +1,0 @@
----
-type: GRANT_PRIVILEGE_HTTP_COMMAND_REQUEST
-description: Grant a member privileges for a unit
-method: POST
-uri: '/units/{id}/members'
-commandTarget: GRANT_PRIVILEGE_COMMAND
-userIdMapping: requesterId

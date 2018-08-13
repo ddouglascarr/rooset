@@ -1,7 +1,0 @@
----
-  type: ADD_CONCERN_POLICY_HTTP_COMMAND_REQUEST
-  commandTarget: ADD_CONCERN_POLICY_COMMAND
-  description: Add a policy to a concern
-  method: POST
-  uri: /units/{id}/concerns/{concernId}/policies
-  userIdMapping: requesterId

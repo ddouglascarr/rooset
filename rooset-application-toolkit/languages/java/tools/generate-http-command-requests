@@ -1,8 +1,0 @@
-#!/bin/bash
-
-WORKDIR=`dirname "$(readlink -f "$0")"`
-cd $WORKDIR
-
-mkdir -p ${RATK_GEN_HTTP_REQUEST_BODY_JAVA_DIR}
-mkdir -p ${RATK_GEN_HTTP_CONTROLLER_JAVA_DIR}
-node src/generateHttpCommandRequests.js

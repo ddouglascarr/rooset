@@ -1,8 +1,0 @@
----
-type: GIVE_INITIATIVE_SUPPORT_HTTP_COMMAND_REQUEST
-commandTarget: GIVE_INITIATIVE_SUPPORT_COMMAND
-description: Give support to an initiative
-method: PUT
-uri: '/issues/{id}/initiatives/{initiativeId}'
-userIdMapping: requesterId
-

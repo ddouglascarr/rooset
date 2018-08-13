@@ -1,9 +1,0 @@
-properties:
-  id:
-    type: uuid
-  areaId:
-    type: uuid
-  requesterId:
-    type: uuid
-  trusteeId:
-    type: uuid

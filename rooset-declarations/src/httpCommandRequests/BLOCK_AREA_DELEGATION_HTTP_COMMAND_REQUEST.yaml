@@ -1,7 +1,0 @@
----
-type: BLOCK_DELEGATION_FOR_AREA_HTTP_COMMAND_REQUEST
-commandTarget: BLOCK_DELEGATION_FOR_AREA_COMMAND
-description: Block delegations at the area level
-method: PUT
-uri: /units/{id}/areas/{areaId}/block-delegation
-userIdMapping: requesterId

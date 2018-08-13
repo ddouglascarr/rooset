@@ -1,8 +1,0 @@
----
-  type: ADD_AREA_CONCERN_HTTP_COMMAND_REQUEST
-  commandTarget: ADD_AREA_CONCERN_COMMAND
-  description: Add a concern to an area
-  method: POST
-  uri: /units/{id}/areas/{areaId}/concerns
-  userIdMapping: requesterId
-  

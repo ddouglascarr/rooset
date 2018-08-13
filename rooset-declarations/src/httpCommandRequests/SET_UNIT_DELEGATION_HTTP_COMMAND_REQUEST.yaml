@@ -1,9 +1,0 @@
----
-type: SET_UNIT_DELEGATION_HTTP_COMMAND_REQUEST
-commandTarget: SET_UNIT_DELEGATION_COMMAND
-description: Set the unit delegation for a member
-method: PUT
-uri: /units/{id}/delegation
-userIdMapping: requesterId
-body:
-  - trusteeId

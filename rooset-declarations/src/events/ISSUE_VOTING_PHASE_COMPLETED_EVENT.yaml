@@ -1,6 +1,0 @@
----
-properties:
-  id:
-    type: uuid
-  winnerId:
-    type: uuidNullable

@@ -1,7 +1,0 @@
----
-  type: DEACTIVATE_CONCERN_HTTP_COMMAND_REQUEST
-  commandTarget: DEACTIVATE_CONCERN_COMMAND
-  description: Deactivate a concern for a unit
-  method: DELETE
-  uri: /units/{id}/concerns/{concernId}
-  userIdMapping: requesterId

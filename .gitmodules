@@ -1,3 +1,0 @@
-[submodule "deps/googletest"]
-	path = rooset-domain-command-posix/deps/googletest
-	url = https://github.com/google/googletest

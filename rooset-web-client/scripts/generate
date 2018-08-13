@@ -1,7 +1,0 @@
-#!/bin/bash
-set -o errexit -o nounset -o pipefail
-
-SCRIPTDIR=`dirname "$(readlink -f "$0")"`
-source ${SCRIPTDIR}/../../etc/set-env
-
-${SCRIPTDIR}/../../rooset-application-toolkit/languages/js/tools/generate-js-actions

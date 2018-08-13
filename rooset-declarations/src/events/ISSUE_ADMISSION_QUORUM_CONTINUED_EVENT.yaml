@@ -1,5 +1,0 @@
----
-properties:
-  id:
-    type: uuid
-commandSchema: ASSESS_ISSUE_ADMISSION_QUORUM_COMMAND

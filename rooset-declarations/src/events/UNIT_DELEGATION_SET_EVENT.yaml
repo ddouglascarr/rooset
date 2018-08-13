@@ -1,7 +1,0 @@
-properties:
-  id:
-    type: uuid
-  trusterId:
-    type: uuid
-  trusteeId:
-    type: uuid

@@ -1,7 +1,0 @@
-{
-  "properties": {
-    "code": { "type": "exceptionCode" },
-    "message": { "type": "string" }
-  },
-  "required": ["code", "message"]
-}

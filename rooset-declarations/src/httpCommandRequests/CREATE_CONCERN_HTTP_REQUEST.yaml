@@ -1,9 +1,0 @@
----
-  type: CREATE_CONCERN_HTTP_COMMAND_REQUEST
-  commandTarget: CREATE_CONCERN_COMMAND
-  description: Create a concern for a unit
-  method: POST
-  uri: /units/{id}/concerns
-  userIdMapping: requesterId
-  generate:
-    - concernId
