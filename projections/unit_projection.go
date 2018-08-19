@@ -3,11 +3,12 @@ package projections
 import (
 	"database/sql"
 
-	"github.com/ddouglascarr/rooset/db/projectionproc"
 	"github.com/ddouglascarr/rooset/messages"
+	"github.com/ddouglascarr/rooset/storage"
 	proto "github.com/golang/protobuf/proto"
 )
 
+// UnitProjectionEventProcessor is a single event processor for updating unit projections
 func UnitProjectionEventProcessor(
 	_ *sql.Tx,
 	targetTx *sql.Tx,
@@ -20,7 +21,7 @@ func UnitProjectionEventProcessor(
 	}
 	for id, eventSet := range eventSets {
 		proj := messages.UnitProjection{}
-		if err := projectionproc.FetchProjection(targetTx, &proj, id); err != nil {
+		if err := storage.FetchProjection(targetTx, &proj, id); err != nil {
 			return out, err
 		}
 		eventSet.Projection = proj
@@ -56,7 +57,7 @@ func populateEventSets(
 		switch container.MessageType {
 		case "messages.UnitCreatedEvent":
 			evt := messages.UnitCreatedEvent{}
-			if err := proto.Unmarshal(container.Payload, &evt); err != nil {
+			if err := proto.Unmarshal(container.Message, &evt); err != nil {
 				return err
 			}
 			evtSet := (*eventSets)[evt.UnitID]
@@ -64,7 +65,7 @@ func populateEventSets(
 			(*eventSets)[evt.UnitID] = evtSet
 		case "messages.PrivilegeGrantedEvent":
 			evt := messages.PrivilegeGrantedEvent{}
-			if err := proto.Unmarshal(container.Payload, &evt); err != nil {
+			if err := proto.Unmarshal(container.Message, &evt); err != nil {
 				return err
 			}
 			evtSet := (*eventSets)[evt.UnitID]
@@ -72,7 +73,7 @@ func populateEventSets(
 			(*eventSets)[evt.UnitID] = evtSet
 		case "messages.PrivilegeRevokedEvent":
 			evt := messages.PrivilegeRevokedEvent{}
-			if err := proto.Unmarshal(container.Payload, &evt); err != nil {
+			if err := proto.Unmarshal(container.Message, &evt); err != nil {
 				return err
 			}
 			evtSet := (*eventSets)[evt.UnitID]
@@ -83,6 +84,7 @@ func populateEventSets(
 	return nil
 }
 
+// UpdateUnitProjection as named
 // TODO: generate this using proj.AggregateIDField and each event theres
 // a handler for
 func UpdateUnitProjection(
@@ -93,19 +95,19 @@ func UpdateUnitProjection(
 	switch evtContainer.MessageType {
 	case "messages.UnitCreatedEvent":
 		evt := messages.UnitCreatedEvent{}
-		if err := proto.Unmarshal(evtContainer.Payload, &evt); err != nil {
+		if err := proto.Unmarshal(evtContainer.Message, &evt); err != nil {
 			return err
 		}
 		unitCreatedEventHandler(&evt, projection)
 	case "messages.PrivilegeGrantedEvent":
 		evt := messages.PrivilegeGrantedEvent{}
-		if err := proto.Unmarshal(evtContainer.Payload, &evt); err != nil {
+		if err := proto.Unmarshal(evtContainer.Message, &evt); err != nil {
 			return err
 		}
 		privilegeGrantedEventHandler(&evt, projection)
 	case "messages.PrivilegeRevokedEvent":
 		evt := messages.PrivilegeRevokedEvent{}
-		if err := proto.Unmarshal(evtContainer.Payload, &evt); err != nil {
+		if err := proto.Unmarshal(evtContainer.Message, &evt); err != nil {
 			return err
 		}
 		privilegeRevokedEventHandler(&evt, projection)

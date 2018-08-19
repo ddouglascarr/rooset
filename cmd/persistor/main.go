@@ -3,10 +3,11 @@ package main
 import (
 	"database/sql"
 	"flag"
-	"github.com/ddouglascarr/rooset/db/persistor"
-	"github.com/ddouglascarr/rooset/messages"
-	_ "github.com/lib/pq"
 	"log"
+
+	"github.com/ddouglascarr/rooset/messages"
+	"github.com/ddouglascarr/rooset/storage/persistor"
+	_ "github.com/lib/pq"
 )
 
 func persist(evtJSON string) error {

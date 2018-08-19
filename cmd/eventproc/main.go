@@ -2,10 +2,12 @@ package main
 
 import (
 	"database/sql"
-	"github.com/ddouglascarr/rooset/db/eventproc"
-	"github.com/ddouglascarr/rooset/projections"
-	_ "github.com/lib/pq"
 	"log"
+
+	"github.com/ddouglascarr/rooset/projections"
+	"github.com/ddouglascarr/rooset/storage"
+	_ "github.com/lib/pq"
+
 	//	"runtime/debug"
 	"time"
 )
@@ -30,15 +32,15 @@ func processLoop() error {
 	defer projectionDB.Close()
 
 	for {
-		if err := eventproc.ProcessEvents(
-			eventproc.CopyEventProcessor,
+		if err := storage.ProcessEvents(
+			storage.CopyEventProcessor,
 			truthDB,
 			projectionDB,
 			"shard0000",
 		); err != nil {
 			return err
 		}
-		if err := eventproc.ProcessEvents(
+		if err := storage.ProcessEvents(
 			projections.UnitProjectionEventProcessor,
 			truthDB,
 			projectionDB,
@@ -46,15 +48,6 @@ func processLoop() error {
 		); err != nil {
 			return err
 		}
-		// if err := eventproc.ProcessEvents(
-		// 	projections.ProcessProjectionEvents,
-		// 	projectionDB,
-		// 	projectionDB,
-		// 	"projections0000",
-		// ); err != nil {
-		// 	debug.PrintStack()
-		// 	return err
-		// }
 		time.Sleep(5000 * time.Millisecond)
 	}
 }

@@ -46,11 +46,11 @@ func TestWrapMessage(t *testing.T) {
 
 	assert.Equals(t, "AggregateRootID set", container.AggregateRootID, "a1")
 	assert.Equals(t, "MessageType set", container.MessageType, "messages.UnitCreatedEvent")
-	// havent checked if it stores the payload :shrug;
+	// havent checked if it stores the Message :shrug;
 }
 
 func TestUnmarshalJSONMessageContainer(t *testing.T) {
-	b := []byte(`{"AggregateRootID": "123", "MessageType": "messages.UnitCreatedEvent", "Payload": { "UnitID":"123", "Name": "Bar Unit", "RequesterID": "asdf", "Description": "The Bar Unit", "URLParameterName": "bar"}}`)
+	b := []byte(`{"AggregateRootID": "123", "MessageType": "messages.UnitCreatedEvent", "Message": { "UnitID":"123", "Name": "Bar Unit", "RequesterID": "asdf", "Description": "The Bar Unit", "URLParameterName": "bar"}}`)
 	expectedMessage := &messages.UnitCreatedEvent{
 		UnitID:           "123",
 		Name:             "Bar Unit",
@@ -66,9 +66,9 @@ func TestUnmarshalJSONMessageContainer(t *testing.T) {
 	assert.Equals(t, "Has MessageType", container.MessageType, "messages.UnitCreatedEvent")
 
 	message := messages.UnitCreatedEvent{}
-	proto.Unmarshal(container.Payload, &message)
+	proto.Unmarshal(container.Message, &message)
 
-	assert.MessageEquals(t, "Has Payload", &message, expectedMessage)
+	assert.MessageEquals(t, "Has Message", &message, expectedMessage)
 }
 
 func TestMessageType(t *testing.T) {
@@ -89,7 +89,7 @@ func TestMessageType(t *testing.T) {
 }
 
 // func TestMarshalJSONMessageContainer(t *testing.T) {
-// 	expectedJSON := []byte(`{"AggregateRootID": "123", "MessageType": "messages.UnitCreatedEvent", "Payload": { "UnitID":"123", "Name": "Bar Unit", "RequesterID": "asdf", "Description": "The Bar Unit", "URLParameterName": "bar"}}`)
+// 	expectedJSON := []byte(`{"AggregateRootID": "123", "MessageType": "messages.UnitCreatedEvent", "Message": { "UnitID":"123", "Name": "Bar Unit", "RequesterID": "asdf", "Description": "The Bar Unit", "URLParameterName": "bar"}}`)
 //
 // 	message := &messages.UnitCreatedEvent{
 // 		UnitID:           "123",

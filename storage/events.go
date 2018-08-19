@@ -1,10 +1,9 @@
-package eventproc
+package storage
 
 import (
 	"database/sql"
 
 	"github.com/ddouglascarr/rooset/messages"
-	proto "github.com/golang/protobuf/proto"
 )
 
 // EventProcessor transforms a slice of event containers into
@@ -193,7 +192,7 @@ func fetchEventContainers(
 		eventContainers []messages.MessageContainer
 	)
 	eventStmt, err := sourceTx.Prepare(`
-		SELECT seq, message
+		SELECT seq, aggregate_root_id, message_type, message
 		FROM events_shard0000
 		WHERE seq > $1
 		ORDER BY seq
@@ -211,12 +210,12 @@ func fetchEventContainers(
 
 	for rows.Next() {
 		container := messages.MessageContainer{}
-		var bContainer []byte
-		rows.Scan(&seqCheckpoint, &bContainer)
-		err := proto.Unmarshal(bContainer, &container)
-		if err != nil {
-			return eventContainers, seqCheckpoint, err
-		}
+		rows.Scan(
+			&seqCheckpoint,
+			&container.AggregateRootID,
+			&container.MessageType,
+			&container.Message,
+		)
 		eventContainers = append(eventContainers, container)
 	}
 
@@ -237,11 +236,7 @@ func persistEventContainers(
 	}
 
 	for _, container := range containers {
-		bContainer, err := proto.Marshal(&container)
-		if err != nil {
-			return err
-		}
-		_, err = eventStmt.Exec(container.AggregateRootID, container.MessageType, bContainer)
+		_, err = eventStmt.Exec(container.AggregateRootID, container.MessageType, container.Message)
 		if err != nil {
 			return err
 		}

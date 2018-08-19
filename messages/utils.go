@@ -44,7 +44,7 @@ func WrapMessage(message proto.Message) (MessageContainer, error) {
 	if err != nil {
 		return container, err
 	}
-	container.Payload = bMessage
+	container.Message = bMessage
 
 	return container, nil
 }
@@ -79,7 +79,7 @@ func GetAggregateRootID(message descriptor.Message) (string, error) {
 type tmpContainer struct {
 	AggregateRootID string
 	MessageType     string
-	Payload         interface{}
+	Message         interface{}
 }
 
 // UnmarshalJSONMessageContainer parses a json rooset message container
@@ -89,24 +89,24 @@ func UnmarshalJSONMessageContainer(data []byte) (*MessageContainer, error) {
 	if err := json.Unmarshal(data, &tmpContainer); err != nil {
 		return container, err
 	}
-	jPayload, err := json.Marshal(tmpContainer.Payload)
+	jMessage, err := json.Marshal(tmpContainer.Message)
 	if err != nil {
 		return container, err
 	}
 
-	bMessage, err := unmarshalJSONMessageContainerPayload(tmpContainer.MessageType, jPayload)
+	bMessage, err := unmarshalJSONMessageContainerMessage(tmpContainer.MessageType, jMessage)
 	if err != nil {
 		return container, err
 	}
 	container.AggregateRootID = tmpContainer.AggregateRootID
 	container.MessageType = tmpContainer.MessageType
-	container.Payload = bMessage
+	container.Message = bMessage
 
 	return container, nil
 }
 
-func unmarshalJSONMessageContainerPayload(messageType string, jPayload []byte) ([]byte, error) {
-	reader := bytes.NewReader(jPayload)
+func unmarshalJSONMessageContainerMessage(messageType string, jMessage []byte) ([]byte, error) {
+	reader := bytes.NewReader(jMessage)
 	var bMessage []byte
 	mt := proto.MessageType(messageType)
 	mi := reflect.New(mt.Elem()).Interface()
@@ -137,7 +137,7 @@ func MarshalJSONMessageContainer(container MessageContainer) ([]byte, error) {
 		return bMessage.Bytes(), fmt.Errorf("No message of type %s", container.MessageType)
 	}
 
-	if err := proto.Unmarshal(container.Payload, message); err != nil {
+	if err := proto.Unmarshal(container.Message, message); err != nil {
 		return bMessage.Bytes(), err
 	}
 
@@ -149,11 +149,11 @@ func MarshalJSONMessageContainer(container MessageContainer) ([]byte, error) {
 	var out struct {
 		AggregateRootID string
 		MessageType     string
-		Payload         json.RawMessage
+		Message         json.RawMessage
 	}
 	out.AggregateRootID = container.AggregateRootID
 	out.MessageType = container.MessageType
-	out.Payload = bMessage.Bytes()
+	out.Message = bMessage.Bytes()
 
 	cbuf, err := json.Marshal(out)
 	if err != nil {

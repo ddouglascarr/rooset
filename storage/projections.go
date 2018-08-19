@@ -1,4 +1,4 @@
-package projectionproc
+package storage
 
 import (
 	"database/sql"
@@ -19,17 +19,16 @@ func FetchProjection(
 	if err != nil {
 		return err
 	}
-	err = proto.Unmarshal(container.Payload, projection)
+	err = proto.Unmarshal(container.Message, projection)
 	return err
 }
 
 // FetchProjectionContainer gets the latest incident of a container
 func FetchProjectionContainer(tx *sql.Tx, messageType string, ID string) (messages.MessageContainer, error) {
-	var bContainer []byte
 	container := messages.MessageContainer{}
 
 	stmt, err := tx.Prepare(`
-		SELECT message FROM events_shard0000
+		SELECT aggregate_root_id, message_type, message FROM events_shard0000
 		WHERE message_type = $1 AND aggregate_root_id = $2
 		ORDER BY seq DESC LIMIT 1;
 	`)
@@ -37,15 +36,15 @@ func FetchProjectionContainer(tx *sql.Tx, messageType string, ID string) (messag
 		return container, err
 	}
 
-	if err := stmt.QueryRow(messageType, ID).Scan(&bContainer); err != nil {
+	if err := stmt.QueryRow(messageType, ID).Scan(
+		&container.AggregateRootID,
+		&container.MessageType,
+		&container.Message,
+	); err != nil {
 		if err == sql.ErrNoRows {
 			// no projection exists yet. Use the empty one
 			return container, nil
 		}
-		return container, err
-	}
-
-	if err = proto.Unmarshal(bContainer, &container); err != nil {
 		return container, err
 	}
 

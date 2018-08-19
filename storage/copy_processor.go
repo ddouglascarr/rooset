@@ -1,7 +1,8 @@
-package eventproc
+package storage
 
 import (
 	"database/sql"
+
 	"github.com/ddouglascarr/rooset/messages"
 )
 
