@@ -13,7 +13,7 @@ func TestGetAggregateRootField(t *testing.T) {
 	evt := messages.UnitCreatedEvent{}
 	id, err := messages.GetAggregateRootField(&evt)
 
-	assert.ErrorNotNil(t, err)
+	assert.ErrorIsNil(t, err)
 	assert.Equals(t, "UnitID", id, "UnitID")
 }
 
@@ -23,52 +23,28 @@ func TestGetAggregateRootID(t *testing.T) {
 	}
 	id, err := messages.GetAggregateRootID(&evt)
 
-	assert.ErrorNotNil(t, err)
+	assert.ErrorIsNil(t, err)
 	assert.Equals(t, "UnitID", id, "a1")
 }
 
-func TestBuildAggregateRootID(t *testing.T) {
-	evt := messages.UnitCreatedEvent{
-		UnitID: "a1",
-	}
-	id, err := messages.BuildAggregateRootID(&evt)
-
-	assert.ErrorNotNil(t, err)
-	assert.Equals(t, "AggregateRootID", id, "a1")
-}
-
-func TestWrapMessage(t *testing.T) {
-	evt := messages.UnitCreatedEvent{
-		UnitID: "a1",
-	}
-	container, err := messages.WrapMessage(&evt)
-	assert.ErrorNotNil(t, err)
-
-	assert.Equals(t, "AggregateRootID set", container.AggregateRootID, "a1")
-	assert.Equals(t, "MessageType set", container.MessageType, "messages.UnitCreatedEvent")
-	// havent checked if it stores the Message :shrug;
-}
-
-func TestUnmarshalJSONMessageContainer(t *testing.T) {
-	b := []byte(`{"AggregateRootID": "123", "MessageType": "messages.UnitCreatedEvent", "Message": { "UnitID":"123", "Name": "Bar Unit", "RequesterID": "asdf", "Description": "The Bar Unit", "URLParameterName": "bar"}}`)
-	expectedMessage := &messages.UnitCreatedEvent{
+func TestUnmarshalBMessage(t *testing.T) {
+	evt := &messages.UnitCreatedEvent{
 		UnitID:           "123",
 		Name:             "Bar Unit",
 		RequesterID:      "asdf",
 		Description:      "The Bar Unit",
 		URLParameterName: "bar",
 	}
+	bMsg, err := proto.Marshal(evt)
+	assert.ErrorIsNil(t, err)
 
-	container, err := messages.UnmarshalJSONMessageContainer(b)
-	assert.ErrorNotNil(t, err)
+	resultMsg, err := messages.UnmarshalBMessage("messages.UnitCreatedEvent", bMsg)
+	assert.ErrorIsNil(t, err)
+	assert.MessageEquals(t, "message deserializes to abstract Message", evt, resultMsg)
 
-	assert.Equals(t, "Has AggregateRootID", container.AggregateRootID, "123")
-	assert.Equals(t, "Has MessageType", container.MessageType, "messages.UnitCreatedEvent")
-
-	message := messages.UnitCreatedEvent{}
-	proto.Unmarshal(container.Message, &message)
-
-	assert.MessageEquals(t, "Has Message", &message, expectedMessage)
+	resultEvt, ok := resultMsg.(*messages.UnitCreatedEvent)
+	assert.Equals(t, "result message casts", true, ok)
+	assert.MessageEquals(t, "case message equal", evt, resultEvt)
 }
 
 func TestMessageType(t *testing.T) {
@@ -88,19 +64,74 @@ func TestMessageType(t *testing.T) {
 
 }
 
-// func TestMarshalJSONMessageContainer(t *testing.T) {
-// 	expectedJSON := []byte(`{"AggregateRootID": "123", "MessageType": "messages.UnitCreatedEvent", "Message": { "UnitID":"123", "Name": "Bar Unit", "RequesterID": "asdf", "Description": "The Bar Unit", "URLParameterName": "bar"}}`)
-//
-// 	message := &messages.UnitCreatedEvent{
-// 		UnitID:           "123",
-// 		Name:             "Bar Unit",
-// 		RequesterID:      "asdf",
-// 		Description:      "The Bar Unit",
-// 		URLParameterName: "bar",
-// 	}
-// 	container, err := messages.WrapMessage(message)
-// 	assert.ErrorNotNil(t, err)
-// 	returnedJSON, err := messages.MarshalJSONMessageContainer(container)
-// 	assert.ErrorNotNil(t, err)
-// 	assert.Equals(t, "JSON generated correctly", string(expectedJSON), string(returnedJSON))
-// }
+type descriptionHaver interface {
+	proto.Message
+	GetDescription() string
+}
+
+func getDescription(message proto.Message) string {
+	evt, ok := message.(descriptionHaver)
+	if !ok {
+		return ""
+	}
+	return evt.GetDescription()
+}
+
+func TestCastInMethod(t *testing.T) {
+	unitCreatedEvt := &messages.UnitCreatedEvent{
+		UnitID:           "123",
+		Name:             "Bar Unit",
+		RequesterID:      "asdf",
+		Description:      "The Bar Unit",
+		URLParameterName: "bar",
+	}
+
+	privilegeRevokedEvt := &messages.PrivilegeRevokedEvent{
+		UnitID:   "456",
+		MemberID: "jim",
+	}
+
+	returnedDescription := getDescription(unitCreatedEvt)
+	emptyDescription := getDescription(privilegeRevokedEvt)
+
+	assert.Equals(t, "returns description", returnedDescription, "The Bar Unit")
+	assert.Equals(t, "returns empty string", emptyDescription, "")
+}
+
+func getSomething(message proto.Message) string {
+	switch evt := message.(type) {
+	case *messages.UnitCreatedEvent:
+		return evt.UnitID
+	case *messages.PrivilegeRevokedEvent:
+		return evt.MemberID
+	default:
+		return ""
+	}
+}
+
+func TestCaseForStruct(t *testing.T) {
+	unitCreatedEvt := &messages.UnitCreatedEvent{
+		UnitID:           "123",
+		Name:             "Bar Unit",
+		RequesterID:      "asdf",
+		Description:      "The Bar Unit",
+		URLParameterName: "bar",
+	}
+
+	privilegeRevokedEvt := &messages.PrivilegeRevokedEvent{
+		UnitID:   "456",
+		MemberID: "jim",
+	}
+	privilegeGrantedEvent := &messages.PrivilegeGrantedEvent{
+		UnitID:   "789",
+		MemberID: "foo",
+	}
+
+	unitCreatedResult := getSomething(unitCreatedEvt)
+	privilegeRevokedResult := getSomething(privilegeRevokedEvt)
+	emptyResult := getSomething(privilegeGrantedEvent)
+
+	assert.Equals(t, "UnitCreatedEvent", unitCreatedResult, "123")
+	assert.Equals(t, "PrivilegeRevokedEvent", privilegeRevokedResult, "jim")
+	assert.Equals(t, "empty", emptyResult, "")
+}

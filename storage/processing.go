@@ -6,15 +6,17 @@ import (
 	"github.com/ddouglascarr/rooset/messages"
 )
 
-// EventProcessor transforms a slice of event containers into
-// a slice of 0 or more event containers.
-type EventProcessor = func(
+const messageProcessorLimit = 100
+
+// MessageProcessor transforms a slice of messages into another
+// slice of 0 or more messages
+type MessageProcessor = func(
 	*sql.Tx, // sourceTx
 	*sql.Tx, // targetTx
-	[]messages.MessageContainer,
-) ([]messages.MessageContainer, error)
+	[]messages.Message,
+) ([]messages.Message, error)
 
-// ProcessEvents queries the sourceDB event table, processes
+// ProcessMessages queries the sourceDB event table, processes
 // each event and perists the output to the targetDB event table.
 // Seq (sequence)
 //   - Sequences MAY be different between sourceDB and targetDB
@@ -28,14 +30,15 @@ type EventProcessor = func(
 //   - the targetDB checkpoint serves as a _fencing token_ (see Kleppmann, Martin, Designing Data
 //		Intensive Applictions, O'Reilly 2017 pp676-680,
 //		or, https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html)
-func ProcessEvents(
-	processor EventProcessor, sourceDB *sql.DB, targetDB *sql.DB, checkpointKey string,
+func ProcessMessages(
+	processor MessageProcessor, sourceDB *sql.DB, targetDB *sql.DB, checkpointKey string,
 ) error {
 	sourceTx, err := sourceDB.Begin()
 	if err != nil {
 		return err
 	}
 	defer sourceTx.Rollback()
+
 	targetTx, err := targetDB.Begin()
 	if err != nil {
 		return err
@@ -47,17 +50,21 @@ func ProcessEvents(
 		return err
 	}
 
-	eventContainers, seqCheckpoint, err := fetchEventContainers(sourceTx, seqCheckpoint)
+	sourceMessages, seqCheckpoint, err := FetchMessagesSinceSeq(
+		sourceTx,
+		seqCheckpoint,
+		messageProcessorLimit,
+	)
 	if err != nil {
 		return err
 	}
 
-	targetEventContainers, err := processor(sourceTx, targetTx, eventContainers)
+	targetMessages, err := processor(sourceTx, targetTx, sourceMessages)
 	if err != nil {
 		return err
 	}
 
-	if err := persistEventContainers(targetTx, targetEventContainers); err != nil {
+	if err := PersistMessages(targetTx, targetMessages); err != nil {
 		return err
 	}
 
@@ -74,6 +81,7 @@ func ProcessEvents(
 	}
 
 	return sourceTx.Commit()
+
 }
 
 // fetchSeqCheckpoint fetches the highest checkpoint from the source
@@ -181,66 +189,5 @@ func persistTargetSeqCheckpoint(targetTx *sql.Tx, seqCheckpoint uint64, checkpoi
 	if _, err := checkpointStmt.Exec(seqCheckpoint, checkpointKey); err != nil {
 		return err
 	}
-	return nil
-}
-
-func fetchEventContainers(
-	sourceTx *sql.Tx,
-	seqCheckpoint uint64,
-) ([]messages.MessageContainer, uint64, error) {
-	var (
-		eventContainers []messages.MessageContainer
-	)
-	eventStmt, err := sourceTx.Prepare(`
-		SELECT seq, aggregate_root_id, message_type, message
-		FROM events_shard0000
-		WHERE seq > $1
-		ORDER BY seq
-		LIMIT 100;
-	`)
-	if err != nil {
-		return eventContainers, seqCheckpoint, err
-	}
-	defer eventStmt.Close()
-	rows, err := eventStmt.Query(seqCheckpoint)
-	if err != nil {
-		return eventContainers, seqCheckpoint, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		container := messages.MessageContainer{}
-		rows.Scan(
-			&seqCheckpoint,
-			&container.AggregateRootID,
-			&container.MessageType,
-			&container.Message,
-		)
-		eventContainers = append(eventContainers, container)
-	}
-
-	return eventContainers, seqCheckpoint, nil
-}
-
-func persistEventContainers(
-	targetTx *sql.Tx,
-	containers []messages.MessageContainer,
-) error {
-	eventStmt, err := targetTx.Prepare(`
-		INSERT INTO events_shard0000 (
-			aggregate_root_id, message_type, message
-		) VALUES ($1, $2, $3);
-	`)
-	if err != nil {
-		return err
-	}
-
-	for _, container := range containers {
-		_, err = eventStmt.Exec(container.AggregateRootID, container.MessageType, container.Message)
-		if err != nil {
-			return err
-		}
-	}
-
 	return nil
 }

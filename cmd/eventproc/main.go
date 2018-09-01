@@ -32,15 +32,15 @@ func processLoop() error {
 	defer projectionDB.Close()
 
 	for {
-		if err := storage.ProcessEvents(
-			storage.CopyEventProcessor,
+		if err := storage.ProcessMessages(
+			storage.CopyMessageProcessor,
 			truthDB,
 			projectionDB,
 			"shard0000",
 		); err != nil {
 			return err
 		}
-		if err := storage.ProcessEvents(
+		if err := storage.ProcessMessages(
 			projections.UnitProjectionEventProcessor,
 			truthDB,
 			projectionDB,

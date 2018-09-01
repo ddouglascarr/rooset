@@ -1,8 +1,0 @@
-syntax = "proto3";
-package messages;
-
-message MessageContainer {
-  string AggregateRootID = 1;
-  string MessageType = 2;
-  bytes Message = 3;
-}

@@ -13,44 +13,18 @@ import (
 	"reflect"
 )
 
-// BuildAggregateRootID builds the container root id from a message ID
-func BuildAggregateRootID(message proto.Message) (string, error) {
-	descriptorMessage, ok := message.(descriptor.Message)
-	if !ok {
-		return "", errors.New("not a descripable message")
-	}
-	id, err := GetAggregateRootID(descriptorMessage)
-	if err != nil {
-		return "", err
-	}
-	return id, nil
+// Message all messages implement this interface
+type Message interface {
+	descriptor.Message // superclass of proto.Message
 }
 
 // GetMessageType returns the message type of a rooset message as a string
-func GetMessageType(message proto.Message) string {
+func GetMessageType(message Message) string {
 	return proto.MessageName(message)
 }
 
-// WrapMessage takes a message and creates a MessageContainer for it
-func WrapMessage(message proto.Message) (MessageContainer, error) {
-	typename := GetMessageType(message)
-	container := MessageContainer{MessageType: typename}
-	id, err := BuildAggregateRootID(message)
-	if err != nil {
-		return container, err
-	}
-	container.AggregateRootID = id
-	bMessage, err := proto.Marshal(message)
-	if err != nil {
-		return container, err
-	}
-	container.Message = bMessage
-
-	return container, nil
-}
-
 // GetAggregateRootField gets the field property, as a string, for a rooset message
-func GetAggregateRootField(message descriptor.Message) (string, error) {
+func GetAggregateRootField(message Message) (string, error) {
 	_, md := descriptor.ForMessage(message)
 	idExtension, err := proto.GetExtension(md.Options, E_AggregateRootField)
 	if err != nil {
@@ -76,89 +50,75 @@ func GetAggregateRootID(message descriptor.Message) (string, error) {
 	return fieldValue.String(), nil
 }
 
-type tmpContainer struct {
-	AggregateRootID string
-	MessageType     string
-	Message         interface{}
+// jSONMessageContainer wraps message for JSON serialization
+type jSONMessageContainer struct {
+	MessageType string
+	Message     json.RawMessage
 }
 
-// UnmarshalJSONMessageContainer parses a json rooset message container
-func UnmarshalJSONMessageContainer(data []byte) (*MessageContainer, error) {
-	container := &MessageContainer{}
-	tmpContainer := &tmpContainer{}
-	if err := json.Unmarshal(data, &tmpContainer); err != nil {
-		return container, err
-	}
-	jMessage, err := json.Marshal(tmpContainer.Message)
+// UnmarshalJSONMessage deserialized JSONin the form of { MessageType: "messages.UnitCreatedEvent", Message: { ... } }
+func UnmarshalJSONMessage(jSONMsgContainer []byte) (Message, error) {
+	container := &jSONMessageContainer{}
+	err := json.Unmarshal(jSONMsgContainer, &container)
 	if err != nil {
-		return container, err
+		return nil, err
 	}
+	reader := bytes.NewReader(container.Message)
 
-	bMessage, err := unmarshalJSONMessageContainerMessage(tmpContainer.MessageType, jMessage)
-	if err != nil {
-		return container, err
-	}
-	container.AggregateRootID = tmpContainer.AggregateRootID
-	container.MessageType = tmpContainer.MessageType
-	container.Message = bMessage
-
-	return container, nil
-}
-
-func unmarshalJSONMessageContainerMessage(messageType string, jMessage []byte) ([]byte, error) {
-	reader := bytes.NewReader(jMessage)
-	var bMessage []byte
-	mt := proto.MessageType(messageType)
-	mi := reflect.New(mt.Elem()).Interface()
-	message, ok := mi.(proto.Message)
-	if !ok {
-		return nil, fmt.Errorf("No message of type %s", messageType)
-	}
-	if err := jsonpb.Unmarshal(reader, message); err != nil {
-		return bMessage, err
-	}
-
-	bMessage, err := proto.Marshal(message)
-	if err != nil {
-		return bMessage, err
-	}
-
-	return bMessage, nil
-}
-
-// MarshalJSONMessageContainer marshals a message container to json
-func MarshalJSONMessageContainer(container MessageContainer) ([]byte, error) {
-	var bMessage bytes.Buffer
-	// _ = bufio.NewWriter(&bMessage)
 	mt := proto.MessageType(container.MessageType)
 	mi := reflect.New(mt.Elem()).Interface()
-	message, ok := mi.(proto.Message)
+	msg, ok := mi.(Message)
 	if !ok {
-		return bMessage.Bytes(), fmt.Errorf("No message of type %s", container.MessageType)
+		return nil, fmt.Errorf("No message of type %s", container.MessageType)
 	}
 
-	if err := proto.Unmarshal(container.Message, message); err != nil {
-		return bMessage.Bytes(), err
+	if err := jsonpb.Unmarshal(reader, msg); err != nil {
+		return nil, err
 	}
 
+	return msg, nil
+}
+
+// MarshalJSONMessage serializes a Message to JSON
+func MarshalJSONMessage(msg Message) ([]byte, error) {
+	var bMsg bytes.Buffer
 	ma := jsonpb.Marshaler{}
-	if err := ma.Marshal(&bMessage, message); err != nil {
-		return bMessage.Bytes(), err
-	}
-
-	var out struct {
-		AggregateRootID string
-		MessageType     string
-		Message         json.RawMessage
-	}
-	out.AggregateRootID = container.AggregateRootID
-	out.MessageType = container.MessageType
-	out.Message = bMessage.Bytes()
-
-	cbuf, err := json.Marshal(out)
+	err := ma.Marshal(&bMsg, msg)
 	if err != nil {
 		return nil, err
 	}
 
-	return cbuf, nil
+	container := jSONMessageContainer{
+		MessageType: GetMessageType(msg),
+		Message:     bMsg.Bytes(),
+	}
+
+	jSONContainer, err := json.Marshal(container)
+	if err != nil {
+		return nil, err
+	}
+
+	return jSONContainer, nil
+}
+
+// UnmarshalBMessage deserialize a binary message
+func UnmarshalBMessage(messageType string, bMsg []byte) (Message, error) {
+	mt := proto.MessageType(messageType)
+	mi := reflect.New(mt.Elem()).Interface()
+	msg, ok := mi.(Message)
+	if !ok {
+		return nil, fmt.Errorf("unrecognized MessageType: %s", messageType)
+	}
+
+	err := proto.Unmarshal(bMsg, msg)
+	if err != nil {
+		return msg, err
+	}
+
+	return msg, nil
+}
+
+// MarshalBMessage serializes a message to protbuf binary
+func MarshalBMessage(msg Message) ([]byte, error) {
+	return proto.Marshal(msg)
 }

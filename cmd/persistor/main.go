@@ -6,12 +6,12 @@ import (
 	"log"
 
 	"github.com/ddouglascarr/rooset/messages"
-	"github.com/ddouglascarr/rooset/storage/persistor"
+	"github.com/ddouglascarr/rooset/storage"
 	_ "github.com/lib/pq"
 )
 
-func persist(evtJSON string) error {
-	container, err := messages.UnmarshalJSONMessageContainer([]byte(evtJSON))
+func persist(jSONMsg string) error {
+	msg, err := messages.UnmarshalJSONMessage([]byte(jSONMsg))
 	if err != nil {
 		return err
 	}
@@ -25,16 +25,22 @@ func persist(evtJSON string) error {
 		return err
 	}
 
-	persistor.PersistMessageContainer(db, container)
-	return nil
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	storage.PersistMessages(tx, []messages.Message{msg})
+	return tx.Commit()
 
 }
 
 func main() {
-	var evtJSON string
-	flag.StringVar(&evtJSON, "container", "", "JSON formatted message container")
+	var jSONMsg string
+	flag.StringVar(&jSONMsg, "container", "", "JSON formatted message container")
 	flag.Parse()
-	if err := persist(evtJSON); err != nil {
+	if err := persist(jSONMsg); err != nil {
 		log.Fatal(err)
 	}
 }

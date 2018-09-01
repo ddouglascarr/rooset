@@ -2,8 +2,9 @@ package assert
 
 import (
 	"fmt"
-	proto "github.com/golang/protobuf/proto"
 	"testing"
+
+	proto "github.com/golang/protobuf/proto"
 )
 
 func Equals(t *testing.T, msg string, a interface{}, b interface{}) {
@@ -21,7 +22,7 @@ func MessageEquals(t *testing.T, msg string, a proto.Message, b proto.Message) {
 	}
 }
 
-func ErrorNotNil(t *testing.T, err error) {
+func ErrorIsNil(t *testing.T, err error) {
 	if err != nil {
 		t.Log(fmt.Sprintf("Error: %s", err))
 		t.FailNow()

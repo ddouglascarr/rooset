@@ -5,18 +5,17 @@ import (
 
 	"github.com/ddouglascarr/rooset/messages"
 	"github.com/ddouglascarr/rooset/storage"
-	proto "github.com/golang/protobuf/proto"
 )
 
 // UnitProjectionEventProcessor is a single event processor for updating unit projections
 func UnitProjectionEventProcessor(
 	_ *sql.Tx,
 	targetTx *sql.Tx,
-	containers []messages.MessageContainer,
-) ([]messages.MessageContainer, error) {
-	out := []messages.MessageContainer{}
+	msgs []messages.Message,
+) ([]messages.Message, error) {
+	out := []messages.Message{}
 	eventSets := make(map[string]projEventSet)
-	if err := populateEventSets(&eventSets, containers); err != nil {
+	if err := populateEventSets(&eventSets, msgs); err != nil {
 		return out, err
 	}
 	for id, eventSet := range eventSets {
@@ -28,58 +27,38 @@ func UnitProjectionEventProcessor(
 	}
 
 	for _, eventSet := range eventSets {
-		for _, container := range eventSet.EventContainers {
-			UpdateUnitProjection(&eventSet.Projection, container)
+		for _, msg := range eventSet.Events {
+			UpdateUnitProjection(&eventSet.Projection, msg)
 		}
 
-		projectionContainer, err := messages.WrapMessage(&eventSet.Projection)
-		if err != nil {
-			return out, err
-		}
-
-		out = append(out, projectionContainer)
+		out = append(out, &eventSet.Projection)
 	}
 	return out, nil
 }
 
 type projEventSet struct {
-	Projection      messages.UnitProjection
-	EventContainers []messages.MessageContainer
+	Projection messages.UnitProjection
+	Events     []messages.Message
+}
+
+type unitIDPossesor interface {
+	GetUnitID() string
 }
 
 // TODO: generate this using proj.AggregateIDField and each event theres
 // a handler for
 func populateEventSets(
 	eventSets *map[string]projEventSet,
-	containers []messages.MessageContainer,
+	msgs []messages.Message,
 ) error {
-	for _, container := range containers {
-		switch container.MessageType {
-		case "messages.UnitCreatedEvent":
-			evt := messages.UnitCreatedEvent{}
-			if err := proto.Unmarshal(container.Message, &evt); err != nil {
-				return err
-			}
-			evtSet := (*eventSets)[evt.UnitID]
-			evtSet.EventContainers = append(evtSet.EventContainers, container)
-			(*eventSets)[evt.UnitID] = evtSet
-		case "messages.PrivilegeGrantedEvent":
-			evt := messages.PrivilegeGrantedEvent{}
-			if err := proto.Unmarshal(container.Message, &evt); err != nil {
-				return err
-			}
-			evtSet := (*eventSets)[evt.UnitID]
-			evtSet.EventContainers = append(evtSet.EventContainers, container)
-			(*eventSets)[evt.UnitID] = evtSet
-		case "messages.PrivilegeRevokedEvent":
-			evt := messages.PrivilegeRevokedEvent{}
-			if err := proto.Unmarshal(container.Message, &evt); err != nil {
-				return err
-			}
-			evtSet := (*eventSets)[evt.UnitID]
-			evtSet.EventContainers = append(evtSet.EventContainers, container)
-			(*eventSets)[evt.UnitID] = evtSet
+	for _, msg := range msgs {
+		evt, ok := msg.(unitIDPossesor)
+		if ok {
+			evtSet := (*eventSets)[evt.GetUnitID()]
+			evtSet.Events = append(evtSet.Events, msg)
+			(*eventSets)[evt.GetUnitID()] = evtSet
 		}
+
 	}
 	return nil
 }
@@ -89,32 +68,18 @@ func populateEventSets(
 // a handler for
 func UpdateUnitProjection(
 	projection *messages.UnitProjection,
-	evtContainer messages.MessageContainer,
+	msg messages.Message,
 ) error {
-
-	switch evtContainer.MessageType {
-	case "messages.UnitCreatedEvent":
-		evt := messages.UnitCreatedEvent{}
-		if err := proto.Unmarshal(evtContainer.Message, &evt); err != nil {
-			return err
-		}
-		unitCreatedEventHandler(&evt, projection)
-	case "messages.PrivilegeGrantedEvent":
-		evt := messages.PrivilegeGrantedEvent{}
-		if err := proto.Unmarshal(evtContainer.Message, &evt); err != nil {
-			return err
-		}
-		privilegeGrantedEventHandler(&evt, projection)
-	case "messages.PrivilegeRevokedEvent":
-		evt := messages.PrivilegeRevokedEvent{}
-		if err := proto.Unmarshal(evtContainer.Message, &evt); err != nil {
-			return err
-		}
-		privilegeRevokedEventHandler(&evt, projection)
-	default:
-		return nil
+	err := error(nil)
+	switch evt := msg.(type) {
+	case *messages.UnitCreatedEvent:
+		err = unitCreatedEventHandler(evt, projection)
+	case *messages.PrivilegeGrantedEvent:
+		err = privilegeGrantedEventHandler(evt, projection)
+	case *messages.PrivilegeRevokedEvent:
+		err = privilegeRevokedEventHandler(evt, projection)
 	}
-	return nil
+	return err
 }
 
 func unitCreatedEventHandler(

@@ -6,10 +6,12 @@ import (
 	"github.com/ddouglascarr/rooset/messages"
 )
 
-func CopyEventProcessor(
+// CopyMessageProcessor returns whatever messages it's given, for copying
+// events from the sourceDB to the targetDB
+func CopyMessageProcessor(
 	_ *sql.Tx,
 	_ *sql.Tx,
-	containers []messages.MessageContainer,
-) ([]messages.MessageContainer, error) {
-	return containers, nil
+	msgs []messages.Message,
+) ([]messages.Message, error) {
+	return msgs, nil
 }
