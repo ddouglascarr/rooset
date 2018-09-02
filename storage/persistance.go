@@ -5,6 +5,7 @@ import (
 
 	"github.com/ddouglascarr/rooset/messages"
 	"github.com/golang/protobuf/proto"
+	"github.com/pkg/errors"
 )
 
 // PersistMessages persists all messages to the database.
@@ -15,7 +16,7 @@ func PersistMessages(tx *sql.Tx, msgs []messages.Message) error {
 		) VALUES ($1, $2, $3);
 	`)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "persistance statement failed")
 	}
 	defer stmt.Close()
 
@@ -32,7 +33,7 @@ func PersistMessages(tx *sql.Tx, msgs []messages.Message) error {
 
 		_, err = stmt.Exec(aRID, messageType, bMsg)
 		if err != nil {
-			return err
+			return errors.Wrap(err, "persistance exec failed")
 		}
 	}
 
@@ -124,6 +125,47 @@ func FetchProjection(
 	err = proto.Unmarshal(bProj, proj)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+type eventHandler interface {
+	HandleEvent(messages.Message) error
+}
+
+// FetchAggregate fetches all events for an aggregate and calls the
+// HandleEvent method for each one
+func FetchAggregate(commandTx *sql.Tx, aRID string, aggregate eventHandler) error {
+	stmt, err := commandTx.Prepare(`
+		SELECT message_type, message FROM events_shard0000
+		WHERE aggregate_root_id = $1
+		ORDER BY seq
+		FOR UPDATE 
+   `)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(aRID)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			messageType string
+			bMsg        []byte
+		)
+		rows.Scan(&messageType, &bMsg)
+		msg, err := messages.UnmarshalBMessage(messageType, bMsg)
+		if err != nil {
+			return err
+		}
+
+		aggregate.HandleEvent(msg)
 	}
 
 	return nil

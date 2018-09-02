@@ -3,11 +3,13 @@ package main
 import (
 	"database/sql"
 	"flag"
-	"log"
+	"fmt"
+	"os"
 
 	"github.com/ddouglascarr/rooset/messages"
 	"github.com/ddouglascarr/rooset/storage"
 	_ "github.com/lib/pq"
+	"github.com/pkg/errors"
 )
 
 func persist(jSONMsg string) error {
@@ -32,8 +34,12 @@ func persist(jSONMsg string) error {
 	defer tx.Rollback()
 
 	storage.PersistMessages(tx, []messages.Message{msg})
-	return tx.Commit()
+	err = tx.Commit()
+	if err != nil {
+		return errors.Wrap(err, "failed to commit")
+	}
 
+	return nil
 }
 
 func main() {
@@ -41,6 +47,7 @@ func main() {
 	flag.StringVar(&jSONMsg, "container", "", "JSON formatted message container")
 	flag.Parse()
 	if err := persist(jSONMsg); err != nil {
-		log.Fatal(err)
+		fmt.Printf("FATAL: %+v\n", err)
+		os.Exit(1)
 	}
 }

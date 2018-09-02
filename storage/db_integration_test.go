@@ -4,6 +4,8 @@ package storage
 
 import (
 	"database/sql"
+	"errors"
+	"strings"
 	"testing"
 
 	"github.com/ddouglascarr/rooset/assert"
@@ -89,4 +91,46 @@ func TestFetchProjectionHandlesNonExistantProj(t *testing.T) {
 	assert.ErrorIsNil(t, err)
 
 	assert.MessageEquals(t, "Leaves the projection along", resultProj, expectedProj)
+}
+
+type concatAggregate struct {
+	Result string
+}
+
+func (a *concatAggregate) HandleEvent(msg messages.Message) error {
+	evt, ok := msg.(*messages.UnitCreatedEvent)
+	if !ok {
+		return errors.New("oops")
+	}
+	var sb strings.Builder
+	sb.WriteString(a.Result)
+	sb.WriteString(evt.Description)
+	a.Result = sb.String()
+	return nil
+}
+
+func TestFetchAggregate(t *testing.T) {
+	db, err := sql.Open(
+		"postgres",
+		"user=postgres dbname=rooset_test_0 host=localhost sslmode=disable port=5433",
+	)
+	assert.ErrorIsNil(t, err)
+	defer db.Close()
+
+	tx, err := db.Begin()
+	assert.ErrorIsNil(t, err)
+	defer tx.Rollback()
+
+	err = PersistMessages(tx, []messages.Message{
+		&messages.UnitCreatedEvent{UnitID: "a", Description: "1"},
+		&messages.UnitCreatedEvent{UnitID: "a", Description: "2"},
+		&messages.UnitCreatedEvent{UnitID: "a", Description: "3"},
+	})
+	assert.ErrorIsNil(t, err)
+
+	aggregate := &concatAggregate{}
+	err = FetchAggregate(tx, "a", aggregate)
+	assert.ErrorIsNil(t, err)
+
+	assert.Equals(t, "aggregate built", aggregate.Result, "123")
 }
