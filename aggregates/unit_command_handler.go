@@ -13,6 +13,8 @@ func HandleUnitCommand(unit *UnitAggregate, msg messages.Message) (messages.Mess
 		return revokePrivilege(unit, cmd)
 	case *messages.CreateAreaCommand:
 		return createArea(unit, cmd)
+	case *messages.CreatePolicyCommand:
+		return createPolicy(unit, cmd)
 	default:
 		return nil, nil
 	}
@@ -106,6 +108,63 @@ func createArea(
 		AreaID:      cmd.AreaID,
 		Name:        cmd.Name,
 		Description: cmd.Description,
+	}, nil
+}
+
+func createPolicy(
+	unit *UnitAggregate,
+	cmd *messages.CreatePolicyCommand,
+) (messages.Message, RejectionReason) {
+	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
+		return nil, rej
+	}
+	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
+		return nil, rej
+	}
+
+	if _, ok := unit.Policies[cmd.PolicyID]; ok {
+		return nil, NewRejectionReason("policy already exists")
+	}
+
+	return &messages.PolicyCreatedEvent{
+		UnitID:      cmd.UnitID,
+		RequesterID: cmd.RequesterID,
+		PolicyID:    cmd.PolicyID,
+		Description: cmd.Description,
+
+		MinAdmissionDuration: cmd.MinAdmissionDuration,
+		MaxAdmissionDuration: cmd.MaxAdmissionDuration,
+		DiscussionDuration:   cmd.DiscussionDuration,
+		VerificationDuration: cmd.VerificationDuration,
+		VotingDuration:       cmd.VotingDuration,
+
+		IssueQuorumNum:      cmd.IssueQuorumNum,
+		IssueQuroumDen:      cmd.IssueQuroumDen,
+		InitiativeQuorumNum: cmd.InitiativeQuorumNum,
+		InitiativeQuorumDen: cmd.InitiativeQuorumDen,
+	}, nil
+
+}
+
+func deactivatePolicy(
+	unit *UnitAggregate,
+	cmd *messages.CreatePolicyCommand,
+) (messages.Message, RejectionReason) {
+	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
+		return nil, rej
+	}
+	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
+		return nil, rej
+	}
+
+	if _, ok := unit.Policies[cmd.PolicyID]; !ok {
+		return nil, NewRejectionReason("policy not found")
+	}
+
+	return &messages.PolicyDeactivatedEvent{
+		UnitID:      cmd.UnitID,
+		RequesterID: cmd.RequesterID,
+		PolicyID:    cmd.PolicyID,
 	}, nil
 }
 
