@@ -11,6 +11,8 @@ func HandleUnitCommand(unit *UnitAggregate, msg messages.Message) (messages.Mess
 		return grantPrivilege(unit, cmd)
 	case *messages.RevokePrivilegeCommand:
 		return revokePrivilege(unit, cmd)
+	case *messages.CreateAreaCommand:
+		return createArea(unit, cmd)
 	default:
 		return nil, nil
 	}
@@ -80,6 +82,30 @@ func revokePrivilege(
 		RequesterID: cmd.RequesterID,
 		MemberID:    cmd.MemberID,
 		Weight:      privilege.Weight,
+	}, nil
+}
+
+func createArea(
+	unit *UnitAggregate,
+	cmd *messages.CreateAreaCommand,
+) (messages.Message, RejectionReason) {
+	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
+		return nil, rej
+	}
+	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
+		return nil, rej
+	}
+
+	if _, ok := unit.Areas[cmd.AreaID]; ok == true {
+		return nil, NewRejectionReason("area already exists")
+	}
+
+	return &messages.AreaCreatedEvent{
+		UnitID:      cmd.UnitID,
+		RequesterID: cmd.RequesterID,
+		AreaID:      cmd.AreaID,
+		Name:        cmd.Name,
+		Description: cmd.Description,
 	}, nil
 }
 

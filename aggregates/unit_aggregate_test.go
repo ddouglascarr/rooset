@@ -217,3 +217,70 @@ func TestRevokePrivilegeRejectsIfAlreadyRevoked(t *testing.T) {
 
 	assertRejected(t, rejectionReason)
 }
+
+func TestCreateArea(t *testing.T) {
+	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
+		&messages.UnitCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+		},
+	})
+
+	evt, rej, _ := aggregates.HandleCommand(
+		aggregateFetcher,
+		"UnitID",
+		"unit0",
+		&messages.CreateAreaCommand{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			Name:        "test area",
+			Description: "The Test Area",
+		},
+	)
+
+	assertNotRejected(t, rej)
+	assert.MessageEquals(
+		t,
+		"event created",
+		evt,
+		&messages.AreaCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			Name:        "test area",
+			Description: "The Test Area",
+		},
+	)
+}
+
+func TestCreateAreaRejectsIfAreaAlreadyExists(t *testing.T) {
+	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
+		&messages.UnitCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+		},
+		&messages.AreaCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			Name:        "test area",
+			Description: "The Test Area",
+		},
+	})
+
+	_, rej, _ := aggregates.HandleCommand(
+		aggregateFetcher,
+		"UnitID",
+		"unit0",
+		&messages.CreateAreaCommand{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			Name:        "test area",
+			Description: "The Test Area",
+		},
+	)
+
+	assertRejected(t, rej)
+}

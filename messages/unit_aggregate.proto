@@ -63,3 +63,23 @@ message PrivilegeRevokedEvent {
   string MemberID = 3;
   uint32 Weight = 4;
 }
+
+message CreateAreaCommand {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string AreaID = 3;
+  string Name = 4;
+  string Description = 5;
+}
+
+message AreaCreatedEvent {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string AreaID = 3;
+  string Name = 4;
+  string Description = 5;
+}
