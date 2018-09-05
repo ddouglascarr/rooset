@@ -39,9 +39,8 @@ func grantPrivilege(
 	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
 		return nil, rej
 	}
-
-	if !isAdministrator(unit, cmd.RequesterID) {
-		return nil, NewRejectionReason("requester is not an administrator")
+	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
+		return nil, rej
 	}
 
 	_, ok := unit.Members[cmd.MemberID]
@@ -64,11 +63,11 @@ func revokePrivilege(
 	unit *UnitAggregate,
 	cmd *messages.RevokePrivilegeCommand,
 ) (messages.Message, RejectionReason) {
-	if unit.Status != Ready {
-		return nil, NewRejectionReason("unit does not exist")
+	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
+		return nil, rej
 	}
-	if !isAdministrator(unit, cmd.RequesterID) {
-		return nil, NewRejectionReason("requester is not an administrator")
+	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
+		return nil, rej
 	}
 
 	privilege, ok := unit.Members[cmd.MemberID]
@@ -88,14 +87,6 @@ func revokePrivilege(
 // utils
 //
 
-func isAdministrator(unit *UnitAggregate, requesterID string) bool {
-	memberPrivilege, ok := unit.Members[requesterID]
-	if !ok || !memberPrivilege.ManagementRight {
-		return false
-	}
-	return true
-}
-
 func assertStatus(status Status, acceptable []Status) RejectionReason {
 	for _, s := range acceptable {
 		if status == s {
@@ -103,4 +94,15 @@ func assertStatus(status Status, acceptable []Status) RejectionReason {
 		}
 	}
 	return NewRejectionReason("aggregate in wrong state")
+}
+
+func assertIsManager(requesterID string, members map[string]memberPrivilege) RejectionReason {
+	member, ok := members[requesterID]
+	if !ok {
+		return NewRejectionReason("unknown requester")
+	}
+	if !member.ManagementRight {
+		return NewRejectionReason("requester is not a manager")
+	}
+	return nil
 }
