@@ -20,8 +20,8 @@ func createUnit(
 	unit *UnitAggregate,
 	cmd *messages.CreateUnitCommand,
 ) (messages.Message, RejectionReason) {
-	if unit.Status != Uninitialized {
-		return nil, NewRejectionReason("unit already created")
+	if rej := assertStatus(unit.Status, []Status{Uninitialized}); rej != nil {
+		return nil, rej
 	}
 	return &messages.UnitCreatedEvent{
 		UnitID:           cmd.UnitID,
@@ -36,8 +36,8 @@ func grantPrivilege(
 	unit *UnitAggregate,
 	cmd *messages.GrantPrivilegeCommand,
 ) (messages.Message, RejectionReason) {
-	if unit.Status != Ready {
-		return nil, NewRejectionReason("unit does not exist")
+	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
+		return nil, rej
 	}
 
 	if !isAdministrator(unit, cmd.RequesterID) {
@@ -94,4 +94,13 @@ func isAdministrator(unit *UnitAggregate, requesterID string) bool {
 		return false
 	}
 	return true
+}
+
+func assertStatus(status Status, acceptable []Status) RejectionReason {
+	for _, s := range acceptable {
+		if status == s {
+			return nil
+		}
+	}
+	return NewRejectionReason("aggregate in wrong state")
 }

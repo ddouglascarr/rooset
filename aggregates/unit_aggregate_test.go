@@ -91,6 +91,32 @@ func TestGrantPrivilege(t *testing.T) {
 	})
 }
 
+// tests manager assertion
+func TestGrantPrivilegeRejectsIfRequesterNotManager(t *testing.T) {
+	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
+		&messages.UnitCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "anotherMember",
+		},
+	})
+
+	_, rejectionReason, _ := aggregates.HandleCommand(
+		aggregateFetcher,
+		"UnitID",
+		"unit0",
+		&messages.GrantPrivilegeCommand{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			MemberID:    "member1",
+			VotingRight: true,
+			Weight:      1,
+		},
+	)
+
+	assertRejected(t, rejectionReason)
+}
+
+// tests status assertion
 func TestGrantPrivilegeRejectsIfPrivilegeAlreadyExists(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
 		&messages.UnitCreatedEvent{
