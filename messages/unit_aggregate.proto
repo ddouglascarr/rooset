@@ -63,3 +63,88 @@ message PrivilegeRevokedEvent {
   string MemberID = 3;
   uint32 Weight = 4;
 }
+
+message CreateAreaCommand {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string AreaID = 3;
+  string Name = 4;
+  string Description = 5;
+}
+
+message AreaCreatedEvent {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string AreaID = 3;
+  string Name = 4;
+  string Description = 5;
+}
+
+
+message CreatePolicyCommand {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string PolicyID = 3;
+  string Description = 4;
+  
+  // Max / min amount of time before an issue is passed the Admision phase
+  int32 MinAdmissionDuration = 5;
+  int32 MaxAdmissionDuration = 6;
+
+  // phase durations
+  int32 DiscussionDuration = 7;
+  int32 VerificationDuration = 8;
+  int32 VotingDuration = 9;
+
+  // quorums required (numerator / denominator)
+  int32 IssueQuorumNum = 10;
+  int32 IssueQuroumDen = 11;
+  int32 InitiativeQuorumNum = 12;
+  int32 InitiativeQuorumDen = 13;
+}
+
+message PolicyCreatedEvent {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string PolicyID = 3;
+  string Description = 4;
+  
+  // Max / min amount of time before an issue is passed the Admision phase
+  int32 MinAdmissionDuration = 5;
+  int32 MaxAdmissionDuration = 6;
+
+  // phase durations
+  int32 DiscussionDuration = 7;
+  int32 VerificationDuration = 8;
+  int32 VotingDuration = 9;
+
+  // quorums required (numerator / denominator)
+  int32 IssueQuorumNum = 10;
+  int32 IssueQuroumDen = 11;
+  int32 InitiativeQuorumNum = 12;
+  int32 InitiativeQuorumDen = 13;
+}
+
+message DeactivatePolicyCommand {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string PolicyID = 3;
+}
+
+message PolicyDeactivatedEvent {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string PolicyID = 3;
+}

@@ -11,6 +11,10 @@ func HandleUnitCommand(unit *UnitAggregate, msg messages.Message) (messages.Mess
 		return grantPrivilege(unit, cmd)
 	case *messages.RevokePrivilegeCommand:
 		return revokePrivilege(unit, cmd)
+	case *messages.CreateAreaCommand:
+		return createArea(unit, cmd)
+	case *messages.CreatePolicyCommand:
+		return createPolicy(unit, cmd)
 	default:
 		return nil, nil
 	}
@@ -20,8 +24,8 @@ func createUnit(
 	unit *UnitAggregate,
 	cmd *messages.CreateUnitCommand,
 ) (messages.Message, RejectionReason) {
-	if unit.Status != Uninitialized {
-		return nil, NewRejectionReason("unit already created")
+	if rej := assertStatus(unit.Status, []Status{Uninitialized}); rej != nil {
+		return nil, rej
 	}
 	return &messages.UnitCreatedEvent{
 		UnitID:           cmd.UnitID,
@@ -36,12 +40,11 @@ func grantPrivilege(
 	unit *UnitAggregate,
 	cmd *messages.GrantPrivilegeCommand,
 ) (messages.Message, RejectionReason) {
-	if unit.Status != Ready {
-		return nil, NewRejectionReason("unit does not exist")
+	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
+		return nil, rej
 	}
-
-	if !isAdministrator(unit, cmd.RequesterID) {
-		return nil, NewRejectionReason("requester is not an administrator")
+	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
+		return nil, rej
 	}
 
 	_, ok := unit.Members[cmd.MemberID]
@@ -64,11 +67,11 @@ func revokePrivilege(
 	unit *UnitAggregate,
 	cmd *messages.RevokePrivilegeCommand,
 ) (messages.Message, RejectionReason) {
-	if unit.Status != Ready {
-		return nil, NewRejectionReason("unit does not exist")
+	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
+		return nil, rej
 	}
-	if !isAdministrator(unit, cmd.RequesterID) {
-		return nil, NewRejectionReason("requester is not an administrator")
+	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
+		return nil, rej
 	}
 
 	privilege, ok := unit.Members[cmd.MemberID]
@@ -84,14 +87,107 @@ func revokePrivilege(
 	}, nil
 }
 
+func createArea(
+	unit *UnitAggregate,
+	cmd *messages.CreateAreaCommand,
+) (messages.Message, RejectionReason) {
+	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
+		return nil, rej
+	}
+	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
+		return nil, rej
+	}
+
+	if _, ok := unit.Areas[cmd.AreaID]; ok == true {
+		return nil, NewRejectionReason("area already exists")
+	}
+
+	return &messages.AreaCreatedEvent{
+		UnitID:      cmd.UnitID,
+		RequesterID: cmd.RequesterID,
+		AreaID:      cmd.AreaID,
+		Name:        cmd.Name,
+		Description: cmd.Description,
+	}, nil
+}
+
+func createPolicy(
+	unit *UnitAggregate,
+	cmd *messages.CreatePolicyCommand,
+) (messages.Message, RejectionReason) {
+	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
+		return nil, rej
+	}
+	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
+		return nil, rej
+	}
+
+	if _, ok := unit.Policies[cmd.PolicyID]; ok {
+		return nil, NewRejectionReason("policy already exists")
+	}
+
+	return &messages.PolicyCreatedEvent{
+		UnitID:      cmd.UnitID,
+		RequesterID: cmd.RequesterID,
+		PolicyID:    cmd.PolicyID,
+		Description: cmd.Description,
+
+		MinAdmissionDuration: cmd.MinAdmissionDuration,
+		MaxAdmissionDuration: cmd.MaxAdmissionDuration,
+		DiscussionDuration:   cmd.DiscussionDuration,
+		VerificationDuration: cmd.VerificationDuration,
+		VotingDuration:       cmd.VotingDuration,
+
+		IssueQuorumNum:      cmd.IssueQuorumNum,
+		IssueQuroumDen:      cmd.IssueQuroumDen,
+		InitiativeQuorumNum: cmd.InitiativeQuorumNum,
+		InitiativeQuorumDen: cmd.InitiativeQuorumDen,
+	}, nil
+
+}
+
+func deactivatePolicy(
+	unit *UnitAggregate,
+	cmd *messages.CreatePolicyCommand,
+) (messages.Message, RejectionReason) {
+	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
+		return nil, rej
+	}
+	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
+		return nil, rej
+	}
+
+	if _, ok := unit.Policies[cmd.PolicyID]; !ok {
+		return nil, NewRejectionReason("policy not found")
+	}
+
+	return &messages.PolicyDeactivatedEvent{
+		UnitID:      cmd.UnitID,
+		RequesterID: cmd.RequesterID,
+		PolicyID:    cmd.PolicyID,
+	}, nil
+}
+
 //
 // utils
 //
 
-func isAdministrator(unit *UnitAggregate, requesterID string) bool {
-	memberPrivilege, ok := unit.Members[requesterID]
-	if !ok || !memberPrivilege.ManagementRight {
-		return false
+func assertStatus(status Status, acceptable []Status) RejectionReason {
+	for _, s := range acceptable {
+		if status == s {
+			return nil
+		}
 	}
-	return true
+	return NewRejectionReason("aggregate in wrong state")
+}
+
+func assertIsManager(requesterID string, members map[string]memberPrivilege) RejectionReason {
+	member, ok := members[requesterID]
+	if !ok {
+		return NewRejectionReason("unknown requester")
+	}
+	if !member.ManagementRight {
+		return NewRejectionReason("requester is not a manager")
+	}
+	return nil
 }
