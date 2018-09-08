@@ -21,16 +21,10 @@ func BuildTestAggregateFetcher(evts []messages.Message) aggregates.AggregateFetc
 	}
 }
 
-func assertRejected(t *testing.T, reason aggregates.RejectionReason) {
-	if reason == nil {
+func assertRejected(t *testing.T, err error) {
+	_, ok := aggregates.GetRejectionReason(err)
+	if !ok {
 		t.Log("should have rejected")
-		t.FailNow()
-	}
-}
-
-func assertNotRejected(t *testing.T, reason aggregates.RejectionReason) {
-	if reason != nil {
-		t.Log("rejected")
 		t.FailNow()
 	}
 }

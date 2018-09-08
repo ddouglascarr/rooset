@@ -1,6 +1,8 @@
 package aggregates
 
 import (
+	"fmt"
+
 	"github.com/ddouglascarr/rooset/messages"
 	"github.com/pkg/errors"
 )
@@ -14,12 +16,52 @@ type Aggregate interface {
 // AggregateFetcher calls an external db to populate an aggregate using it's previous events
 type AggregateFetcher func(aRID string, aggregate Aggregate) error
 
-// RejectionReason should be returned whenever a command violates business rules
-type RejectionReason *string
+// RejectionCode enum for different categories of command handler rejection
+type RejectionCode int
 
-// NewRejectionReason creates a rejection reason
-func NewRejectionReason(reason string) RejectionReason {
-	return RejectionReason(&reason)
+// RejectionCode enums
+const (
+	UnauthorizedRejectionCode    = RejectionCode(0)
+	AggregateStatusRejectionCode = RejectionCode(1)
+	ImpossibleActionRectionCode  = RejectionCode(2)
+)
+
+// RejectionReason struct housing the code and description for the command handler rejection
+type RejectionReason struct {
+	Desc string
+	Code RejectionCode
+}
+
+// RejectionError is the error type used by command handlers to reject commands
+type RejectionError struct {
+	Desc string
+	Code RejectionCode
+}
+
+// NewRejectionError builds a RejectionError
+func NewRejectionError(code RejectionCode, desc string) *RejectionError {
+	return &RejectionError{Code: code, Desc: desc}
+}
+
+func (e *RejectionError) Error() string {
+	return fmt.Sprintf("rooset: command rejected, %s", e.Desc)
+}
+
+// CommandRejectionReason gets the RejectionReason for a command handler rejection
+func (e *RejectionError) CommandRejectionReason() *RejectionReason {
+	return &RejectionReason{
+		Code: e.Code,
+		Desc: e.Desc,
+	}
+}
+
+// GetRejectionReason checks if an error is a RejectionError and returns the
+// RejectionReason if it is
+func GetRejectionReason(err error) (reason *RejectionReason, ok bool) {
+	if r, ok := err.(interface{ CommandRejectionReason() *RejectionReason }); ok && r != nil {
+		return r.CommandRejectionReason(), true
+	}
+	return nil, false
 }
 
 // HandleCommand is the root command handler for all aggregates
@@ -32,16 +74,16 @@ func HandleCommand(
 	aRField string,
 	aRID string,
 	cmd messages.Message,
-) (messages.Message, RejectionReason, error) {
+) (messages.Message, error) {
 	switch aRField {
 	case "UnitID":
 		unit := NewUnitAggregate(aRID)
 		err := fetchAggregate(aRID, &unit)
 		if err != nil {
-			return nil, nil, errors.Wrap(err, "fetch aggregate failed")
+			return nil, errors.Wrap(err, "fetch aggregate failed")
 		}
-		msg, rejectionReason := HandleUnitCommand(&unit, cmd)
-		return msg, rejectionReason, nil
+		msg, err := HandleUnitCommand(&unit, cmd)
+		return msg, err
 	}
-	return nil, nil, nil
+	return nil, nil
 }

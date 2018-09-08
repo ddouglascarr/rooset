@@ -18,7 +18,7 @@ func TestCreateUnitCommand(t *testing.T) {
 		URLParameterName: "unit-0",
 	}
 
-	evt, rejectionReason, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -32,7 +32,6 @@ func TestCreateUnitCommand(t *testing.T) {
 	)
 
 	assert.ErrorIsNil(t, err)
-	assertNotRejected(t, rejectionReason)
 	assert.MessageEquals(t, "event generated", expectedEvt, evt)
 }
 
@@ -43,7 +42,7 @@ func TestCreateUnitCommandRejectsIfUnitAlreadyExists(t *testing.T) {
 		},
 	})
 
-	_, rejectionReason, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -56,8 +55,7 @@ func TestCreateUnitCommandRejectsIfUnitAlreadyExists(t *testing.T) {
 		},
 	)
 
-	assert.ErrorIsNil(t, err)
-	assertRejected(t, rejectionReason)
+	assertRejected(t, err)
 }
 
 func TestGrantPrivilege(t *testing.T) {
@@ -68,7 +66,7 @@ func TestGrantPrivilege(t *testing.T) {
 		},
 	})
 
-	evt, rejectionReason, _ := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -81,7 +79,7 @@ func TestGrantPrivilege(t *testing.T) {
 		},
 	)
 
-	assertNotRejected(t, rejectionReason)
+	assert.ErrorIsNil(t, err)
 	assert.MessageEquals(t, "event generated", evt, &messages.PrivilegeGrantedEvent{
 		UnitID:      "unit0",
 		RequesterID: "member0",
@@ -100,7 +98,7 @@ func TestGrantPrivilegeRejectsIfRequesterNotManager(t *testing.T) {
 		},
 	})
 
-	_, rejectionReason, _ := aggregates.HandleCommand(
+	_, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -113,7 +111,7 @@ func TestGrantPrivilegeRejectsIfRequesterNotManager(t *testing.T) {
 		},
 	)
 
-	assertRejected(t, rejectionReason)
+	assertRejected(t, err)
 }
 
 // tests status assertion
@@ -132,7 +130,7 @@ func TestGrantPrivilegeRejectsIfPrivilegeAlreadyExists(t *testing.T) {
 		},
 	})
 
-	_, rejectionReason, _ := aggregates.HandleCommand(
+	_, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -145,7 +143,7 @@ func TestGrantPrivilegeRejectsIfPrivilegeAlreadyExists(t *testing.T) {
 		},
 	)
 
-	assertRejected(t, rejectionReason)
+	assertRejected(t, err)
 }
 
 func TestRevokePrivilege(t *testing.T) {
@@ -163,7 +161,7 @@ func TestRevokePrivilege(t *testing.T) {
 		},
 	})
 
-	evt, rejectionReason, _ := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -174,7 +172,7 @@ func TestRevokePrivilege(t *testing.T) {
 		},
 	)
 
-	assertNotRejected(t, rejectionReason)
+	assert.ErrorIsNil(t, err)
 	assert.MessageEquals(t, "event generated", evt, &messages.PrivilegeRevokedEvent{
 		UnitID:      "unit0",
 		RequesterID: "member0",
@@ -204,7 +202,7 @@ func TestRevokePrivilegeRejectsIfAlreadyRevoked(t *testing.T) {
 		},
 	})
 
-	_, rejectionReason, _ := aggregates.HandleCommand(
+	_, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -215,7 +213,7 @@ func TestRevokePrivilegeRejectsIfAlreadyRevoked(t *testing.T) {
 		},
 	)
 
-	assertRejected(t, rejectionReason)
+	assertRejected(t, err)
 }
 
 func TestCreateArea(t *testing.T) {
@@ -226,7 +224,7 @@ func TestCreateArea(t *testing.T) {
 		},
 	})
 
-	evt, rej, _ := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -239,7 +237,7 @@ func TestCreateArea(t *testing.T) {
 		},
 	)
 
-	assertNotRejected(t, rej)
+	assert.ErrorIsNil(t, err)
 	assert.MessageEquals(
 		t,
 		"event created",
@@ -269,7 +267,7 @@ func TestCreateAreaRejectsIfAreaAlreadyExists(t *testing.T) {
 		},
 	})
 
-	_, rej, _ := aggregates.HandleCommand(
+	_, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -282,7 +280,7 @@ func TestCreateAreaRejectsIfAreaAlreadyExists(t *testing.T) {
 		},
 	)
 
-	assertRejected(t, rej)
+	assertRejected(t, err)
 }
 
 func TestCreatePolicy(t *testing.T) {
@@ -293,7 +291,7 @@ func TestCreatePolicy(t *testing.T) {
 		},
 	})
 
-	evt, rej, _ := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -316,7 +314,7 @@ func TestCreatePolicy(t *testing.T) {
 		},
 	)
 
-	assertNotRejected(t, rej)
+	assert.ErrorIsNil(t, err)
 	assert.MessageEquals(
 		t, "expected event", evt,
 		&messages.PolicyCreatedEvent{
@@ -364,7 +362,7 @@ func TestCreatePolicyRejectsDuplicate(t *testing.T) {
 		},
 	})
 
-	_, rej, _ := aggregates.HandleCommand(
+	_, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
@@ -387,6 +385,6 @@ func TestCreatePolicyRejectsDuplicate(t *testing.T) {
 		},
 	)
 
-	assertRejected(t, rej)
+	assertRejected(t, err)
 
 }

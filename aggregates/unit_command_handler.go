@@ -3,7 +3,7 @@ package aggregates
 import "github.com/ddouglascarr/rooset/messages"
 
 // HandleUnitCommand is the Unit command handler
-func HandleUnitCommand(unit *UnitAggregate, msg messages.Message) (messages.Message, RejectionReason) {
+func HandleUnitCommand(unit *UnitAggregate, msg messages.Message) (messages.Message, error) {
 	switch cmd := msg.(type) {
 	case *messages.CreateUnitCommand:
 		return createUnit(unit, cmd)
@@ -23,9 +23,9 @@ func HandleUnitCommand(unit *UnitAggregate, msg messages.Message) (messages.Mess
 func createUnit(
 	unit *UnitAggregate,
 	cmd *messages.CreateUnitCommand,
-) (messages.Message, RejectionReason) {
-	if rej := assertStatus(unit.Status, []Status{Uninitialized}); rej != nil {
-		return nil, rej
+) (messages.Message, error) {
+	if err := assertStatus(unit.Status, []Status{Uninitialized}); err != nil {
+		return nil, err
 	}
 	return &messages.UnitCreatedEvent{
 		UnitID:           cmd.UnitID,
@@ -39,17 +39,17 @@ func createUnit(
 func grantPrivilege(
 	unit *UnitAggregate,
 	cmd *messages.GrantPrivilegeCommand,
-) (messages.Message, RejectionReason) {
-	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
-		return nil, rej
+) (messages.Message, error) {
+	if err := assertStatus(unit.Status, []Status{Ready}); err != nil {
+		return nil, err
 	}
-	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
-		return nil, rej
+	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
+		return nil, err
 	}
 
 	_, ok := unit.Members[cmd.MemberID]
 	if ok {
-		return nil, NewRejectionReason("membership already granted")
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "membership already granted")
 	}
 
 	return &messages.PrivilegeGrantedEvent{
@@ -66,17 +66,17 @@ func grantPrivilege(
 func revokePrivilege(
 	unit *UnitAggregate,
 	cmd *messages.RevokePrivilegeCommand,
-) (messages.Message, RejectionReason) {
-	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
-		return nil, rej
+) (messages.Message, error) {
+	if err := assertStatus(unit.Status, []Status{Ready}); err != nil {
+		return nil, err
 	}
-	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
-		return nil, rej
+	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
+		return nil, err
 	}
 
 	privilege, ok := unit.Members[cmd.MemberID]
 	if !ok {
-		return nil, NewRejectionReason("membership not present")
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "membership not present")
 	}
 
 	return &messages.PrivilegeRevokedEvent{
@@ -90,16 +90,16 @@ func revokePrivilege(
 func createArea(
 	unit *UnitAggregate,
 	cmd *messages.CreateAreaCommand,
-) (messages.Message, RejectionReason) {
-	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
-		return nil, rej
+) (messages.Message, error) {
+	if err := assertStatus(unit.Status, []Status{Ready}); err != nil {
+		return nil, err
 	}
-	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
-		return nil, rej
+	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
+		return nil, err
 	}
 
 	if _, ok := unit.Areas[cmd.AreaID]; ok == true {
-		return nil, NewRejectionReason("area already exists")
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "area already exists")
 	}
 
 	return &messages.AreaCreatedEvent{
@@ -114,16 +114,16 @@ func createArea(
 func createPolicy(
 	unit *UnitAggregate,
 	cmd *messages.CreatePolicyCommand,
-) (messages.Message, RejectionReason) {
-	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
-		return nil, rej
+) (messages.Message, error) {
+	if err := assertStatus(unit.Status, []Status{Ready}); err != nil {
+		return nil, err
 	}
-	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
-		return nil, rej
+	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
+		return nil, err
 	}
 
 	if _, ok := unit.Policies[cmd.PolicyID]; ok {
-		return nil, NewRejectionReason("policy already exists")
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "policy already exists")
 	}
 
 	return &messages.PolicyCreatedEvent{
@@ -149,16 +149,16 @@ func createPolicy(
 func deactivatePolicy(
 	unit *UnitAggregate,
 	cmd *messages.CreatePolicyCommand,
-) (messages.Message, RejectionReason) {
-	if rej := assertStatus(unit.Status, []Status{Ready}); rej != nil {
-		return nil, rej
+) (messages.Message, error) {
+	if err := assertStatus(unit.Status, []Status{Ready}); err != nil {
+		return nil, err
 	}
-	if rej := assertIsManager(cmd.RequesterID, unit.Members); rej != nil {
-		return nil, rej
+	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
+		return nil, err
 	}
 
 	if _, ok := unit.Policies[cmd.PolicyID]; !ok {
-		return nil, NewRejectionReason("policy not found")
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "policy not found")
 	}
 
 	return &messages.PolicyDeactivatedEvent{
@@ -172,22 +172,22 @@ func deactivatePolicy(
 // utils
 //
 
-func assertStatus(status Status, acceptable []Status) RejectionReason {
+func assertStatus(status Status, acceptable []Status) error {
 	for _, s := range acceptable {
 		if status == s {
 			return nil
 		}
 	}
-	return NewRejectionReason("aggregate in wrong state")
+	return NewRejectionError(AggregateStatusRejectionCode, "aggregate in wrong state")
 }
 
-func assertIsManager(requesterID string, members map[string]memberPrivilege) RejectionReason {
+func assertIsManager(requesterID string, members map[string]memberPrivilege) error {
 	member, ok := members[requesterID]
 	if !ok {
-		return NewRejectionReason("unknown requester")
+		return NewRejectionError(UnauthorizedRejectionCode, "unknown requester")
 	}
 	if !member.ManagementRight {
-		return NewRejectionReason("requester is not a manager")
+		return NewRejectionError(UnauthorizedRejectionCode, "requester is not a manager")
 	}
 	return nil
 }
