@@ -1,13 +1,16 @@
 package messages
 
 import (
+	"crypto/rand"
 	"fmt"
+	"strings"
 
 	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/jsonpb"
 	proto "github.com/golang/protobuf/proto"
 
 	"bytes"
+	"encoding/base32"
 	"encoding/json"
 	"errors"
 	"reflect"
@@ -121,4 +124,14 @@ func UnmarshalBMessage(messageType string, bMsg []byte) (Message, error) {
 // MarshalBMessage serializes a message to protbuf binary
 func MarshalBMessage(msg Message) ([]byte, error) {
 	return proto.Marshal(msg)
+}
+
+// GenID generates a random 128 bit base32 string
+func GenID() string {
+	b := make([]byte, 16)
+	rand.Read(b)
+	buf := new(bytes.Buffer)
+	encoder := base32.NewEncoder(base32.StdEncoding, buf)
+	encoder.Write(b)
+	return strings.ToLower(buf.String())
 }

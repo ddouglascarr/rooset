@@ -91,20 +91,20 @@ func ProcessMessages(
 // It returns:
 // - a rejection reason string, nil if the command was accepted
 // - an error which is not nil if there was a system error
-func ExecuteCommand(commandDB *sql.DB, cmd messages.Message) (*string, error) {
+func ExecuteCommand(commandDB *sql.DB, cmd messages.Message) error {
 	aRField, err := messages.GetAggregateRootField(cmd)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	aRID, err := messages.GetAggregateRootID(cmd)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	tx, err := commandDB.Begin()
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer tx.Rollback()
 
@@ -112,22 +112,19 @@ func ExecuteCommand(commandDB *sql.DB, cmd messages.Message) (*string, error) {
 		return FetchAggregate(tx, aRID, aggregate)
 	}
 
-	evt, rejectionReason, err := aggregates.HandleCommand(fetchAggregate, aRField, aRID, cmd)
+	evt, err := aggregates.HandleCommand(fetchAggregate, aRField, aRID, cmd)
 	if err != nil {
-		return nil, err
-	}
-	if rejectionReason != nil {
-		return rejectionReason, nil
+		return err
 	}
 
 	if evt != nil {
 		err := PersistMessages(tx, []messages.Message{evt})
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
 	err = tx.Commit()
-	return nil, err
+	return err
 }
 
 // fetchSeqCheckpoint fetches the highest checkpoint from the source

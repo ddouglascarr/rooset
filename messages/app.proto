@@ -1,0 +1,11 @@
+syntax = "proto3";
+package messages;
+
+// Application messages. These aren't part of the CQRS application, but they need
+// to be serialized, so this seemed like the easiest place to put them.
+
+message Session {
+  string UserID = 1;
+  string Username = 2;
+  string CSRFTk = 3;
+}

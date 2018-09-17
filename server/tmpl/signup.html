@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en-us">
+
+  <body>
+    <h3>Sign Up</h3>
+    {{ range .Errors }}
+      <p>{{ . }}</p>
+    {{ end }}
+    <form action="/signup" method="post">
+      <input name="Email" placeholder="Email" type="text" value="{{.Fields.Email}}" />
+      <input name="Username" placeholder="Username" type="text" value="{{.Fields.Username}}" />
+      <input name="Password" placeholder="Password" type="password" />
+      <button type="submit">Sign Up</button>
+    </form>
+  </body>
+</html>
+  
