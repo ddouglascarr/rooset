@@ -65,12 +65,10 @@ func Authenticate(f AuthenticatedHandlerFunc) httprouter.Handle {
 }
 
 var (
-	loginPageTmpl  *template.Template
 	signupPageTmpl *template.Template
 )
 
 func init() {
-	loginPageTmpl = template.Must(template.ParseFiles("server/tmpl/login.html"))
 	signupPageTmpl = template.Must(template.ParseFiles("server/tmpl/signup.html"))
 }
 
@@ -144,12 +142,7 @@ type loginPageProps struct {
 // TODO: I think this needs double cookie CSRF?
 func loginGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	props := loginPageProps{Errors: []string{}}
-	err := loginPageTmpl.Execute(w, props)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprint(w, err)
-	}
-
+	renderPage(w, r, "LoginPage", true, &props)
 }
 
 // TODO: I think this needs double cookie CSRF?
@@ -161,7 +154,7 @@ func loginPost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	badRequest := func(msg string) {
 		props.Errors = []string{msg}
 		w.WriteHeader(http.StatusBadRequest)
-		loginPageTmpl.Execute(w, props)
+		renderPage(w, r, "LoginPage", true, &props)
 	}
 
 	if err := r.ParseForm(); err != nil {
@@ -195,7 +188,7 @@ func loginPost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	if err := storage.PersistSession(cacheDB, sessionTk, session); err != nil {
 		props.Errors = []string{"System Error"}
 		w.WriteHeader(http.StatusInternalServerError)
-		loginPageTmpl.Execute(w, props)
+		renderPage(w, r, "LoginPage", true, &props)
 		return
 	}
 

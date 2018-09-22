@@ -1,0 +1,25 @@
+{
+  "name": "rooset-pages",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ddouglascarr/rooset"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "preact": "^8.3.1",
+    "preact-render-to-string": "^3.8.2",
+    "prettier": "^1.14.3",
+    "rollup": "^0.66.1",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-typescript2": "^0.17.0",
+    "tslib": "^1.9.3",
+    "typescript": "^3.0.3"
+  }
+}

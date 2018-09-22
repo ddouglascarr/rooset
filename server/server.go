@@ -2,10 +2,8 @@ package server
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 
-	"github.com/ddouglascarr/rooset/messages"
 	"github.com/gomodule/redigo/redis"
 	"github.com/julienschmidt/httprouter"
 )
@@ -23,6 +21,10 @@ func ListenAndServe() error {
 	defer cacheDB.Close()
 
 	router := httprouter.New()
+
+	router.ServeFiles("/dist/*filepath", http.Dir("pages/dist"))
+	router.ServeFiles("/static/*filepath", http.Dir("pages/static"))
+
 	router.GET("/", homepage)
 	router.GET("/signup", signupGet)
 	router.POST("/signup", signupPost)
@@ -56,12 +58,4 @@ func initiDBs() {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func welcome(w http.ResponseWriter, r *http.Request, _ httprouter.Params, s *messages.Session) {
-	fmt.Fprintf(w, "Welcome %s %s %s", s.UserID, s.Username, s.CSRFTk)
-}
-
-func homepage(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Rooset")
 }
