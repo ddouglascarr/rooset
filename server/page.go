@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"go/build"
 	"html/template"
 	"net/http"
 )
@@ -11,7 +12,7 @@ var (
 )
 
 func init() {
-	pageTmpl = template.Must(template.ParseFiles("server/tmpl/page.html"))
+	pageTmpl = template.Must(template.ParseFiles(build.Default.GOPATH + "/src/github.com/ddouglascarr/rooset/server/tmpl/page.html"))
 }
 
 // pageCtx is the struct to be passed to the generic page tepmlate

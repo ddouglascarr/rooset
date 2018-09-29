@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"go/build"
 	"html/template"
 	"net/http"
 	"time"
@@ -69,7 +70,7 @@ var (
 )
 
 func init() {
-	signupPageTmpl = template.Must(template.ParseFiles("server/tmpl/signup.html"))
+	signupPageTmpl = template.Must(template.ParseFiles(build.Default.GOPATH + "/src/github.com/ddouglascarr/rooset/server/tmpl/signup.html"))
 }
 
 type signupFields struct {
@@ -78,13 +79,14 @@ type signupFields struct {
 	Password string
 }
 
-type signupProps struct {
+// SignupPageProps are the props for the signup page
+type SignupPageProps struct {
 	Fields signupFields
 	Errors []string
 }
 
 func signupGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	props := signupProps{}
+	props := SignupPageProps{}
 	err := signupPageTmpl.Execute(w, props)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -134,20 +136,21 @@ func signupPost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
-type loginPageProps struct {
+// LoginPageProps yep
+type LoginPageProps struct {
 	Errors []string
 	Email  string
 }
 
 // TODO: I think this needs double cookie CSRF?
 func loginGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	props := loginPageProps{Errors: []string{}}
+	props := LoginPageProps{Errors: []string{}}
 	renderPage(w, r, "LoginPage", true, &props)
 }
 
 // TODO: I think this needs double cookie CSRF?
 func loginPost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	props := loginPageProps{
+	props := LoginPageProps{
 		Email: r.FormValue("Email"),
 	}
 
