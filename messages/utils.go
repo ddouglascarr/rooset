@@ -69,6 +69,9 @@ func UnmarshalJSONMessage(jSONMsgContainer []byte) (Message, error) {
 	reader := bytes.NewReader(container.Message)
 
 	mt := proto.MessageType(container.MessageType)
+	if mt == nil {
+		return nil, errors.New("Invalid MessageType")
+	}
 	mi := reflect.New(mt.Elem()).Interface()
 	msg, ok := mi.(Message)
 	if !ok {
