@@ -33,7 +33,7 @@ func (t *projProcCmd) Args() *args.ArgSet {
 func (t *projProcCmd) Run(ctx cmdy.Context) error {
 	commandDB, err := sql.Open(
 		"postgres",
-		"user=postgres dbname=rooset_test_0 host=localhost sslmode=disable",
+		"user=postgres  dbname=rooset_test_0 host=localhost sslmode=disable",
 	)
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func (t *projProcCmd) Run(ctx cmdy.Context) error {
 
 	queryDB, err := sql.Open(
 		"postgres",
-		"user=postgres dbname=rooset_test_projections_0 host=localhost sslmode=disable",
+		"user=postgres  dbname=rooset_test_projections_0 host=localhost sslmode=disable",
 	)
 	if err != nil {
 		return err

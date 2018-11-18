@@ -104,7 +104,7 @@ message CreatePolicyCommand {
 
   // quorums required (numerator / denominator)
   int32 IssueQuorumNum = 10;
-  int32 IssueQuroumDen = 11;
+  int32 IssueQuorumDen = 11;
   int32 InitiativeQuorumNum = 12;
   int32 InitiativeQuorumDen = 13;
 }
@@ -128,7 +128,7 @@ message PolicyCreatedEvent {
 
   // quorums required (numerator / denominator)
   int32 IssueQuorumNum = 10;
-  int32 IssueQuroumDen = 11;
+  int32 IssueQuorumDen = 11;
   int32 InitiativeQuorumNum = 12;
   int32 InitiativeQuorumDen = 13;
 }
@@ -147,4 +147,40 @@ message PolicyDeactivatedEvent {
   string UnitID = 1;
   string RequesterID = 2;
   string PolicyID = 3;
+}
+
+message AllowAreaPolicyCommand {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string PolicyID = 3;
+  string AreaID = 4;
+}
+
+message AreaPolicyAllowedEvent {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string PolicyID = 3;
+  string AreaID = 4;
+}
+
+message DisallowAreaPolicyCommand {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string PolicyID = 3;
+  string AreaID = 4;
+}
+
+message AreaPolicyDisallowedEvent {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string PolicyID = 3;
+  string AreaID = 4;
 }

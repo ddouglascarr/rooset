@@ -84,6 +84,23 @@ func HandleCommand(
 		}
 		msg, err := HandleUnitCommand(&unit, cmd)
 		return msg, err
+	case "IssueID":
+		issue := NewIssueAggregate(aRID)
+		err := fetchAggregate(aRID, &issue)
+		if err != nil {
+			return nil, errors.Wrap(err, "fetch issue aggregate failed")
+		}
+
+		if createCmd, ok := cmd.(*messages.CreateIssueCommand); ok {
+			issue.UnitID = createCmd.UnitID
+		}
+		issue.Unit = NewUnitAggregate(issue.UnitID)
+		err = fetchAggregate(issue.UnitID, &issue.Unit)
+		if err != nil {
+			return nil, errors.Wrap(err, "fetch unit aggregate failed")
+		}
+
+		return HandleIssueCommand(&issue, cmd)
 	}
 	return nil, nil
 }

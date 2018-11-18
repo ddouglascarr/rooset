@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="${BASH_SOURCE%/*}"
+CMD_DB="rooset_test_0"
+QUERY_DB="rooset_test_projections_0"
+
+. ${SCRIPT_DIR}/set-env
+
+echo "--- resting cmd db"
+dropdb ${CMD_DB}
+createdb ${CMD_DB}
+psql -v ON_ERROR_STOP=1 -f ${SCRIPT_DIR}/../storage/schema/schema.sql ${CMD_DB}
+
+echo "--- resting query db"
+dropdb ${QUERY_DB}
+createdb ${QUERY_DB}
+psql -v ON_ERROR_STOP=1 -f ${SCRIPT_DIR}/../storage/schema/schema.sql ${QUERY_DB}
+
+
+

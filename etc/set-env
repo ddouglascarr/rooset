@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export PGUSER="postgres"
+export PGPASSWORD="postgres"
+export PGHOST="localhost"
+

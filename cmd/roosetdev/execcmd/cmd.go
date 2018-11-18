@@ -39,7 +39,7 @@ func (t *execCmd) Run(ctx cmdy.Context) error {
 		return errors.Wrap(err, "rooset: Invalid JSON")
 	}
 
-	db, err := sql.Open("postgres", "user=postgres dbname=rooset_test_0 host=localhost sslmode=disable")
+	db, err := sql.Open("postgres", "user=postgres  dbname=rooset_test_0 host=localhost sslmode=disable")
 	if err != nil {
 		return errors.Wrap(err, "rooset: failed to connect to db")
 	}

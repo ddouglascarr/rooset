@@ -48,7 +48,7 @@ func initiDBs() {
 
 	cmdDB, err = sql.Open(
 		"postgres",
-		"user=postgres dbname=rooset_test_0 host=localhost sslmode=disable",
+		"user=postgres  dbname=rooset_test_0 host=localhost sslmode=disable",
 	)
 	if err != nil {
 		panic(err)

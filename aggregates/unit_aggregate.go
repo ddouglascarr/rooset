@@ -2,14 +2,14 @@ package aggregates
 
 import "github.com/ddouglascarr/rooset/messages"
 
-// Status aggregate status enum
-type Status int
+// UnitStatus aggregate status enum
+type UnitStatus int
 
 const (
 	// Uninitialized Status Enum value
-	Uninitialized = Status(0)
+	Uninitialized = UnitStatus(0)
 	// Ready Status Enum value
-	Ready = Status(1)
+	Ready = UnitStatus(1)
 )
 
 type memberPrivilege struct {
@@ -19,16 +19,20 @@ type memberPrivilege struct {
 	Weight          uint32
 }
 
+// TODO: is this right? I was after something like a Set in Python. should I just point at the unit policy?
 type area struct {
 	Name        string
 	Description string
+	Policies    map[string]areaPolicy
 }
 
 type policy struct{}
 
+type areaPolicy struct{}
+
 // UnitAggregate is the aggregate root of pretty much everything
 type UnitAggregate struct {
-	Status   Status
+	Status   UnitStatus
 	UnitID   string
 	Members  map[string]memberPrivilege
 	Areas    map[string]area
@@ -57,6 +61,10 @@ func (unit *UnitAggregate) HandleEvent(msg messages.Message) error {
 		unit.areaCreated(evt)
 	case *messages.PolicyCreatedEvent:
 		unit.policyCreated(evt)
+	case *messages.AreaPolicyAllowedEvent:
+		unit.areaPolicyAllowed(evt)
+	case *messages.AreaPolicyDisallowedEvent:
+		unit.areaPolicyDisallowed(evt)
 	}
 	return nil
 }
@@ -85,12 +93,31 @@ func (unit *UnitAggregate) privilegeRevoked(evt *messages.PrivilegeRevokedEvent)
 }
 
 func (unit *UnitAggregate) areaCreated(evt *messages.AreaCreatedEvent) {
-	unit.Areas[evt.AreaID] = area{
+	a := area{
 		Name:        evt.Name,
 		Description: evt.Description,
 	}
+	a.Policies = make(map[string]areaPolicy)
+	unit.Areas[evt.AreaID] = a
 }
 
 func (unit *UnitAggregate) policyCreated(evt *messages.PolicyCreatedEvent) {
 	unit.Policies[evt.PolicyID] = policy{}
+}
+
+func (unit *UnitAggregate) areaPolicyAllowed(evt *messages.AreaPolicyAllowedEvent) {
+	a, ok := unit.Areas[evt.AreaID]
+	if !ok {
+		return
+	}
+
+	a.Policies[evt.PolicyID] = areaPolicy{}
+}
+
+func (unit *UnitAggregate) areaPolicyDisallowed(evt *messages.AreaPolicyDisallowedEvent) {
+	a, ok := unit.Areas[evt.AreaID]
+	if !ok {
+		return
+	}
+	delete(a.Policies, evt.PolicyID)
 }

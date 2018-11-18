@@ -15,6 +15,10 @@ func HandleUnitCommand(unit *UnitAggregate, msg messages.Message) (messages.Mess
 		return createArea(unit, cmd)
 	case *messages.CreatePolicyCommand:
 		return createPolicy(unit, cmd)
+	case *messages.AllowAreaPolicyCommand:
+		return allowAreaPolicy(unit, cmd)
+	case *messages.DisallowAreaPolicyCommand:
+		return disallowAreaPolicy(unit, cmd)
 	default:
 		return nil, nil
 	}
@@ -24,7 +28,7 @@ func createUnit(
 	unit *UnitAggregate,
 	cmd *messages.CreateUnitCommand,
 ) (messages.Message, error) {
-	if err := assertStatus(unit.Status, []Status{Uninitialized}); err != nil {
+	if err := assertStatus(unit.Status, []UnitStatus{Uninitialized}); err != nil {
 		return nil, err
 	}
 	return &messages.UnitCreatedEvent{
@@ -40,7 +44,7 @@ func grantPrivilege(
 	unit *UnitAggregate,
 	cmd *messages.GrantPrivilegeCommand,
 ) (messages.Message, error) {
-	if err := assertStatus(unit.Status, []Status{Ready}); err != nil {
+	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
 	}
 	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
@@ -67,7 +71,7 @@ func revokePrivilege(
 	unit *UnitAggregate,
 	cmd *messages.RevokePrivilegeCommand,
 ) (messages.Message, error) {
-	if err := assertStatus(unit.Status, []Status{Ready}); err != nil {
+	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
 	}
 	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
@@ -91,7 +95,7 @@ func createArea(
 	unit *UnitAggregate,
 	cmd *messages.CreateAreaCommand,
 ) (messages.Message, error) {
-	if err := assertStatus(unit.Status, []Status{Ready}); err != nil {
+	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
 	}
 	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
@@ -115,7 +119,7 @@ func createPolicy(
 	unit *UnitAggregate,
 	cmd *messages.CreatePolicyCommand,
 ) (messages.Message, error) {
-	if err := assertStatus(unit.Status, []Status{Ready}); err != nil {
+	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
 	}
 	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
@@ -139,7 +143,7 @@ func createPolicy(
 		VotingDuration:       cmd.VotingDuration,
 
 		IssueQuorumNum:      cmd.IssueQuorumNum,
-		IssueQuroumDen:      cmd.IssueQuroumDen,
+		IssueQuorumDen:      cmd.IssueQuorumDen,
 		InitiativeQuorumNum: cmd.InitiativeQuorumNum,
 		InitiativeQuorumDen: cmd.InitiativeQuorumDen,
 	}, nil
@@ -150,7 +154,7 @@ func deactivatePolicy(
 	unit *UnitAggregate,
 	cmd *messages.CreatePolicyCommand,
 ) (messages.Message, error) {
-	if err := assertStatus(unit.Status, []Status{Ready}); err != nil {
+	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
 	}
 	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
@@ -168,11 +172,74 @@ func deactivatePolicy(
 	}, nil
 }
 
+func allowAreaPolicy(
+	unit *UnitAggregate,
+	cmd *messages.AllowAreaPolicyCommand,
+) (messages.Message, error) {
+	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
+		return nil, err
+	}
+	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
+		return nil, err
+	}
+	if _, ok := unit.Policies[cmd.PolicyID]; !ok {
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "unit policy not found")
+	}
+
+	area, ok := unit.Areas[cmd.AreaID]
+	if !ok {
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "area not found")
+	}
+
+	if _, ok := area.Policies[cmd.PolicyID]; ok {
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "area policy already allowed")
+	}
+
+	return &messages.AreaPolicyAllowedEvent{
+		UnitID:      cmd.UnitID,
+		RequesterID: cmd.RequesterID,
+		PolicyID:    cmd.PolicyID,
+		AreaID:      cmd.AreaID,
+	}, nil
+}
+
+func disallowAreaPolicy(
+	unit *UnitAggregate,
+	cmd *messages.DisallowAreaPolicyCommand,
+) (messages.Message, error) {
+	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
+		return nil, err
+	}
+	if err := assertIsManager(cmd.RequesterID, unit.Members); err != nil {
+		return nil, err
+	}
+	if _, ok := unit.Policies[cmd.PolicyID]; !ok {
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "unit policy not found")
+	}
+
+	area, ok := unit.Areas[cmd.AreaID]
+	if !ok {
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "area not found")
+	}
+
+	if _, ok := area.Policies[cmd.PolicyID]; !ok {
+		return nil, NewRejectionError(ImpossibleActionRectionCode, "area policy already not allowed")
+	}
+
+	return &messages.AreaPolicyDisallowedEvent{
+		UnitID:      cmd.UnitID,
+		RequesterID: cmd.RequesterID,
+		PolicyID:    cmd.PolicyID,
+		AreaID:      cmd.AreaID,
+	}, nil
+
+}
+
 //
 // utils
 //
 
-func assertStatus(status Status, acceptable []Status) error {
+func assertStatus(status UnitStatus, acceptable []UnitStatus) error {
 	for _, s := range acceptable {
 		if status == s {
 			return nil

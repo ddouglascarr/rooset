@@ -1,0 +1,55 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="${BASH_SOURCE%/*}"
+
+. ${SCRIPT_DIR}/set-env
+
+echo "--- Installing roosetdev"
+go install ${SCRIPT_DIR}/../cmd/roosetdev
+
+${SCRIPT_DIR}/reset-dbs
+
+echo "--- Creating Test Unit"
+roosetdev exec '{
+  "MessageType": "messages.CreateUnitCommand",
+  "Message": {
+    "UnitID": "unit0",
+    "RequesterID": "user0",
+    "Name": "Test Unit",
+    "Description": "The Test Unit",
+    "URLParameterName": "test-unit"
+  }
+}'
+
+echo "--- Creating Test Area"
+roosetdev exec '{
+  "MessageType": "messages.CreateAreaCommand",
+  "Message": {
+    "UnitID": "unit0",
+    "RequesterID": "user0",
+    "AreaID": "area0",
+    "Name": "Test Area 0",
+    "Description": "The Test Area Number 0"
+  }
+}'
+
+echo "--- Creating Test Policy"
+roosetdev exec '{
+  "MessageType": "messages.CreatePolicyCommand",
+  "Message": {
+    "UnitID": "unit0",
+    "RequesterID": "user0",
+    "PolicyID": "policy0",
+    "Description": "Test Policy",
+    "MinAdmissionDuration": 10000,
+    "MaxAdmissionDuration": 3600000,
+    "DiscussionDuration": 3600000,
+    "VerificationDuration": 3600000,
+    "VotingDuration": 3600000,
+    "IssueQuorumNum": 1,
+    "IssueQuorumDen": 10,
+    "InitiativeQuorumNum": 2,
+    "InitiativeQuorumDen": 10 
+  }
+}'

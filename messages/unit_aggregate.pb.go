@@ -33,7 +33,7 @@ func (m *CreateUnitCommand) Reset()         { *m = CreateUnitCommand{} }
 func (m *CreateUnitCommand) String() string { return proto.CompactTextString(m) }
 func (*CreateUnitCommand) ProtoMessage()    {}
 func (*CreateUnitCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{0}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{0}
 }
 func (m *CreateUnitCommand) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateUnitCommand.Unmarshal(m, b)
@@ -103,7 +103,7 @@ func (m *UnitCreatedEvent) Reset()         { *m = UnitCreatedEvent{} }
 func (m *UnitCreatedEvent) String() string { return proto.CompactTextString(m) }
 func (*UnitCreatedEvent) ProtoMessage()    {}
 func (*UnitCreatedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{1}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{1}
 }
 func (m *UnitCreatedEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UnitCreatedEvent.Unmarshal(m, b)
@@ -175,7 +175,7 @@ func (m *GrantPrivilegeCommand) Reset()         { *m = GrantPrivilegeCommand{} }
 func (m *GrantPrivilegeCommand) String() string { return proto.CompactTextString(m) }
 func (*GrantPrivilegeCommand) ProtoMessage()    {}
 func (*GrantPrivilegeCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{2}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{2}
 }
 func (m *GrantPrivilegeCommand) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GrantPrivilegeCommand.Unmarshal(m, b)
@@ -261,7 +261,7 @@ func (m *PrivilegeGrantedEvent) Reset()         { *m = PrivilegeGrantedEvent{} }
 func (m *PrivilegeGrantedEvent) String() string { return proto.CompactTextString(m) }
 func (*PrivilegeGrantedEvent) ProtoMessage()    {}
 func (*PrivilegeGrantedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{3}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{3}
 }
 func (m *PrivilegeGrantedEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivilegeGrantedEvent.Unmarshal(m, b)
@@ -343,7 +343,7 @@ func (m *RevokePrivilegeCommand) Reset()         { *m = RevokePrivilegeCommand{}
 func (m *RevokePrivilegeCommand) String() string { return proto.CompactTextString(m) }
 func (*RevokePrivilegeCommand) ProtoMessage()    {}
 func (*RevokePrivilegeCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{4}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{4}
 }
 func (m *RevokePrivilegeCommand) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RevokePrivilegeCommand.Unmarshal(m, b)
@@ -398,7 +398,7 @@ func (m *PrivilegeRevokedEvent) Reset()         { *m = PrivilegeRevokedEvent{} }
 func (m *PrivilegeRevokedEvent) String() string { return proto.CompactTextString(m) }
 func (*PrivilegeRevokedEvent) ProtoMessage()    {}
 func (*PrivilegeRevokedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{5}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{5}
 }
 func (m *PrivilegeRevokedEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivilegeRevokedEvent.Unmarshal(m, b)
@@ -461,7 +461,7 @@ func (m *CreateAreaCommand) Reset()         { *m = CreateAreaCommand{} }
 func (m *CreateAreaCommand) String() string { return proto.CompactTextString(m) }
 func (*CreateAreaCommand) ProtoMessage()    {}
 func (*CreateAreaCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{6}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{6}
 }
 func (m *CreateAreaCommand) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateAreaCommand.Unmarshal(m, b)
@@ -531,7 +531,7 @@ func (m *AreaCreatedEvent) Reset()         { *m = AreaCreatedEvent{} }
 func (m *AreaCreatedEvent) String() string { return proto.CompactTextString(m) }
 func (*AreaCreatedEvent) ProtoMessage()    {}
 func (*AreaCreatedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{7}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{7}
 }
 func (m *AreaCreatedEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AreaCreatedEvent.Unmarshal(m, b)
@@ -600,7 +600,7 @@ type CreatePolicyCommand struct {
 	VotingDuration       int32 `protobuf:"varint,9,opt,name=VotingDuration,proto3" json:"VotingDuration,omitempty"`
 	// quorums required (numerator / denominator)
 	IssueQuorumNum       int32    `protobuf:"varint,10,opt,name=IssueQuorumNum,proto3" json:"IssueQuorumNum,omitempty"`
-	IssueQuroumDen       int32    `protobuf:"varint,11,opt,name=IssueQuroumDen,proto3" json:"IssueQuroumDen,omitempty"`
+	IssueQuorumDen       int32    `protobuf:"varint,11,opt,name=IssueQuorumDen,proto3" json:"IssueQuorumDen,omitempty"`
 	InitiativeQuorumNum  int32    `protobuf:"varint,12,opt,name=InitiativeQuorumNum,proto3" json:"InitiativeQuorumNum,omitempty"`
 	InitiativeQuorumDen  int32    `protobuf:"varint,13,opt,name=InitiativeQuorumDen,proto3" json:"InitiativeQuorumDen,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -612,7 +612,7 @@ func (m *CreatePolicyCommand) Reset()         { *m = CreatePolicyCommand{} }
 func (m *CreatePolicyCommand) String() string { return proto.CompactTextString(m) }
 func (*CreatePolicyCommand) ProtoMessage()    {}
 func (*CreatePolicyCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{8}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{8}
 }
 func (m *CreatePolicyCommand) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreatePolicyCommand.Unmarshal(m, b)
@@ -702,9 +702,9 @@ func (m *CreatePolicyCommand) GetIssueQuorumNum() int32 {
 	return 0
 }
 
-func (m *CreatePolicyCommand) GetIssueQuroumDen() int32 {
+func (m *CreatePolicyCommand) GetIssueQuorumDen() int32 {
 	if m != nil {
-		return m.IssueQuroumDen
+		return m.IssueQuorumDen
 	}
 	return 0
 }
@@ -737,7 +737,7 @@ type PolicyCreatedEvent struct {
 	VotingDuration       int32 `protobuf:"varint,9,opt,name=VotingDuration,proto3" json:"VotingDuration,omitempty"`
 	// quorums required (numerator / denominator)
 	IssueQuorumNum       int32    `protobuf:"varint,10,opt,name=IssueQuorumNum,proto3" json:"IssueQuorumNum,omitempty"`
-	IssueQuroumDen       int32    `protobuf:"varint,11,opt,name=IssueQuroumDen,proto3" json:"IssueQuroumDen,omitempty"`
+	IssueQuorumDen       int32    `protobuf:"varint,11,opt,name=IssueQuorumDen,proto3" json:"IssueQuorumDen,omitempty"`
 	InitiativeQuorumNum  int32    `protobuf:"varint,12,opt,name=InitiativeQuorumNum,proto3" json:"InitiativeQuorumNum,omitempty"`
 	InitiativeQuorumDen  int32    `protobuf:"varint,13,opt,name=InitiativeQuorumDen,proto3" json:"InitiativeQuorumDen,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -749,7 +749,7 @@ func (m *PolicyCreatedEvent) Reset()         { *m = PolicyCreatedEvent{} }
 func (m *PolicyCreatedEvent) String() string { return proto.CompactTextString(m) }
 func (*PolicyCreatedEvent) ProtoMessage()    {}
 func (*PolicyCreatedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{9}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{9}
 }
 func (m *PolicyCreatedEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PolicyCreatedEvent.Unmarshal(m, b)
@@ -839,9 +839,9 @@ func (m *PolicyCreatedEvent) GetIssueQuorumNum() int32 {
 	return 0
 }
 
-func (m *PolicyCreatedEvent) GetIssueQuroumDen() int32 {
+func (m *PolicyCreatedEvent) GetIssueQuorumDen() int32 {
 	if m != nil {
-		return m.IssueQuroumDen
+		return m.IssueQuorumDen
 	}
 	return 0
 }
@@ -873,7 +873,7 @@ func (m *DeactivatePolicyCommand) Reset()         { *m = DeactivatePolicyCommand
 func (m *DeactivatePolicyCommand) String() string { return proto.CompactTextString(m) }
 func (*DeactivatePolicyCommand) ProtoMessage()    {}
 func (*DeactivatePolicyCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{10}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{10}
 }
 func (m *DeactivatePolicyCommand) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeactivatePolicyCommand.Unmarshal(m, b)
@@ -927,7 +927,7 @@ func (m *PolicyDeactivatedEvent) Reset()         { *m = PolicyDeactivatedEvent{}
 func (m *PolicyDeactivatedEvent) String() string { return proto.CompactTextString(m) }
 func (*PolicyDeactivatedEvent) ProtoMessage()    {}
 func (*PolicyDeactivatedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_c6afba69f3d5e3c8, []int{11}
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{11}
 }
 func (m *PolicyDeactivatedEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PolicyDeactivatedEvent.Unmarshal(m, b)
@@ -968,6 +968,254 @@ func (m *PolicyDeactivatedEvent) GetPolicyID() string {
 	return ""
 }
 
+type AllowAreaPolicyCommand struct {
+	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
+	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
+	PolicyID             string   `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
+	AreaID               string   `protobuf:"bytes,4,opt,name=AreaID,proto3" json:"AreaID,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AllowAreaPolicyCommand) Reset()         { *m = AllowAreaPolicyCommand{} }
+func (m *AllowAreaPolicyCommand) String() string { return proto.CompactTextString(m) }
+func (*AllowAreaPolicyCommand) ProtoMessage()    {}
+func (*AllowAreaPolicyCommand) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{12}
+}
+func (m *AllowAreaPolicyCommand) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AllowAreaPolicyCommand.Unmarshal(m, b)
+}
+func (m *AllowAreaPolicyCommand) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AllowAreaPolicyCommand.Marshal(b, m, deterministic)
+}
+func (dst *AllowAreaPolicyCommand) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AllowAreaPolicyCommand.Merge(dst, src)
+}
+func (m *AllowAreaPolicyCommand) XXX_Size() int {
+	return xxx_messageInfo_AllowAreaPolicyCommand.Size(m)
+}
+func (m *AllowAreaPolicyCommand) XXX_DiscardUnknown() {
+	xxx_messageInfo_AllowAreaPolicyCommand.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AllowAreaPolicyCommand proto.InternalMessageInfo
+
+func (m *AllowAreaPolicyCommand) GetUnitID() string {
+	if m != nil {
+		return m.UnitID
+	}
+	return ""
+}
+
+func (m *AllowAreaPolicyCommand) GetRequesterID() string {
+	if m != nil {
+		return m.RequesterID
+	}
+	return ""
+}
+
+func (m *AllowAreaPolicyCommand) GetPolicyID() string {
+	if m != nil {
+		return m.PolicyID
+	}
+	return ""
+}
+
+func (m *AllowAreaPolicyCommand) GetAreaID() string {
+	if m != nil {
+		return m.AreaID
+	}
+	return ""
+}
+
+type AreaPolicyAllowedEvent struct {
+	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
+	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
+	PolicyID             string   `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
+	AreaID               string   `protobuf:"bytes,4,opt,name=AreaID,proto3" json:"AreaID,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AreaPolicyAllowedEvent) Reset()         { *m = AreaPolicyAllowedEvent{} }
+func (m *AreaPolicyAllowedEvent) String() string { return proto.CompactTextString(m) }
+func (*AreaPolicyAllowedEvent) ProtoMessage()    {}
+func (*AreaPolicyAllowedEvent) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{13}
+}
+func (m *AreaPolicyAllowedEvent) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AreaPolicyAllowedEvent.Unmarshal(m, b)
+}
+func (m *AreaPolicyAllowedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AreaPolicyAllowedEvent.Marshal(b, m, deterministic)
+}
+func (dst *AreaPolicyAllowedEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AreaPolicyAllowedEvent.Merge(dst, src)
+}
+func (m *AreaPolicyAllowedEvent) XXX_Size() int {
+	return xxx_messageInfo_AreaPolicyAllowedEvent.Size(m)
+}
+func (m *AreaPolicyAllowedEvent) XXX_DiscardUnknown() {
+	xxx_messageInfo_AreaPolicyAllowedEvent.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AreaPolicyAllowedEvent proto.InternalMessageInfo
+
+func (m *AreaPolicyAllowedEvent) GetUnitID() string {
+	if m != nil {
+		return m.UnitID
+	}
+	return ""
+}
+
+func (m *AreaPolicyAllowedEvent) GetRequesterID() string {
+	if m != nil {
+		return m.RequesterID
+	}
+	return ""
+}
+
+func (m *AreaPolicyAllowedEvent) GetPolicyID() string {
+	if m != nil {
+		return m.PolicyID
+	}
+	return ""
+}
+
+func (m *AreaPolicyAllowedEvent) GetAreaID() string {
+	if m != nil {
+		return m.AreaID
+	}
+	return ""
+}
+
+type DisallowAreaPolicyCommand struct {
+	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
+	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
+	PolicyID             string   `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
+	AreaID               string   `protobuf:"bytes,4,opt,name=AreaID,proto3" json:"AreaID,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DisallowAreaPolicyCommand) Reset()         { *m = DisallowAreaPolicyCommand{} }
+func (m *DisallowAreaPolicyCommand) String() string { return proto.CompactTextString(m) }
+func (*DisallowAreaPolicyCommand) ProtoMessage()    {}
+func (*DisallowAreaPolicyCommand) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{14}
+}
+func (m *DisallowAreaPolicyCommand) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DisallowAreaPolicyCommand.Unmarshal(m, b)
+}
+func (m *DisallowAreaPolicyCommand) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DisallowAreaPolicyCommand.Marshal(b, m, deterministic)
+}
+func (dst *DisallowAreaPolicyCommand) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DisallowAreaPolicyCommand.Merge(dst, src)
+}
+func (m *DisallowAreaPolicyCommand) XXX_Size() int {
+	return xxx_messageInfo_DisallowAreaPolicyCommand.Size(m)
+}
+func (m *DisallowAreaPolicyCommand) XXX_DiscardUnknown() {
+	xxx_messageInfo_DisallowAreaPolicyCommand.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DisallowAreaPolicyCommand proto.InternalMessageInfo
+
+func (m *DisallowAreaPolicyCommand) GetUnitID() string {
+	if m != nil {
+		return m.UnitID
+	}
+	return ""
+}
+
+func (m *DisallowAreaPolicyCommand) GetRequesterID() string {
+	if m != nil {
+		return m.RequesterID
+	}
+	return ""
+}
+
+func (m *DisallowAreaPolicyCommand) GetPolicyID() string {
+	if m != nil {
+		return m.PolicyID
+	}
+	return ""
+}
+
+func (m *DisallowAreaPolicyCommand) GetAreaID() string {
+	if m != nil {
+		return m.AreaID
+	}
+	return ""
+}
+
+type AreaPolicyDisallowedEvent struct {
+	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
+	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
+	PolicyID             string   `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
+	AreaID               string   `protobuf:"bytes,4,opt,name=AreaID,proto3" json:"AreaID,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AreaPolicyDisallowedEvent) Reset()         { *m = AreaPolicyDisallowedEvent{} }
+func (m *AreaPolicyDisallowedEvent) String() string { return proto.CompactTextString(m) }
+func (*AreaPolicyDisallowedEvent) ProtoMessage()    {}
+func (*AreaPolicyDisallowedEvent) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{15}
+}
+func (m *AreaPolicyDisallowedEvent) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AreaPolicyDisallowedEvent.Unmarshal(m, b)
+}
+func (m *AreaPolicyDisallowedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AreaPolicyDisallowedEvent.Marshal(b, m, deterministic)
+}
+func (dst *AreaPolicyDisallowedEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AreaPolicyDisallowedEvent.Merge(dst, src)
+}
+func (m *AreaPolicyDisallowedEvent) XXX_Size() int {
+	return xxx_messageInfo_AreaPolicyDisallowedEvent.Size(m)
+}
+func (m *AreaPolicyDisallowedEvent) XXX_DiscardUnknown() {
+	xxx_messageInfo_AreaPolicyDisallowedEvent.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AreaPolicyDisallowedEvent proto.InternalMessageInfo
+
+func (m *AreaPolicyDisallowedEvent) GetUnitID() string {
+	if m != nil {
+		return m.UnitID
+	}
+	return ""
+}
+
+func (m *AreaPolicyDisallowedEvent) GetRequesterID() string {
+	if m != nil {
+		return m.RequesterID
+	}
+	return ""
+}
+
+func (m *AreaPolicyDisallowedEvent) GetPolicyID() string {
+	if m != nil {
+		return m.PolicyID
+	}
+	return ""
+}
+
+func (m *AreaPolicyDisallowedEvent) GetAreaID() string {
+	if m != nil {
+		return m.AreaID
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*CreateUnitCommand)(nil), "messages.CreateUnitCommand")
 	proto.RegisterType((*UnitCreatedEvent)(nil), "messages.UnitCreatedEvent")
@@ -981,50 +1229,57 @@ func init() {
 	proto.RegisterType((*PolicyCreatedEvent)(nil), "messages.PolicyCreatedEvent")
 	proto.RegisterType((*DeactivatePolicyCommand)(nil), "messages.DeactivatePolicyCommand")
 	proto.RegisterType((*PolicyDeactivatedEvent)(nil), "messages.PolicyDeactivatedEvent")
+	proto.RegisterType((*AllowAreaPolicyCommand)(nil), "messages.AllowAreaPolicyCommand")
+	proto.RegisterType((*AreaPolicyAllowedEvent)(nil), "messages.AreaPolicyAllowedEvent")
+	proto.RegisterType((*DisallowAreaPolicyCommand)(nil), "messages.DisallowAreaPolicyCommand")
+	proto.RegisterType((*AreaPolicyDisallowedEvent)(nil), "messages.AreaPolicyDisallowedEvent")
 }
 
 func init() {
-	proto.RegisterFile("messages/unit_aggregate.proto", fileDescriptor_unit_aggregate_c6afba69f3d5e3c8)
+	proto.RegisterFile("messages/unit_aggregate.proto", fileDescriptor_unit_aggregate_8073d076b75591a1)
 }
 
-var fileDescriptor_unit_aggregate_c6afba69f3d5e3c8 = []byte{
-	// 593 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xcf, 0x6f, 0xd3, 0x30,
-	0x14, 0x56, 0x46, 0xd6, 0x75, 0x6f, 0x0c, 0x86, 0x07, 0x25, 0x4c, 0x20, 0x55, 0x3b, 0xa0, 0x8a,
-	0xc3, 0x40, 0x70, 0xe3, 0x36, 0x2d, 0x08, 0x55, 0xa2, 0x53, 0x89, 0xb4, 0x71, 0x9c, 0xbc, 0xf4,
-	0x2d, 0x58, 0xd4, 0xf6, 0xb0, 0x9d, 0x8a, 0x1f, 0x37, 0x2e, 0x9c, 0xb9, 0xf2, 0x07, 0xc0, 0xff,
-	0x00, 0x17, 0xf8, 0xcf, 0x50, 0xec, 0x2c, 0x4d, 0xda, 0x4c, 0x42, 0x6a, 0x3b, 0x69, 0x82, 0x5b,
-	0xdf, 0xf7, 0xbe, 0xcf, 0xfe, 0xfc, 0xfc, 0xfc, 0x1a, 0xb8, 0xc7, 0x51, 0x6b, 0x9a, 0xa0, 0x7e,
-	0x98, 0x0a, 0x66, 0x8e, 0x68, 0x92, 0x28, 0x4c, 0xa8, 0xc1, 0x9d, 0x53, 0x25, 0x8d, 0x24, 0xcd,
-	0xb3, 0xf4, 0xd6, 0xdd, 0x82, 0x18, 0xa7, 0xda, 0x48, 0x7e, 0x74, 0xc2, 0x70, 0x38, 0xd0, 0x8e,
-	0xb7, 0xfd, 0xd3, 0x83, 0x1b, 0x7b, 0x0a, 0xa9, 0xc1, 0x03, 0xc1, 0xcc, 0x9e, 0xe4, 0x9c, 0x8a,
-	0x01, 0x69, 0x41, 0x23, 0x0b, 0xbb, 0x61, 0xe0, 0xb5, 0xbd, 0xce, 0x6a, 0x94, 0x47, 0xa4, 0x0d,
-	0x6b, 0x11, 0xbe, 0x4d, 0x51, 0x1b, 0x54, 0xdd, 0x30, 0x58, 0xb2, 0xc9, 0x32, 0x44, 0x08, 0xf8,
-	0xfb, 0x94, 0x63, 0x70, 0xc5, 0xa6, 0xec, 0xef, 0x4c, 0x15, 0xa2, 0x8e, 0x15, 0x3b, 0x35, 0x4c,
-	0x8a, 0xc0, 0x77, 0xaa, 0x12, 0x44, 0x1e, 0xc0, 0xc6, 0x41, 0xf4, 0xa2, 0x4f, 0x15, 0xe5, 0x68,
-	0x50, 0xd9, 0x15, 0x96, 0x2d, 0x6d, 0x0a, 0x7f, 0x0a, 0x5f, 0x3f, 0xdd, 0xc9, 0xfd, 0x6c, 0xff,
-	0xf0, 0x60, 0xc3, 0xfa, 0xb6, 0x27, 0x18, 0x3c, 0x1b, 0xa1, 0x30, 0x97, 0xc6, 0xfc, 0xe7, 0x25,
-	0xb8, 0xf5, 0x5c, 0x51, 0x61, 0xfa, 0x8a, 0x8d, 0xd8, 0x10, 0x13, 0x9c, 0xbd, 0xfc, 0x5b, 0xd0,
-	0xec, 0x21, 0x3f, 0xb6, 0x69, 0x77, 0x8a, 0x22, 0xce, 0xd4, 0x87, 0xd2, 0x30, 0x91, 0x44, 0x2c,
-	0x79, 0x6d, 0xac, 0xc5, 0x66, 0x54, 0x86, 0x48, 0x07, 0xae, 0x77, 0x05, 0x33, 0x8c, 0x1a, 0x36,
-	0x42, 0xc7, 0x6a, 0x58, 0xd6, 0x24, 0x9c, 0x31, 0x7b, 0x54, 0xd0, 0x04, 0x39, 0x0a, 0xe3, 0x98,
-	0x2b, 0x8e, 0x39, 0x01, 0x67, 0x67, 0x79, 0x85, 0x96, 0xd0, 0x6c, 0x7b, 0x9d, 0xf5, 0x28, 0x8f,
-	0xa6, 0x2a, 0x51, 0x14, 0xc1, 0x96, 0x64, 0xf6, 0xbb, 0xbc, 0x9c, 0x95, 0xf8, 0x00, 0xad, 0x08,
-	0x47, 0xf2, 0x0d, 0x5e, 0x4c, 0x4f, 0x54, 0xf6, 0xfe, 0xe2, 0x95, 0x6e, 0xc1, 0xb9, 0x58, 0xe8,
-	0x2d, 0x8c, 0xeb, 0xe1, 0x9f, 0x5b, 0x8f, 0xef, 0xc5, 0x78, 0xda, 0x55, 0x48, 0x67, 0xaf, 0x45,
-	0x0b, 0x1a, 0xd9, 0x42, 0x85, 0x9b, 0x3c, 0x2a, 0x5e, 0xbe, 0x7f, 0xfe, 0xcb, 0x5f, 0x9e, 0x7a,
-	0xf9, 0x15, 0xa7, 0xdf, 0x3c, 0xd8, 0xb0, 0x1e, 0xe7, 0x33, 0x8a, 0x16, 0x67, 0xf4, 0xb7, 0x0f,
-	0x9b, 0xce, 0x64, 0x5f, 0x0e, 0x59, 0xfc, 0x7e, 0x2e, 0x0d, 0xe6, 0x96, 0x1a, 0x5f, 0xf2, 0x59,
-	0xfc, 0x17, 0xe3, 0xf3, 0x31, 0xdc, 0xec, 0x31, 0xb1, 0x3b, 0xe0, 0x4c, 0x6b, 0x26, 0x45, 0x98,
-	0x2a, 0x5a, 0x1c, 0x63, 0x39, 0xaa, 0xcd, 0x59, 0x0d, 0x7d, 0x37, 0xad, 0x69, 0xe4, 0x9a, 0x9a,
-	0x1c, 0xd9, 0x01, 0x12, 0x32, 0x1d, 0xa7, 0x55, 0xc5, 0x8a, 0x55, 0xd4, 0x64, 0xb2, 0x3d, 0x0e,
-	0x51, 0xb1, 0x13, 0x16, 0xdb, 0xb8, 0x50, 0x34, 0xdd, 0x1e, 0x75, 0x39, 0x72, 0x1f, 0xae, 0xb9,
-	0x29, 0x52, 0xb0, 0x57, 0x2d, 0x7b, 0x02, 0xcd, 0x78, 0x5d, 0xad, 0x53, 0x7c, 0x99, 0x4a, 0x95,
-	0xf2, 0xfd, 0x94, 0x07, 0xe0, 0x78, 0x55, 0xb4, 0xc4, 0x53, 0x32, 0xe5, 0x21, 0x8a, 0x60, 0xad,
-	0xc2, 0xcb, 0x51, 0xf2, 0x08, 0x36, 0xc7, 0x73, 0x69, 0xbc, 0xe8, 0x55, 0x4b, 0xae, 0x4b, 0xd5,
-	0x29, 0xb2, 0xe5, 0xd7, 0xeb, 0x15, 0x21, 0x56, 0x7b, 0xe8, 0x97, 0x0f, 0x24, 0xef, 0x9e, 0xf9,
-	0xb4, 0xfb, 0xff, 0x16, 0xfa, 0xd7, 0x5a, 0xe8, 0x23, 0xdc, 0x0e, 0x91, 0xc6, 0x86, 0x8d, 0x2e,
-	0x66, 0x12, 0x4d, 0xfe, 0xcd, 0x3a, 0x7c, 0x6c, 0x61, 0x91, 0x2d, 0x5c, 0xde, 0xfb, 0xb8, 0x61,
-	0x3f, 0xbc, 0x9f, 0xfc, 0x09, 0x00, 0x00, 0xff, 0xff, 0x77, 0x14, 0x9a, 0x32, 0xc1, 0x0b, 0x00,
-	0x00,
+var fileDescriptor_unit_aggregate_8073d076b75591a1 = []byte{
+	// 643 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x4f, 0x6f, 0xd3, 0x4e,
+	0x10, 0x95, 0xfb, 0x73, 0xd3, 0x74, 0xfa, 0x2b, 0x94, 0x2d, 0x04, 0xb7, 0x02, 0x29, 0xea, 0x01,
+	0x45, 0x1c, 0x0a, 0x82, 0x1b, 0xb7, 0xa8, 0x46, 0x28, 0x12, 0xa9, 0x82, 0xa5, 0x96, 0x63, 0xb5,
+	0x75, 0xa6, 0x66, 0x45, 0xbc, 0x2e, 0xbb, 0xeb, 0xf0, 0xef, 0xc6, 0x85, 0x33, 0x48, 0x5c, 0xf8,
+	0x00, 0xf0, 0x1d, 0xe0, 0x02, 0xdf, 0x0c, 0x79, 0xd7, 0xb1, 0xe3, 0xd8, 0x95, 0x2a, 0xe5, 0x0f,
+	0x54, 0x70, 0xcb, 0xcc, 0xbc, 0xb7, 0xfb, 0xf6, 0xed, 0xec, 0x58, 0x81, 0x9b, 0x21, 0x4a, 0x49,
+	0x03, 0x94, 0x77, 0x62, 0xce, 0xd4, 0x11, 0x0d, 0x02, 0x81, 0x01, 0x55, 0xb8, 0x7b, 0x2a, 0x22,
+	0x15, 0x91, 0xfa, 0xa8, 0xbc, 0x7d, 0x23, 0x03, 0xfa, 0xb1, 0x54, 0x51, 0x78, 0x74, 0xc2, 0x70,
+	0xd0, 0x97, 0x06, 0xb7, 0xf3, 0xdd, 0x82, 0x2b, 0x7b, 0x02, 0xa9, 0xc2, 0x03, 0xce, 0xd4, 0x5e,
+	0x14, 0x86, 0x94, 0xf7, 0x49, 0x03, 0x6a, 0x49, 0xd8, 0x71, 0x1d, 0xab, 0x69, 0xb5, 0x56, 0xbd,
+	0x34, 0x22, 0x4d, 0x58, 0xf3, 0xf0, 0x45, 0x8c, 0x52, 0xa1, 0xe8, 0xb8, 0xce, 0x92, 0x2e, 0x8e,
+	0xa7, 0x08, 0x01, 0x7b, 0x9f, 0x86, 0xe8, 0xfc, 0xa7, 0x4b, 0xfa, 0x77, 0xc2, 0x72, 0x51, 0xfa,
+	0x82, 0x9d, 0x2a, 0x16, 0x71, 0xc7, 0x36, 0xac, 0xb1, 0x14, 0xb9, 0x0d, 0x1b, 0x07, 0xde, 0xe3,
+	0x1e, 0x15, 0x34, 0x44, 0x85, 0x42, 0xaf, 0xb0, 0xac, 0x61, 0xa5, 0xfc, 0x03, 0xf8, 0xfc, 0x6e,
+	0x2b, 0xd5, 0xb3, 0xf3, 0xcd, 0x82, 0x0d, 0xad, 0x5b, 0x9f, 0xa0, 0xff, 0x70, 0x88, 0x5c, 0x5d,
+	0x18, 0xf1, 0xef, 0x97, 0xe0, 0xda, 0x23, 0x41, 0xb9, 0xea, 0x09, 0x36, 0x64, 0x03, 0x0c, 0x70,
+	0x7a, 0xfb, 0xb7, 0xa1, 0xde, 0xc5, 0xf0, 0x58, 0x97, 0xcd, 0x29, 0xb2, 0x38, 0x61, 0x1f, 0x46,
+	0x8a, 0xf1, 0xc0, 0x63, 0xc1, 0x33, 0xa5, 0x25, 0xd6, 0xbd, 0xf1, 0x14, 0x69, 0xc1, 0xe5, 0x0e,
+	0x67, 0x8a, 0x51, 0xc5, 0x86, 0x68, 0x50, 0x35, 0x8d, 0x9a, 0x4c, 0x27, 0xc8, 0x2e, 0xe5, 0x34,
+	0xc0, 0x10, 0xb9, 0x32, 0xc8, 0x15, 0x83, 0x9c, 0x48, 0x27, 0x67, 0x79, 0x8a, 0x1a, 0x50, 0x6f,
+	0x5a, 0xad, 0x75, 0x2f, 0x8d, 0x4a, 0x4e, 0x64, 0x26, 0x68, 0x4b, 0xa6, 0xbf, 0xcb, 0x8b, 0xe9,
+	0xc4, 0x1b, 0x68, 0x78, 0x38, 0x8c, 0x9e, 0xe3, 0x62, 0x7a, 0xa2, 0xb0, 0xf7, 0x07, 0x6b, 0xec,
+	0x16, 0x8c, 0x8a, 0xb9, 0xde, 0x42, 0xee, 0x87, 0x7d, 0xa6, 0x1f, 0x5f, 0xb3, 0xf1, 0xd4, 0x16,
+	0x48, 0xa7, 0xf7, 0xa2, 0x01, 0xb5, 0x64, 0xa1, 0x4c, 0x4d, 0x1a, 0x65, 0x2f, 0xdf, 0x3e, 0xfb,
+	0xe5, 0x2f, 0x97, 0x5e, 0x7e, 0x41, 0xe9, 0x17, 0x0b, 0x36, 0xb4, 0xc6, 0xd9, 0x8c, 0xa2, 0xf9,
+	0x09, 0xfd, 0x69, 0xc3, 0xa6, 0x11, 0xd9, 0x8b, 0x06, 0xcc, 0x7f, 0x3d, 0x93, 0x06, 0x33, 0x4b,
+	0xe5, 0x97, 0x3c, 0x8a, 0xcf, 0x31, 0x3e, 0xef, 0xc1, 0xd5, 0x2e, 0xe3, 0xed, 0x7e, 0xc8, 0xa4,
+	0x64, 0x11, 0x77, 0x63, 0x41, 0xb3, 0x63, 0x2c, 0x7b, 0x95, 0x35, 0xcd, 0xa1, 0xaf, 0xca, 0x9c,
+	0x5a, 0xca, 0xa9, 0xa8, 0x91, 0x5d, 0x20, 0x2e, 0x93, 0x7e, 0x5c, 0x64, 0xac, 0x68, 0x46, 0x45,
+	0x25, 0xd9, 0xe3, 0x10, 0x05, 0x3b, 0x61, 0xbe, 0x8e, 0x33, 0x46, 0xdd, 0xec, 0x51, 0x55, 0x23,
+	0xb7, 0xe0, 0x92, 0x99, 0x22, 0x19, 0x7a, 0x55, 0xa3, 0x27, 0xb2, 0x09, 0xae, 0x23, 0x65, 0x8c,
+	0x4f, 0xe2, 0x48, 0xc4, 0xe1, 0x7e, 0x1c, 0x3a, 0x60, 0x70, 0xc5, 0xec, 0x04, 0xce, 0x45, 0xee,
+	0xac, 0x95, 0x70, 0x2e, 0x72, 0x72, 0x17, 0x36, 0xf3, 0xb9, 0x94, 0x2f, 0xfa, 0xbf, 0x06, 0x57,
+	0x95, 0xaa, 0x18, 0xc9, 0xf2, 0xeb, 0xd5, 0x0c, 0x17, 0x8b, 0x3d, 0xf4, 0xc3, 0x06, 0x92, 0x76,
+	0xcf, 0x6c, 0xda, 0xfd, 0x5f, 0x0b, 0xfd, 0x6d, 0x2d, 0xf4, 0x16, 0xae, 0xbb, 0x48, 0x7d, 0xc5,
+	0x86, 0x8b, 0x99, 0x44, 0x93, 0x9f, 0x59, 0x93, 0xcf, 0x25, 0xcc, 0xb3, 0x85, 0x0b, 0x7b, 0x7f,
+	0xb4, 0xa0, 0xd1, 0x1e, 0x0c, 0xa2, 0x97, 0xc9, 0x44, 0x5f, 0xc4, 0x08, 0xce, 0x3f, 0x25, 0xf6,
+	0xf8, 0xa7, 0xa4, 0x2c, 0x2a, 0xd3, 0xa3, 0xe5, 0xcd, 0xf7, 0x51, 0x9f, 0x47, 0xd4, 0x27, 0x0b,
+	0xb6, 0x5c, 0x26, 0xe9, 0x9f, 0x66, 0x56, 0xa2, 0x2b, 0xd7, 0x33, 0x52, 0xf8, 0xdb, 0xfd, 0x3a,
+	0xae, 0xe9, 0xbf, 0x74, 0xf7, 0x7f, 0x05, 0x00, 0x00, 0xff, 0xff, 0x78, 0xc2, 0x0a, 0x6c, 0x1b,
+	0x0e, 0x00, 0x00,
 }

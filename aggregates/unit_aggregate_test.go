@@ -308,7 +308,7 @@ func TestCreatePolicy(t *testing.T) {
 			VotingDuration:       1209600000,
 
 			IssueQuorumNum:      1,
-			IssueQuroumDen:      10,
+			IssueQuorumDen:      10,
 			InitiativeQuorumNum: 1,
 			InitiativeQuorumDen: 5,
 		},
@@ -330,7 +330,7 @@ func TestCreatePolicy(t *testing.T) {
 			VotingDuration:       1209600000,
 
 			IssueQuorumNum:      1,
-			IssueQuroumDen:      10,
+			IssueQuorumDen:      10,
 			InitiativeQuorumNum: 1,
 			InitiativeQuorumDen: 5,
 		},
@@ -356,7 +356,7 @@ func TestCreatePolicyRejectsDuplicate(t *testing.T) {
 			VotingDuration:       1209600000,
 
 			IssueQuorumNum:      1,
-			IssueQuroumDen:      10,
+			IssueQuorumDen:      10,
 			InitiativeQuorumNum: 1,
 			InitiativeQuorumDen: 5,
 		},
@@ -379,12 +379,229 @@ func TestCreatePolicyRejectsDuplicate(t *testing.T) {
 			VotingDuration:       1209600000,
 
 			IssueQuorumNum:      1,
-			IssueQuroumDen:      10,
+			IssueQuorumDen:      10,
 			InitiativeQuorumNum: 1,
 			InitiativeQuorumDen: 5,
 		},
 	)
 
 	assertRejected(t, err)
+}
 
+func TestAllowAreaPolicyCommand(t *testing.T) {
+	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
+		&messages.UnitCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+		},
+		&messages.PolicyCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			PolicyID:    "policy0",
+			Description: "test policy",
+
+			MinAdmissionDuration: 604800000, // one week
+			MaxAdmissionDuration: 604800000,
+			DiscussionDuration:   1209600000, // two weeks
+			VerificationDuration: 1209600000,
+			VotingDuration:       1209600000,
+
+			IssueQuorumNum:      1,
+			IssueQuorumDen:      10,
+			InitiativeQuorumNum: 1,
+			InitiativeQuorumDen: 5,
+		},
+		&messages.AreaCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			Name:        "test area",
+			Description: "The Test Area",
+		},
+	})
+
+	evt, err := aggregates.HandleCommand(
+		aggregateFetcher,
+		"UnitID",
+		"unit0",
+		&messages.AllowAreaPolicyCommand{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			PolicyID:    "policy0",
+		},
+	)
+
+	assert.ErrorIsNil(t, err)
+	assert.MessageEquals(
+		t, "expected event", evt,
+		&messages.AreaPolicyAllowedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			PolicyID:    "policy0",
+		},
+	)
+}
+
+func TestAllowAreaPolicyCommandRejectesDuplicate(t *testing.T) {
+	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
+		&messages.UnitCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+		},
+		&messages.PolicyCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			PolicyID:    "policy0",
+			Description: "test policy",
+
+			MinAdmissionDuration: 604800000, // one week
+			MaxAdmissionDuration: 604800000,
+			DiscussionDuration:   1209600000, // two weeks
+			VerificationDuration: 1209600000,
+			VotingDuration:       1209600000,
+
+			IssueQuorumNum:      1,
+			IssueQuorumDen:      10,
+			InitiativeQuorumNum: 1,
+			InitiativeQuorumDen: 5,
+		},
+		&messages.AreaCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			Name:        "test area",
+			Description: "The Test Area",
+		},
+		&messages.AreaPolicyAllowedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			PolicyID:    "policy0",
+		},
+	})
+
+	_, err := aggregates.HandleCommand(
+		aggregateFetcher,
+		"UnitID",
+		"unit0",
+		&messages.AllowAreaPolicyCommand{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			PolicyID:    "policy0",
+		},
+	)
+
+	assertRejected(t, err)
+}
+
+func TestDisallowAreaPolicyCommand(t *testing.T) {
+	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
+		&messages.UnitCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+		},
+		&messages.PolicyCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			PolicyID:    "policy0",
+			Description: "test policy",
+
+			MinAdmissionDuration: 604800000, // one week
+			MaxAdmissionDuration: 604800000,
+			DiscussionDuration:   1209600000, // two weeks
+			VerificationDuration: 1209600000,
+			VotingDuration:       1209600000,
+
+			IssueQuorumNum:      1,
+			IssueQuorumDen:      10,
+			InitiativeQuorumNum: 1,
+			InitiativeQuorumDen: 5,
+		},
+		&messages.AreaCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			Name:        "test area",
+			Description: "The Test Area",
+		},
+		&messages.AreaPolicyAllowedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			PolicyID:    "policy0",
+		},
+	})
+
+	evt, err := aggregates.HandleCommand(
+		aggregateFetcher,
+		"UnitID",
+		"unit0",
+		&messages.DisallowAreaPolicyCommand{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			PolicyID:    "policy0",
+		},
+	)
+
+	assert.ErrorIsNil(t, err)
+	assert.MessageEquals(
+		t, "expected event", evt,
+		&messages.AreaPolicyDisallowedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			PolicyID:    "policy0",
+		},
+	)
+}
+
+func TestDisallowAreaPolicyCommandRejectesIfAlreadyNotAllowed(t *testing.T) {
+	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
+		&messages.UnitCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+		},
+		&messages.PolicyCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			PolicyID:    "policy0",
+			Description: "test policy",
+
+			MinAdmissionDuration: 604800000, // one week
+			MaxAdmissionDuration: 604800000,
+			DiscussionDuration:   1209600000, // two weeks
+			VerificationDuration: 1209600000,
+			VotingDuration:       1209600000,
+
+			IssueQuorumNum:      1,
+			IssueQuorumDen:      10,
+			InitiativeQuorumNum: 1,
+			InitiativeQuorumDen: 5,
+		},
+		&messages.AreaCreatedEvent{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			Name:        "test area",
+			Description: "The Test Area",
+		},
+	})
+
+	_, err := aggregates.HandleCommand(
+		aggregateFetcher,
+		"UnitID",
+		"unit0",
+		&messages.DisallowAreaPolicyCommand{
+			UnitID:      "unit0",
+			RequesterID: "member0",
+			AreaID:      "area0",
+			PolicyID:    "policy0",
+		},
+	)
+
+	assertRejected(t, err)
 }
