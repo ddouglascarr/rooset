@@ -2,7 +2,9 @@ package saveevtcmd
 
 import (
 	"database/sql"
+	"fmt"
 
+	"github.com/ddouglascarr/rooset/conf"
 	"github.com/ddouglascarr/rooset/messages"
 	"github.com/ddouglascarr/rooset/storage"
 	"github.com/pkg/errors"
@@ -11,7 +13,7 @@ import (
 )
 
 // NewSaveEvtCmd command builder
-func NewSaveEvtCmd() (cmdy.Command, error) {
+func NewSaveEvtCmd() (cmdy.Command, cmdy.Init) {
 	return &saveEvtCmd{}, nil
 }
 
@@ -39,7 +41,13 @@ func (t *saveEvtCmd) Run(ctx cmdy.Context) error {
 		return errors.Wrap(err, "rooset: Invalid JSON")
 	}
 
-	db, err := sql.Open("postgres", "user=postgres  dbname=rooset_test_0 host=localhost sslmode=disable")
+	db, err := sql.Open(
+		"postgres",
+		fmt.Sprintf(
+			"user=%s dbname=%s host=%s sslmode=disable",
+			conf.DB.User, conf.DB.QueryName, conf.DB.QueryHost,
+		),
+	)
 	if err != nil {
 		return err
 	}

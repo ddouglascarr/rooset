@@ -11,7 +11,7 @@ import (
 )
 
 func run() error {
-	bld := func() (cmdy.Command, error) {
+	bld := func() (cmdy.Command, cmdy.Init) {
 		return cmdy.NewGroup(
 			"My command group",
 			cmdy.Builders{

@@ -2,10 +2,13 @@ package server
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	"github.com/gomodule/redigo/redis"
 	"github.com/julienschmidt/httprouter"
+
+	"github.com/ddouglascarr/rooset/conf"
 )
 
 var (
@@ -48,13 +51,21 @@ func initiDBs() {
 
 	cmdDB, err = sql.Open(
 		"postgres",
-		"user=postgres  dbname=rooset_test_0 host=localhost sslmode=disable",
+		fmt.Sprintf(
+			"user=%s dbname=%s host=%s sslmode=disable",
+			conf.DB.User, conf.DB.CmdName, conf.DB.CmdHost,
+		),
 	)
 	if err != nil {
 		panic(err)
 	}
 
-	cacheDB, err = redis.DialURL("redis://localhost:6379/9")
+	cacheDB, err = redis.DialURL(
+		fmt.Sprintf(
+			"redis://%s:6379/%s",
+			conf.DB.CacheHost, conf.DB.CacheNum,
+		),
+	)
 	if err != nil {
 		panic(err)
 	}

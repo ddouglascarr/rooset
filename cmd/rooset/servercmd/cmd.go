@@ -10,13 +10,13 @@ type serverCmd struct {
 }
 
 // NewServerCmd command builder
-func NewServerCmd() (cmdy.Command, error) {
+func NewServerCmd() (cmdy.Command, cmdy.Init) {
 	return &serverCmd{}, nil
 }
 
 var _ cmdy.Command = &serverCmd{}
 
-func (t *serverCmd) Synopsis() string { return "Executes a command" }
+func (t *serverCmd) Synopsis() string { return "Starts a HTTP server" }
 
 func (t *serverCmd) Flags() *cmdy.FlagSet {
 	return cmdy.NewFlagSet()

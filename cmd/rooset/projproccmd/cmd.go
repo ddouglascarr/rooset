@@ -2,8 +2,10 @@ package projproccmd
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 
+	"github.com/ddouglascarr/rooset/conf"
 	"github.com/ddouglascarr/rooset/projections"
 	"github.com/ddouglascarr/rooset/storage"
 	"github.com/shabbyrobe/cmdy"
@@ -14,13 +16,13 @@ type projProcCmd struct {
 }
 
 // NewProjProcCmd command builder
-func NewProjProcCmd() (cmdy.Command, error) {
+func NewProjProcCmd() (cmdy.Command, cmdy.Init) {
 	return &projProcCmd{}, nil
 }
 
 var _ cmdy.Command = &projProcCmd{}
 
-func (t *projProcCmd) Synopsis() string { return "Executes a command" }
+func (t *projProcCmd) Synopsis() string { return "Starts a projection processor" }
 
 func (t *projProcCmd) Flags() *cmdy.FlagSet {
 	return cmdy.NewFlagSet()
@@ -33,7 +35,10 @@ func (t *projProcCmd) Args() *args.ArgSet {
 func (t *projProcCmd) Run(ctx cmdy.Context) error {
 	commandDB, err := sql.Open(
 		"postgres",
-		"user=postgres  dbname=rooset_test_0 host=localhost sslmode=disable",
+		fmt.Sprintf(
+			"user=%s dbname=%s host=%s sslmode=disable",
+			conf.DB.User, conf.DB.CmdName, conf.DB.CmdHost,
+		),
 	)
 	if err != nil {
 		return err
@@ -42,7 +47,10 @@ func (t *projProcCmd) Run(ctx cmdy.Context) error {
 
 	queryDB, err := sql.Open(
 		"postgres",
-		"user=postgres  dbname=rooset_test_projections_0 host=localhost sslmode=disable",
+		fmt.Sprintf(
+			"user=%s dbname=%s host=%s sslmode=disable",
+			conf.DB.User, conf.DB.QueryName, conf.DB.QueryHost,
+		),
 	)
 	if err != nil {
 		return err

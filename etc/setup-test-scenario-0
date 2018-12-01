@@ -1,12 +1,26 @@
 #!/bin/bash
 set -euo pipefail
 
+################################################################################
+#
+# setup-test-scenario-0
+#
+# Sets up a dev scenario on a Rooset database. This will delete all
+# data currently in that database. Use it for manual testing.
+#
+# Requires a Postgres database on localhost:5433
+#
+# e.g.
+#
+#  $ . etc/set-env
+#  $ etc/setup-test-scenario-0
+#
+################################################################################
+
 SCRIPT_DIR="${BASH_SOURCE%/*}"
 
-. ${SCRIPT_DIR}/set-env
-
 echo "--- Installing roosetdev"
-go install ${SCRIPT_DIR}/../cmd/roosetdev
+go install github.com/ddouglascarr/rooset/cmd/roosetdev
 
 ${SCRIPT_DIR}/reset-dbs
 

@@ -1,6 +1,36 @@
 #!/bin/bash
 
+################################################################################
+#
+# set-env
+#
+# Sets up a standard Rooset development bash environment
+#
+# e.g.
+#
+#   $ . etc/set-env
+#
+################################################################################
+
+# Postgres config
 export PGUSER="postgres"
 export PGPASSWORD="postgres"
-export PGHOST="localhost"
+export PGHOST="localhost" # convenience only. use ROOSET_CMD_HOST and ROOSET_QUERY_HOST in the app
 
+# Rooset Specific DB config (requires 2 databases, which may be on different servers)
+export ROOSET_CMD_DB="rooset_cmd"
+export ROOSET_CMD_HOST="localhost"
+export ROOSET_QUERY_DB="rooset_query"
+export ROOSET_QUERY_HOST="localhost"
+export ROOSET_INTEGRATION_TEST_PORT="5433"
+export ROOSET_CACHE_HOST="localhost"
+export ROOSET_CACHE_NUM="9"
+
+# Put '(rooset)' in front of the command prompt. But not if there's already one there.
+if ! [ -z "${PS1}" ]; then
+  if ! [ -z "${ROOSET_OLD_PS1}" ]; then
+      PS1=${ROOSET_OLD_PS1}
+  fi
+  export ROOSET_OLD_PS1=${PS1}
+  export PS1="(rooset)${PS1}"
+fi
