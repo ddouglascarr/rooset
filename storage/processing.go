@@ -112,13 +112,13 @@ func ExecuteCommand(commandDB *sql.DB, cmd messages.Message) error {
 		return FetchAggregate(tx, aRID, aggregate)
 	}
 
-	evt, err := aggregates.HandleCommand(fetchAggregate, aRField, aRID, cmd)
+	evts, err := aggregates.HandleCommand(fetchAggregate, aRField, aRID, cmd)
 	if err != nil {
 		return err
 	}
 
-	if evt != nil {
-		err := PersistMessages(tx, []messages.Message{evt})
+	if evts != nil {
+		err := PersistMessages(tx, evts)
 		if err != nil {
 			return err
 		}

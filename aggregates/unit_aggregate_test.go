@@ -32,7 +32,7 @@ func TestCreateUnitCommand(t *testing.T) {
 	)
 
 	assert.ErrorIsNil(t, err)
-	assert.MessageEquals(t, "event generated", expectedEvt, evt)
+	assert.MessageEquals(t, "event generated", evt, expectedEvt)
 }
 
 func TestCreateUnitCommandRejectsIfUnitAlreadyExists(t *testing.T) {

@@ -28,7 +28,7 @@ func TestUnitCreatedEventHandler(t *testing.T) {
 	assert.ErrorIsNil(t, err)
 
 	assert.Equals(t, "Projection UnitID set", projection.UnitID, "a1")
-	assert.MessageEquals(t, "Projection Updated", projection, expectedProjection)
+	assert.MessageEquals(t, "Projection Updated", []messages.Message{projection}, expectedProjection)
 }
 
 func TestPrivilegeGrantedEventHandler(t *testing.T) {

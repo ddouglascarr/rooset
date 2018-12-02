@@ -12,9 +12,9 @@ import (
 // User model, password is always hashed
 type User struct {
 	ID       string
-	Email    string
 	Username string
 	Password string
+	GithubID string // the GraphQL node id (e.g. "MDQ6VXNlcjU4MzIzMQ==")
 }
 
 // PersistNewUser persists a new user to the databse table. Password must already be hashed
@@ -27,7 +27,7 @@ func PersistNewUser(cmdDB *sql.DB, user User) error {
 
 	stmt, err := tx.Prepare(`
 		INSERT INTO users (
-			id, email, username, password
+			id, username, password, github_id
 		) VALUES ($1, $2, $3, $4);
 	`)
 	if err != nil {
@@ -35,7 +35,9 @@ func PersistNewUser(cmdDB *sql.DB, user User) error {
 	}
 	defer stmt.Close()
 
-	if _, err := stmt.Exec(user.ID, user.Email, user.Username, user.Password); err != nil {
+	if _, err := stmt.Exec(
+		user.ID, user.Username, user.Password, user.GithubID,
+	); err != nil {
 		return err
 	}
 
@@ -43,7 +45,7 @@ func PersistNewUser(cmdDB *sql.DB, user User) error {
 }
 
 // FetchUser retrieves user from the db. Password will be hashed
-func FetchUser(cmdDB *sql.DB, email string) (User, error) {
+func FetchUser(cmdDB *sql.DB, username string) (User, error) {
 	user := User{}
 
 	tx, err := cmdDB.Begin()
@@ -53,16 +55,16 @@ func FetchUser(cmdDB *sql.DB, email string) (User, error) {
 	defer tx.Rollback()
 
 	stmt, err := tx.Prepare(`
-		SELECT id, email, username, password
+		SELECT id, username, password
 		FROM users
-		WHERE email = $1
+		WHERE username = $1
 	`)
 	if err != nil {
 		return user, err
 	}
 	defer stmt.Close()
 
-	err = stmt.QueryRow(email).Scan(&user.ID, &user.Email, &user.Username, &user.Password)
+	err = stmt.QueryRow(username).Scan(&user.ID, &user.Username, &user.Password)
 	if err != nil {
 		return user, err
 	}

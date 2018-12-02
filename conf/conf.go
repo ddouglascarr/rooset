@@ -2,6 +2,7 @@ package conf
 
 import (
 	"os"
+	"time"
 )
 
 type dBConf struct {
@@ -16,11 +17,27 @@ type dBConf struct {
 	CacheNum  string
 }
 
+type serverConf struct {
+	Port           string
+	SessionTimeout time.Duration
+}
+
+type githubConf struct {
+	ClientID     string
+	ClientSecret string
+	AppID        string
+	PrivateKey   string
+	CallbackURI  string
+}
+
 // DB contains all app configurations for the databases
-var DB dBConf
+var (
+	DB     dBConf
+	Server serverConf
+	Github githubConf
+)
 
 func init() {
-
 	DB = dBConf{
 		CmdName:   os.Getenv("ROOSET_CMD_DB"),
 		QueryName: os.Getenv("ROOSET_QUERY_DB"),
@@ -31,5 +48,18 @@ func init() {
 		Password:  os.Getenv("PGPASSWORD"),
 		CacheHost: os.Getenv("ROOSET_CACHE_HOST"),
 		CacheNum:  os.Getenv("ROOSET_CACHE_NUM"),
+	}
+
+	Server = serverConf{
+		Port:           os.Getenv("ROOSET_SERVER_PORT"),
+		SessionTimeout: time.Second * 600, // 10 minutes
+	}
+
+	Github = githubConf{
+		ClientID:     os.Getenv("ROOSET_GITHUB_CLIENT_ID"),
+		ClientSecret: os.Getenv("ROOSET_GITHUB_CLIENT_SECRET"),
+		AppID:        os.Getenv("ROOSET_GITHUB_APP_ID"),
+		PrivateKey:   os.Getenv("ROOSET_GITHUB_APP_PRIVATE_KEY"),
+		CallbackURI:  os.Getenv("ROOSET_GITHUB_CALLBACK_URI"),
 	}
 }

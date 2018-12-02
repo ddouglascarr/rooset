@@ -12,6 +12,8 @@
 #
 ################################################################################
 
+SCRIPT_DIR="${BASH_SOURCE%/*}"
+
 # Postgres config
 export PGUSER="postgres"
 export PGPASSWORD="postgres"
@@ -25,6 +27,19 @@ export ROOSET_QUERY_HOST="localhost"
 export ROOSET_INTEGRATION_TEST_PORT="5433"
 export ROOSET_CACHE_HOST="localhost"
 export ROOSET_CACHE_NUM="9"
+
+export ROOSET_SERVER_PORT="12345"
+
+export ROOSET_GITHUB_CALLBACK_URI="http://localhost:12345/auth/github/callback"
+
+# Secrets are in an uncommitted script called etc/secret/set-secrets-env. 
+# Contains:
+#  - ROOSET_GITHUB_CLIENT_ID
+#  - ROOSET_GITHUB_CLIENT_SECRET
+#  - ROOSET_GITHUB_APP_ID
+#  - ROOSET_GITHUB_APP_PRIVATE_KEY
+. ${SCRIPT_DIR}/secret/set-secrets-env
+
 
 # Put '(rooset)' in front of the command prompt. But not if there's already one there.
 if ! [ -z "${PS1}" ]; then

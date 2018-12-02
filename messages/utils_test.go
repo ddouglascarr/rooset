@@ -40,11 +40,16 @@ func TestUnmarshalBMessage(t *testing.T) {
 
 	resultMsg, err := messages.UnmarshalBMessage("messages.UnitCreatedEvent", bMsg)
 	assert.ErrorIsNil(t, err)
-	assert.MessageEquals(t, "message deserializes to abstract Message", evt, resultMsg)
+	assert.MessageEquals(
+		t,
+		"message deserializes to abstract Message",
+		[]messages.Message{resultMsg},
+		evt,
+	)
 
 	resultEvt, ok := resultMsg.(*messages.UnitCreatedEvent)
 	assert.Equals(t, "result message casts", true, ok)
-	assert.MessageEquals(t, "case message equal", evt, resultEvt)
+	assert.MessageEquals(t, "case message equal", []messages.Message{resultEvt}, evt)
 }
 
 func TestMessageType(t *testing.T) {

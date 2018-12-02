@@ -31,10 +31,10 @@ CREATE TABLE event_processor_source_checkpoints (
 
 
 CREATE TABLE users (
-    email                       VARCHAR(512) NOT NULL UNIQUE,
     id                          VARCHAR(512) NOT NULL UNIQUE,
     username                    VARCHAR(128) NOT NULL UNIQUE,
-    password                    CHAR(60) NOT NULL
+    password                    CHAR(60) NOT NULL,
+    github_id                   VARCHAR(512) NOT NULL UNIQUE
 );
 
 

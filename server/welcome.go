@@ -1,9 +1,9 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 
+	"github.com/ddouglascarr/rooset/conf"
 	"github.com/ddouglascarr/rooset/messages"
 	"github.com/julienschmidt/httprouter"
 )
@@ -18,6 +18,14 @@ func welcome(w http.ResponseWriter, r *http.Request, _ httprouter.Params, s *mes
 	})
 }
 
+type homeProps struct {
+	GithubClientID    string
+	GithubCallbackURI string
+}
+
 func homepage(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Rooset")
+	renderPage(w, r, "HomePage", false, &homeProps{
+		GithubClientID:    conf.Github.ClientID,
+		GithubCallbackURI: conf.Github.CallbackURI,
+	})
 }

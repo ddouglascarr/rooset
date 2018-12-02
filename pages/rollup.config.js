@@ -21,11 +21,33 @@ const pageOutputOpts = {
 
 export default [
   {
+    input: 'src/pages/HomePage.tsx',
+    output: [
+      {
+        file: 'dist/HomePage.js',
+        name: 'HomePage',
+        ...pageOutputOpts,
+      },
+    ],
+    ...pageOpts,
+  },
+  {
     input: 'src/pages/WelcomePage.tsx',
     output: [
       {
         file: 'dist/WelcomePage.js',
         name: 'WelcomePage',
+        ...pageOutputOpts,
+      },
+    ],
+    ...pageOpts,
+  },
+  {
+    input: 'src/pages/DevLoginPage.tsx',
+    output: [
+      {
+        file: 'dist/DevLoginPage.js',
+        name: 'DevLoginPage',
         ...pageOutputOpts,
       },
     ],

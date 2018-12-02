@@ -29,14 +29,17 @@ func ListenAndServe() error {
 	router.ServeFiles("/static/*filepath", http.Dir("pages/static"))
 
 	router.GET("/", homepage)
-	router.GET("/signup", signupGet)
-	router.POST("/signup", signupPost)
 	router.GET("/login", loginGet)
-	router.POST("/login", loginPost)
 	router.GET("/welcome", Authenticate(welcome))
+	router.GET("/auth/dev/signup", devSignupGet)
+	router.POST("/auth/dev/signup", devSignupPost)
+	router.GET("/auth/dev/login", devLoginGet)
+	router.POST("/auth/dev/login", devLoginPost)
+	router.GET("/auth/github/login", githubLogin)
+	router.GET("/auth/github/callback", githubCallback)
 
 	srv := http.Server{
-		Addr:    ":12345",
+		Addr:    fmt.Sprintf(":%s", conf.Server.Port),
 		Handler: router,
 	}
 

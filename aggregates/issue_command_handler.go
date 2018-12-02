@@ -3,7 +3,10 @@ package aggregates
 import "github.com/ddouglascarr/rooset/messages"
 
 // HandleIssueCommand issue command handler
-func HandleIssueCommand(issue *IssueAggregate, msg messages.Message) (messages.Message, error) {
+func HandleIssueCommand(issue *IssueAggregate, msg messages.Message) (
+	[]messages.Message,
+	error,
+) {
 	switch cmd := msg.(type) {
 	case *messages.CreateIssueCommand:
 		return createIssue(issue, cmd)
@@ -21,7 +24,7 @@ func HandleIssueCommand(issue *IssueAggregate, msg messages.Message) (messages.M
 func createIssue(
 	issue *IssueAggregate,
 	cmd *messages.CreateIssueCommand,
-) (messages.Message, error) {
+) ([]messages.Message, error) {
 	if err := assertIssueStatus(issue.Status, []IssueStatus{IssueUninitialized}); err != nil {
 		return nil, err
 	}
@@ -34,21 +37,23 @@ func createIssue(
 		return nil, err
 	}
 
-	return &messages.IssueCreatedEvent{
-		IssueID:      cmd.IssueID,
-		InitiativeID: cmd.InitiativeID,
-		UnitID:       cmd.UnitID,
-		RequesterID:  cmd.RequesterID,
-		PolicyID:     cmd.PolicyID,
-		AreaID:       cmd.AreaID,
-		Body:         cmd.Body,
+	return []messages.Message{
+		&messages.IssueCreatedEvent{
+			IssueID:      cmd.IssueID,
+			InitiativeID: cmd.InitiativeID,
+			UnitID:       cmd.UnitID,
+			RequesterID:  cmd.RequesterID,
+			PolicyID:     cmd.PolicyID,
+			AreaID:       cmd.AreaID,
+			Body:         cmd.Body,
+		},
 	}, nil
 }
 
 func createInitiative(
 	issue *IssueAggregate,
 	cmd *messages.CreateInitiativeRequestedCommand,
-) (messages.Message, error) {
+) ([]messages.Message, error) {
 	if err := assertIssueStatus(
 		issue.Status,
 		[]IssueStatus{IssueAdmission, IssueDiscussion, IssueVerification, IssueVoting},
@@ -70,38 +75,42 @@ func createInitiative(
 		return nil, NewRejectionError(ImpossibleActionRectionCode, "initiative already exists")
 	}
 
-	return &messages.InitiativeCreatedRequestedEvent{
-		IssueID:      cmd.IssueID,
-		InitiativeID: cmd.InitiativeID,
-		UnitID:       issue.UnitID,
-		RequesterID:  cmd.RequesterID,
-		PolicyID:     issue.PolicyID,
-		AreaID:       issue.AreaID,
-		Body:         cmd.Body,
+	return []messages.Message{
+		&messages.InitiativeCreatedRequestedEvent{
+			IssueID:      cmd.IssueID,
+			InitiativeID: cmd.InitiativeID,
+			UnitID:       issue.UnitID,
+			RequesterID:  cmd.RequesterID,
+			PolicyID:     issue.PolicyID,
+			AreaID:       issue.AreaID,
+			Body:         cmd.Body,
+		},
 	}, nil
 }
 
 func createInitiativeRejected(
 	issue *IssueAggregate,
 	cmd *messages.CreateInitiativeRejectedCommand,
-) (messages.Message, error) {
+) ([]messages.Message, error) {
 	if err := assertInitiativeStatus(
 		issue.Initiatives[cmd.InitiativeID],
 		[]InitiativeStatus{InitiativeValidating}); err != nil {
 		return nil, err
 	}
 
-	return &messages.InitiativeCreatedRejectedEvent{
-		IssueID:      cmd.IssueID,
-		InitiativeID: cmd.InitiativeID,
-		Reason:       cmd.Reason,
+	return []messages.Message{
+		&messages.InitiativeCreatedRejectedEvent{
+			IssueID:      cmd.IssueID,
+			InitiativeID: cmd.InitiativeID,
+			Reason:       cmd.Reason,
+		},
 	}, nil
 }
 
 func createInitiativeAccepted(
 	issue *IssueAggregate,
 	cmd *messages.CreateInitiativeAcceptedCommand,
-) (messages.Message, error) {
+) ([]messages.Message, error) {
 	i := issue.Initiatives[cmd.InitiativeID]
 
 	if err := assertInitiativeStatus(
@@ -110,13 +119,15 @@ func createInitiativeAccepted(
 		return nil, err
 	}
 
-	return &messages.InitiativeCreatedAcceptedEvent{
-		IssueID:      cmd.IssueID,
-		InitiativeID: cmd.InitiativeID,
-		UnitID:       issue.UnitID,
-		PolicyID:     issue.PolicyID,
-		AreaID:       issue.AreaID,
-		Body:         i.Body,
+	return []messages.Message{
+		&messages.InitiativeCreatedAcceptedEvent{
+			IssueID:      cmd.IssueID,
+			InitiativeID: cmd.InitiativeID,
+			UnitID:       issue.UnitID,
+			PolicyID:     issue.PolicyID,
+			AreaID:       issue.AreaID,
+			Body:         i.Body,
+		},
 	}, nil
 }
 

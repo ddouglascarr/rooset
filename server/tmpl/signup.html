@@ -6,8 +6,7 @@
     {{ range .Errors }}
       <p>{{ . }}</p>
     {{ end }}
-    <form action="/signup" method="post">
-      <input name="Email" placeholder="Email" type="text" value="{{.Fields.Email}}" />
+    <form action="/auth/dev/signup" method="post">
       <input name="Username" placeholder="Username" type="text" value="{{.Fields.Username}}" />
       <input name="Password" placeholder="Password" type="password" />
       <button type="submit">Sign Up</button>

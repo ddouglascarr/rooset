@@ -10,7 +10,7 @@ import (
 
 func TestCreateIssueCommand(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher(buildBaseFixture())
-	evt, err := aggregates.HandleCommand(
+	evts, err := aggregates.HandleCommand(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
@@ -29,7 +29,7 @@ func TestCreateIssueCommand(t *testing.T) {
 	assert.MessageEquals(
 		t,
 		"expected event",
-		evt,
+		evts,
 		&messages.IssueCreatedEvent{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",

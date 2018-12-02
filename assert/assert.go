@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/ddouglascarr/rooset/messages"
 	proto "github.com/golang/protobuf/proto"
 )
 
@@ -19,9 +20,13 @@ func Equals(t *testing.T, msg string, a interface{}, b interface{}) {
 }
 
 // MessageEquals asserts that two project messages are deeply equal
-func MessageEquals(t *testing.T, msg string, a proto.Message, b proto.Message) {
-	if !proto.Equal(a, b) {
-		t.Log(fmt.Sprintf("expected: \n%#v\n actual: \n%#v", a, b))
+func MessageEquals(t *testing.T, msg string, a []messages.Message, b proto.Message) {
+	if len(a) != 1 {
+		t.Log(fmt.Sprintf("expected one message, got %d", len(a)))
+		t.Fail()
+	}
+	if !proto.Equal(a[0], b) {
+		t.Log(fmt.Sprintf("expected: \n%#v\n actual: \n%#v", b, a[0]))
 		t.Fail()
 	}
 }

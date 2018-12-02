@@ -74,7 +74,7 @@ func HandleCommand(
 	aRField string,
 	aRID string,
 	cmd messages.Message,
-) (messages.Message, error) {
+) ([]messages.Message, error) {
 	switch aRField {
 	case "UnitID":
 		unit := NewUnitAggregate(aRID)

@@ -2,19 +2,14 @@ package server
 
 import (
 	"fmt"
-	"go/build"
-	"html/template"
 	"net/http"
 	"time"
 
+	"github.com/ddouglascarr/rooset/conf"
 	"github.com/ddouglascarr/rooset/messages"
 	"github.com/ddouglascarr/rooset/storage"
 	"github.com/julienschmidt/httprouter"
-	"golang.org/x/crypto/bcrypt"
-)
-
-const (
-	cookieTimeout = 600 * time.Second
+	"github.com/pkg/errors"
 )
 
 // AuthenticatedHandlerFunc is an http.HandlerFunc with an extra Session argument
@@ -52,134 +47,21 @@ func Authenticate(f AuthenticatedHandlerFunc) httprouter.Handle {
 		http.SetCookie(w, &http.Cookie{
 			Name:    "sessiontk",
 			Value:   cookie.Value,
-			Expires: time.Now().Add(cookieTimeout),
+			Expires: time.Now().Add(conf.Server.SessionTimeout),
 		})
 		http.SetCookie(w, &http.Cookie{
 			Name:    "csrftk",
 			Value:   session.CSRFTk,
-			Expires: time.Now().Add(cookieTimeout),
+			Expires: time.Now().Add(conf.Server.SessionTimeout),
 		})
 
 		f(w, r, p, session)
 	}
-
 }
 
-var (
-	signupPageTmpl *template.Template
-)
-
-func init() {
-	signupPageTmpl = template.Must(template.ParseFiles(build.Default.GOPATH + "/src/github.com/ddouglascarr/rooset/server/tmpl/signup.html"))
-}
-
-type signupFields struct {
-	Email    string
-	Username string
-	Password string
-}
-
-// SignupPageProps are the props for the signup page
-type SignupPageProps struct {
-	Fields signupFields
-	Errors []string
-}
-
-func signupGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	props := SignupPageProps{}
-	err := signupPageTmpl.Execute(w, props)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprint(w, err)
-	}
-}
-
-// TODO: double cookie CSRF protection?
-func signupPost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	// TODO: development only. Needs to be like way better.
-	user := storage.User{ID: messages.GenID()}
-
-	if err := r.ParseForm(); err != nil {
-		// TODO: error message rerender?
-		fmt.Println(err)
-		return
-	}
-
-	barePwd := r.FormValue("Password")
-	hashedPwd, err := bcrypt.GenerateFromPassword([]byte(barePwd), 12)
-	if err != nil {
-		// TODO: error message rerender?
-		fmt.Println(err)
-		return
-	}
-	if err := r.ParseForm(); err != nil {
-		// TODO: error message rerender?
-		fmt.Println(err)
-		return
-	}
-	user.Password = string(hashedPwd)
-	user.Email = r.FormValue("Email")
-	user.Username = r.FormValue("Username")
-
-	err = storage.PersistNewUser(cmdDB, user)
-	if err != nil {
-		// TODO: error message rerender?
-		fmt.Println(err)
-		return
-	}
-	if err := r.ParseForm(); err != nil {
-		// TODO: error message rerender?
-		fmt.Println(err)
-		return
-	}
-
-	http.Redirect(w, r, "/login", http.StatusFound)
-}
-
-// LoginPageProps yep
-type LoginPageProps struct {
-	Errors []string
-	Email  string
-}
-
-// TODO: I think this needs double cookie CSRF?
-func loginGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	props := LoginPageProps{Errors: []string{}}
-	renderPage(w, r, "LoginPage", true, &props)
-}
-
-// TODO: I think this needs double cookie CSRF?
-func loginPost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	props := LoginPageProps{
-		Email: r.FormValue("Email"),
-	}
-
-	badRequest := func(msg string) {
-		props.Errors = []string{msg}
-		w.WriteHeader(http.StatusBadRequest)
-		renderPage(w, r, "LoginPage", true, &props)
-	}
-
-	if err := r.ParseForm(); err != nil {
-		// TODO: error message rerender?
-		fmt.Println(err)
-		return
-	}
-
-	user, err := storage.FetchUser(cmdDB, r.FormValue("Email"))
-	if err != nil {
-		badRequest("Wrong Email or password")
-		return
-	}
-
-	if err := bcrypt.CompareHashAndPassword(
-		[]byte(user.Password),
-		[]byte(r.FormValue("Password")),
-	); err != nil {
-		badRequest("Wrong Email or password")
-		return
-	}
-
+// beginSession creates a session object, persists it to the cache, and sets the cookie
+// header
+func beginSession(w http.ResponseWriter, user storage.User) error {
 	sessionTk := messages.GenID()
 	// TODO: username stuff
 	session := &messages.Session{
@@ -189,17 +71,25 @@ func loginPost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 
 	if err := storage.PersistSession(cacheDB, sessionTk, session); err != nil {
-		props.Errors = []string{"System Error"}
-		w.WriteHeader(http.StatusInternalServerError)
-		renderPage(w, r, "LoginPage", true, &props)
-		return
+		return errors.Wrap(err, "rooset: failed to begin session")
 	}
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "sessiontk",
 		Value:   sessionTk,
-		Expires: time.Now().Add(120 * time.Second),
+		Path:    "/",
+		Expires: time.Now().Add(conf.Server.SessionTimeout),
 	})
 
-	http.Redirect(w, r, "/welcome", http.StatusFound)
+	return nil
+}
+
+// LoginPageProps props for login page. Use Errors to notify if user is unauthorized
+type LoginPageProps struct {
+	Errors []string
+}
+
+func loginGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	props := LoginPageProps{}
+	renderPage(w, r, "LoginPage", false, &props)
 }

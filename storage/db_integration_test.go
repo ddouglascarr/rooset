@@ -40,7 +40,7 @@ func TestFetchMessagesSinceSeq(t *testing.T) {
 	assert.ErrorIsNil(t, err)
 	result := results[len(results)-1]
 
-	assert.MessageEquals(t, "message is correct", result, evt)
+	assert.MessageEquals(t, "message is correct", []messages.Message{result}, evt)
 }
 
 func TestFetchProjection(t *testing.T) {
@@ -69,7 +69,12 @@ func TestFetchProjection(t *testing.T) {
 	err = FetchProjection(tx, resultProj, "a1")
 	assert.ErrorIsNil(t, err)
 
-	assert.MessageEquals(t, "Projection recreated identically", resultProj, proj)
+	assert.MessageEquals(
+		t,
+		"Projection recreated identically",
+		[]messages.Message{resultProj},
+		proj,
+	)
 }
 
 func TestFetchProjectionHandlesNonExistantProj(t *testing.T) {
@@ -90,7 +95,12 @@ func TestFetchProjectionHandlesNonExistantProj(t *testing.T) {
 	err = FetchProjection(tx, resultProj, "a1")
 	assert.ErrorIsNil(t, err)
 
-	assert.MessageEquals(t, "Leaves the projection along", resultProj, expectedProj)
+	assert.MessageEquals(
+		t,
+		"Leaves the projection along",
+		[]messages.Message{resultProj},
+		expectedProj,
+	)
 }
 
 type concatAggregate struct {
