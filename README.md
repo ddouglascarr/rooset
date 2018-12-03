@@ -19,6 +19,13 @@ Rooset is a democratic structured decision system. Work in progress
 
 There's a bunch of env variables. source `etc/set-env` to set them. 
 
+This will source a file at `etc/set-secrets-env`. Use this to override default options
+and set secret values. The following needs to be set in that file for Github OAuth to work:
+- ROOSET_GITHUB_CLIENT_ID
+- ROOSET_GITHUB_CLIENT_SECRET
+- ROOSET_GITHUB_APP_ID
+- ROOSET_GITHUB_APP_PRIVATE_KEY
+
 All commands assume you're in this directory, and that these env variables are set.
 
 ```
