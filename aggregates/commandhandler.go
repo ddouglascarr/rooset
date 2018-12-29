@@ -82,8 +82,7 @@ func HandleCommand(
 		if err != nil {
 			return nil, errors.Wrap(err, "fetch aggregate failed")
 		}
-		msg, err := HandleUnitCommand(&unit, cmd)
-		return msg, err
+		return HandleUnitCommand(&unit, cmd)
 	case "IssueID":
 		issue := NewIssueAggregate(aRID)
 		err := fetchAggregate(aRID, &issue)
@@ -102,5 +101,5 @@ func HandleCommand(
 
 		return HandleIssueCommand(&issue, cmd)
 	}
-	return nil, nil
+	return []messages.Message{}, nil
 }

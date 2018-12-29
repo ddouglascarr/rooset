@@ -17,7 +17,7 @@ func HandleIssueCommand(issue *IssueAggregate, msg messages.Message) (
 	case *messages.CreateInitiativeAcceptedCommand:
 		return createInitiativeAccepted(issue, cmd)
 	default:
-		return nil, nil
+		return []messages.Message{}, nil
 	}
 }
 
