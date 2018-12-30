@@ -1,7 +1,9 @@
 package conf
 
 import (
+	"fmt"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -25,7 +27,7 @@ type serverConf struct {
 type githubConf struct {
 	ClientID     string
 	ClientSecret string
-	AppID        string
+	AppID        int
 	PrivateKey   string
 	CallbackURI  string
 }
@@ -55,10 +57,14 @@ func init() {
 		SessionTimeout: time.Second * 600, // 10 minutes
 	}
 
+	appID, err := strconv.Atoi(os.Getenv("ROOSET_GITHUB_APP_ID"))
+	if err != nil {
+		panic(fmt.Sprintf("rooset: failed to parse ROOSET_GITHUB_APP_ID: %s", err))
+	}
 	Github = githubConf{
 		ClientID:     os.Getenv("ROOSET_GITHUB_CLIENT_ID"),
 		ClientSecret: os.Getenv("ROOSET_GITHUB_CLIENT_SECRET"),
-		AppID:        os.Getenv("ROOSET_GITHUB_APP_ID"),
+		AppID:        appID,
 		PrivateKey:   os.Getenv("ROOSET_GITHUB_APP_PRIVATE_KEY"),
 		CallbackURI:  os.Getenv("ROOSET_GITHUB_CALLBACK_URI"),
 	}
