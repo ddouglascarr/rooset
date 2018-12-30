@@ -38,5 +38,21 @@ CREATE TABLE users (
 );
 
 
+--------------------------------------------------------------------------------
+-- Github
+--------------------------------------------------------------------------------
+
+
+CREATE TABLE github_repository (
+    github_id                   VARCHAR(128) NOT NULL UNIQUE,
+    unit_id                     VARCHAR(512) NOT NULL UNIQUE,
+    installation_id             BIGINT NOT NULL,
+    owner                       VARCHAR(512) NOT NULL,
+    name                        VARCHAR(512) NOT NULL
+);
+
+CREATE INDEX github_owner_name_lookup
+    ON github_repository(owner, name);
+
 
 COMMIT;
