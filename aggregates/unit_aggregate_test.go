@@ -8,9 +8,9 @@ import (
 	"github.com/ddouglascarr/rooset/messages"
 )
 
-func TestCreateUnitCommand(t *testing.T) {
+func TestCreateUnitCmd(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{})
-	expectedEvt := &messages.UnitCreatedEvent{
+	expectedEvt := &messages.UnitCreatedEvt{
 		UnitID:           "unit0",
 		RequesterID:      "member0",
 		Name:             "Unit 0",
@@ -18,11 +18,11 @@ func TestCreateUnitCommand(t *testing.T) {
 		URLParameterName: "unit-0",
 	}
 
-	evt, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.CreateUnitCommand{
+		&messages.CreateUnitCmd{
 			UnitID:           "unit0",
 			RequesterID:      "member0",
 			Name:             "Unit 0",
@@ -35,18 +35,18 @@ func TestCreateUnitCommand(t *testing.T) {
 	assert.MessageEquals(t, "event generated", evt, expectedEvt)
 }
 
-func TestCreateUnitCommandRejectsIfUnitAlreadyExists(t *testing.T) {
+func TestCreateUnitCmdRejectsIfUnitAlreadyExists(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID: "unit0",
 		},
 	})
 
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.CreateUnitCommand{
+		&messages.CreateUnitCmd{
 			UnitID:           "unit0",
 			RequesterID:      "member0",
 			Name:             "Unit 0",
@@ -60,17 +60,17 @@ func TestCreateUnitCommandRejectsIfUnitAlreadyExists(t *testing.T) {
 
 func TestGrantPrivilege(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
 	})
 
-	evt, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.GrantPrivilegeCommand{
+		&messages.GrantPrivilegeCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			MemberID:    "member1",
@@ -80,7 +80,7 @@ func TestGrantPrivilege(t *testing.T) {
 	)
 
 	assert.ErrorIsNil(t, err)
-	assert.MessageEquals(t, "event generated", evt, &messages.PrivilegeGrantedEvent{
+	assert.MessageEquals(t, "event generated", evt, &messages.PrivilegeGrantedEvt{
 		UnitID:      "unit0",
 		RequesterID: "member0",
 		MemberID:    "member1",
@@ -92,17 +92,17 @@ func TestGrantPrivilege(t *testing.T) {
 // tests manager assertion
 func TestGrantPrivilegeRejectsIfRequesterNotManager(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "anotherMember",
 		},
 	})
 
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.GrantPrivilegeCommand{
+		&messages.GrantPrivilegeCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			MemberID:    "member1",
@@ -117,11 +117,11 @@ func TestGrantPrivilegeRejectsIfRequesterNotManager(t *testing.T) {
 // tests status assertion
 func TestGrantPrivilegeRejectsIfPrivilegeAlreadyExists(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
-		&messages.PrivilegeGrantedEvent{
+		&messages.PrivilegeGrantedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			MemberID:    "member1",
@@ -130,11 +130,11 @@ func TestGrantPrivilegeRejectsIfPrivilegeAlreadyExists(t *testing.T) {
 		},
 	})
 
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.GrantPrivilegeCommand{
+		&messages.GrantPrivilegeCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			MemberID:    "member1",
@@ -148,11 +148,11 @@ func TestGrantPrivilegeRejectsIfPrivilegeAlreadyExists(t *testing.T) {
 
 func TestRevokePrivilege(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
-		&messages.PrivilegeGrantedEvent{
+		&messages.PrivilegeGrantedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			MemberID:    "member1",
@@ -161,11 +161,11 @@ func TestRevokePrivilege(t *testing.T) {
 		},
 	})
 
-	evt, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.RevokePrivilegeCommand{
+		&messages.RevokePrivilegeCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			MemberID:    "member1",
@@ -173,7 +173,7 @@ func TestRevokePrivilege(t *testing.T) {
 	)
 
 	assert.ErrorIsNil(t, err)
-	assert.MessageEquals(t, "event generated", evt, &messages.PrivilegeRevokedEvent{
+	assert.MessageEquals(t, "event generated", evt, &messages.PrivilegeRevokedEvt{
 		UnitID:      "unit0",
 		RequesterID: "member0",
 		MemberID:    "member1",
@@ -183,18 +183,18 @@ func TestRevokePrivilege(t *testing.T) {
 
 func TestRevokePrivilegeRejectsIfAlreadyRevoked(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
-		&messages.PrivilegeGrantedEvent{
+		&messages.PrivilegeGrantedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			MemberID:    "member1",
 			VotingRight: true,
 			Weight:      2,
 		},
-		&messages.PrivilegeRevokedEvent{
+		&messages.PrivilegeRevokedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			MemberID:    "member1",
@@ -202,11 +202,11 @@ func TestRevokePrivilegeRejectsIfAlreadyRevoked(t *testing.T) {
 		},
 	})
 
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.RevokePrivilegeCommand{
+		&messages.RevokePrivilegeCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			MemberID:    "member1",
@@ -218,17 +218,17 @@ func TestRevokePrivilegeRejectsIfAlreadyRevoked(t *testing.T) {
 
 func TestCreateArea(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
 	})
 
-	evt, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.CreateAreaCommand{
+		&messages.CreateAreaCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -242,7 +242,7 @@ func TestCreateArea(t *testing.T) {
 		t,
 		"event created",
 		evt,
-		&messages.AreaCreatedEvent{
+		&messages.AreaCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -254,11 +254,11 @@ func TestCreateArea(t *testing.T) {
 
 func TestCreateAreaRejectsIfAreaAlreadyExists(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
-		&messages.AreaCreatedEvent{
+		&messages.AreaCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -267,11 +267,11 @@ func TestCreateAreaRejectsIfAreaAlreadyExists(t *testing.T) {
 		},
 	})
 
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.CreateAreaCommand{
+		&messages.CreateAreaCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -285,17 +285,17 @@ func TestCreateAreaRejectsIfAreaAlreadyExists(t *testing.T) {
 
 func TestCreatePolicy(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
 	})
 
-	evt, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.CreatePolicyCommand{
+		&messages.CreatePolicyCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			PolicyID:    "policy0",
@@ -317,7 +317,7 @@ func TestCreatePolicy(t *testing.T) {
 	assert.ErrorIsNil(t, err)
 	assert.MessageEquals(
 		t, "expected event", evt,
-		&messages.PolicyCreatedEvent{
+		&messages.PolicyCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			PolicyID:    "policy0",
@@ -339,11 +339,11 @@ func TestCreatePolicy(t *testing.T) {
 
 func TestCreatePolicyRejectsDuplicate(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
-		&messages.PolicyCreatedEvent{
+		&messages.PolicyCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			PolicyID:    "policy0",
@@ -362,11 +362,11 @@ func TestCreatePolicyRejectsDuplicate(t *testing.T) {
 		},
 	})
 
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.CreatePolicyCommand{
+		&messages.CreatePolicyCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			PolicyID:    "policy0",
@@ -388,13 +388,13 @@ func TestCreatePolicyRejectsDuplicate(t *testing.T) {
 	assertRejected(t, err)
 }
 
-func TestAllowAreaPolicyCommand(t *testing.T) {
+func TestAllowAreaPolicyCmd(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
-		&messages.PolicyCreatedEvent{
+		&messages.PolicyCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			PolicyID:    "policy0",
@@ -411,7 +411,7 @@ func TestAllowAreaPolicyCommand(t *testing.T) {
 			InitiativeQuorumNum: 1,
 			InitiativeQuorumDen: 5,
 		},
-		&messages.AreaCreatedEvent{
+		&messages.AreaCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -420,11 +420,11 @@ func TestAllowAreaPolicyCommand(t *testing.T) {
 		},
 	})
 
-	evt, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.AllowAreaPolicyCommand{
+		&messages.AllowAreaPolicyCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -435,7 +435,7 @@ func TestAllowAreaPolicyCommand(t *testing.T) {
 	assert.ErrorIsNil(t, err)
 	assert.MessageEquals(
 		t, "expected event", evt,
-		&messages.AreaPolicyAllowedEvent{
+		&messages.AreaPolicyAllowedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -444,13 +444,13 @@ func TestAllowAreaPolicyCommand(t *testing.T) {
 	)
 }
 
-func TestAllowAreaPolicyCommandRejectesDuplicate(t *testing.T) {
+func TestAllowAreaPolicyCmdRejectesDuplicate(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
-		&messages.PolicyCreatedEvent{
+		&messages.PolicyCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			PolicyID:    "policy0",
@@ -467,14 +467,14 @@ func TestAllowAreaPolicyCommandRejectesDuplicate(t *testing.T) {
 			InitiativeQuorumNum: 1,
 			InitiativeQuorumDen: 5,
 		},
-		&messages.AreaCreatedEvent{
+		&messages.AreaCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
 			Name:        "test area",
 			Description: "The Test Area",
 		},
-		&messages.AreaPolicyAllowedEvent{
+		&messages.AreaPolicyAllowedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -482,11 +482,11 @@ func TestAllowAreaPolicyCommandRejectesDuplicate(t *testing.T) {
 		},
 	})
 
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.AllowAreaPolicyCommand{
+		&messages.AllowAreaPolicyCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -497,13 +497,13 @@ func TestAllowAreaPolicyCommandRejectesDuplicate(t *testing.T) {
 	assertRejected(t, err)
 }
 
-func TestDisallowAreaPolicyCommand(t *testing.T) {
+func TestDisallowAreaPolicyCmd(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
-		&messages.PolicyCreatedEvent{
+		&messages.PolicyCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			PolicyID:    "policy0",
@@ -520,14 +520,14 @@ func TestDisallowAreaPolicyCommand(t *testing.T) {
 			InitiativeQuorumNum: 1,
 			InitiativeQuorumDen: 5,
 		},
-		&messages.AreaCreatedEvent{
+		&messages.AreaCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
 			Name:        "test area",
 			Description: "The Test Area",
 		},
-		&messages.AreaPolicyAllowedEvent{
+		&messages.AreaPolicyAllowedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -535,11 +535,11 @@ func TestDisallowAreaPolicyCommand(t *testing.T) {
 		},
 	})
 
-	evt, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.DisallowAreaPolicyCommand{
+		&messages.DisallowAreaPolicyCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -550,7 +550,7 @@ func TestDisallowAreaPolicyCommand(t *testing.T) {
 	assert.ErrorIsNil(t, err)
 	assert.MessageEquals(
 		t, "expected event", evt,
-		&messages.AreaPolicyDisallowedEvent{
+		&messages.AreaPolicyDisallowedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -559,13 +559,13 @@ func TestDisallowAreaPolicyCommand(t *testing.T) {
 	)
 }
 
-func TestDisallowAreaPolicyCommandRejectesIfAlreadyNotAllowed(t *testing.T) {
+func TestDisallowAreaPolicyCmdRejectesIfAlreadyNotAllowed(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher([]messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
-		&messages.PolicyCreatedEvent{
+		&messages.PolicyCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			PolicyID:    "policy0",
@@ -582,7 +582,7 @@ func TestDisallowAreaPolicyCommandRejectesIfAlreadyNotAllowed(t *testing.T) {
 			InitiativeQuorumNum: 1,
 			InitiativeQuorumDen: 5,
 		},
-		&messages.AreaCreatedEvent{
+		&messages.AreaCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
@@ -591,11 +591,11 @@ func TestDisallowAreaPolicyCommandRejectesIfAlreadyNotAllowed(t *testing.T) {
 		},
 	})
 
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"UnitID",
 		"unit0",
-		&messages.DisallowAreaPolicyCommand{
+		&messages.DisallowAreaPolicyCmd{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",

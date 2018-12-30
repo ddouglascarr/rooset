@@ -68,22 +68,22 @@ func NewIssueAggregate(aRID string) IssueAggregate {
 	return agg
 }
 
-// HandleEvent is the root event handle for the Issue aggregate
-func (issue *IssueAggregate) HandleEvent(msg messages.Message) error {
+// HandleEvt is the root event handle for the Issue aggregate
+func (issue *IssueAggregate) HandleEvt(msg messages.Message) error {
 	switch evt := msg.(type) {
-	case *messages.IssueCreatedEvent:
+	case *messages.IssueCreatedEvt:
 		issue.issueCreated(evt)
-	case *messages.InitiativeCreatedRequestedEvent:
+	case *messages.InitiativeCreatedRequestedEvt:
 		issue.initiativeCreatedRequested(evt)
-	case *messages.InitiativeCreatedRejectedEvent:
+	case *messages.InitiativeCreatedRejectedEvt:
 		issue.initiativeCreatedRejected(evt)
-	case *messages.InitiativeCreatedAcceptedEvent:
+	case *messages.InitiativeCreatedAcceptedEvt:
 		issue.initiativeCreatedAccepted(evt)
 	}
 	return nil
 }
 
-func (issue *IssueAggregate) issueCreated(evt *messages.IssueCreatedEvent) {
+func (issue *IssueAggregate) issueCreated(evt *messages.IssueCreatedEvt) {
 	issue.Status = IssueValidating
 	issue.IssueID = evt.IssueID
 	issue.UnitID = evt.UnitID
@@ -102,7 +102,7 @@ func (issue *IssueAggregate) issueCreated(evt *messages.IssueCreatedEvent) {
 }
 
 func (issue *IssueAggregate) initiativeCreatedRequested(
-	evt *messages.InitiativeCreatedRequestedEvent,
+	evt *messages.InitiativeCreatedRequestedEvt,
 ) {
 	i := initiative{
 		InitiativeID: evt.InitiativeID,
@@ -116,7 +116,7 @@ func (issue *IssueAggregate) initiativeCreatedRequested(
 }
 
 func (issue *IssueAggregate) initiativeCreatedRejected(
-	evt *messages.InitiativeCreatedRejectedEvent,
+	evt *messages.InitiativeCreatedRejectedEvt,
 ) {
 	i := issue.Initiatives[evt.InitiativeID]
 	i.Status = InitiativeInvalid
@@ -128,7 +128,7 @@ func (issue *IssueAggregate) initiativeCreatedRejected(
 }
 
 func (issue *IssueAggregate) initiativeCreatedAccepted(
-	evt *messages.InitiativeCreatedAcceptedEvent,
+	evt *messages.InitiativeCreatedAcceptedEvt,
 ) {
 	i := issue.Initiatives[evt.InitiativeID]
 	i.Status = InitiativeReady

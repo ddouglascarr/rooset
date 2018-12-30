@@ -3,7 +3,7 @@ package messages;
 
 import "messages/custom_fields.proto";
 
-message CreateUnitCommand {
+message CreateUnitCmd {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -13,7 +13,7 @@ message CreateUnitCommand {
   string URLParameterName = 5;  
 }
 
-message UnitCreatedEvent {
+message UnitCreatedEvt {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -23,7 +23,7 @@ message UnitCreatedEvent {
   string URLParameterName = 5;  
 }
 
-message GrantPrivilegeCommand {
+message GrantPrivilegeCmd {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -35,7 +35,7 @@ message GrantPrivilegeCommand {
   uint32 Weight = 8;
 }
 
-message PrivilegeGrantedEvent {
+message PrivilegeGrantedEvt {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -47,7 +47,7 @@ message PrivilegeGrantedEvent {
   uint32 Weight = 8;
 }
 
-message RevokePrivilegeCommand {
+message RevokePrivilegeCmd {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -55,7 +55,7 @@ message RevokePrivilegeCommand {
   string MemberID = 3;
 }
 
-message PrivilegeRevokedEvent {
+message PrivilegeRevokedEvt {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -64,7 +64,7 @@ message PrivilegeRevokedEvent {
   uint32 Weight = 4;
 }
 
-message CreateAreaCommand {
+message CreateAreaCmd {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -74,7 +74,7 @@ message CreateAreaCommand {
   string Description = 5;
 }
 
-message AreaCreatedEvent {
+message AreaCreatedEvt {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -85,7 +85,7 @@ message AreaCreatedEvent {
 }
 
 
-message CreatePolicyCommand {
+message CreatePolicyCmd {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -109,7 +109,7 @@ message CreatePolicyCommand {
   int32 InitiativeQuorumDen = 13;
 }
 
-message PolicyCreatedEvent {
+message PolicyCreatedEvt {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -133,7 +133,7 @@ message PolicyCreatedEvent {
   int32 InitiativeQuorumDen = 13;
 }
 
-message DeactivatePolicyCommand {
+message DeactivatePolicyCmd {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -141,7 +141,7 @@ message DeactivatePolicyCommand {
   string PolicyID = 3;
 }
 
-message PolicyDeactivatedEvent {
+message PolicyDeactivatedEvt {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -149,16 +149,7 @@ message PolicyDeactivatedEvent {
   string PolicyID = 3;
 }
 
-message AllowAreaPolicyCommand {
-  option (messages.AggregateRootField) = "UnitID";
-
-  string UnitID = 1;
-  string RequesterID = 2;
-  string PolicyID = 3;
-  string AreaID = 4;
-}
-
-message AreaPolicyAllowedEvent {
+message AllowAreaPolicyCmd {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -167,7 +158,7 @@ message AreaPolicyAllowedEvent {
   string AreaID = 4;
 }
 
-message DisallowAreaPolicyCommand {
+message AreaPolicyAllowedEvt {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;
@@ -176,7 +167,16 @@ message DisallowAreaPolicyCommand {
   string AreaID = 4;
 }
 
-message AreaPolicyDisallowedEvent {
+message DisallowAreaPolicyCmd {
+  option (messages.AggregateRootField) = "UnitID";
+
+  string UnitID = 1;
+  string RequesterID = 2;
+  string PolicyID = 3;
+  string AreaID = 4;
+}
+
+message AreaPolicyDisallowedEvt {
   option (messages.AggregateRootField) = "UnitID";
 
   string UnitID = 1;

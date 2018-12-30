@@ -131,7 +131,7 @@ func FetchProjection(
 }
 
 type eventHandler interface {
-	HandleEvent(messages.Message) error
+	HandleEvt(messages.Message) error
 }
 
 // FetchAggregate fetches all events for an aggregate and calls the
@@ -165,7 +165,7 @@ func FetchAggregate(commandTx *sql.Tx, aRID string, aggregate eventHandler) erro
 			return err
 		}
 
-		aggregate.HandleEvent(msg)
+		aggregate.HandleEvt(msg)
 	}
 
 	return nil

@@ -2,22 +2,22 @@ package aggregates
 
 import "github.com/ddouglascarr/rooset/messages"
 
-// HandleUnitCommand is the Unit command handler
-func HandleUnitCommand(unit *UnitAggregate, msg messages.Message) ([]messages.Message, error) {
+// HandleUnitCmd is the Unit command handler
+func HandleUnitCmd(unit *UnitAggregate, msg messages.Message) ([]messages.Message, error) {
 	switch cmd := msg.(type) {
-	case *messages.CreateUnitCommand:
+	case *messages.CreateUnitCmd:
 		return createUnit(unit, cmd)
-	case *messages.GrantPrivilegeCommand:
+	case *messages.GrantPrivilegeCmd:
 		return grantPrivilege(unit, cmd)
-	case *messages.RevokePrivilegeCommand:
+	case *messages.RevokePrivilegeCmd:
 		return revokePrivilege(unit, cmd)
-	case *messages.CreateAreaCommand:
+	case *messages.CreateAreaCmd:
 		return createArea(unit, cmd)
-	case *messages.CreatePolicyCommand:
+	case *messages.CreatePolicyCmd:
 		return createPolicy(unit, cmd)
-	case *messages.AllowAreaPolicyCommand:
+	case *messages.AllowAreaPolicyCmd:
 		return allowAreaPolicy(unit, cmd)
-	case *messages.DisallowAreaPolicyCommand:
+	case *messages.DisallowAreaPolicyCmd:
 		return disallowAreaPolicy(unit, cmd)
 	default:
 		return []messages.Message{}, nil
@@ -26,13 +26,13 @@ func HandleUnitCommand(unit *UnitAggregate, msg messages.Message) ([]messages.Me
 
 func createUnit(
 	unit *UnitAggregate,
-	cmd *messages.CreateUnitCommand,
+	cmd *messages.CreateUnitCmd,
 ) ([]messages.Message, error) {
 	if err := assertStatus(unit.Status, []UnitStatus{Uninitialized}); err != nil {
 		return nil, err
 	}
 	return []messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:           cmd.UnitID,
 			RequesterID:      cmd.RequesterID,
 			Name:             cmd.Name,
@@ -44,7 +44,7 @@ func createUnit(
 
 func grantPrivilege(
 	unit *UnitAggregate,
-	cmd *messages.GrantPrivilegeCommand,
+	cmd *messages.GrantPrivilegeCmd,
 ) ([]messages.Message, error) {
 	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func grantPrivilege(
 	}
 
 	return []messages.Message{
-		&messages.PrivilegeGrantedEvent{
+		&messages.PrivilegeGrantedEvt{
 			UnitID:          cmd.UnitID,
 			RequesterID:     cmd.RequesterID,
 			MemberID:        cmd.MemberID,
@@ -73,7 +73,7 @@ func grantPrivilege(
 
 func revokePrivilege(
 	unit *UnitAggregate,
-	cmd *messages.RevokePrivilegeCommand,
+	cmd *messages.RevokePrivilegeCmd,
 ) ([]messages.Message, error) {
 	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
@@ -88,7 +88,7 @@ func revokePrivilege(
 	}
 
 	return []messages.Message{
-		&messages.PrivilegeRevokedEvent{
+		&messages.PrivilegeRevokedEvt{
 			UnitID:      cmd.UnitID,
 			RequesterID: cmd.RequesterID,
 			MemberID:    cmd.MemberID,
@@ -99,7 +99,7 @@ func revokePrivilege(
 
 func createArea(
 	unit *UnitAggregate,
-	cmd *messages.CreateAreaCommand,
+	cmd *messages.CreateAreaCmd,
 ) ([]messages.Message, error) {
 	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
@@ -113,7 +113,7 @@ func createArea(
 	}
 
 	return []messages.Message{
-		&messages.AreaCreatedEvent{
+		&messages.AreaCreatedEvt{
 			UnitID:      cmd.UnitID,
 			RequesterID: cmd.RequesterID,
 			AreaID:      cmd.AreaID,
@@ -125,7 +125,7 @@ func createArea(
 
 func createPolicy(
 	unit *UnitAggregate,
-	cmd *messages.CreatePolicyCommand,
+	cmd *messages.CreatePolicyCmd,
 ) ([]messages.Message, error) {
 	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
@@ -139,7 +139,7 @@ func createPolicy(
 	}
 
 	return []messages.Message{
-		&messages.PolicyCreatedEvent{
+		&messages.PolicyCreatedEvt{
 			UnitID:      cmd.UnitID,
 			RequesterID: cmd.RequesterID,
 			PolicyID:    cmd.PolicyID,
@@ -162,7 +162,7 @@ func createPolicy(
 
 func deactivatePolicy(
 	unit *UnitAggregate,
-	cmd *messages.CreatePolicyCommand,
+	cmd *messages.CreatePolicyCmd,
 ) ([]messages.Message, error) {
 	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
@@ -176,7 +176,7 @@ func deactivatePolicy(
 	}
 
 	return []messages.Message{
-		&messages.PolicyDeactivatedEvent{
+		&messages.PolicyDeactivatedEvt{
 			UnitID:      cmd.UnitID,
 			RequesterID: cmd.RequesterID,
 			PolicyID:    cmd.PolicyID,
@@ -186,7 +186,7 @@ func deactivatePolicy(
 
 func allowAreaPolicy(
 	unit *UnitAggregate,
-	cmd *messages.AllowAreaPolicyCommand,
+	cmd *messages.AllowAreaPolicyCmd,
 ) ([]messages.Message, error) {
 	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
@@ -208,7 +208,7 @@ func allowAreaPolicy(
 	}
 
 	return []messages.Message{
-		&messages.AreaPolicyAllowedEvent{
+		&messages.AreaPolicyAllowedEvt{
 			UnitID:      cmd.UnitID,
 			RequesterID: cmd.RequesterID,
 			PolicyID:    cmd.PolicyID,
@@ -219,7 +219,7 @@ func allowAreaPolicy(
 
 func disallowAreaPolicy(
 	unit *UnitAggregate,
-	cmd *messages.DisallowAreaPolicyCommand,
+	cmd *messages.DisallowAreaPolicyCmd,
 ) ([]messages.Message, error) {
 	if err := assertStatus(unit.Status, []UnitStatus{Ready}); err != nil {
 		return nil, err
@@ -241,7 +241,7 @@ func disallowAreaPolicy(
 	}
 
 	return []messages.Message{
-		&messages.AreaPolicyDisallowedEvent{
+		&messages.AreaPolicyDisallowedEvt{
 			UnitID:      cmd.UnitID,
 			RequesterID: cmd.RequesterID,
 			PolicyID:    cmd.PolicyID,

@@ -10,7 +10,7 @@ import (
 // Aggregate are populated by events, and are used by the commandhandler to
 // generate more events
 type Aggregate interface {
-	HandleEvent(messages.Message) error
+	HandleEvt(messages.Message) error
 }
 
 // AggregateFetcher calls an external db to populate an aggregate using it's previous events
@@ -47,8 +47,8 @@ func (e *RejectionError) Error() string {
 	return fmt.Sprintf("rooset: command rejected, %s", e.Desc)
 }
 
-// CommandRejectionReason gets the RejectionReason for a command handler rejection
-func (e *RejectionError) CommandRejectionReason() *RejectionReason {
+// CmdRejectionReason gets the RejectionReason for a command handler rejection
+func (e *RejectionError) CmdRejectionReason() *RejectionReason {
 	return &RejectionReason{
 		Code: e.Code,
 		Desc: e.Desc,
@@ -58,18 +58,18 @@ func (e *RejectionError) CommandRejectionReason() *RejectionReason {
 // GetRejectionReason checks if an error is a RejectionError and returns the
 // RejectionReason if it is
 func GetRejectionReason(err error) (reason *RejectionReason, ok bool) {
-	if r, ok := err.(interface{ CommandRejectionReason() *RejectionReason }); ok && r != nil {
-		return r.CommandRejectionReason(), true
+	if r, ok := err.(interface{ CmdRejectionReason() *RejectionReason }); ok && r != nil {
+		return r.CmdRejectionReason(), true
 	}
 	return nil, false
 }
 
-// HandleCommand is the root command handler for all aggregates
+// HandleCmd is the root command handler for all aggregates
 // It returns
 // - an event message which is nil if no event was emitted
 // - a failure reason, which is empty if the command was accepted
 // - an error, which is not nil if there was a system problem
-func HandleCommand(
+func HandleCmd(
 	fetchAggregate AggregateFetcher,
 	aRField string,
 	aRID string,
@@ -82,7 +82,7 @@ func HandleCommand(
 		if err != nil {
 			return nil, errors.Wrap(err, "fetch aggregate failed")
 		}
-		return HandleUnitCommand(&unit, cmd)
+		return HandleUnitCmd(&unit, cmd)
 	case "IssueID":
 		issue := NewIssueAggregate(aRID)
 		err := fetchAggregate(aRID, &issue)
@@ -90,7 +90,7 @@ func HandleCommand(
 			return nil, errors.Wrap(err, "fetch issue aggregate failed")
 		}
 
-		if createCmd, ok := cmd.(*messages.CreateIssueCommand); ok {
+		if createCmd, ok := cmd.(*messages.CreateIssueCmd); ok {
 			issue.UnitID = createCmd.UnitID
 		}
 		issue.Unit = NewUnitAggregate(issue.UnitID)
@@ -99,7 +99,7 @@ func HandleCommand(
 			return nil, errors.Wrap(err, "fetch unit aggregate failed")
 		}
 
-		return HandleIssueCommand(&issue, cmd)
+		return HandleIssueCmd(&issue, cmd)
 	}
 	return []messages.Message{}, nil
 }

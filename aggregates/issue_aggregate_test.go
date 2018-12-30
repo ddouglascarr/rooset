@@ -8,13 +8,13 @@ import (
 	"github.com/ddouglascarr/rooset/messages"
 )
 
-func TestCreateIssueCommand(t *testing.T) {
+func TestCreateIssueCmd(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher(buildBaseFixture())
-	evts, err := aggregates.HandleCommand(
+	evts, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateIssueCommand{
+		&messages.CreateIssueCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -30,7 +30,7 @@ func TestCreateIssueCommand(t *testing.T) {
 		t,
 		"expected event",
 		evts,
-		&messages.IssueCreatedEvent{
+		&messages.IssueCreatedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -42,13 +42,13 @@ func TestCreateIssueCommand(t *testing.T) {
 	)
 }
 
-func TestCreateIssueCommandFailsOnNonMembershipt(t *testing.T) {
+func TestCreateIssueCmdFailsOnNonMembershipt(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher(buildBaseFixture())
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateIssueCommand{
+		&messages.CreateIssueCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -62,9 +62,9 @@ func TestCreateIssueCommandFailsOnNonMembershipt(t *testing.T) {
 	assertRejected(t, err)
 }
 
-func TestCreateIssueCommandFailsForNonInitiativeRightMember(t *testing.T) {
+func TestCreateIssueCmdFailsForNonInitiativeRightMember(t *testing.T) {
 	fixture := append(buildBaseFixture(),
-		&messages.PrivilegeGrantedEvent{
+		&messages.PrivilegeGrantedEvt{
 			UnitID:          "unit0",
 			RequesterID:     "member0",
 			MemberID:        "member2",
@@ -75,11 +75,11 @@ func TestCreateIssueCommandFailsForNonInitiativeRightMember(t *testing.T) {
 		},
 	)
 	aggregateFetcher := BuildTestAggregateFetcher(fixture)
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateIssueCommand{
+		&messages.CreateIssueCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -93,13 +93,13 @@ func TestCreateIssueCommandFailsForNonInitiativeRightMember(t *testing.T) {
 	assertRejected(t, err)
 }
 
-func TestCreateIssueCommandFailsOnMissingArea(t *testing.T) {
+func TestCreateIssueCmdFailsOnMissingArea(t *testing.T) {
 	aggregateFetcher := BuildTestAggregateFetcher(buildBaseFixture())
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateIssueCommand{
+		&messages.CreateIssueCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -113,14 +113,14 @@ func TestCreateIssueCommandFailsOnMissingArea(t *testing.T) {
 	assertRejected(t, err)
 }
 
-func TestCreateIssueCommandFailsOnIncorrectPolicy(t *testing.T) {
+func TestCreateIssueCmdFailsOnIncorrectPolicy(t *testing.T) {
 	fixture := append(buildBaseFixture())
 	aggregateFetcher := BuildTestAggregateFetcher(fixture)
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateIssueCommand{
+		&messages.CreateIssueCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -134,9 +134,9 @@ func TestCreateIssueCommandFailsOnIncorrectPolicy(t *testing.T) {
 	assertRejected(t, err)
 }
 
-func TestCreateIssueCommandFailsOnDuplicate(t *testing.T) {
+func TestCreateIssueCmdFailsOnDuplicate(t *testing.T) {
 	fixture := append(buildBaseFixture(),
-		&messages.IssueCreatedEvent{
+		&messages.IssueCreatedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -147,11 +147,11 @@ func TestCreateIssueCommandFailsOnDuplicate(t *testing.T) {
 		},
 	)
 	aggregateFetcher := BuildTestAggregateFetcher(fixture)
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateIssueCommand{
+		&messages.CreateIssueCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -167,7 +167,7 @@ func TestCreateIssueCommandFailsOnDuplicate(t *testing.T) {
 
 func TestCreateInitiativeRejected(t *testing.T) {
 	fixture := append(buildBaseFixture(),
-		&messages.IssueCreatedEvent{
+		&messages.IssueCreatedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -179,11 +179,11 @@ func TestCreateInitiativeRejected(t *testing.T) {
 	)
 	aggregateFetcher := BuildTestAggregateFetcher(fixture)
 
-	evt, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateInitiativeRejectedCommand{
+		&messages.CreateInitiativeRejectedCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			Reason:       "not good folks",
@@ -194,7 +194,7 @@ func TestCreateInitiativeRejected(t *testing.T) {
 		t,
 		"expected event",
 		evt,
-		&messages.InitiativeCreatedRejectedEvent{
+		&messages.InitiativeCreatedRejectedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			Reason:       "not good folks",
@@ -204,7 +204,7 @@ func TestCreateInitiativeRejected(t *testing.T) {
 
 func TestCreateInitiativeRejectedFailsOnDuplicate(t *testing.T) {
 	fixture := append(buildBaseFixture(),
-		&messages.IssueCreatedEvent{
+		&messages.IssueCreatedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -213,18 +213,18 @@ func TestCreateInitiativeRejectedFailsOnDuplicate(t *testing.T) {
 			AreaID:       "area0",
 			Body:         "Lets do A",
 		},
-		&messages.InitiativeCreatedRejectedEvent{
+		&messages.InitiativeCreatedRejectedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 		},
 	)
 	aggregateFetcher := BuildTestAggregateFetcher(fixture)
 
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateInitiativeRejectedCommand{
+		&messages.CreateInitiativeRejectedCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 		},
@@ -234,7 +234,7 @@ func TestCreateInitiativeRejectedFailsOnDuplicate(t *testing.T) {
 
 func TestCreateInitiativeAccepted(t *testing.T) {
 	fixture := append(buildBaseFixture(),
-		&messages.IssueCreatedEvent{
+		&messages.IssueCreatedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -246,11 +246,11 @@ func TestCreateInitiativeAccepted(t *testing.T) {
 	)
 	aggregateFetcher := BuildTestAggregateFetcher(fixture)
 
-	evt, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateInitiativeAcceptedCommand{
+		&messages.CreateInitiativeAcceptedCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 		},
@@ -260,7 +260,7 @@ func TestCreateInitiativeAccepted(t *testing.T) {
 		t,
 		"expected event",
 		evt,
-		&messages.InitiativeCreatedAcceptedEvent{
+		&messages.InitiativeCreatedAcceptedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -273,7 +273,7 @@ func TestCreateInitiativeAccepted(t *testing.T) {
 
 func TestCreateInitiativeAcceptedFailsOnDuplicate(t *testing.T) {
 	fixture := append(buildBaseFixture(),
-		&messages.IssueCreatedEvent{
+		&messages.IssueCreatedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -282,7 +282,7 @@ func TestCreateInitiativeAcceptedFailsOnDuplicate(t *testing.T) {
 			AreaID:       "area0",
 			Body:         "Lets do A",
 		},
-		&messages.InitiativeCreatedAcceptedEvent{
+		&messages.InitiativeCreatedAcceptedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -294,11 +294,11 @@ func TestCreateInitiativeAcceptedFailsOnDuplicate(t *testing.T) {
 	)
 	aggregateFetcher := BuildTestAggregateFetcher(fixture)
 
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateInitiativeAcceptedCommand{
+		&messages.CreateInitiativeAcceptedCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 		},
@@ -308,7 +308,7 @@ func TestCreateInitiativeAcceptedFailsOnDuplicate(t *testing.T) {
 
 func TestCreateInitiative(t *testing.T) {
 	fixture := append(buildBaseFixture(),
-		&messages.IssueCreatedEvent{
+		&messages.IssueCreatedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -317,7 +317,7 @@ func TestCreateInitiative(t *testing.T) {
 			AreaID:       "area0",
 			Body:         "Lets do A",
 		},
-		&messages.InitiativeCreatedAcceptedEvent{
+		&messages.InitiativeCreatedAcceptedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -328,11 +328,11 @@ func TestCreateInitiative(t *testing.T) {
 		},
 	)
 	aggregateFetcher := BuildTestAggregateFetcher(fixture)
-	evt, err := aggregates.HandleCommand(
+	evt, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateInitiativeRequestedCommand{
+		&messages.CreateInitiativeRequestedCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative1",
 			RequesterID:  "member1",
@@ -345,7 +345,7 @@ func TestCreateInitiative(t *testing.T) {
 		t,
 		"expected event",
 		evt,
-		&messages.InitiativeCreatedRequestedEvent{
+		&messages.InitiativeCreatedRequestedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative1",
 			UnitID:       "unit0",
@@ -359,7 +359,7 @@ func TestCreateInitiative(t *testing.T) {
 
 func TestCreateInitiativeFailsOnDuplicateInitial(t *testing.T) {
 	fixture := append(buildBaseFixture(),
-		&messages.IssueCreatedEvent{
+		&messages.IssueCreatedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -370,11 +370,11 @@ func TestCreateInitiativeFailsOnDuplicateInitial(t *testing.T) {
 		},
 	)
 	aggregateFetcher := BuildTestAggregateFetcher(fixture)
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateInitiativeRequestedCommand{
+		&messages.CreateInitiativeRequestedCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			RequesterID:  "member1",
@@ -387,7 +387,7 @@ func TestCreateInitiativeFailsOnDuplicateInitial(t *testing.T) {
 
 func TestCreateInitiativeFailsOnDuplicate(t *testing.T) {
 	fixture := append(buildBaseFixture(),
-		&messages.IssueCreatedEvent{
+		&messages.IssueCreatedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -396,7 +396,7 @@ func TestCreateInitiativeFailsOnDuplicate(t *testing.T) {
 			AreaID:       "area0",
 			Body:         "Lets do A",
 		},
-		&messages.InitiativeCreatedAcceptedEvent{
+		&messages.InitiativeCreatedAcceptedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative0",
 			UnitID:       "unit0",
@@ -405,7 +405,7 @@ func TestCreateInitiativeFailsOnDuplicate(t *testing.T) {
 			AreaID:       "area0",
 			Body:         "Lets do A",
 		},
-		&messages.InitiativeCreatedRequestedEvent{
+		&messages.InitiativeCreatedRequestedEvt{
 			IssueID:      "issue0",
 			InitiativeID: "initiative1",
 			UnitID:       "unit0",
@@ -416,11 +416,11 @@ func TestCreateInitiativeFailsOnDuplicate(t *testing.T) {
 		},
 	)
 	aggregateFetcher := BuildTestAggregateFetcher(fixture)
-	_, err := aggregates.HandleCommand(
+	_, err := aggregates.HandleCmd(
 		aggregateFetcher,
 		"IssueID",
 		"issue0",
-		&messages.CreateInitiativeRequestedCommand{
+		&messages.CreateInitiativeRequestedCmd{
 			IssueID:      "issue0",
 			InitiativeID: "initiative1",
 			RequesterID:  "member1",
@@ -437,11 +437,11 @@ func TestCreateInitiativeFailsOnDuplicate(t *testing.T) {
 
 func buildBaseFixture() []messages.Message {
 	return []messages.Message{
-		&messages.UnitCreatedEvent{
+		&messages.UnitCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 		},
-		&messages.PrivilegeGrantedEvent{
+		&messages.PrivilegeGrantedEvt{
 			UnitID:          "unit0",
 			RequesterID:     "member0",
 			MemberID:        "member1",
@@ -450,7 +450,7 @@ func buildBaseFixture() []messages.Message {
 			ManagementRight: false,
 			Weight:          1,
 		},
-		&messages.PolicyCreatedEvent{
+		&messages.PolicyCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			PolicyID:    "policy0",
@@ -467,14 +467,14 @@ func buildBaseFixture() []messages.Message {
 			InitiativeQuorumNum: 1,
 			InitiativeQuorumDen: 5,
 		},
-		&messages.AreaCreatedEvent{
+		&messages.AreaCreatedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",
 			Name:        "test area",
 			Description: "The Test Area",
 		},
-		&messages.AreaPolicyAllowedEvent{
+		&messages.AreaPolicyAllowedEvt{
 			UnitID:      "unit0",
 			RequesterID: "member0",
 			AreaID:      "area0",

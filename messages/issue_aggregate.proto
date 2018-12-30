@@ -3,7 +3,7 @@ package messages;
 
 import "messages/custom_fields.proto";
 
-message CreateIssueCommand {
+message CreateIssueCmd {
   option (messages.AggregateRootField) = "IssueID";
 
   string UnitID = 1;
@@ -16,7 +16,7 @@ message CreateIssueCommand {
   string Body = 7;
 }
 
-message IssueCreatedEvent {
+message IssueCreatedEvt {
   option (messages.AggregateRootField) = "IssueID";
 
   string UnitID = 1;
@@ -29,7 +29,7 @@ message IssueCreatedEvent {
   string Body = 7;
 }
 
-message CreateInitiativeRequestedCommand {
+message CreateInitiativeRequestedCmd {
   option (messages.AggregateRootField) = "IssueID";
 
   string IssueID = 1;
@@ -38,7 +38,7 @@ message CreateInitiativeRequestedCommand {
   string Body = 4;
 }
 
-message InitiativeCreatedRequestedEvent {
+message InitiativeCreatedRequestedEvt {
   option (messages.AggregateRootField) = "IssueID";
 
   string IssueID = 1;
@@ -50,7 +50,7 @@ message InitiativeCreatedRequestedEvent {
   string Body = 7;
 }
 
-message CreateInitiativeRejectedCommand {
+message CreateInitiativeRejectedCmd {
   option (messages.AggregateRootField) = "IssueID";
 
   string IssueID = 1;
@@ -58,7 +58,7 @@ message CreateInitiativeRejectedCommand {
   string Reason = 3;
 }
 
-message InitiativeCreatedRejectedEvent {
+message InitiativeCreatedRejectedEvt {
   option (messages.AggregateRootField) = "IssueID";
 
   string IssueID = 1;
@@ -66,14 +66,14 @@ message InitiativeCreatedRejectedEvent {
   string Reason = 3;
 }
 
-message CreateInitiativeAcceptedCommand {
+message CreateInitiativeAcceptedCmd {
   option (messages.AggregateRootField) = "IssueID";
 
   string IssueID = 1;
   string InitiativeID = 2;
 }
 
-message InitiativeCreatedAcceptedEvent {
+message InitiativeCreatedAcceptedEvt {
   option (messages.AggregateRootField) = "IssueID";
 
   string IssueID = 1;

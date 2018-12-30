@@ -5,16 +5,19 @@ package storage
 import (
 	"database/sql"
 	"errors"
+	"fmt"
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/ddouglascarr/rooset/assert"
+	"github.com/ddouglascarr/rooset/conf"
 	"github.com/ddouglascarr/rooset/messages"
 	_ "github.com/lib/pq"
 )
 
 func TestFetchMessagesSinceSeq(t *testing.T) {
-	evt := &messages.UnitCreatedEvent{
+	evt := &messages.UnitCreatedEvt{
 		UnitID:           "a1",
 		RequesterID:      "b1",
 		Name:             "Test Unit",
@@ -24,7 +27,9 @@ func TestFetchMessagesSinceSeq(t *testing.T) {
 
 	db, err := sql.Open(
 		"postgres",
-		"user=postgres dbname=rooset_test_0 host=localhost sslmode=disable port=5433",
+		fmt.Sprintf(
+			"user=postgres dbname=%s host=%s sslmode=disable port=%s",
+			conf.DB.CmdName, conf.DB.CmdHost, os.Getenv("ROOSET_INTEGRATION_TEST_PORT")),
 	)
 	assert.ErrorIsNil(t, err)
 	defer db.Close()
@@ -54,7 +59,9 @@ func TestFetchProjection(t *testing.T) {
 
 	db, err := sql.Open(
 		"postgres",
-		"user=postgres dbname=rooset_test_0 host=localhost sslmode=disable port=5433",
+		fmt.Sprintf(
+			"user=postgres dbname=%s host=%s sslmode=disable port=%s",
+			conf.DB.CmdName, conf.DB.CmdHost, os.Getenv("ROOSET_INTEGRATION_TEST_PORT")),
 	)
 	assert.ErrorIsNil(t, err)
 	defer db.Close()
@@ -83,7 +90,9 @@ func TestFetchProjectionHandlesNonExistantProj(t *testing.T) {
 
 	db, err := sql.Open(
 		"postgres",
-		"user=postgres dbname=rooset_test_0 host=localhost sslmode=disable port=5433",
+		fmt.Sprintf(
+			"user=postgres dbname=%s host=%s sslmode=disable port=%s",
+			conf.DB.CmdName, conf.DB.CmdHost, os.Getenv("ROOSET_INTEGRATION_TEST_PORT")),
 	)
 	assert.ErrorIsNil(t, err)
 	defer db.Close()
@@ -107,8 +116,8 @@ type concatAggregate struct {
 	Result string
 }
 
-func (a *concatAggregate) HandleEvent(msg messages.Message) error {
-	evt, ok := msg.(*messages.UnitCreatedEvent)
+func (a *concatAggregate) HandleEvt(msg messages.Message) error {
+	evt, ok := msg.(*messages.UnitCreatedEvt)
 	if !ok {
 		return errors.New("oops")
 	}
@@ -122,7 +131,9 @@ func (a *concatAggregate) HandleEvent(msg messages.Message) error {
 func TestFetchAggregate(t *testing.T) {
 	db, err := sql.Open(
 		"postgres",
-		"user=postgres dbname=rooset_test_0 host=localhost sslmode=disable port=5433",
+		fmt.Sprintf(
+			"user=postgres dbname=%s host=%s sslmode=disable port=%s",
+			conf.DB.CmdName, conf.DB.CmdHost, os.Getenv("ROOSET_INTEGRATION_TEST_PORT")),
 	)
 	assert.ErrorIsNil(t, err)
 	defer db.Close()
@@ -132,9 +143,9 @@ func TestFetchAggregate(t *testing.T) {
 	defer tx.Rollback()
 
 	err = PersistMessages(tx, []messages.Message{
-		&messages.UnitCreatedEvent{UnitID: "a", Description: "1"},
-		&messages.UnitCreatedEvent{UnitID: "a", Description: "2"},
-		&messages.UnitCreatedEvent{UnitID: "a", Description: "3"},
+		&messages.UnitCreatedEvt{UnitID: "a", Description: "1"},
+		&messages.UnitCreatedEvt{UnitID: "a", Description: "2"},
+		&messages.UnitCreatedEvt{UnitID: "a", Description: "3"},
 	})
 	assert.ErrorIsNil(t, err)
 

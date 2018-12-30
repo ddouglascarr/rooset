@@ -7,8 +7,8 @@ import (
 	"github.com/ddouglascarr/rooset/storage"
 )
 
-// UnitProjectionEventProcessor is a single event processor for updating unit projections
-func UnitProjectionEventProcessor(
+// UnitProjectionEvtProcessor is a single event processor for updating unit projections
+func UnitProjectionEvtProcessor(
 	_ *sql.Tx,
 	targetTx *sql.Tx,
 	msgs []messages.Message,
@@ -27,7 +27,7 @@ func UnitProjectionEventProcessor(
 	}
 
 	for _, eventSet := range eventSets {
-		for _, msg := range eventSet.Events {
+		for _, msg := range eventSet.Evts {
 			UpdateUnitProjection(&eventSet.Projection, msg)
 		}
 
@@ -38,7 +38,7 @@ func UnitProjectionEventProcessor(
 
 type projEventSet struct {
 	Projection messages.UnitProjection
-	Events     []messages.Message
+	Evts       []messages.Message
 }
 
 type unitIDPossesor interface {
@@ -55,7 +55,7 @@ func populateEventSets(
 		evt, ok := msg.(unitIDPossesor)
 		if ok {
 			evtSet := (*eventSets)[evt.GetUnitID()]
-			evtSet.Events = append(evtSet.Events, msg)
+			evtSet.Evts = append(evtSet.Evts, msg)
 			(*eventSets)[evt.GetUnitID()] = evtSet
 		}
 
@@ -72,18 +72,18 @@ func UpdateUnitProjection(
 ) error {
 	err := error(nil)
 	switch evt := msg.(type) {
-	case *messages.UnitCreatedEvent:
-		err = unitCreatedEventHandler(evt, projection)
-	case *messages.PrivilegeGrantedEvent:
-		err = privilegeGrantedEventHandler(evt, projection)
-	case *messages.PrivilegeRevokedEvent:
-		err = privilegeRevokedEventHandler(evt, projection)
+	case *messages.UnitCreatedEvt:
+		err = unitCreatedEvtHandler(evt, projection)
+	case *messages.PrivilegeGrantedEvt:
+		err = privilegeGrantedEvtHandler(evt, projection)
+	case *messages.PrivilegeRevokedEvt:
+		err = privilegeRevokedEvtHandler(evt, projection)
 	}
 	return err
 }
 
-func unitCreatedEventHandler(
-	evt *messages.UnitCreatedEvent,
+func unitCreatedEvtHandler(
+	evt *messages.UnitCreatedEvt,
 	projection *messages.UnitProjection,
 ) error {
 	projection.UnitID = evt.UnitID
@@ -95,8 +95,8 @@ func unitCreatedEventHandler(
 	return nil
 }
 
-func privilegeGrantedEventHandler(
-	evt *messages.PrivilegeGrantedEvent,
+func privilegeGrantedEvtHandler(
+	evt *messages.PrivilegeGrantedEvt,
 	projection *messages.UnitProjection,
 ) error {
 	projection.MemberCount = projection.MemberCount + 1
@@ -105,8 +105,8 @@ func privilegeGrantedEventHandler(
 	return nil
 }
 
-func privilegeRevokedEventHandler(
-	evt *messages.PrivilegeRevokedEvent,
+func privilegeRevokedEvtHandler(
+	evt *messages.PrivilegeRevokedEvt,
 	projection *messages.UnitProjection,
 ) error {
 	projection.MemberCount = projection.MemberCount - 1

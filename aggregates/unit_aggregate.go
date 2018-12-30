@@ -48,28 +48,28 @@ func NewUnitAggregate(aRID string) UnitAggregate {
 	return agg
 }
 
-// HandleEvent is the root event handler
-func (unit *UnitAggregate) HandleEvent(msg messages.Message) error {
+// HandleEvt is the root event handler
+func (unit *UnitAggregate) HandleEvt(msg messages.Message) error {
 	switch evt := msg.(type) {
-	case *messages.UnitCreatedEvent:
+	case *messages.UnitCreatedEvt:
 		unit.unitCreated(evt)
-	case *messages.PrivilegeGrantedEvent:
+	case *messages.PrivilegeGrantedEvt:
 		unit.privilegeGranted(evt)
-	case *messages.PrivilegeRevokedEvent:
+	case *messages.PrivilegeRevokedEvt:
 		unit.privilegeRevoked(evt)
-	case *messages.AreaCreatedEvent:
+	case *messages.AreaCreatedEvt:
 		unit.areaCreated(evt)
-	case *messages.PolicyCreatedEvent:
+	case *messages.PolicyCreatedEvt:
 		unit.policyCreated(evt)
-	case *messages.AreaPolicyAllowedEvent:
+	case *messages.AreaPolicyAllowedEvt:
 		unit.areaPolicyAllowed(evt)
-	case *messages.AreaPolicyDisallowedEvent:
+	case *messages.AreaPolicyDisallowedEvt:
 		unit.areaPolicyDisallowed(evt)
 	}
 	return nil
 }
 
-func (unit *UnitAggregate) unitCreated(evt *messages.UnitCreatedEvent) {
+func (unit *UnitAggregate) unitCreated(evt *messages.UnitCreatedEvt) {
 	unit.Status = Ready
 	unit.Members[evt.RequesterID] = memberPrivilege{
 		VotingRight:     false,
@@ -79,7 +79,7 @@ func (unit *UnitAggregate) unitCreated(evt *messages.UnitCreatedEvent) {
 	}
 }
 
-func (unit *UnitAggregate) privilegeGranted(evt *messages.PrivilegeGrantedEvent) {
+func (unit *UnitAggregate) privilegeGranted(evt *messages.PrivilegeGrantedEvt) {
 	unit.Members[evt.MemberID] = memberPrivilege{
 		VotingRight:     evt.VotingRight,
 		InitiativeRight: evt.InitiativeRight,
@@ -88,11 +88,11 @@ func (unit *UnitAggregate) privilegeGranted(evt *messages.PrivilegeGrantedEvent)
 	}
 }
 
-func (unit *UnitAggregate) privilegeRevoked(evt *messages.PrivilegeRevokedEvent) {
+func (unit *UnitAggregate) privilegeRevoked(evt *messages.PrivilegeRevokedEvt) {
 	delete(unit.Members, evt.MemberID)
 }
 
-func (unit *UnitAggregate) areaCreated(evt *messages.AreaCreatedEvent) {
+func (unit *UnitAggregate) areaCreated(evt *messages.AreaCreatedEvt) {
 	a := area{
 		Name:        evt.Name,
 		Description: evt.Description,
@@ -101,11 +101,11 @@ func (unit *UnitAggregate) areaCreated(evt *messages.AreaCreatedEvent) {
 	unit.Areas[evt.AreaID] = a
 }
 
-func (unit *UnitAggregate) policyCreated(evt *messages.PolicyCreatedEvent) {
+func (unit *UnitAggregate) policyCreated(evt *messages.PolicyCreatedEvt) {
 	unit.Policies[evt.PolicyID] = policy{}
 }
 
-func (unit *UnitAggregate) areaPolicyAllowed(evt *messages.AreaPolicyAllowedEvent) {
+func (unit *UnitAggregate) areaPolicyAllowed(evt *messages.AreaPolicyAllowedEvt) {
 	a, ok := unit.Areas[evt.AreaID]
 	if !ok {
 		return
@@ -114,7 +114,7 @@ func (unit *UnitAggregate) areaPolicyAllowed(evt *messages.AreaPolicyAllowedEven
 	a.Policies[evt.PolicyID] = areaPolicy{}
 }
 
-func (unit *UnitAggregate) areaPolicyDisallowed(evt *messages.AreaPolicyDisallowedEvent) {
+func (unit *UnitAggregate) areaPolicyDisallowed(evt *messages.AreaPolicyDisallowedEvt) {
 	a, ok := unit.Areas[evt.AreaID]
 	if !ok {
 		return

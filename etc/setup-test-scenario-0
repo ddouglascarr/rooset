@@ -26,7 +26,7 @@ ${SCRIPT_DIR}/reset-dbs
 
 echo "--- Creating Test Unit"
 roosetdev exec '{
-  "MessageType": "messages.CreateUnitCommand",
+  "MessageType": "messages.CreateUnitCmd",
   "Message": {
     "UnitID": "unit0",
     "RequesterID": "user0",
@@ -38,7 +38,7 @@ roosetdev exec '{
 
 echo "--- Creating Test Area"
 roosetdev exec '{
-  "MessageType": "messages.CreateAreaCommand",
+  "MessageType": "messages.CreateAreaCmd",
   "Message": {
     "UnitID": "unit0",
     "RequesterID": "user0",
@@ -50,7 +50,7 @@ roosetdev exec '{
 
 echo "--- Creating Test Policy"
 roosetdev exec '{
-  "MessageType": "messages.CreatePolicyCommand",
+  "MessageType": "messages.CreatePolicyCmd",
   "Message": {
     "UnitID": "unit0",
     "RequesterID": "user0",

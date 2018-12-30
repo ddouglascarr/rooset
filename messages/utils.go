@@ -59,7 +59,7 @@ type jSONMessageContainer struct {
 	Message     json.RawMessage
 }
 
-// UnmarshalJSONMessage deserialized JSONin the form of { MessageType: "messages.UnitCreatedEvent", Message: { ... } }
+// UnmarshalJSONMessage deserialized JSONin the form of { MessageType: "messages.UnitCreatedEvt", Message: { ... } }
 func UnmarshalJSONMessage(jSONMsgContainer []byte) (Message, error) {
 	container := &jSONMessageContainer{}
 	err := json.Unmarshal(jSONMsgContainer, &container)

@@ -56,7 +56,7 @@ func (t *execCmd) Run(ctx cmdy.Context) error {
 		return errors.Wrap(err, "rooset: failed to connect to db")
 	}
 
-	if err := storage.ExecuteCommand(db, msg); err != nil {
+	if err := storage.ExecuteCmd(db, msg); err != nil {
 		return errors.Wrap(err, "rooset: failed to execute command")
 	}
 
