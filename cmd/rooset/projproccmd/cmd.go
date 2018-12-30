@@ -67,7 +67,7 @@ func (t *projProcCmd) Run(ctx cmdy.Context) error {
 			return err
 		}
 		if err := storage.ProcessMessages(
-			projections.UnitProjectionEventProcessor,
+			projections.UnitProjectionEvtProcessor,
 			commandDB,
 			queryDB,
 			"projections0000",

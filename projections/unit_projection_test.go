@@ -8,8 +8,8 @@ import (
 	"github.com/ddouglascarr/rooset/projections"
 )
 
-func TestUnitCreatedEventHandler(t *testing.T) {
-	evt := &messages.UnitCreatedEvent{
+func TestUnitCreatedEvtHandler(t *testing.T) {
+	evt := &messages.UnitCreatedEvt{
 		UnitID:           "a1",
 		RequesterID:      "b1",
 		Name:             "Test Unit",
@@ -31,13 +31,13 @@ func TestUnitCreatedEventHandler(t *testing.T) {
 	assert.MessageEquals(t, "Projection Updated", []messages.Message{projection}, expectedProjection)
 }
 
-func TestPrivilegeGrantedEventHandler(t *testing.T) {
+func TestPrivilegeGrantedEvtHandler(t *testing.T) {
 	projection := &messages.UnitProjection{
 		UnitID:      "a1",
 		MemberCount: 10,
 		TotalWeight: 12,
 	}
-	evt := &messages.PrivilegeGrantedEvent{
+	evt := &messages.PrivilegeGrantedEvt{
 		UnitID:   "a1",
 		MemberID: "123",
 		Weight:   2,
@@ -50,13 +50,13 @@ func TestPrivilegeGrantedEventHandler(t *testing.T) {
 	assert.Equals(t, "Total Weight Incremented", projection.TotalWeight, uint32(14))
 }
 
-func TestPrivilegeRevokedEventHandler(t *testing.T) {
+func TestPrivilegeRevokedEvtHandler(t *testing.T) {
 	projection := &messages.UnitProjection{
 		UnitID:      "a1",
 		MemberCount: 10,
 		TotalWeight: 10,
 	}
-	evt := &messages.PrivilegeRevokedEvent{
+	evt := &messages.PrivilegeRevokedEvt{
 		UnitID: "a1",
 		Weight: 2,
 	}

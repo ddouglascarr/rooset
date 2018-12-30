@@ -15,7 +15,7 @@ message CreateGithubManagedUnit {
 }
 
 
-message SyncPullRequestCommand{
+message SyncPullRequestCmd{
   option (messages.AggregateRootField) = "IssueID";
 
   string IssueID = 1;

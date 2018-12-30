@@ -18,7 +18,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-type CreateUnitCommand struct {
+type CreateUnitCmd struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	Name                 string   `protobuf:"bytes,3,opt,name=Name,proto3" json:"Name,omitempty"`
@@ -29,66 +29,66 @@ type CreateUnitCommand struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *CreateUnitCommand) Reset()         { *m = CreateUnitCommand{} }
-func (m *CreateUnitCommand) String() string { return proto.CompactTextString(m) }
-func (*CreateUnitCommand) ProtoMessage()    {}
-func (*CreateUnitCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{0}
+func (m *CreateUnitCmd) Reset()         { *m = CreateUnitCmd{} }
+func (m *CreateUnitCmd) String() string { return proto.CompactTextString(m) }
+func (*CreateUnitCmd) ProtoMessage()    {}
+func (*CreateUnitCmd) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{0}
 }
-func (m *CreateUnitCommand) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CreateUnitCommand.Unmarshal(m, b)
+func (m *CreateUnitCmd) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateUnitCmd.Unmarshal(m, b)
 }
-func (m *CreateUnitCommand) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CreateUnitCommand.Marshal(b, m, deterministic)
+func (m *CreateUnitCmd) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateUnitCmd.Marshal(b, m, deterministic)
 }
-func (dst *CreateUnitCommand) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateUnitCommand.Merge(dst, src)
+func (dst *CreateUnitCmd) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateUnitCmd.Merge(dst, src)
 }
-func (m *CreateUnitCommand) XXX_Size() int {
-	return xxx_messageInfo_CreateUnitCommand.Size(m)
+func (m *CreateUnitCmd) XXX_Size() int {
+	return xxx_messageInfo_CreateUnitCmd.Size(m)
 }
-func (m *CreateUnitCommand) XXX_DiscardUnknown() {
-	xxx_messageInfo_CreateUnitCommand.DiscardUnknown(m)
+func (m *CreateUnitCmd) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateUnitCmd.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_CreateUnitCommand proto.InternalMessageInfo
+var xxx_messageInfo_CreateUnitCmd proto.InternalMessageInfo
 
-func (m *CreateUnitCommand) GetUnitID() string {
+func (m *CreateUnitCmd) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *CreateUnitCommand) GetRequesterID() string {
+func (m *CreateUnitCmd) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *CreateUnitCommand) GetName() string {
+func (m *CreateUnitCmd) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *CreateUnitCommand) GetDescription() string {
+func (m *CreateUnitCmd) GetDescription() string {
 	if m != nil {
 		return m.Description
 	}
 	return ""
 }
 
-func (m *CreateUnitCommand) GetURLParameterName() string {
+func (m *CreateUnitCmd) GetURLParameterName() string {
 	if m != nil {
 		return m.URLParameterName
 	}
 	return ""
 }
 
-type UnitCreatedEvent struct {
+type UnitCreatedEvt struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	Name                 string   `protobuf:"bytes,3,opt,name=Name,proto3" json:"Name,omitempty"`
@@ -99,66 +99,66 @@ type UnitCreatedEvent struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *UnitCreatedEvent) Reset()         { *m = UnitCreatedEvent{} }
-func (m *UnitCreatedEvent) String() string { return proto.CompactTextString(m) }
-func (*UnitCreatedEvent) ProtoMessage()    {}
-func (*UnitCreatedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{1}
+func (m *UnitCreatedEvt) Reset()         { *m = UnitCreatedEvt{} }
+func (m *UnitCreatedEvt) String() string { return proto.CompactTextString(m) }
+func (*UnitCreatedEvt) ProtoMessage()    {}
+func (*UnitCreatedEvt) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{1}
 }
-func (m *UnitCreatedEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_UnitCreatedEvent.Unmarshal(m, b)
+func (m *UnitCreatedEvt) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UnitCreatedEvt.Unmarshal(m, b)
 }
-func (m *UnitCreatedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_UnitCreatedEvent.Marshal(b, m, deterministic)
+func (m *UnitCreatedEvt) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UnitCreatedEvt.Marshal(b, m, deterministic)
 }
-func (dst *UnitCreatedEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UnitCreatedEvent.Merge(dst, src)
+func (dst *UnitCreatedEvt) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UnitCreatedEvt.Merge(dst, src)
 }
-func (m *UnitCreatedEvent) XXX_Size() int {
-	return xxx_messageInfo_UnitCreatedEvent.Size(m)
+func (m *UnitCreatedEvt) XXX_Size() int {
+	return xxx_messageInfo_UnitCreatedEvt.Size(m)
 }
-func (m *UnitCreatedEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_UnitCreatedEvent.DiscardUnknown(m)
+func (m *UnitCreatedEvt) XXX_DiscardUnknown() {
+	xxx_messageInfo_UnitCreatedEvt.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_UnitCreatedEvent proto.InternalMessageInfo
+var xxx_messageInfo_UnitCreatedEvt proto.InternalMessageInfo
 
-func (m *UnitCreatedEvent) GetUnitID() string {
+func (m *UnitCreatedEvt) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *UnitCreatedEvent) GetRequesterID() string {
+func (m *UnitCreatedEvt) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *UnitCreatedEvent) GetName() string {
+func (m *UnitCreatedEvt) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *UnitCreatedEvent) GetDescription() string {
+func (m *UnitCreatedEvt) GetDescription() string {
 	if m != nil {
 		return m.Description
 	}
 	return ""
 }
 
-func (m *UnitCreatedEvent) GetURLParameterName() string {
+func (m *UnitCreatedEvt) GetURLParameterName() string {
 	if m != nil {
 		return m.URLParameterName
 	}
 	return ""
 }
 
-type GrantPrivilegeCommand struct {
+type GrantPrivilegeCmd struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	MemberID             string   `protobuf:"bytes,3,opt,name=MemberID,proto3" json:"MemberID,omitempty"`
@@ -171,80 +171,80 @@ type GrantPrivilegeCommand struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GrantPrivilegeCommand) Reset()         { *m = GrantPrivilegeCommand{} }
-func (m *GrantPrivilegeCommand) String() string { return proto.CompactTextString(m) }
-func (*GrantPrivilegeCommand) ProtoMessage()    {}
-func (*GrantPrivilegeCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{2}
+func (m *GrantPrivilegeCmd) Reset()         { *m = GrantPrivilegeCmd{} }
+func (m *GrantPrivilegeCmd) String() string { return proto.CompactTextString(m) }
+func (*GrantPrivilegeCmd) ProtoMessage()    {}
+func (*GrantPrivilegeCmd) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{2}
 }
-func (m *GrantPrivilegeCommand) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GrantPrivilegeCommand.Unmarshal(m, b)
+func (m *GrantPrivilegeCmd) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GrantPrivilegeCmd.Unmarshal(m, b)
 }
-func (m *GrantPrivilegeCommand) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GrantPrivilegeCommand.Marshal(b, m, deterministic)
+func (m *GrantPrivilegeCmd) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GrantPrivilegeCmd.Marshal(b, m, deterministic)
 }
-func (dst *GrantPrivilegeCommand) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GrantPrivilegeCommand.Merge(dst, src)
+func (dst *GrantPrivilegeCmd) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GrantPrivilegeCmd.Merge(dst, src)
 }
-func (m *GrantPrivilegeCommand) XXX_Size() int {
-	return xxx_messageInfo_GrantPrivilegeCommand.Size(m)
+func (m *GrantPrivilegeCmd) XXX_Size() int {
+	return xxx_messageInfo_GrantPrivilegeCmd.Size(m)
 }
-func (m *GrantPrivilegeCommand) XXX_DiscardUnknown() {
-	xxx_messageInfo_GrantPrivilegeCommand.DiscardUnknown(m)
+func (m *GrantPrivilegeCmd) XXX_DiscardUnknown() {
+	xxx_messageInfo_GrantPrivilegeCmd.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GrantPrivilegeCommand proto.InternalMessageInfo
+var xxx_messageInfo_GrantPrivilegeCmd proto.InternalMessageInfo
 
-func (m *GrantPrivilegeCommand) GetUnitID() string {
+func (m *GrantPrivilegeCmd) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *GrantPrivilegeCommand) GetRequesterID() string {
+func (m *GrantPrivilegeCmd) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *GrantPrivilegeCommand) GetMemberID() string {
+func (m *GrantPrivilegeCmd) GetMemberID() string {
 	if m != nil {
 		return m.MemberID
 	}
 	return ""
 }
 
-func (m *GrantPrivilegeCommand) GetVotingRight() bool {
+func (m *GrantPrivilegeCmd) GetVotingRight() bool {
 	if m != nil {
 		return m.VotingRight
 	}
 	return false
 }
 
-func (m *GrantPrivilegeCommand) GetInitiativeRight() bool {
+func (m *GrantPrivilegeCmd) GetInitiativeRight() bool {
 	if m != nil {
 		return m.InitiativeRight
 	}
 	return false
 }
 
-func (m *GrantPrivilegeCommand) GetManagementRight() bool {
+func (m *GrantPrivilegeCmd) GetManagementRight() bool {
 	if m != nil {
 		return m.ManagementRight
 	}
 	return false
 }
 
-func (m *GrantPrivilegeCommand) GetWeight() uint32 {
+func (m *GrantPrivilegeCmd) GetWeight() uint32 {
 	if m != nil {
 		return m.Weight
 	}
 	return 0
 }
 
-type PrivilegeGrantedEvent struct {
+type PrivilegeGrantedEvt struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	MemberID             string   `protobuf:"bytes,3,opt,name=MemberID,proto3" json:"MemberID,omitempty"`
@@ -257,80 +257,80 @@ type PrivilegeGrantedEvent struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PrivilegeGrantedEvent) Reset()         { *m = PrivilegeGrantedEvent{} }
-func (m *PrivilegeGrantedEvent) String() string { return proto.CompactTextString(m) }
-func (*PrivilegeGrantedEvent) ProtoMessage()    {}
-func (*PrivilegeGrantedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{3}
+func (m *PrivilegeGrantedEvt) Reset()         { *m = PrivilegeGrantedEvt{} }
+func (m *PrivilegeGrantedEvt) String() string { return proto.CompactTextString(m) }
+func (*PrivilegeGrantedEvt) ProtoMessage()    {}
+func (*PrivilegeGrantedEvt) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{3}
 }
-func (m *PrivilegeGrantedEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PrivilegeGrantedEvent.Unmarshal(m, b)
+func (m *PrivilegeGrantedEvt) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PrivilegeGrantedEvt.Unmarshal(m, b)
 }
-func (m *PrivilegeGrantedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PrivilegeGrantedEvent.Marshal(b, m, deterministic)
+func (m *PrivilegeGrantedEvt) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PrivilegeGrantedEvt.Marshal(b, m, deterministic)
 }
-func (dst *PrivilegeGrantedEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PrivilegeGrantedEvent.Merge(dst, src)
+func (dst *PrivilegeGrantedEvt) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PrivilegeGrantedEvt.Merge(dst, src)
 }
-func (m *PrivilegeGrantedEvent) XXX_Size() int {
-	return xxx_messageInfo_PrivilegeGrantedEvent.Size(m)
+func (m *PrivilegeGrantedEvt) XXX_Size() int {
+	return xxx_messageInfo_PrivilegeGrantedEvt.Size(m)
 }
-func (m *PrivilegeGrantedEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_PrivilegeGrantedEvent.DiscardUnknown(m)
+func (m *PrivilegeGrantedEvt) XXX_DiscardUnknown() {
+	xxx_messageInfo_PrivilegeGrantedEvt.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PrivilegeGrantedEvent proto.InternalMessageInfo
+var xxx_messageInfo_PrivilegeGrantedEvt proto.InternalMessageInfo
 
-func (m *PrivilegeGrantedEvent) GetUnitID() string {
+func (m *PrivilegeGrantedEvt) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *PrivilegeGrantedEvent) GetRequesterID() string {
+func (m *PrivilegeGrantedEvt) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *PrivilegeGrantedEvent) GetMemberID() string {
+func (m *PrivilegeGrantedEvt) GetMemberID() string {
 	if m != nil {
 		return m.MemberID
 	}
 	return ""
 }
 
-func (m *PrivilegeGrantedEvent) GetVotingRight() bool {
+func (m *PrivilegeGrantedEvt) GetVotingRight() bool {
 	if m != nil {
 		return m.VotingRight
 	}
 	return false
 }
 
-func (m *PrivilegeGrantedEvent) GetInitiativeRight() bool {
+func (m *PrivilegeGrantedEvt) GetInitiativeRight() bool {
 	if m != nil {
 		return m.InitiativeRight
 	}
 	return false
 }
 
-func (m *PrivilegeGrantedEvent) GetManagementRight() bool {
+func (m *PrivilegeGrantedEvt) GetManagementRight() bool {
 	if m != nil {
 		return m.ManagementRight
 	}
 	return false
 }
 
-func (m *PrivilegeGrantedEvent) GetWeight() uint32 {
+func (m *PrivilegeGrantedEvt) GetWeight() uint32 {
 	if m != nil {
 		return m.Weight
 	}
 	return 0
 }
 
-type RevokePrivilegeCommand struct {
+type RevokePrivilegeCmd struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	MemberID             string   `protobuf:"bytes,3,opt,name=MemberID,proto3" json:"MemberID,omitempty"`
@@ -339,52 +339,52 @@ type RevokePrivilegeCommand struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *RevokePrivilegeCommand) Reset()         { *m = RevokePrivilegeCommand{} }
-func (m *RevokePrivilegeCommand) String() string { return proto.CompactTextString(m) }
-func (*RevokePrivilegeCommand) ProtoMessage()    {}
-func (*RevokePrivilegeCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{4}
+func (m *RevokePrivilegeCmd) Reset()         { *m = RevokePrivilegeCmd{} }
+func (m *RevokePrivilegeCmd) String() string { return proto.CompactTextString(m) }
+func (*RevokePrivilegeCmd) ProtoMessage()    {}
+func (*RevokePrivilegeCmd) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{4}
 }
-func (m *RevokePrivilegeCommand) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_RevokePrivilegeCommand.Unmarshal(m, b)
+func (m *RevokePrivilegeCmd) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RevokePrivilegeCmd.Unmarshal(m, b)
 }
-func (m *RevokePrivilegeCommand) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_RevokePrivilegeCommand.Marshal(b, m, deterministic)
+func (m *RevokePrivilegeCmd) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RevokePrivilegeCmd.Marshal(b, m, deterministic)
 }
-func (dst *RevokePrivilegeCommand) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RevokePrivilegeCommand.Merge(dst, src)
+func (dst *RevokePrivilegeCmd) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RevokePrivilegeCmd.Merge(dst, src)
 }
-func (m *RevokePrivilegeCommand) XXX_Size() int {
-	return xxx_messageInfo_RevokePrivilegeCommand.Size(m)
+func (m *RevokePrivilegeCmd) XXX_Size() int {
+	return xxx_messageInfo_RevokePrivilegeCmd.Size(m)
 }
-func (m *RevokePrivilegeCommand) XXX_DiscardUnknown() {
-	xxx_messageInfo_RevokePrivilegeCommand.DiscardUnknown(m)
+func (m *RevokePrivilegeCmd) XXX_DiscardUnknown() {
+	xxx_messageInfo_RevokePrivilegeCmd.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_RevokePrivilegeCommand proto.InternalMessageInfo
+var xxx_messageInfo_RevokePrivilegeCmd proto.InternalMessageInfo
 
-func (m *RevokePrivilegeCommand) GetUnitID() string {
+func (m *RevokePrivilegeCmd) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *RevokePrivilegeCommand) GetRequesterID() string {
+func (m *RevokePrivilegeCmd) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *RevokePrivilegeCommand) GetMemberID() string {
+func (m *RevokePrivilegeCmd) GetMemberID() string {
 	if m != nil {
 		return m.MemberID
 	}
 	return ""
 }
 
-type PrivilegeRevokedEvent struct {
+type PrivilegeRevokedEvt struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	MemberID             string   `protobuf:"bytes,3,opt,name=MemberID,proto3" json:"MemberID,omitempty"`
@@ -394,59 +394,59 @@ type PrivilegeRevokedEvent struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PrivilegeRevokedEvent) Reset()         { *m = PrivilegeRevokedEvent{} }
-func (m *PrivilegeRevokedEvent) String() string { return proto.CompactTextString(m) }
-func (*PrivilegeRevokedEvent) ProtoMessage()    {}
-func (*PrivilegeRevokedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{5}
+func (m *PrivilegeRevokedEvt) Reset()         { *m = PrivilegeRevokedEvt{} }
+func (m *PrivilegeRevokedEvt) String() string { return proto.CompactTextString(m) }
+func (*PrivilegeRevokedEvt) ProtoMessage()    {}
+func (*PrivilegeRevokedEvt) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{5}
 }
-func (m *PrivilegeRevokedEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PrivilegeRevokedEvent.Unmarshal(m, b)
+func (m *PrivilegeRevokedEvt) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PrivilegeRevokedEvt.Unmarshal(m, b)
 }
-func (m *PrivilegeRevokedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PrivilegeRevokedEvent.Marshal(b, m, deterministic)
+func (m *PrivilegeRevokedEvt) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PrivilegeRevokedEvt.Marshal(b, m, deterministic)
 }
-func (dst *PrivilegeRevokedEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PrivilegeRevokedEvent.Merge(dst, src)
+func (dst *PrivilegeRevokedEvt) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PrivilegeRevokedEvt.Merge(dst, src)
 }
-func (m *PrivilegeRevokedEvent) XXX_Size() int {
-	return xxx_messageInfo_PrivilegeRevokedEvent.Size(m)
+func (m *PrivilegeRevokedEvt) XXX_Size() int {
+	return xxx_messageInfo_PrivilegeRevokedEvt.Size(m)
 }
-func (m *PrivilegeRevokedEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_PrivilegeRevokedEvent.DiscardUnknown(m)
+func (m *PrivilegeRevokedEvt) XXX_DiscardUnknown() {
+	xxx_messageInfo_PrivilegeRevokedEvt.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PrivilegeRevokedEvent proto.InternalMessageInfo
+var xxx_messageInfo_PrivilegeRevokedEvt proto.InternalMessageInfo
 
-func (m *PrivilegeRevokedEvent) GetUnitID() string {
+func (m *PrivilegeRevokedEvt) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *PrivilegeRevokedEvent) GetRequesterID() string {
+func (m *PrivilegeRevokedEvt) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *PrivilegeRevokedEvent) GetMemberID() string {
+func (m *PrivilegeRevokedEvt) GetMemberID() string {
 	if m != nil {
 		return m.MemberID
 	}
 	return ""
 }
 
-func (m *PrivilegeRevokedEvent) GetWeight() uint32 {
+func (m *PrivilegeRevokedEvt) GetWeight() uint32 {
 	if m != nil {
 		return m.Weight
 	}
 	return 0
 }
 
-type CreateAreaCommand struct {
+type CreateAreaCmd struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	AreaID               string   `protobuf:"bytes,3,opt,name=AreaID,proto3" json:"AreaID,omitempty"`
@@ -457,66 +457,66 @@ type CreateAreaCommand struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *CreateAreaCommand) Reset()         { *m = CreateAreaCommand{} }
-func (m *CreateAreaCommand) String() string { return proto.CompactTextString(m) }
-func (*CreateAreaCommand) ProtoMessage()    {}
-func (*CreateAreaCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{6}
+func (m *CreateAreaCmd) Reset()         { *m = CreateAreaCmd{} }
+func (m *CreateAreaCmd) String() string { return proto.CompactTextString(m) }
+func (*CreateAreaCmd) ProtoMessage()    {}
+func (*CreateAreaCmd) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{6}
 }
-func (m *CreateAreaCommand) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CreateAreaCommand.Unmarshal(m, b)
+func (m *CreateAreaCmd) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateAreaCmd.Unmarshal(m, b)
 }
-func (m *CreateAreaCommand) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CreateAreaCommand.Marshal(b, m, deterministic)
+func (m *CreateAreaCmd) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateAreaCmd.Marshal(b, m, deterministic)
 }
-func (dst *CreateAreaCommand) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateAreaCommand.Merge(dst, src)
+func (dst *CreateAreaCmd) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateAreaCmd.Merge(dst, src)
 }
-func (m *CreateAreaCommand) XXX_Size() int {
-	return xxx_messageInfo_CreateAreaCommand.Size(m)
+func (m *CreateAreaCmd) XXX_Size() int {
+	return xxx_messageInfo_CreateAreaCmd.Size(m)
 }
-func (m *CreateAreaCommand) XXX_DiscardUnknown() {
-	xxx_messageInfo_CreateAreaCommand.DiscardUnknown(m)
+func (m *CreateAreaCmd) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateAreaCmd.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_CreateAreaCommand proto.InternalMessageInfo
+var xxx_messageInfo_CreateAreaCmd proto.InternalMessageInfo
 
-func (m *CreateAreaCommand) GetUnitID() string {
+func (m *CreateAreaCmd) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *CreateAreaCommand) GetRequesterID() string {
+func (m *CreateAreaCmd) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *CreateAreaCommand) GetAreaID() string {
+func (m *CreateAreaCmd) GetAreaID() string {
 	if m != nil {
 		return m.AreaID
 	}
 	return ""
 }
 
-func (m *CreateAreaCommand) GetName() string {
+func (m *CreateAreaCmd) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *CreateAreaCommand) GetDescription() string {
+func (m *CreateAreaCmd) GetDescription() string {
 	if m != nil {
 		return m.Description
 	}
 	return ""
 }
 
-type AreaCreatedEvent struct {
+type AreaCreatedEvt struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	AreaID               string   `protobuf:"bytes,3,opt,name=AreaID,proto3" json:"AreaID,omitempty"`
@@ -527,66 +527,66 @@ type AreaCreatedEvent struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *AreaCreatedEvent) Reset()         { *m = AreaCreatedEvent{} }
-func (m *AreaCreatedEvent) String() string { return proto.CompactTextString(m) }
-func (*AreaCreatedEvent) ProtoMessage()    {}
-func (*AreaCreatedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{7}
+func (m *AreaCreatedEvt) Reset()         { *m = AreaCreatedEvt{} }
+func (m *AreaCreatedEvt) String() string { return proto.CompactTextString(m) }
+func (*AreaCreatedEvt) ProtoMessage()    {}
+func (*AreaCreatedEvt) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{7}
 }
-func (m *AreaCreatedEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AreaCreatedEvent.Unmarshal(m, b)
+func (m *AreaCreatedEvt) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AreaCreatedEvt.Unmarshal(m, b)
 }
-func (m *AreaCreatedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AreaCreatedEvent.Marshal(b, m, deterministic)
+func (m *AreaCreatedEvt) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AreaCreatedEvt.Marshal(b, m, deterministic)
 }
-func (dst *AreaCreatedEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AreaCreatedEvent.Merge(dst, src)
+func (dst *AreaCreatedEvt) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AreaCreatedEvt.Merge(dst, src)
 }
-func (m *AreaCreatedEvent) XXX_Size() int {
-	return xxx_messageInfo_AreaCreatedEvent.Size(m)
+func (m *AreaCreatedEvt) XXX_Size() int {
+	return xxx_messageInfo_AreaCreatedEvt.Size(m)
 }
-func (m *AreaCreatedEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_AreaCreatedEvent.DiscardUnknown(m)
+func (m *AreaCreatedEvt) XXX_DiscardUnknown() {
+	xxx_messageInfo_AreaCreatedEvt.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AreaCreatedEvent proto.InternalMessageInfo
+var xxx_messageInfo_AreaCreatedEvt proto.InternalMessageInfo
 
-func (m *AreaCreatedEvent) GetUnitID() string {
+func (m *AreaCreatedEvt) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *AreaCreatedEvent) GetRequesterID() string {
+func (m *AreaCreatedEvt) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *AreaCreatedEvent) GetAreaID() string {
+func (m *AreaCreatedEvt) GetAreaID() string {
 	if m != nil {
 		return m.AreaID
 	}
 	return ""
 }
 
-func (m *AreaCreatedEvent) GetName() string {
+func (m *AreaCreatedEvt) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *AreaCreatedEvent) GetDescription() string {
+func (m *AreaCreatedEvt) GetDescription() string {
 	if m != nil {
 		return m.Description
 	}
 	return ""
 }
 
-type CreatePolicyCommand struct {
+type CreatePolicyCmd struct {
 	UnitID      string `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID string `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	PolicyID    string `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
@@ -608,122 +608,122 @@ type CreatePolicyCommand struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *CreatePolicyCommand) Reset()         { *m = CreatePolicyCommand{} }
-func (m *CreatePolicyCommand) String() string { return proto.CompactTextString(m) }
-func (*CreatePolicyCommand) ProtoMessage()    {}
-func (*CreatePolicyCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{8}
+func (m *CreatePolicyCmd) Reset()         { *m = CreatePolicyCmd{} }
+func (m *CreatePolicyCmd) String() string { return proto.CompactTextString(m) }
+func (*CreatePolicyCmd) ProtoMessage()    {}
+func (*CreatePolicyCmd) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{8}
 }
-func (m *CreatePolicyCommand) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CreatePolicyCommand.Unmarshal(m, b)
+func (m *CreatePolicyCmd) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreatePolicyCmd.Unmarshal(m, b)
 }
-func (m *CreatePolicyCommand) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CreatePolicyCommand.Marshal(b, m, deterministic)
+func (m *CreatePolicyCmd) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreatePolicyCmd.Marshal(b, m, deterministic)
 }
-func (dst *CreatePolicyCommand) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreatePolicyCommand.Merge(dst, src)
+func (dst *CreatePolicyCmd) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreatePolicyCmd.Merge(dst, src)
 }
-func (m *CreatePolicyCommand) XXX_Size() int {
-	return xxx_messageInfo_CreatePolicyCommand.Size(m)
+func (m *CreatePolicyCmd) XXX_Size() int {
+	return xxx_messageInfo_CreatePolicyCmd.Size(m)
 }
-func (m *CreatePolicyCommand) XXX_DiscardUnknown() {
-	xxx_messageInfo_CreatePolicyCommand.DiscardUnknown(m)
+func (m *CreatePolicyCmd) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreatePolicyCmd.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_CreatePolicyCommand proto.InternalMessageInfo
+var xxx_messageInfo_CreatePolicyCmd proto.InternalMessageInfo
 
-func (m *CreatePolicyCommand) GetUnitID() string {
+func (m *CreatePolicyCmd) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *CreatePolicyCommand) GetRequesterID() string {
+func (m *CreatePolicyCmd) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *CreatePolicyCommand) GetPolicyID() string {
+func (m *CreatePolicyCmd) GetPolicyID() string {
 	if m != nil {
 		return m.PolicyID
 	}
 	return ""
 }
 
-func (m *CreatePolicyCommand) GetDescription() string {
+func (m *CreatePolicyCmd) GetDescription() string {
 	if m != nil {
 		return m.Description
 	}
 	return ""
 }
 
-func (m *CreatePolicyCommand) GetMinAdmissionDuration() int32 {
+func (m *CreatePolicyCmd) GetMinAdmissionDuration() int32 {
 	if m != nil {
 		return m.MinAdmissionDuration
 	}
 	return 0
 }
 
-func (m *CreatePolicyCommand) GetMaxAdmissionDuration() int32 {
+func (m *CreatePolicyCmd) GetMaxAdmissionDuration() int32 {
 	if m != nil {
 		return m.MaxAdmissionDuration
 	}
 	return 0
 }
 
-func (m *CreatePolicyCommand) GetDiscussionDuration() int32 {
+func (m *CreatePolicyCmd) GetDiscussionDuration() int32 {
 	if m != nil {
 		return m.DiscussionDuration
 	}
 	return 0
 }
 
-func (m *CreatePolicyCommand) GetVerificationDuration() int32 {
+func (m *CreatePolicyCmd) GetVerificationDuration() int32 {
 	if m != nil {
 		return m.VerificationDuration
 	}
 	return 0
 }
 
-func (m *CreatePolicyCommand) GetVotingDuration() int32 {
+func (m *CreatePolicyCmd) GetVotingDuration() int32 {
 	if m != nil {
 		return m.VotingDuration
 	}
 	return 0
 }
 
-func (m *CreatePolicyCommand) GetIssueQuorumNum() int32 {
+func (m *CreatePolicyCmd) GetIssueQuorumNum() int32 {
 	if m != nil {
 		return m.IssueQuorumNum
 	}
 	return 0
 }
 
-func (m *CreatePolicyCommand) GetIssueQuorumDen() int32 {
+func (m *CreatePolicyCmd) GetIssueQuorumDen() int32 {
 	if m != nil {
 		return m.IssueQuorumDen
 	}
 	return 0
 }
 
-func (m *CreatePolicyCommand) GetInitiativeQuorumNum() int32 {
+func (m *CreatePolicyCmd) GetInitiativeQuorumNum() int32 {
 	if m != nil {
 		return m.InitiativeQuorumNum
 	}
 	return 0
 }
 
-func (m *CreatePolicyCommand) GetInitiativeQuorumDen() int32 {
+func (m *CreatePolicyCmd) GetInitiativeQuorumDen() int32 {
 	if m != nil {
 		return m.InitiativeQuorumDen
 	}
 	return 0
 }
 
-type PolicyCreatedEvent struct {
+type PolicyCreatedEvt struct {
 	UnitID      string `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID string `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	PolicyID    string `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
@@ -745,122 +745,122 @@ type PolicyCreatedEvent struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PolicyCreatedEvent) Reset()         { *m = PolicyCreatedEvent{} }
-func (m *PolicyCreatedEvent) String() string { return proto.CompactTextString(m) }
-func (*PolicyCreatedEvent) ProtoMessage()    {}
-func (*PolicyCreatedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{9}
+func (m *PolicyCreatedEvt) Reset()         { *m = PolicyCreatedEvt{} }
+func (m *PolicyCreatedEvt) String() string { return proto.CompactTextString(m) }
+func (*PolicyCreatedEvt) ProtoMessage()    {}
+func (*PolicyCreatedEvt) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{9}
 }
-func (m *PolicyCreatedEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PolicyCreatedEvent.Unmarshal(m, b)
+func (m *PolicyCreatedEvt) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PolicyCreatedEvt.Unmarshal(m, b)
 }
-func (m *PolicyCreatedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PolicyCreatedEvent.Marshal(b, m, deterministic)
+func (m *PolicyCreatedEvt) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PolicyCreatedEvt.Marshal(b, m, deterministic)
 }
-func (dst *PolicyCreatedEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PolicyCreatedEvent.Merge(dst, src)
+func (dst *PolicyCreatedEvt) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PolicyCreatedEvt.Merge(dst, src)
 }
-func (m *PolicyCreatedEvent) XXX_Size() int {
-	return xxx_messageInfo_PolicyCreatedEvent.Size(m)
+func (m *PolicyCreatedEvt) XXX_Size() int {
+	return xxx_messageInfo_PolicyCreatedEvt.Size(m)
 }
-func (m *PolicyCreatedEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_PolicyCreatedEvent.DiscardUnknown(m)
+func (m *PolicyCreatedEvt) XXX_DiscardUnknown() {
+	xxx_messageInfo_PolicyCreatedEvt.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PolicyCreatedEvent proto.InternalMessageInfo
+var xxx_messageInfo_PolicyCreatedEvt proto.InternalMessageInfo
 
-func (m *PolicyCreatedEvent) GetUnitID() string {
+func (m *PolicyCreatedEvt) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *PolicyCreatedEvent) GetRequesterID() string {
+func (m *PolicyCreatedEvt) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *PolicyCreatedEvent) GetPolicyID() string {
+func (m *PolicyCreatedEvt) GetPolicyID() string {
 	if m != nil {
 		return m.PolicyID
 	}
 	return ""
 }
 
-func (m *PolicyCreatedEvent) GetDescription() string {
+func (m *PolicyCreatedEvt) GetDescription() string {
 	if m != nil {
 		return m.Description
 	}
 	return ""
 }
 
-func (m *PolicyCreatedEvent) GetMinAdmissionDuration() int32 {
+func (m *PolicyCreatedEvt) GetMinAdmissionDuration() int32 {
 	if m != nil {
 		return m.MinAdmissionDuration
 	}
 	return 0
 }
 
-func (m *PolicyCreatedEvent) GetMaxAdmissionDuration() int32 {
+func (m *PolicyCreatedEvt) GetMaxAdmissionDuration() int32 {
 	if m != nil {
 		return m.MaxAdmissionDuration
 	}
 	return 0
 }
 
-func (m *PolicyCreatedEvent) GetDiscussionDuration() int32 {
+func (m *PolicyCreatedEvt) GetDiscussionDuration() int32 {
 	if m != nil {
 		return m.DiscussionDuration
 	}
 	return 0
 }
 
-func (m *PolicyCreatedEvent) GetVerificationDuration() int32 {
+func (m *PolicyCreatedEvt) GetVerificationDuration() int32 {
 	if m != nil {
 		return m.VerificationDuration
 	}
 	return 0
 }
 
-func (m *PolicyCreatedEvent) GetVotingDuration() int32 {
+func (m *PolicyCreatedEvt) GetVotingDuration() int32 {
 	if m != nil {
 		return m.VotingDuration
 	}
 	return 0
 }
 
-func (m *PolicyCreatedEvent) GetIssueQuorumNum() int32 {
+func (m *PolicyCreatedEvt) GetIssueQuorumNum() int32 {
 	if m != nil {
 		return m.IssueQuorumNum
 	}
 	return 0
 }
 
-func (m *PolicyCreatedEvent) GetIssueQuorumDen() int32 {
+func (m *PolicyCreatedEvt) GetIssueQuorumDen() int32 {
 	if m != nil {
 		return m.IssueQuorumDen
 	}
 	return 0
 }
 
-func (m *PolicyCreatedEvent) GetInitiativeQuorumNum() int32 {
+func (m *PolicyCreatedEvt) GetInitiativeQuorumNum() int32 {
 	if m != nil {
 		return m.InitiativeQuorumNum
 	}
 	return 0
 }
 
-func (m *PolicyCreatedEvent) GetInitiativeQuorumDen() int32 {
+func (m *PolicyCreatedEvt) GetInitiativeQuorumDen() int32 {
 	if m != nil {
 		return m.InitiativeQuorumDen
 	}
 	return 0
 }
 
-type DeactivatePolicyCommand struct {
+type DeactivatePolicyCmd struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	PolicyID             string   `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
@@ -869,52 +869,52 @@ type DeactivatePolicyCommand struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *DeactivatePolicyCommand) Reset()         { *m = DeactivatePolicyCommand{} }
-func (m *DeactivatePolicyCommand) String() string { return proto.CompactTextString(m) }
-func (*DeactivatePolicyCommand) ProtoMessage()    {}
-func (*DeactivatePolicyCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{10}
+func (m *DeactivatePolicyCmd) Reset()         { *m = DeactivatePolicyCmd{} }
+func (m *DeactivatePolicyCmd) String() string { return proto.CompactTextString(m) }
+func (*DeactivatePolicyCmd) ProtoMessage()    {}
+func (*DeactivatePolicyCmd) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{10}
 }
-func (m *DeactivatePolicyCommand) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeactivatePolicyCommand.Unmarshal(m, b)
+func (m *DeactivatePolicyCmd) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeactivatePolicyCmd.Unmarshal(m, b)
 }
-func (m *DeactivatePolicyCommand) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeactivatePolicyCommand.Marshal(b, m, deterministic)
+func (m *DeactivatePolicyCmd) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeactivatePolicyCmd.Marshal(b, m, deterministic)
 }
-func (dst *DeactivatePolicyCommand) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeactivatePolicyCommand.Merge(dst, src)
+func (dst *DeactivatePolicyCmd) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeactivatePolicyCmd.Merge(dst, src)
 }
-func (m *DeactivatePolicyCommand) XXX_Size() int {
-	return xxx_messageInfo_DeactivatePolicyCommand.Size(m)
+func (m *DeactivatePolicyCmd) XXX_Size() int {
+	return xxx_messageInfo_DeactivatePolicyCmd.Size(m)
 }
-func (m *DeactivatePolicyCommand) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeactivatePolicyCommand.DiscardUnknown(m)
+func (m *DeactivatePolicyCmd) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeactivatePolicyCmd.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_DeactivatePolicyCommand proto.InternalMessageInfo
+var xxx_messageInfo_DeactivatePolicyCmd proto.InternalMessageInfo
 
-func (m *DeactivatePolicyCommand) GetUnitID() string {
+func (m *DeactivatePolicyCmd) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *DeactivatePolicyCommand) GetRequesterID() string {
+func (m *DeactivatePolicyCmd) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *DeactivatePolicyCommand) GetPolicyID() string {
+func (m *DeactivatePolicyCmd) GetPolicyID() string {
 	if m != nil {
 		return m.PolicyID
 	}
 	return ""
 }
 
-type PolicyDeactivatedEvent struct {
+type PolicyDeactivatedEvt struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	PolicyID             string   `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
@@ -923,52 +923,52 @@ type PolicyDeactivatedEvent struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PolicyDeactivatedEvent) Reset()         { *m = PolicyDeactivatedEvent{} }
-func (m *PolicyDeactivatedEvent) String() string { return proto.CompactTextString(m) }
-func (*PolicyDeactivatedEvent) ProtoMessage()    {}
-func (*PolicyDeactivatedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{11}
+func (m *PolicyDeactivatedEvt) Reset()         { *m = PolicyDeactivatedEvt{} }
+func (m *PolicyDeactivatedEvt) String() string { return proto.CompactTextString(m) }
+func (*PolicyDeactivatedEvt) ProtoMessage()    {}
+func (*PolicyDeactivatedEvt) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{11}
 }
-func (m *PolicyDeactivatedEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PolicyDeactivatedEvent.Unmarshal(m, b)
+func (m *PolicyDeactivatedEvt) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PolicyDeactivatedEvt.Unmarshal(m, b)
 }
-func (m *PolicyDeactivatedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PolicyDeactivatedEvent.Marshal(b, m, deterministic)
+func (m *PolicyDeactivatedEvt) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PolicyDeactivatedEvt.Marshal(b, m, deterministic)
 }
-func (dst *PolicyDeactivatedEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PolicyDeactivatedEvent.Merge(dst, src)
+func (dst *PolicyDeactivatedEvt) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PolicyDeactivatedEvt.Merge(dst, src)
 }
-func (m *PolicyDeactivatedEvent) XXX_Size() int {
-	return xxx_messageInfo_PolicyDeactivatedEvent.Size(m)
+func (m *PolicyDeactivatedEvt) XXX_Size() int {
+	return xxx_messageInfo_PolicyDeactivatedEvt.Size(m)
 }
-func (m *PolicyDeactivatedEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_PolicyDeactivatedEvent.DiscardUnknown(m)
+func (m *PolicyDeactivatedEvt) XXX_DiscardUnknown() {
+	xxx_messageInfo_PolicyDeactivatedEvt.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PolicyDeactivatedEvent proto.InternalMessageInfo
+var xxx_messageInfo_PolicyDeactivatedEvt proto.InternalMessageInfo
 
-func (m *PolicyDeactivatedEvent) GetUnitID() string {
+func (m *PolicyDeactivatedEvt) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *PolicyDeactivatedEvent) GetRequesterID() string {
+func (m *PolicyDeactivatedEvt) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *PolicyDeactivatedEvent) GetPolicyID() string {
+func (m *PolicyDeactivatedEvt) GetPolicyID() string {
 	if m != nil {
 		return m.PolicyID
 	}
 	return ""
 }
 
-type AllowAreaPolicyCommand struct {
+type AllowAreaPolicyCmd struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	PolicyID             string   `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
@@ -978,59 +978,59 @@ type AllowAreaPolicyCommand struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *AllowAreaPolicyCommand) Reset()         { *m = AllowAreaPolicyCommand{} }
-func (m *AllowAreaPolicyCommand) String() string { return proto.CompactTextString(m) }
-func (*AllowAreaPolicyCommand) ProtoMessage()    {}
-func (*AllowAreaPolicyCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{12}
+func (m *AllowAreaPolicyCmd) Reset()         { *m = AllowAreaPolicyCmd{} }
+func (m *AllowAreaPolicyCmd) String() string { return proto.CompactTextString(m) }
+func (*AllowAreaPolicyCmd) ProtoMessage()    {}
+func (*AllowAreaPolicyCmd) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{12}
 }
-func (m *AllowAreaPolicyCommand) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AllowAreaPolicyCommand.Unmarshal(m, b)
+func (m *AllowAreaPolicyCmd) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AllowAreaPolicyCmd.Unmarshal(m, b)
 }
-func (m *AllowAreaPolicyCommand) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AllowAreaPolicyCommand.Marshal(b, m, deterministic)
+func (m *AllowAreaPolicyCmd) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AllowAreaPolicyCmd.Marshal(b, m, deterministic)
 }
-func (dst *AllowAreaPolicyCommand) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AllowAreaPolicyCommand.Merge(dst, src)
+func (dst *AllowAreaPolicyCmd) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AllowAreaPolicyCmd.Merge(dst, src)
 }
-func (m *AllowAreaPolicyCommand) XXX_Size() int {
-	return xxx_messageInfo_AllowAreaPolicyCommand.Size(m)
+func (m *AllowAreaPolicyCmd) XXX_Size() int {
+	return xxx_messageInfo_AllowAreaPolicyCmd.Size(m)
 }
-func (m *AllowAreaPolicyCommand) XXX_DiscardUnknown() {
-	xxx_messageInfo_AllowAreaPolicyCommand.DiscardUnknown(m)
+func (m *AllowAreaPolicyCmd) XXX_DiscardUnknown() {
+	xxx_messageInfo_AllowAreaPolicyCmd.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AllowAreaPolicyCommand proto.InternalMessageInfo
+var xxx_messageInfo_AllowAreaPolicyCmd proto.InternalMessageInfo
 
-func (m *AllowAreaPolicyCommand) GetUnitID() string {
+func (m *AllowAreaPolicyCmd) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *AllowAreaPolicyCommand) GetRequesterID() string {
+func (m *AllowAreaPolicyCmd) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *AllowAreaPolicyCommand) GetPolicyID() string {
+func (m *AllowAreaPolicyCmd) GetPolicyID() string {
 	if m != nil {
 		return m.PolicyID
 	}
 	return ""
 }
 
-func (m *AllowAreaPolicyCommand) GetAreaID() string {
+func (m *AllowAreaPolicyCmd) GetAreaID() string {
 	if m != nil {
 		return m.AreaID
 	}
 	return ""
 }
 
-type AreaPolicyAllowedEvent struct {
+type AreaPolicyAllowedEvt struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	PolicyID             string   `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
@@ -1040,59 +1040,59 @@ type AreaPolicyAllowedEvent struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *AreaPolicyAllowedEvent) Reset()         { *m = AreaPolicyAllowedEvent{} }
-func (m *AreaPolicyAllowedEvent) String() string { return proto.CompactTextString(m) }
-func (*AreaPolicyAllowedEvent) ProtoMessage()    {}
-func (*AreaPolicyAllowedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{13}
+func (m *AreaPolicyAllowedEvt) Reset()         { *m = AreaPolicyAllowedEvt{} }
+func (m *AreaPolicyAllowedEvt) String() string { return proto.CompactTextString(m) }
+func (*AreaPolicyAllowedEvt) ProtoMessage()    {}
+func (*AreaPolicyAllowedEvt) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{13}
 }
-func (m *AreaPolicyAllowedEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AreaPolicyAllowedEvent.Unmarshal(m, b)
+func (m *AreaPolicyAllowedEvt) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AreaPolicyAllowedEvt.Unmarshal(m, b)
 }
-func (m *AreaPolicyAllowedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AreaPolicyAllowedEvent.Marshal(b, m, deterministic)
+func (m *AreaPolicyAllowedEvt) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AreaPolicyAllowedEvt.Marshal(b, m, deterministic)
 }
-func (dst *AreaPolicyAllowedEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AreaPolicyAllowedEvent.Merge(dst, src)
+func (dst *AreaPolicyAllowedEvt) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AreaPolicyAllowedEvt.Merge(dst, src)
 }
-func (m *AreaPolicyAllowedEvent) XXX_Size() int {
-	return xxx_messageInfo_AreaPolicyAllowedEvent.Size(m)
+func (m *AreaPolicyAllowedEvt) XXX_Size() int {
+	return xxx_messageInfo_AreaPolicyAllowedEvt.Size(m)
 }
-func (m *AreaPolicyAllowedEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_AreaPolicyAllowedEvent.DiscardUnknown(m)
+func (m *AreaPolicyAllowedEvt) XXX_DiscardUnknown() {
+	xxx_messageInfo_AreaPolicyAllowedEvt.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AreaPolicyAllowedEvent proto.InternalMessageInfo
+var xxx_messageInfo_AreaPolicyAllowedEvt proto.InternalMessageInfo
 
-func (m *AreaPolicyAllowedEvent) GetUnitID() string {
+func (m *AreaPolicyAllowedEvt) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *AreaPolicyAllowedEvent) GetRequesterID() string {
+func (m *AreaPolicyAllowedEvt) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *AreaPolicyAllowedEvent) GetPolicyID() string {
+func (m *AreaPolicyAllowedEvt) GetPolicyID() string {
 	if m != nil {
 		return m.PolicyID
 	}
 	return ""
 }
 
-func (m *AreaPolicyAllowedEvent) GetAreaID() string {
+func (m *AreaPolicyAllowedEvt) GetAreaID() string {
 	if m != nil {
 		return m.AreaID
 	}
 	return ""
 }
 
-type DisallowAreaPolicyCommand struct {
+type DisallowAreaPolicyCmd struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	PolicyID             string   `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
@@ -1102,59 +1102,59 @@ type DisallowAreaPolicyCommand struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *DisallowAreaPolicyCommand) Reset()         { *m = DisallowAreaPolicyCommand{} }
-func (m *DisallowAreaPolicyCommand) String() string { return proto.CompactTextString(m) }
-func (*DisallowAreaPolicyCommand) ProtoMessage()    {}
-func (*DisallowAreaPolicyCommand) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{14}
+func (m *DisallowAreaPolicyCmd) Reset()         { *m = DisallowAreaPolicyCmd{} }
+func (m *DisallowAreaPolicyCmd) String() string { return proto.CompactTextString(m) }
+func (*DisallowAreaPolicyCmd) ProtoMessage()    {}
+func (*DisallowAreaPolicyCmd) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{14}
 }
-func (m *DisallowAreaPolicyCommand) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DisallowAreaPolicyCommand.Unmarshal(m, b)
+func (m *DisallowAreaPolicyCmd) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DisallowAreaPolicyCmd.Unmarshal(m, b)
 }
-func (m *DisallowAreaPolicyCommand) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DisallowAreaPolicyCommand.Marshal(b, m, deterministic)
+func (m *DisallowAreaPolicyCmd) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DisallowAreaPolicyCmd.Marshal(b, m, deterministic)
 }
-func (dst *DisallowAreaPolicyCommand) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DisallowAreaPolicyCommand.Merge(dst, src)
+func (dst *DisallowAreaPolicyCmd) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DisallowAreaPolicyCmd.Merge(dst, src)
 }
-func (m *DisallowAreaPolicyCommand) XXX_Size() int {
-	return xxx_messageInfo_DisallowAreaPolicyCommand.Size(m)
+func (m *DisallowAreaPolicyCmd) XXX_Size() int {
+	return xxx_messageInfo_DisallowAreaPolicyCmd.Size(m)
 }
-func (m *DisallowAreaPolicyCommand) XXX_DiscardUnknown() {
-	xxx_messageInfo_DisallowAreaPolicyCommand.DiscardUnknown(m)
+func (m *DisallowAreaPolicyCmd) XXX_DiscardUnknown() {
+	xxx_messageInfo_DisallowAreaPolicyCmd.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_DisallowAreaPolicyCommand proto.InternalMessageInfo
+var xxx_messageInfo_DisallowAreaPolicyCmd proto.InternalMessageInfo
 
-func (m *DisallowAreaPolicyCommand) GetUnitID() string {
+func (m *DisallowAreaPolicyCmd) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *DisallowAreaPolicyCommand) GetRequesterID() string {
+func (m *DisallowAreaPolicyCmd) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *DisallowAreaPolicyCommand) GetPolicyID() string {
+func (m *DisallowAreaPolicyCmd) GetPolicyID() string {
 	if m != nil {
 		return m.PolicyID
 	}
 	return ""
 }
 
-func (m *DisallowAreaPolicyCommand) GetAreaID() string {
+func (m *DisallowAreaPolicyCmd) GetAreaID() string {
 	if m != nil {
 		return m.AreaID
 	}
 	return ""
 }
 
-type AreaPolicyDisallowedEvent struct {
+type AreaPolicyDisallowedEvt struct {
 	UnitID               string   `protobuf:"bytes,1,opt,name=UnitID,proto3" json:"UnitID,omitempty"`
 	RequesterID          string   `protobuf:"bytes,2,opt,name=RequesterID,proto3" json:"RequesterID,omitempty"`
 	PolicyID             string   `protobuf:"bytes,3,opt,name=PolicyID,proto3" json:"PolicyID,omitempty"`
@@ -1164,52 +1164,52 @@ type AreaPolicyDisallowedEvent struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *AreaPolicyDisallowedEvent) Reset()         { *m = AreaPolicyDisallowedEvent{} }
-func (m *AreaPolicyDisallowedEvent) String() string { return proto.CompactTextString(m) }
-func (*AreaPolicyDisallowedEvent) ProtoMessage()    {}
-func (*AreaPolicyDisallowedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_unit_aggregate_8073d076b75591a1, []int{15}
+func (m *AreaPolicyDisallowedEvt) Reset()         { *m = AreaPolicyDisallowedEvt{} }
+func (m *AreaPolicyDisallowedEvt) String() string { return proto.CompactTextString(m) }
+func (*AreaPolicyDisallowedEvt) ProtoMessage()    {}
+func (*AreaPolicyDisallowedEvt) Descriptor() ([]byte, []int) {
+	return fileDescriptor_unit_aggregate_5e3543043b14b8be, []int{15}
 }
-func (m *AreaPolicyDisallowedEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AreaPolicyDisallowedEvent.Unmarshal(m, b)
+func (m *AreaPolicyDisallowedEvt) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AreaPolicyDisallowedEvt.Unmarshal(m, b)
 }
-func (m *AreaPolicyDisallowedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AreaPolicyDisallowedEvent.Marshal(b, m, deterministic)
+func (m *AreaPolicyDisallowedEvt) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AreaPolicyDisallowedEvt.Marshal(b, m, deterministic)
 }
-func (dst *AreaPolicyDisallowedEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AreaPolicyDisallowedEvent.Merge(dst, src)
+func (dst *AreaPolicyDisallowedEvt) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AreaPolicyDisallowedEvt.Merge(dst, src)
 }
-func (m *AreaPolicyDisallowedEvent) XXX_Size() int {
-	return xxx_messageInfo_AreaPolicyDisallowedEvent.Size(m)
+func (m *AreaPolicyDisallowedEvt) XXX_Size() int {
+	return xxx_messageInfo_AreaPolicyDisallowedEvt.Size(m)
 }
-func (m *AreaPolicyDisallowedEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_AreaPolicyDisallowedEvent.DiscardUnknown(m)
+func (m *AreaPolicyDisallowedEvt) XXX_DiscardUnknown() {
+	xxx_messageInfo_AreaPolicyDisallowedEvt.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AreaPolicyDisallowedEvent proto.InternalMessageInfo
+var xxx_messageInfo_AreaPolicyDisallowedEvt proto.InternalMessageInfo
 
-func (m *AreaPolicyDisallowedEvent) GetUnitID() string {
+func (m *AreaPolicyDisallowedEvt) GetUnitID() string {
 	if m != nil {
 		return m.UnitID
 	}
 	return ""
 }
 
-func (m *AreaPolicyDisallowedEvent) GetRequesterID() string {
+func (m *AreaPolicyDisallowedEvt) GetRequesterID() string {
 	if m != nil {
 		return m.RequesterID
 	}
 	return ""
 }
 
-func (m *AreaPolicyDisallowedEvent) GetPolicyID() string {
+func (m *AreaPolicyDisallowedEvt) GetPolicyID() string {
 	if m != nil {
 		return m.PolicyID
 	}
 	return ""
 }
 
-func (m *AreaPolicyDisallowedEvent) GetAreaID() string {
+func (m *AreaPolicyDisallowedEvt) GetAreaID() string {
 	if m != nil {
 		return m.AreaID
 	}
@@ -1217,69 +1217,69 @@ func (m *AreaPolicyDisallowedEvent) GetAreaID() string {
 }
 
 func init() {
-	proto.RegisterType((*CreateUnitCommand)(nil), "messages.CreateUnitCommand")
-	proto.RegisterType((*UnitCreatedEvent)(nil), "messages.UnitCreatedEvent")
-	proto.RegisterType((*GrantPrivilegeCommand)(nil), "messages.GrantPrivilegeCommand")
-	proto.RegisterType((*PrivilegeGrantedEvent)(nil), "messages.PrivilegeGrantedEvent")
-	proto.RegisterType((*RevokePrivilegeCommand)(nil), "messages.RevokePrivilegeCommand")
-	proto.RegisterType((*PrivilegeRevokedEvent)(nil), "messages.PrivilegeRevokedEvent")
-	proto.RegisterType((*CreateAreaCommand)(nil), "messages.CreateAreaCommand")
-	proto.RegisterType((*AreaCreatedEvent)(nil), "messages.AreaCreatedEvent")
-	proto.RegisterType((*CreatePolicyCommand)(nil), "messages.CreatePolicyCommand")
-	proto.RegisterType((*PolicyCreatedEvent)(nil), "messages.PolicyCreatedEvent")
-	proto.RegisterType((*DeactivatePolicyCommand)(nil), "messages.DeactivatePolicyCommand")
-	proto.RegisterType((*PolicyDeactivatedEvent)(nil), "messages.PolicyDeactivatedEvent")
-	proto.RegisterType((*AllowAreaPolicyCommand)(nil), "messages.AllowAreaPolicyCommand")
-	proto.RegisterType((*AreaPolicyAllowedEvent)(nil), "messages.AreaPolicyAllowedEvent")
-	proto.RegisterType((*DisallowAreaPolicyCommand)(nil), "messages.DisallowAreaPolicyCommand")
-	proto.RegisterType((*AreaPolicyDisallowedEvent)(nil), "messages.AreaPolicyDisallowedEvent")
+	proto.RegisterType((*CreateUnitCmd)(nil), "messages.CreateUnitCmd")
+	proto.RegisterType((*UnitCreatedEvt)(nil), "messages.UnitCreatedEvt")
+	proto.RegisterType((*GrantPrivilegeCmd)(nil), "messages.GrantPrivilegeCmd")
+	proto.RegisterType((*PrivilegeGrantedEvt)(nil), "messages.PrivilegeGrantedEvt")
+	proto.RegisterType((*RevokePrivilegeCmd)(nil), "messages.RevokePrivilegeCmd")
+	proto.RegisterType((*PrivilegeRevokedEvt)(nil), "messages.PrivilegeRevokedEvt")
+	proto.RegisterType((*CreateAreaCmd)(nil), "messages.CreateAreaCmd")
+	proto.RegisterType((*AreaCreatedEvt)(nil), "messages.AreaCreatedEvt")
+	proto.RegisterType((*CreatePolicyCmd)(nil), "messages.CreatePolicyCmd")
+	proto.RegisterType((*PolicyCreatedEvt)(nil), "messages.PolicyCreatedEvt")
+	proto.RegisterType((*DeactivatePolicyCmd)(nil), "messages.DeactivatePolicyCmd")
+	proto.RegisterType((*PolicyDeactivatedEvt)(nil), "messages.PolicyDeactivatedEvt")
+	proto.RegisterType((*AllowAreaPolicyCmd)(nil), "messages.AllowAreaPolicyCmd")
+	proto.RegisterType((*AreaPolicyAllowedEvt)(nil), "messages.AreaPolicyAllowedEvt")
+	proto.RegisterType((*DisallowAreaPolicyCmd)(nil), "messages.DisallowAreaPolicyCmd")
+	proto.RegisterType((*AreaPolicyDisallowedEvt)(nil), "messages.AreaPolicyDisallowedEvt")
 }
 
 func init() {
-	proto.RegisterFile("messages/unit_aggregate.proto", fileDescriptor_unit_aggregate_8073d076b75591a1)
+	proto.RegisterFile("messages/unit_aggregate.proto", fileDescriptor_unit_aggregate_5e3543043b14b8be)
 }
 
-var fileDescriptor_unit_aggregate_8073d076b75591a1 = []byte{
-	// 643 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x4f, 0x6f, 0xd3, 0x4e,
-	0x10, 0x95, 0xfb, 0x73, 0xd3, 0x74, 0xfa, 0x2b, 0x94, 0x2d, 0x04, 0xb7, 0x02, 0x29, 0xea, 0x01,
-	0x45, 0x1c, 0x0a, 0x82, 0x1b, 0xb7, 0xa8, 0x46, 0x28, 0x12, 0xa9, 0x82, 0xa5, 0x96, 0x63, 0xb5,
-	0x75, 0xa6, 0x66, 0x45, 0xbc, 0x2e, 0xbb, 0xeb, 0xf0, 0xef, 0xc6, 0x85, 0x33, 0x48, 0x5c, 0xf8,
-	0x00, 0xf0, 0x1d, 0xe0, 0x02, 0xdf, 0x0c, 0x79, 0xd7, 0xb1, 0xe3, 0xd8, 0x95, 0x2a, 0xe5, 0x0f,
-	0x54, 0x70, 0xcb, 0xcc, 0xbc, 0xb7, 0xfb, 0xf6, 0xed, 0xec, 0x58, 0x81, 0x9b, 0x21, 0x4a, 0x49,
-	0x03, 0x94, 0x77, 0x62, 0xce, 0xd4, 0x11, 0x0d, 0x02, 0x81, 0x01, 0x55, 0xb8, 0x7b, 0x2a, 0x22,
-	0x15, 0x91, 0xfa, 0xa8, 0xbc, 0x7d, 0x23, 0x03, 0xfa, 0xb1, 0x54, 0x51, 0x78, 0x74, 0xc2, 0x70,
-	0xd0, 0x97, 0x06, 0xb7, 0xf3, 0xdd, 0x82, 0x2b, 0x7b, 0x02, 0xa9, 0xc2, 0x03, 0xce, 0xd4, 0x5e,
-	0x14, 0x86, 0x94, 0xf7, 0x49, 0x03, 0x6a, 0x49, 0xd8, 0x71, 0x1d, 0xab, 0x69, 0xb5, 0x56, 0xbd,
-	0x34, 0x22, 0x4d, 0x58, 0xf3, 0xf0, 0x45, 0x8c, 0x52, 0xa1, 0xe8, 0xb8, 0xce, 0x92, 0x2e, 0x8e,
-	0xa7, 0x08, 0x01, 0x7b, 0x9f, 0x86, 0xe8, 0xfc, 0xa7, 0x4b, 0xfa, 0x77, 0xc2, 0x72, 0x51, 0xfa,
-	0x82, 0x9d, 0x2a, 0x16, 0x71, 0xc7, 0x36, 0xac, 0xb1, 0x14, 0xb9, 0x0d, 0x1b, 0x07, 0xde, 0xe3,
-	0x1e, 0x15, 0x34, 0x44, 0x85, 0x42, 0xaf, 0xb0, 0xac, 0x61, 0xa5, 0xfc, 0x03, 0xf8, 0xfc, 0x6e,
-	0x2b, 0xd5, 0xb3, 0xf3, 0xcd, 0x82, 0x0d, 0xad, 0x5b, 0x9f, 0xa0, 0xff, 0x70, 0x88, 0x5c, 0x5d,
-	0x18, 0xf1, 0xef, 0x97, 0xe0, 0xda, 0x23, 0x41, 0xb9, 0xea, 0x09, 0x36, 0x64, 0x03, 0x0c, 0x70,
-	0x7a, 0xfb, 0xb7, 0xa1, 0xde, 0xc5, 0xf0, 0x58, 0x97, 0xcd, 0x29, 0xb2, 0x38, 0x61, 0x1f, 0x46,
-	0x8a, 0xf1, 0xc0, 0x63, 0xc1, 0x33, 0xa5, 0x25, 0xd6, 0xbd, 0xf1, 0x14, 0x69, 0xc1, 0xe5, 0x0e,
-	0x67, 0x8a, 0x51, 0xc5, 0x86, 0x68, 0x50, 0x35, 0x8d, 0x9a, 0x4c, 0x27, 0xc8, 0x2e, 0xe5, 0x34,
-	0xc0, 0x10, 0xb9, 0x32, 0xc8, 0x15, 0x83, 0x9c, 0x48, 0x27, 0x67, 0x79, 0x8a, 0x1a, 0x50, 0x6f,
-	0x5a, 0xad, 0x75, 0x2f, 0x8d, 0x4a, 0x4e, 0x64, 0x26, 0x68, 0x4b, 0xa6, 0xbf, 0xcb, 0x8b, 0xe9,
-	0xc4, 0x1b, 0x68, 0x78, 0x38, 0x8c, 0x9e, 0xe3, 0x62, 0x7a, 0xa2, 0xb0, 0xf7, 0x07, 0x6b, 0xec,
-	0x16, 0x8c, 0x8a, 0xb9, 0xde, 0x42, 0xee, 0x87, 0x7d, 0xa6, 0x1f, 0x5f, 0xb3, 0xf1, 0xd4, 0x16,
-	0x48, 0xa7, 0xf7, 0xa2, 0x01, 0xb5, 0x64, 0xa1, 0x4c, 0x4d, 0x1a, 0x65, 0x2f, 0xdf, 0x3e, 0xfb,
-	0xe5, 0x2f, 0x97, 0x5e, 0x7e, 0x41, 0xe9, 0x17, 0x0b, 0x36, 0xb4, 0xc6, 0xd9, 0x8c, 0xa2, 0xf9,
-	0x09, 0xfd, 0x69, 0xc3, 0xa6, 0x11, 0xd9, 0x8b, 0x06, 0xcc, 0x7f, 0x3d, 0x93, 0x06, 0x33, 0x4b,
-	0xe5, 0x97, 0x3c, 0x8a, 0xcf, 0x31, 0x3e, 0xef, 0xc1, 0xd5, 0x2e, 0xe3, 0xed, 0x7e, 0xc8, 0xa4,
-	0x64, 0x11, 0x77, 0x63, 0x41, 0xb3, 0x63, 0x2c, 0x7b, 0x95, 0x35, 0xcd, 0xa1, 0xaf, 0xca, 0x9c,
-	0x5a, 0xca, 0xa9, 0xa8, 0x91, 0x5d, 0x20, 0x2e, 0x93, 0x7e, 0x5c, 0x64, 0xac, 0x68, 0x46, 0x45,
-	0x25, 0xd9, 0xe3, 0x10, 0x05, 0x3b, 0x61, 0xbe, 0x8e, 0x33, 0x46, 0xdd, 0xec, 0x51, 0x55, 0x23,
-	0xb7, 0xe0, 0x92, 0x99, 0x22, 0x19, 0x7a, 0x55, 0xa3, 0x27, 0xb2, 0x09, 0xae, 0x23, 0x65, 0x8c,
-	0x4f, 0xe2, 0x48, 0xc4, 0xe1, 0x7e, 0x1c, 0x3a, 0x60, 0x70, 0xc5, 0xec, 0x04, 0xce, 0x45, 0xee,
-	0xac, 0x95, 0x70, 0x2e, 0x72, 0x72, 0x17, 0x36, 0xf3, 0xb9, 0x94, 0x2f, 0xfa, 0xbf, 0x06, 0x57,
-	0x95, 0xaa, 0x18, 0xc9, 0xf2, 0xeb, 0xd5, 0x0c, 0x17, 0x8b, 0x3d, 0xf4, 0xc3, 0x06, 0x92, 0x76,
-	0xcf, 0x6c, 0xda, 0xfd, 0x5f, 0x0b, 0xfd, 0x6d, 0x2d, 0xf4, 0x16, 0xae, 0xbb, 0x48, 0x7d, 0xc5,
-	0x86, 0x8b, 0x99, 0x44, 0x93, 0x9f, 0x59, 0x93, 0xcf, 0x25, 0xcc, 0xb3, 0x85, 0x0b, 0x7b, 0x7f,
-	0xb4, 0xa0, 0xd1, 0x1e, 0x0c, 0xa2, 0x97, 0xc9, 0x44, 0x5f, 0xc4, 0x08, 0xce, 0x3f, 0x25, 0xf6,
-	0xf8, 0xa7, 0xa4, 0x2c, 0x2a, 0xd3, 0xa3, 0xe5, 0xcd, 0xf7, 0x51, 0x9f, 0x47, 0xd4, 0x27, 0x0b,
-	0xb6, 0x5c, 0x26, 0xe9, 0x9f, 0x66, 0x56, 0xa2, 0x2b, 0xd7, 0x33, 0x52, 0xf8, 0xdb, 0xfd, 0x3a,
-	0xae, 0xe9, 0xbf, 0x74, 0xf7, 0x7f, 0x05, 0x00, 0x00, 0xff, 0xff, 0x78, 0xc2, 0x0a, 0x6c, 0x1b,
-	0x0e, 0x00, 0x00,
+var fileDescriptor_unit_aggregate_5e3543043b14b8be = []byte{
+	// 645 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x4d, 0x6f, 0xd3, 0x40,
+	0x10, 0x95, 0x8b, 0x9b, 0xa6, 0x53, 0xfa, 0xc1, 0xb6, 0x14, 0x53, 0x81, 0x54, 0xf5, 0x80, 0x22,
+	0x0e, 0x05, 0xc1, 0x8d, 0x5b, 0x54, 0x23, 0x14, 0x89, 0x54, 0xc1, 0x52, 0xcb, 0xb1, 0xda, 0x3a,
+	0x53, 0xb3, 0x22, 0x5e, 0x97, 0xdd, 0xb5, 0x5b, 0xae, 0x20, 0xae, 0x7c, 0x88, 0x1b, 0x57, 0xf8,
+	0x0f, 0x70, 0x81, 0xdf, 0x86, 0xbc, 0xeb, 0xd8, 0x71, 0xe2, 0x4a, 0x95, 0x52, 0x0b, 0x2a, 0xb8,
+	0x65, 0x66, 0xde, 0xdb, 0x79, 0x7e, 0x9e, 0x1d, 0x2b, 0x70, 0x3b, 0x44, 0x29, 0x69, 0x80, 0xf2,
+	0x5e, 0xcc, 0x99, 0x3a, 0xa0, 0x41, 0x20, 0x30, 0xa0, 0x0a, 0xb7, 0x8f, 0x45, 0xa4, 0x22, 0xd2,
+	0x1c, 0x96, 0x37, 0x6e, 0xe5, 0x40, 0x3f, 0x96, 0x2a, 0x0a, 0x0f, 0x8e, 0x18, 0x0e, 0xfa, 0xd2,
+	0xe0, 0xb6, 0xbe, 0x5b, 0xb0, 0xb8, 0x23, 0x90, 0x2a, 0xdc, 0xe3, 0x4c, 0xed, 0x84, 0x7d, 0xb2,
+	0x0e, 0x8d, 0xf4, 0x67, 0xc7, 0x75, 0xac, 0x4d, 0xab, 0x35, 0xef, 0x65, 0x11, 0xd9, 0x84, 0x05,
+	0x0f, 0x5f, 0xc5, 0x28, 0x15, 0x8a, 0x8e, 0xeb, 0xcc, 0xe8, 0xe2, 0x68, 0x8a, 0x10, 0xb0, 0x77,
+	0x69, 0x88, 0xce, 0x15, 0x5d, 0xd2, 0xbf, 0x53, 0x96, 0x8b, 0xd2, 0x17, 0xec, 0x58, 0xb1, 0x88,
+	0x3b, 0xb6, 0x61, 0x8d, 0xa4, 0xc8, 0x5d, 0x58, 0xd9, 0xf3, 0x9e, 0xf6, 0xa8, 0xa0, 0x21, 0x2a,
+	0x14, 0xfa, 0x84, 0x59, 0x0d, 0x9b, 0xc8, 0x3f, 0x82, 0x2f, 0x6f, 0x6e, 0x66, 0x7a, 0xb6, 0x7e,
+	0x58, 0xb0, 0xa4, 0x35, 0x6b, 0xf5, 0xfd, 0xc7, 0x89, 0xba, 0x34, 0xd2, 0xdf, 0xce, 0xc0, 0xb5,
+	0x27, 0x82, 0x72, 0xd5, 0x13, 0x2c, 0x61, 0x03, 0x0c, 0x70, 0x3a, 0xe3, 0x37, 0xa0, 0xd9, 0xc5,
+	0xf0, 0x50, 0x97, 0xcd, 0x13, 0xe4, 0x71, 0xca, 0xde, 0x8f, 0x14, 0xe3, 0x81, 0xc7, 0x82, 0x17,
+	0x4a, 0xcb, 0x6b, 0x7a, 0xa3, 0x29, 0xd2, 0x82, 0xe5, 0x0e, 0x67, 0x8a, 0x51, 0xc5, 0x12, 0x34,
+	0xa8, 0x86, 0x46, 0x8d, 0xa7, 0x53, 0x64, 0x97, 0x72, 0x1a, 0x60, 0x88, 0x5c, 0x19, 0xe4, 0x9c,
+	0x41, 0x8e, 0xa5, 0xd3, 0x67, 0x79, 0x8e, 0x1a, 0xd0, 0xdc, 0xb4, 0x5a, 0x8b, 0x5e, 0x16, 0x95,
+	0x5c, 0x78, 0x37, 0x03, 0xab, 0xb9, 0x01, 0xda, 0x8e, 0x69, 0xdf, 0xe2, 0xe5, 0xf4, 0x21, 0x01,
+	0xe2, 0x61, 0x12, 0xbd, 0xc4, 0xfa, 0xa7, 0xa1, 0xd4, 0xf7, 0x83, 0x35, 0xe2, 0xbf, 0x51, 0x50,
+	0xa3, 0xff, 0x85, 0x13, 0xf6, 0x99, 0x4e, 0x7c, 0xcd, 0x97, 0x51, 0x5b, 0x20, 0x9d, 0xce, 0x85,
+	0x75, 0x68, 0xa4, 0x87, 0xe4, 0x4a, 0xb2, 0x28, 0xbf, 0xe9, 0xf6, 0xd9, 0x37, 0x7d, 0x76, 0xe2,
+	0xa6, 0x97, 0x54, 0x7e, 0xb3, 0x60, 0x49, 0xeb, 0xbb, 0x88, 0xc5, 0x53, 0x9f, 0xcc, 0x9f, 0x36,
+	0x2c, 0x1b, 0x89, 0xbd, 0x68, 0xc0, 0xfc, 0xd7, 0x53, 0x0f, 0x95, 0x39, 0xa6, 0x78, 0xb5, 0xc3,
+	0xf8, 0x1c, 0x8b, 0xf2, 0x01, 0xac, 0x75, 0x19, 0x6f, 0xf7, 0x43, 0x26, 0x25, 0x8b, 0xb8, 0x1b,
+	0x0b, 0x9a, 0x3f, 0xc2, 0xac, 0x57, 0x59, 0xd3, 0x1c, 0x7a, 0x3a, 0xc9, 0x69, 0x64, 0x9c, 0x8a,
+	0x1a, 0xd9, 0x06, 0xe2, 0x32, 0xe9, 0xc7, 0x65, 0xc6, 0x9c, 0x66, 0x54, 0x54, 0xd2, 0x1e, 0xfb,
+	0x28, 0xd8, 0x11, 0xf3, 0x75, 0x9c, 0x33, 0x9a, 0xa6, 0x47, 0x55, 0x8d, 0xdc, 0x81, 0x25, 0xb3,
+	0x35, 0x72, 0xf4, 0xbc, 0x46, 0x8f, 0x65, 0x53, 0x5c, 0x47, 0xca, 0x18, 0x9f, 0xc5, 0x91, 0x88,
+	0xc3, 0xdd, 0x38, 0x74, 0xc0, 0xe0, 0xca, 0xd9, 0x31, 0x9c, 0x8b, 0xdc, 0x59, 0x98, 0xc0, 0xb9,
+	0xc8, 0xc9, 0x7d, 0x58, 0x2d, 0xf6, 0x50, 0x71, 0xe8, 0x55, 0x0d, 0xae, 0x2a, 0x55, 0x31, 0xd2,
+	0xe3, 0x17, 0xab, 0x19, 0x2e, 0x96, 0xe7, 0xe7, 0x97, 0x0d, 0x2b, 0xd9, 0xe4, 0x5c, 0xc4, 0xa0,
+	0xff, 0x1f, 0xa0, 0x7f, 0x6d, 0x80, 0x4e, 0x60, 0xd5, 0x45, 0xea, 0x2b, 0x96, 0xd4, 0xbf, 0x83,
+	0x4a, 0x8d, 0x4f, 0x61, 0xcd, 0xe4, 0x8b, 0xf6, 0xf5, 0x0d, 0x6f, 0xa9, 0xf3, 0x7b, 0x0b, 0x48,
+	0x7b, 0x30, 0x88, 0x4e, 0xd2, 0x2d, 0x5e, 0xf7, 0xda, 0x2d, 0x3e, 0x1d, 0xf6, 0xe8, 0xa7, 0xa3,
+	0x24, 0xe8, 0xa3, 0x05, 0x6b, 0x85, 0x16, 0x2d, 0xad, 0xce, 0x8b, 0x7c, 0x1e, 0x49, 0x9f, 0x2c,
+	0xb8, 0xee, 0x32, 0x49, 0xff, 0x26, 0x9b, 0x3e, 0x5b, 0x70, 0xa3, 0xd0, 0x32, 0x54, 0xf7, 0x87,
+	0x9d, 0x3a, 0x6c, 0xe8, 0xbf, 0x68, 0x0f, 0x7f, 0x07, 0x00, 0x00, 0xff, 0xff, 0x47, 0x7a, 0x46,
+	0x0f, 0xeb, 0x0d, 0x00, 0x00,
 }

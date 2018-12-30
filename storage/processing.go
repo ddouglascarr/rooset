@@ -85,13 +85,13 @@ func ProcessMessages(
 
 }
 
-// ExecuteCommand is the primary command dispatcher. All commands should
+// ExecuteCmd is the primary command dispatcher. All commands should
 // be issued to this function, it will generate one or less events
 // to be persisted on success.
 // It returns:
 // - a rejection reason string, nil if the command was accepted
 // - an error which is not nil if there was a system error
-func ExecuteCommand(commandDB *sql.DB, cmd messages.Message) error {
+func ExecuteCmd(commandDB *sql.DB, cmd messages.Message) error {
 	aRField, err := messages.GetAggregateRootField(cmd)
 	if err != nil {
 		return err
@@ -112,7 +112,7 @@ func ExecuteCommand(commandDB *sql.DB, cmd messages.Message) error {
 		return FetchAggregate(tx, aRID, aggregate)
 	}
 
-	evts, err := aggregates.HandleCommand(fetchAggregate, aRField, aRID, cmd)
+	evts, err := aggregates.HandleCmd(fetchAggregate, aRField, aRID, cmd)
 	if err != nil {
 		return err
 	}

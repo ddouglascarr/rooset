@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetAggregateRootField(t *testing.T) {
-	evt := messages.UnitCreatedEvent{}
+	evt := messages.UnitCreatedEvt{}
 	id, err := messages.GetAggregateRootField(&evt)
 
 	assert.ErrorIsNil(t, err)
@@ -18,7 +18,7 @@ func TestGetAggregateRootField(t *testing.T) {
 }
 
 func TestGetAggregateRootID(t *testing.T) {
-	evt := messages.UnitCreatedEvent{
+	evt := messages.UnitCreatedEvt{
 		UnitID: "a1",
 	}
 	id, err := messages.GetAggregateRootID(&evt)
@@ -28,7 +28,7 @@ func TestGetAggregateRootID(t *testing.T) {
 }
 
 func TestUnmarshalBMessage(t *testing.T) {
-	evt := &messages.UnitCreatedEvent{
+	evt := &messages.UnitCreatedEvt{
 		UnitID:           "123",
 		Name:             "Bar Unit",
 		RequesterID:      "asdf",
@@ -38,7 +38,7 @@ func TestUnmarshalBMessage(t *testing.T) {
 	bMsg, err := proto.Marshal(evt)
 	assert.ErrorIsNil(t, err)
 
-	resultMsg, err := messages.UnmarshalBMessage("messages.UnitCreatedEvent", bMsg)
+	resultMsg, err := messages.UnmarshalBMessage("messages.UnitCreatedEvt", bMsg)
 	assert.ErrorIsNil(t, err)
 	assert.MessageEquals(
 		t,
@@ -47,13 +47,13 @@ func TestUnmarshalBMessage(t *testing.T) {
 		evt,
 	)
 
-	resultEvt, ok := resultMsg.(*messages.UnitCreatedEvent)
+	resultEvt, ok := resultMsg.(*messages.UnitCreatedEvt)
 	assert.Equals(t, "result message casts", true, ok)
 	assert.MessageEquals(t, "case message equal", []messages.Message{resultEvt}, evt)
 }
 
 func TestMessageType(t *testing.T) {
-	evt := &messages.UnitCreatedEvent{
+	evt := &messages.UnitCreatedEvt{
 		UnitID:           "123",
 		Name:             "Bar Unit",
 		RequesterID:      "asdf",
@@ -61,11 +61,11 @@ func TestMessageType(t *testing.T) {
 		URLParameterName: "bar",
 	}
 	name := proto.MessageName(evt)
-	assert.Equals(t, "MessageName created", name, "messages.UnitCreatedEvent")
+	assert.Equals(t, "MessageName created", name, "messages.UnitCreatedEvt")
 
 	mt := proto.MessageType(name)
 	assert.Equals(t, "MessageType", mt, reflect.TypeOf(evt))
-	assert.Equals(t, "MessageName from type", mt.String(), "*messages.UnitCreatedEvent")
+	assert.Equals(t, "MessageName from type", mt.String(), "*messages.UnitCreatedEvt")
 
 }
 
@@ -83,7 +83,7 @@ func getDescription(message proto.Message) string {
 }
 
 func TestCastInMethod(t *testing.T) {
-	unitCreatedEvt := &messages.UnitCreatedEvent{
+	unitCreatedEvt := &messages.UnitCreatedEvt{
 		UnitID:           "123",
 		Name:             "Bar Unit",
 		RequesterID:      "asdf",
@@ -91,7 +91,7 @@ func TestCastInMethod(t *testing.T) {
 		URLParameterName: "bar",
 	}
 
-	privilegeRevokedEvt := &messages.PrivilegeRevokedEvent{
+	privilegeRevokedEvt := &messages.PrivilegeRevokedEvt{
 		UnitID:   "456",
 		MemberID: "jim",
 	}
@@ -105,9 +105,9 @@ func TestCastInMethod(t *testing.T) {
 
 func getSomething(message proto.Message) string {
 	switch evt := message.(type) {
-	case *messages.UnitCreatedEvent:
+	case *messages.UnitCreatedEvt:
 		return evt.UnitID
-	case *messages.PrivilegeRevokedEvent:
+	case *messages.PrivilegeRevokedEvt:
 		return evt.MemberID
 	default:
 		return ""
@@ -115,7 +115,7 @@ func getSomething(message proto.Message) string {
 }
 
 func TestCaseForStruct(t *testing.T) {
-	unitCreatedEvt := &messages.UnitCreatedEvent{
+	unitCreatedEvt := &messages.UnitCreatedEvt{
 		UnitID:           "123",
 		Name:             "Bar Unit",
 		RequesterID:      "asdf",
@@ -123,20 +123,20 @@ func TestCaseForStruct(t *testing.T) {
 		URLParameterName: "bar",
 	}
 
-	privilegeRevokedEvt := &messages.PrivilegeRevokedEvent{
+	privilegeRevokedEvt := &messages.PrivilegeRevokedEvt{
 		UnitID:   "456",
 		MemberID: "jim",
 	}
-	privilegeGrantedEvent := &messages.PrivilegeGrantedEvent{
+	privilegeGrantedEvt := &messages.PrivilegeGrantedEvt{
 		UnitID:   "789",
 		MemberID: "foo",
 	}
 
 	unitCreatedResult := getSomething(unitCreatedEvt)
 	privilegeRevokedResult := getSomething(privilegeRevokedEvt)
-	emptyResult := getSomething(privilegeGrantedEvent)
+	emptyResult := getSomething(privilegeGrantedEvt)
 
-	assert.Equals(t, "UnitCreatedEvent", unitCreatedResult, "123")
-	assert.Equals(t, "PrivilegeRevokedEvent", privilegeRevokedResult, "jim")
+	assert.Equals(t, "UnitCreatedEvt", unitCreatedResult, "123")
+	assert.Equals(t, "PrivilegeRevokedEvt", privilegeRevokedResult, "jim")
 	assert.Equals(t, "empty", emptyResult, "")
 }

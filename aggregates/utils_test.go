@@ -14,7 +14,7 @@ func BuildTestAggregateFetcher(evts []messages.Message) aggregates.AggregateFetc
 	return func(aRID string, aggregate aggregates.Aggregate) error {
 		for _, evt := range evts {
 			if cmdARID, _ := messages.GetAggregateRootID(evt); cmdARID == aRID {
-				aggregate.HandleEvent(evt)
+				aggregate.HandleEvt(evt)
 			}
 		}
 		return nil
