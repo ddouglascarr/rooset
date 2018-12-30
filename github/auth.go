@@ -1,6 +1,7 @@
 package github
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -63,4 +64,48 @@ func QueryApp() (string, error) {
 	}
 
 	return string(body), nil
+}
+
+type InstallationAccount struct {
+	ID    string `json:"node_id"`
+	Login string `json:"login"`
+}
+
+type Installation struct {
+	InstallationID int                 `json:"id"`
+	AppID          int                 `json:"app_id"`
+	Account        InstallationAccount `json:"account"`
+}
+
+func FetchAllInstallations() ([]Installation, error) {
+	installations := make([]Installation, 0)
+	tk, err := NewGithubAppJWT()
+	if err != nil {
+		return installations, err
+	}
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
+	req, err := http.NewRequest("GET", "https://api.github.com/app/installations", nil)
+	if err != nil {
+		return installations, errors.Wrap(err, "rooset: failed to GET installations")
+	}
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", tk))
+	req.Header.Add("Accept", "application/vnd.github.machine-man-preview+json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return installations, errors.Wrap(err, "rooset: query failed")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return installations, errors.Wrap(err, "rooset: failed to parse response body")
+	}
+
+	if err := json.Unmarshal(body, &installations); err != nil {
+		return installations, errors.Wrap(err, "rooset: failed to parse response body")
+	}
+
+	return installations, nil
 }
