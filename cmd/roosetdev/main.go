@@ -7,6 +7,7 @@ import (
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/execcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/installationscmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/queryappcmd"
+	"github.com/ddouglascarr/rooset/cmd/roosetdev/repoidcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/saveevtcmd"
 	_ "github.com/lib/pq"
 	"github.com/shabbyrobe/cmdy"
@@ -21,6 +22,7 @@ func run() error {
 				"exec":          execcmd.NewExecCmd,
 				"queryapp":      queryappcmd.NewQueryAppCmd,
 				"installations": installationscmd.NewInstallationsCmd,
+				"repoid":        repoidcmd.NewRepoIDCmd,
 			},
 		), nil
 	}

@@ -63,9 +63,9 @@ const fetchRepoIDQuery = `
 `
 
 type graphQLQueryBody struct {
-	operationName string
-	query         string
-	variables     interface{}
+	OperationName string      `json:"operationName"`
+	Query         string      `json:"query"`
+	Variables     interface{} `json:"variables"`
 }
 
 // NewGraphQLQueryBody builds a JSON query string for a graphql query
@@ -75,9 +75,9 @@ func NewGraphQLQueryBody(
 	variables interface{},
 ) ([]byte, error) {
 	body, err := json.Marshal(graphQLQueryBody{
-		operationName: operationName,
-		query:         query,
-		variables:     variables,
+		OperationName: operationName,
+		Query:         query,
+		Variables:     variables,
 	})
 	if err != nil {
 		return body, errors.Wrap(err, "rooset: invalid query")
@@ -87,22 +87,22 @@ func NewGraphQLQueryBody(
 }
 
 type fetchRepoIDVars struct {
-	owner string
-	name  string
+	Owner string `json:"repoOwner"`
+	Name  string `json:"repoName"`
 }
 
 // FetchRepoID fetches the GraphQL node_id for a repo
 // this is necessary because the Github installation webhook doesn't include
 // it for the repos that have installations.
-func FetchRepoID(owner, name string) (string, error) {
-	tk, err := NewGithubAppJWT()
+func FetchRepoID(installationID int64, owner, name string) (string, error) {
+	tk, err := FetchInstallationTk(installationID)
 	if err != nil {
 		return "", errors.Wrap(err, "rooset: failed to fetch repo id")
 	}
 	body, err := NewGraphQLQueryBody(
 		"FetchRepoIDQuery",
 		fetchRepoIDQuery,
-		fetchRepoIDVars{owner: owner, name: name},
+		fetchRepoIDVars{Owner: owner, Name: name},
 	)
 	if err != nil {
 		return "", errors.Wrap(err, "rooset: failed to fetch repo id")
@@ -118,13 +118,17 @@ func FetchRepoID(owner, name string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "rooset: failed to GET app endpoint")
 	}
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", tk))
+	req.Header.Add("Authorization", fmt.Sprintf("token %s", tk))
 	req.Header.Add("Accept", "application/vnd.github.machine-man-preview+json")
-	req.Header.Add("Content-Type", "application/json; charset=utf-8")
+	// req.Header.Add("Content-Type", "application/json; charset=utf-8")
 
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", errors.Wrap(err, "rooset: FetchRepoID query failed")
+	}
+
+	if resp.StatusCode != 200 {
+		return "", errors.New(fmt.Sprintf("rooset: FetchRepoID query failed %s", resp.Status))
 	}
 
 	respBody, err := ioutil.ReadAll(resp.Body)
@@ -135,12 +139,18 @@ func FetchRepoID(owner, name string) (string, error) {
 	parsedBody := struct {
 		Data struct {
 			Repo struct {
-				ID string
-			}
-		}
+				ID string `json:"id"`
+			} `json:"repo"`
+		} `json:"data"`
+		Errors []struct {
+			Message string `json:"message"`
+		} `json:"errors"`
 	}{}
 	if err := json.Unmarshal(respBody, &parsedBody); err != nil {
 		return "", errors.Wrap(err, "rooset: FetchRepoID query failed")
+	}
+	if len(parsedBody.Errors) > 0 {
+		return "", errors.New(fmt.Sprintf("rooset: FetchRepoID failed - %s", parsedBody.Errors[0].Message))
 	}
 
 	return parsedBody.Data.Repo.ID, nil

@@ -37,6 +37,51 @@ func NewGithubAppJWT() (string, error) {
 	return tkStr, nil
 }
 
+// FetchInstallationTk fetches an installation auth token for an installation
+func FetchInstallationTk(installationID int64) (string, error) {
+	parsedBody := struct {
+		Token string
+	}{}
+	appTk, err := NewGithubAppJWT()
+	if err != nil {
+		return "", err
+	}
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
+	url := fmt.Sprintf("https://api.github.com/app/installations/%v/access_tokens", installationID)
+	req, err := http.NewRequest(
+		"POST",
+		url,
+		nil,
+	)
+	if err != nil {
+		return "", errors.Wrap(err, "rooset: failed to GET installations")
+	}
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", appTk))
+	req.Header.Add("Accept", "application/vnd.github.machine-man-preview+json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", errors.Wrap(err, "rooset: query failed")
+	}
+
+	if resp.StatusCode != 201 {
+		return "", errors.New(fmt.Sprintf("rooset: FetchInstallationTk failed %s", resp.Status))
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", errors.Wrap(err, "rooset: failed to parse response body")
+	}
+
+	if err := json.Unmarshal(body, &parsedBody); err != nil {
+		return "", errors.Wrap(err, "rooset: failed to parse response body")
+	}
+
+	return parsedBody.Token, nil
+}
+
 // QueryApp queries the Github app endpoint. Use to verify token setup
 func QueryApp() (string, error) {
 	tk, err := NewGithubAppJWT()
