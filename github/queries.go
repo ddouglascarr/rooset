@@ -54,14 +54,6 @@ import (
 //   }
 // `
 
-const fetchRepoIDQuery = `
-  query FetchRepoIDQuery($repoOwner:String!, $repoName:String!) {
-	repo: repository(owner: $repoOwner, name: $repoName) {
-	  id
-	},
-  }
-`
-
 type graphQLQueryBody struct {
 	OperationName string      `json:"operationName"`
 	Query         string      `json:"query"`
@@ -86,11 +78,6 @@ func NewGraphQLQueryBody(
 	return body, nil
 }
 
-type fetchRepoIDVars struct {
-	Owner string `json:"repoOwner"`
-	Name  string `json:"repoName"`
-}
-
 // FetchRepoID fetches the GraphQL node_id for a repo
 // this is necessary because the Github installation webhook doesn't include
 // it for the repos that have installations.
@@ -101,8 +88,17 @@ func FetchRepoID(installationID int64, owner, name string) (string, error) {
 	}
 	body, err := NewGraphQLQueryBody(
 		"FetchRepoIDQuery",
-		fetchRepoIDQuery,
-		fetchRepoIDVars{Owner: owner, Name: name},
+		` 
+		query FetchRepoIDQuery($Owner:String!, $Name:String!) {
+			repo: repository(owner: $Owner, name: $Name) {
+				id
+			},
+		}
+		`,
+		struct {
+			Owner string
+			Name  string
+		}{owner, name},
 	)
 	if err != nil {
 		return "", errors.Wrap(err, "rooset: failed to fetch repo id")
@@ -150,7 +146,9 @@ func FetchRepoID(installationID int64, owner, name string) (string, error) {
 		return "", errors.Wrap(err, "rooset: FetchRepoID query failed")
 	}
 	if len(parsedBody.Errors) > 0 {
-		return "", errors.New(fmt.Sprintf("rooset: FetchRepoID failed - %s", parsedBody.Errors[0].Message))
+		return "", errors.New(fmt.Sprintf(
+			"rooset: FetchRepoID failed - %s", parsedBody.Errors[0].Message),
+		)
 	}
 
 	return parsedBody.Data.Repo.ID, nil
