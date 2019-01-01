@@ -6,6 +6,7 @@ import (
 
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/execcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/githubapptkcmd"
+	"github.com/ddouglascarr/rooset/cmd/roosetdev/githubinstallationtkcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/installationscmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/queryappcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/repoidcmd"
@@ -19,12 +20,13 @@ func run() error {
 		return cmdy.NewGroup(
 			"My command group",
 			cmdy.Builders{
-				"saveevt":       saveevtcmd.NewSaveEvtCmd,
-				"exec":          execcmd.NewExecCmd,
-				"queryapp":      queryappcmd.NewQueryAppCmd,
-				"installations": installationscmd.NewInstallationsCmd,
-				"repoid":        repoidcmd.NewRepoIDCmd,
-				"githubapptk":   githubapptkcmd.NewGithubAppTkCmd,
+				"saveevt":              saveevtcmd.NewSaveEvtCmd,
+				"exec":                 execcmd.NewExecCmd,
+				"queryapp":             queryappcmd.NewQueryAppCmd,
+				"installations":        installationscmd.NewInstallationsCmd,
+				"repoid":               repoidcmd.NewRepoIDCmd,
+				"githubapptk":          githubapptkcmd.NewGithubAppTkCmd,
+				"githubinstallationtk": githubinstallationtkcmd.NewGithubAppTkCmd,
 			},
 		), nil
 	}
