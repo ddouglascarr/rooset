@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/execcmd"
+	"github.com/ddouglascarr/rooset/cmd/roosetdev/githubapptkcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/installationscmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/queryappcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/repoidcmd"
@@ -23,6 +24,7 @@ func run() error {
 				"queryapp":      queryappcmd.NewQueryAppCmd,
 				"installations": installationscmd.NewInstallationsCmd,
 				"repoid":        repoidcmd.NewRepoIDCmd,
+				"githubapptk":   githubapptkcmd.NewGithubAppTkCmd,
 			},
 		), nil
 	}
