@@ -43,7 +43,8 @@ CREATE TABLE users (
 --------------------------------------------------------------------------------
 
 
-CREATE TABLE github_repository (
+
+CREATE TABLE github_repo_unit (
     github_id                   VARCHAR(128) NOT NULL UNIQUE,
     unit_id                     VARCHAR(512) NOT NULL UNIQUE,
     installation_id             BIGINT NOT NULL,
@@ -52,7 +53,16 @@ CREATE TABLE github_repository (
 );
 
 CREATE INDEX github_owner_name_lookup
-    ON github_repository(owner, name);
+    ON github_repo_unit(owner, name);
+
+
+
+CREATE TABLE github_pull_req_issue (
+    pull_req_id                 VARCHAR(123) NOT NULL UNIQUE,
+    issue_id                    VARCHAR(512) NOT NULL UNIQUE,
+    unit_id                     VARCHAR(512) NOT NULL REFERENCES github_repo_unit (unit_id)
+);
+
 
 
 COMMIT;
