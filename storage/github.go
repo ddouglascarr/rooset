@@ -16,6 +16,15 @@ type GithubProfile struct {
 	AvatarURL string `json:"avatar_url"`
 }
 
+// GithubRepoInstallation represents a single github repo that has Rooset installed on it
+type GithubRepoInstallation struct {
+	GithubID       string
+	UnitID         string
+	InstallationID int64
+	Owner          string
+	Name           string
+}
+
 // FetchOrCreateGithubUser gets a Rooset user for the given Github profile.
 // - If that user hasn't been created before, it is done now.
 // - TODO: The Rooset User is updated to reflect the Github profile (e.g. name, email)
@@ -73,4 +82,82 @@ func persistNewGithubUser(cmdDB *sql.DB, githubProfile GithubProfile) (User, err
 	}
 
 	return user, nil
+}
+
+// PersistGithubRepoInstallation yep
+func PersistGithubRepoInstallation(cmdDB *sql.DB, installation GithubRepoInstallation) error {
+	tx, err := cmdDB.Begin()
+	if err != nil {
+		return errors.Wrap(err, "rooset: failed to create new github repo installation")
+	}
+	defer tx.Rollback()
+
+	stmt, err := tx.Prepare(`
+		INSERT INTO github_repo_unit
+		(github_id, unit_id, installation_id, owner, name) VALUES (
+			$1, $2, $3, $4, $5
+		);
+	`)
+	if err != nil {
+		return errors.Wrap(err, "rooset: failed to create new github repo installation")
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(
+		installation.GithubID,
+		installation.UnitID,
+		installation.InstallationID,
+		installation.Owner,
+		installation.Name,
+	)
+	if err != nil {
+		return errors.Wrap(err, "rooset: failed to create new github repo installation")
+	}
+
+	return nil
+}
+
+// FetchGithubRepoInstallation yep
+func FetchGithubRepoInstallation(
+	cmdDB *sql.DB,
+	githubID string,
+) (GithubRepoInstallation, error) {
+	installation := GithubRepoInstallation{}
+	tx, err := cmdDB.Begin()
+	if err != nil {
+		return installation, errors.Wrap(
+			err,
+			"rooset: failed to create new github repo installation",
+		)
+	}
+	defer tx.Rollback()
+
+	stmt, err := tx.Prepare(`
+		SELECT github_id, unit_id, installation_id, owner, name
+		FROM github_repo_unit
+		WHERE github_id = $1;
+	`)
+	if err != nil {
+		return installation, errors.Wrap(
+			err,
+			"rooset: failed to create new github repo installation",
+		)
+	}
+	defer stmt.Close()
+
+	err = stmt.QueryRow(githubID).Scan(
+		&installation.GithubID,
+		&installation.UnitID,
+		&installation.InstallationID,
+		&installation.Owner,
+		&installation.Name,
+	)
+	if err != nil {
+		return installation, errors.Wrap(
+			err,
+			"rooset: failed to create new github repo installation",
+		)
+	}
+
+	return installation, nil
 }
