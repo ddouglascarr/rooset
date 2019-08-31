@@ -7,6 +7,7 @@ import (
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/execcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/githubapptkcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/githubinstallationtkcmd"
+	"github.com/ddouglascarr/rooset/cmd/roosetdev/gitlabcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/installationscmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/queryappcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/repoidcmd"
@@ -27,6 +28,7 @@ func run() error {
 				"repoid":               repoidcmd.NewRepoIDCmd,
 				"githubapptk":          githubapptkcmd.NewGithubAppTkCmd,
 				"githubinstallationtk": githubinstallationtkcmd.NewGithubAppTkCmd,
+				"gitlab":               gitlabcmd.NewGitlabClientCmd,
 			},
 		), nil
 	}

@@ -31,5 +31,6 @@ func (t *serverCmd) Run(ctx cmdy.Context) error {
 	if err != nil {
 		panic(err)
 	}
+
 	return nil
 }
