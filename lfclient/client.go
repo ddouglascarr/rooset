@@ -1,5 +1,7 @@
 package lfclient
 
+//go:generate enumgen IssueState
+
 import (
 	"encoding/json"
 	"fmt"
@@ -21,19 +23,6 @@ const (
 	Verification = IssueState("verification")
 	Voting       = IssueState("voting")
 )
-
-func (s IssueState) IsValid() bool {
-	switch s {
-	case Idle:
-	case Admission:
-	case Discussion:
-	case Verification:
-	case Voting:
-	default:
-		return false
-	}
-	return true
-}
 
 // Initiative represents a lf initiative
 type Initiative struct {

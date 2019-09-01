@@ -49,3 +49,9 @@ func Classify(pullRequest *gitlab.MergeRequest, initiative *lfclient.Initiative)
 func buildTargetBranchName(initiative lfclient.Initiative) string {
 	return fmt.Sprintf("lf-issue-%d", initiative.IssueID)
 }
+
+// RebaseNewIssueInitiative creates a new issue branch, and rebases the initiative PR against it
+func RebaseNewIssueInitiative(projectID string, pRID int, issueID int) error {
+	// TODO implement
+	return nil
+}
