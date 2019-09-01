@@ -38,9 +38,16 @@ func (s IssueState) IsValid() bool {
 // Initiative represents a lf initiative
 type Initiative struct {
 	ID          int        `json:"id"`
+	IssueID     int        `json:"issue_id"`
 	Name        string     `json:"name"`
 	InitiatorID int        `json:"initator_id"`
 	IssueState  IssueState `json:"issue_state"`
+}
+
+// IsActive determines if the intiiative is still live
+func (i *Initiative) IsActive() bool {
+	// TODO: implement
+	return true
 }
 
 var client = &http.Client{
@@ -58,6 +65,7 @@ func GetInitiative(initiativeID int) (*Initiative, error) {
 		nil,
 	)
 	req.Header.Set("Accept", "application/json")
+	// TODO: lol
 	req.Header.Set("Cookie", "liquid_feedback_session=IehzbSC5WwGQRjiPRE1y64gZ1F4AI8X8;")
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to fetch initiative")

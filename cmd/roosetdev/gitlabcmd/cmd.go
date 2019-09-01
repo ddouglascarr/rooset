@@ -43,6 +43,6 @@ func (t *gitlabClientCmd) Run(ctx cmdy.Context) error {
 		log.Fatal(err)
 	}
 
-	log.Println(initiative.Name)
+	log.Println(string(initiative.IssueState), initiative.Name)
 	return nil
 }

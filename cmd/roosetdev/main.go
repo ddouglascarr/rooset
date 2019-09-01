@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 
+	"github.com/ddouglascarr/rooset/cmd/roosetdev/classifycmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/execcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/githubapptkcmd"
 	"github.com/ddouglascarr/rooset/cmd/roosetdev/githubinstallationtkcmd"
@@ -29,6 +30,7 @@ func run() error {
 				"githubapptk":          githubapptkcmd.NewGithubAppTkCmd,
 				"githubinstallationtk": githubinstallationtkcmd.NewGithubAppTkCmd,
 				"gitlab":               gitlabcmd.NewGitlabClientCmd,
+				"classify":             classifycmd.NewClassifyCmd,
 			},
 		), nil
 	}
