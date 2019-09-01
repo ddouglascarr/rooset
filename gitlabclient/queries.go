@@ -1,28 +1,19 @@
 package gitlabclient
 
 import (
-	"log"
-
 	"github.com/xanzy/go-gitlab"
 )
 
-// Ping checks if it works
-func Ping() {
+// GetMergeRequest returns merge request
+func GetMergeRequest(projectID string, mergeRequestID int) (*gitlab.MergeRequest, error) {
 	git := gitlab.NewClient(nil, "y816jUs-hhV8sokfR_Fe")
 	git.SetBaseURL("http://localhost:9080/api/v4")
 
-	// Create new project
-	p := &gitlab.CreateProjectOptions{
-		Name:                 gitlab.String("My Other Project"),
-		Description:          gitlab.String("Just a test project to play with"),
-		MergeRequestsEnabled: gitlab.Bool(true),
-		SnippetsEnabled:      gitlab.Bool(true),
-		Visibility:           gitlab.Visibility(gitlab.PublicVisibility),
-	}
-	project, _, err := git.Projects.CreateProject(p)
+	mr, _, err := git.MergeRequests.GetMergeRequest(
+		projectID, mergeRequestID, &gitlab.GetMergeRequestsOptions{},
+	)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-
-	log.Println(project.ID)
+	return mr, nil
 }

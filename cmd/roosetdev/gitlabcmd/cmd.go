@@ -1,6 +1,8 @@
 package gitlabcmd
 
 import (
+	"log"
+
 	"github.com/ddouglascarr/rooset/gitlabclient"
 	"github.com/shabbyrobe/cmdy"
 	"github.com/shabbyrobe/cmdy/args"
@@ -29,6 +31,10 @@ func (t *gitlabClientCmd) Args() *args.ArgSet {
 }
 
 func (t *gitlabClientCmd) Run(ctx cmdy.Context) error {
-	gitlabclient.Ping()
+	mergeRequest, err := gitlabclient.GetMergeRequest("determined_poitras/test-public-1", 1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(mergeRequest.Title)
 	return nil
 }
