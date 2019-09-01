@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/ddouglascarr/rooset/gitlabclient"
+	"github.com/ddouglascarr/rooset/lfclient"
 	"github.com/shabbyrobe/cmdy"
 	"github.com/shabbyrobe/cmdy/args"
 )
@@ -36,5 +37,12 @@ func (t *gitlabClientCmd) Run(ctx cmdy.Context) error {
 		log.Fatal(err)
 	}
 	log.Println(mergeRequest.Title)
+
+	initiative, err := lfclient.GetInitiative(1)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println(initiative.Name)
 	return nil
 }
