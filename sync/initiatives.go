@@ -15,6 +15,8 @@ var (
 	CreateCompetingInitiative = Situation("CreateCompetingInitiative")
 	RebaseToIssue             = Situation("RebaseToIssue")
 	ActiveIssue               = Situation("ActiveIssue")
+	ClosePullRequest          = Situation("ClosePullRequest")
+	Closed                    = Situation("Closed")
 	Invalid                   = Situation("Invalid")
 )
 
@@ -22,7 +24,7 @@ func Classify(pullRequest *gitlab.MergeRequest, initiative *lfclient.Initiative)
 	Situation, error) {
 	switch {
 	case initiative == nil:
-		if pullRequest.TargetBranch == "master" {
+		if strings.HasPrefix(pullRequest.TargetBranch, "lf-area-") {
 			// first initiative in new issue
 			return CreateInitiative, nil
 		}
@@ -31,9 +33,13 @@ func Classify(pullRequest *gitlab.MergeRequest, initiative *lfclient.Initiative)
 			return CreateCompetingInitiative, nil
 		}
 		return Invalid, nil
-	case pullRequest.TargetBranch == "master" && initiative.IsActive():
+	case !initiative.IsActive() && pullRequest.State != "closed":
+		return ClosePullRequest, nil
+	case !initiative.IsActive() && pullRequest.State == "closed":
+		return Closed, nil
+	case pullRequest.TargetBranch == "master":
 		return RebaseToIssue, nil
-	case pullRequest.TargetBranch == buildTargetBranchName(*initiative) && initiative.IsActive():
+	case pullRequest.TargetBranch == buildTargetBranchName(*initiative):
 		return ActiveIssue, nil
 	default:
 		return Invalid, nil

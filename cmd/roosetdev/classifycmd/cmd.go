@@ -3,9 +3,9 @@ package classifycmd
 import (
 	"log"
 
-	"github.com/ddouglascarr/rooset/cmd/roosetdev/sync"
 	"github.com/ddouglascarr/rooset/gitlabclient"
 	"github.com/ddouglascarr/rooset/lfclient"
+	"github.com/ddouglascarr/rooset/sync"
 	"github.com/shabbyrobe/cmdy"
 	"github.com/shabbyrobe/cmdy/args"
 )
