@@ -44,7 +44,7 @@ config.localhost = false
 
 -- Connection information for the LiquidFeedback database
 -- ------------------------------------------------------------------------
-config.database = { engine='postgresql', dbname='liquid_feedback', dbhost='db', dbuser='postgres'}
+config.database = { engine='postgresql', dbname='liquid_feedback', host='db', user='postgres', port='5432'}
 
 
 -- Location of the rocketwiki binaries
