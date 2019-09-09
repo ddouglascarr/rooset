@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+dropdb --if-exists ${PGDATABASE}
+createdb ${PGDATABASE}
+
+psql -v ON_ERROR_EXIT -f /opt/core/core.sql
+psql -v ON_ERROR_EXIT -f /opt/core/fixtures/00_utils.sql 
+psql -v ON_ERROR_EXIT -f /opt/core/fixtures/01_test_world.sql 
+

@@ -1,0 +1,37 @@
+#!/bin/bash
+set -euo pipefail
+
+################################################################################
+#
+# Runs the core services.
+#
+# Usage:
+#   core-services
+#
+# Uses the psql environment variables to configure the database
+# see: https://www.postgresql.org/docs/9.3/static/libpq-envars.html
+#
+################################################################################
+
+keep_running=true
+function cleanup {
+  keep_running=false
+}
+trap cleanup EXIT SIGTERM
+
+# wait for database to initialise
+sleep ${CORE_SERVICES_INITIAL_DELAY}
+
+while ${keep_running}; do
+  echo "---: lf_update"
+  /opt/core/lf_update dbname=${PGDATABASE}
+
+  echo "---: lf_update_issue_order"
+  /opt/core/lf_update_issue_order dbname=${PGDATABASE}
+
+  echo "---: lf_update_suggestion_order"
+  /opt/core/lf_update_suggestion_order dbname=${PGDATABASE}
+  
+  sleep ${CORE_SERVICES_REPEAT_DELAY}
+done
+
