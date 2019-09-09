@@ -18,6 +18,7 @@ func NewClassifyCmd() (cmdy.Command, cmdy.Init) {
 type classifyCmd struct {
 	InitiativeID  int
 	PullRequestID int
+	IssueState    lfclient.IssueState
 }
 
 var _ cmdy.Command = &classifyCmd{}
@@ -30,6 +31,7 @@ func (t *classifyCmd) Flags() *cmdy.FlagSet {
 	fs := cmdy.NewFlagSet()
 	fs.IntVar(&t.InitiativeID, "initiative", 0, "lf initiative id")
 	fs.IntVar(&t.PullRequestID, "pr", 0, "pull request id")
+	fs.Var(&t.IssueState, "issuestate", "the issue state")
 	return fs
 }
 
@@ -38,6 +40,7 @@ func (t *classifyCmd) Args() *args.ArgSet {
 }
 
 func (t *classifyCmd) Run(ctx cmdy.Context) error {
+	log.Println(t.IssueState)
 	mergeRequest, err := gitlabclient.GetMergeRequest("determined_poitras/test-public-1", t.PullRequestID)
 	if err != nil {
 		log.Fatal(err)
