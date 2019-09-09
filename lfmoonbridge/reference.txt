@@ -1,0 +1,795 @@
+
+Moonbridge reference
+====================
+
+
+
+Global function listen{...}
+---------------------------
+
+This function initializes the Moonbridge Network Server. It may be called
+multiple times. However, it is not allowed to register additional listeners by
+calling listen{...} from a "prepare", "connect", or "finish" handler.
+
+See file "example.lua" for parametrization of the listen{...} function.
+
+Warning: Moonbridge will fork the Lua environment to handle parallel requests.
+Functions provided as "prepare", "connect", and "finish" handlers may access
+global variables, but for every child process these global variables will not
+be shared! If you require a global state, a DBMS, cache server, or similar is
+necessary.
+
+
+
+Global function timeout(...)
+----------------------------
+
+Calling this function with a positive number (time in seconds) sets a timer
+that kills the current process after the selected time runs out. The remaining
+time can be queried by calling this function without arguments.
+
+Calling this function with a single argument that is the number zero will
+disable the timeout.
+
+Another mode of operation is selected by passing two arguments: a time (in
+seconds) as first argument and a function as second argument. In this case, a
+sub-timer will be used to limit the execution time of the function. In case of
+timeout, the process will be killed (and the timeout function does not return).
+If the time for the sub-timer is longer than a previously set timeout (using
+the timeout(...) function with one argument), the shorter timeout (of the
+previous call of timeout(...)) will have precedence.
+
+Timers are also automatically reset (disabled) when a handler (prepare handler
+or connect handler) returns. To shutdown processes after a certain time waiting
+for a new request, use the idle_time parameter of the listen function.
+
+
+
+Socket object passed to "connect" handler
+-----------------------------------------
+
+For every incoming connection, the registered "connect" handler is called with
+a single socket object as argument, which is described below:
+
+
+### socket:close()
+
+Closes the socket connection (input and output stream) by flushing all data and
+sending a TCP FIN packet.
+
+Returns true on success, or nil plus error message in case of an I/O error.
+Using this method on sockets that have already been closed (or reset) will
+throw an error.
+
+Warning: Pending data on the input stream may cause connection aborts (TCP RST)
+when network connections are used. All pending input data should have been read
+(or drained) before calling socket:close(). Use socket:finish() to send a
+TCP FIN packet to the peer before waiting for EOF from the peer.
+
+A socket passed to the "connect" handler will be closed automatically if it was
+not closed by the "connect" handler and if the "connect" handler returns
+normally (i.e. without throwing an error). If the "connect" handler throws an
+error, then the socket will be reset. See socket:reset().
+
+
+### socket:drain(maxlen, terminator)
+
+Same as socket:read(maxlen, terminator), but discards the input and returns the
+number of discarded bytes (as first return value) and the status code ("term",
+"maxlen", "eof" as second return value).
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) are returned.
+
+
+### socket:drain_call(waitfunc, maxlen, terminator)
+
+Same as socket:drain(maxlen, terminator), but calls waitfunc() (in an infinite
+loop) as long as the reading is blocked.
+
+
+### socket:drain_nb(maxlen, terminator)
+
+Same as socket:drain(maxlen, terminator), but non-blocking. The status code
+(which is returned as second return value) may therefore be "term", "maxlen",
+"eof", or "block".
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) are returned.
+
+
+### socket:drain_yield(maxlen, terminator)
+
+Alias for socket:drain_call(coroutine.yield, maxlen, terminator)
+
+
+### socket:finish()
+
+Sends a TCP FIN packet to indicate EOF on write stream. Subsequent reads are
+still possible. When there is no more input data to be read, the connection
+should finally be closed with socket:close().
+
+In case of local sockets (Unix Domain Sockets), socket:finish() simply closes
+the underlying socket and emulates EOF on subsequent reads. Also in this case,
+the connection should be finally closed with socket:close().
+
+
+### socket:flush(...)
+
+Same as socket:write(...) but additionally flushes the socket (i.e. all pending
+data is passed to the operating system).
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) are returned. On success, the socket userdata object is
+returned.
+
+
+### socket:flush_call(waitfunc, ...)
+
+Same as socket:flush(...), but calls waitfunc() (in an infinite loop) as long
+as the writing is blocked.
+
+
+### socket:flush_nb(...)
+
+Same as socket:write_nb(...) but additionally flushes the socket (i.e. all
+pending data is passed to the operating system). The total number of bytes that
+could not be passed yet to the operating system is returned. Zero is returned
+if all data could be flushed out.
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) are returned.
+
+
+### socket:flush_yield(...)
+
+Alias for socket:flush_call(coroutine.yield, ...)
+
+
+### socket.interval
+
+Set to the name of an interval timer if the "connect" handler was called due to
+an elapsed interval timer. Otherwise nil.
+
+
+### socket.local_ip4
+
+Local IPv4 address used for the connection. Encoded as 4 raw bytes in form of a
+string.
+
+
+### socket.local_ip6
+
+Local IPv6 address used for the connection. Encoded as 16 raw bytes in form of
+a string.
+
+
+### socket.local_tcpport
+
+Local TCP port used for the connection.
+
+
+### socket:read(maxlen, terminator)
+
+Reads up to maxlen bytes or until an optional termination character is
+encountered (which is included in the result). The maxlen value may be nil, in
+which case there is no limit on the number of bytes read.
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) are returned.
+
+In all other cases (including EOF), the following two values are returned:
+
+- a string containing the bytes read (first return value, may be empty string)
+- a status code equal to "term", "maxlen", or "eof" (second return value)
+
+If an EOF is encountered before all data could be read, then "eof" is returned
+as second return value. If maxlen bytes have been read and no termination
+character has been read, then "maxlen" is returned as second return value. If
+the termination character is the last character of the read string, the second
+return value will be "term".
+
+
+### socket:read_call(waitfunc, maxlen, terminator)
+
+Same as socket:read(maxlen, terminator), but calls waitfunc() (in an infinite
+loop) as long as the reading is blocked.
+
+
+### socket:read_nb(maxlen, terminator)
+
+Same as socket:read(maxlen, terminator), but does not block.
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) are returned.
+
+In all other cases (including EOF), the following two values are returned:
+
+- a string containing the bytes read (first return value, may be empty string)
+- a status code equal to "term", "maxlen", "eof", "block" (second return value)
+
+The status code "block" as second return value is used if the function returned
+prematurely because it would block otherwise. In this case, the first return
+value is a string that contains the bytes that could be read without blocking.
+
+
+### socket:read_yield(maxlen, terminator)
+
+Alias for socket:read_call(coroutine.yield, maxlen, terminator)
+
+
+### socket.remote_ip4
+
+Remote IPv4 address used for the connection. Encoded as 4 raw bytes in form of
+a string.
+
+
+### socket.remote_ip6
+
+Remote IPv6 address used for the connection. Encoded as 16 raw bytes in form of
+a string.
+
+
+### socket.remote_tcpport
+
+Remote TCP port used for the connection.
+
+
+### socket:reset()
+
+Alias for socket:close(). Closes the socket connection by sending a TCP RST
+packet if possible to indicate error condition. This is the default operation
+when a socket handle gets garbage collected or the process is terminated
+abnormally.
+
+Returns true on success, or nil (as first return value) plus error message (as
+second return value) in case of an I/O error. Using this method on sockets that
+have already been closed (or reset) will throw an error.
+
+Warning: Previously sent (and flushed) data may be lost during transmission.
+
+
+### socket:write(...)
+
+Takes a variable number of strings and sends them to the peer. The operation is
+buffered, so to actually send out the data, it is necessary to eventually call
+socket:flush(), socket:finish(), or socket:close().
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) are returned. On success, the socket userdata object is
+returned.
+
+
+### socket:write_call(waitfunc, ...)
+
+Same as socket:write(...), but calls waitfunc() (in an infinite loop) as long
+as the writing is blocked.
+
+
+### socket:write_nb(...)
+
+Takes a variable number of strings and sends them to the peer. The operation is
+buffered, so to actually send out the data, it is necessary to eventually call
+socket:flush_nb(), socket:flush(), socket:finish(), or socket:close().
+
+This function always returns immediately (i.e. it does not block). If all data
+(but a small buffered portion) could be sent out, then zero is returned.
+Otherwise, all arguments that could not be sent are stored in a buffer of
+unlimited size (up to memory capabilities) and an integer is returned that
+indicates the number of bytes currently in the buffer.
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) are returned.
+
+
+### socket:write_yield(...)
+
+Alias for socket:write_call(coroutine.yield, ...)
+
+
+
+I/O library
+-----------
+
+The Moonbridge Network Server for Lua Applications comes with its own I/O
+library to support blocking as well as nonblocking I/O operations.
+
+All methods on an I/O handle (e.g. socket) are described in the previous
+section regarding the "socket" object. All other functions of the library are
+listed below.
+
+
+### moonbridge_io.catch_sigterm()
+
+This function installs a signal handler for SIGTERM. Instead of causing
+immediate process termination, the behavior of moonbridge_io.poll(...) is
+modified.
+
+See moonbridge_io.poll(...) for further information.
+
+
+### moonbridge_io.exec(command, arg1, arg2, ...)
+
+Executes the given command and returns a child handle with three sockets named
+"stdin", "stdout", and "stderr" as well as the following methods:
+
+- :kill(signal)
+- :wait()
+- :wait_nb()
+- :wait_call(waitfunc) 
+- :wait_yield()
+
+Use :kill(signal) to terminate the process with the given signal (defaults to 9
+for SIGKILL).
+
+The :wait() method will wait for the process to terminate and return its exit
+code. If the process was terminated by a signal, a negative integer is returned
+which corresponds to the respective positive signal number.
+
+The method :wait_nb() is the same as :wait(), except that it does not block but
+returns false (plus a notice as second return value) if the child process has
+not terminated yet.
+
+The method :wait_call() is the same as :wait() but calls waitfunc() (in an
+infinite loop) as long as the process is still running.
+
+The method :wait_yield() is an alias for :wait_call(coroutine.yield).
+
+It is possible to wait for process termination by including the child handle
+in the input_set of the moonbridge_io.poll(...) call.
+
+moonbridge_io.exec(...) returns nil (as first return value) plus an error
+message (as second return value) in case of error.
+
+
+### moonbridge_io.getpid()
+
+Returns the current PID.
+
+
+### moonbridge_io.localconnect(path)
+
+Tries to connect to a local socket (also known as Unix Domain Socket). Returns
+a socket object on success, or nil (as first return value) plus an error
+message (as second return value) in case of error.
+
+
+### moonbridge_io.localconnect_nb(path)
+
+Tries to connect to a local socket (also known as Unix Domain Socket). Returns
+a socket object on success, or nil (as first return value) plus an error
+message (as second return value) in case of error.
+
+Same as moonbridge_io.localconnect(path), except that this function does not
+block and immediately returns a socket object.  
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) may be returned. However, connection errors may also be
+reported on first read or write on the socket.
+
+
+### moonbridge_io.locallisten(path)
+
+Attempts to create a local socket (also known as Unix Domain Socket) to accept
+incoming connections. If the file does already exist and is a socket, then it
+is deleted automatically before being re-created.
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) may be returned. On success, a listener object is returned
+which supports the methods :accept(), :accept_nb(), and :close(). 
+
+The method :accept() blocks until a new incoming connection is available, in
+which case a socket object is returned.
+
+The method :accept_nb() works like :accept(), except that the call is
+nonblocking and returns false (plus a notice as second return value) in case no
+incoming connection is available. It is possible to wait for an incoming
+connection by including the listener object in the input_set of the
+moonbridge_io.poll(...) call.
+
+The method :close() will close the listening socket. In case of local sockets
+(Unix Domain Sockets), the socket will not be unlinked in the file system.
+
+I/O errors by the methods of the listener object are also reported by returning
+nil (as first return value) plus an error message (as second return value).
+
+
+### moonbridge_io.poll(input_set, output_set, timeout, wakeup_on_sigterm)
+
+This function waits for at least one of the given file descriptors and/or
+I/O handles to be ready for input or output. The two sets of file descriptors
+and/or handles must contain the file descriptor or handle as a key, and a value
+which does evaluate to true, e.g. input_set = {[socketA] = true}. If a set is
+nil, it is treated as being empty.
+
+The input_set may also contain listeners (to wait for incoming connections) and
+child handles (to wait for process termination).
+
+If the 4th parameter (wakeup_on_sigterm) is set to true, then the function
+returns immediately if the process received at least one SIGTERM signal after
+moonbridge_io.catch_sigterm() has been called for the first time. Three values
+are returned if a timeout happened or a SIGTERM has been received: false as
+first return value, a message string as second return value (that may, for
+example, be used for assert(...)), and a boolean as third return value which
+indicates whether the function prematurely returned because of SIGTERM.
+
+If the 4th parameter (wakeup_on_sigterm) is omitted or set to false, then the
+function only returns false as first return value if a timeout happened. In
+this case, the second return value also will be set to an appropriate message
+string such that assert(moonbridge_io.poll(...)) can be used to throw an error.
+
+In all other cases, the function returns true as a single return value. The
+function may also return true (for technical reasons) if signals other than
+SIGTERM have been received during waiting.
+
+Note that the function is not thread-safe when the 4th parameter is set to
+true.
+
+
+### moonbridge_io.tcpconnect(hostname, port)
+
+Tries to open a TCP connection with the given host and TCP port number. Returns
+a socket object on success, or nil (as first return value) plus an error
+message (as second return value) in case of error.
+
+
+### moonbridge_io.tcpconnect_nb(hostname, port)
+
+Same as moonbridge_io.tcpconnect(hostname, port), except that this function
+does not block and immediately returns a socket object.
+
+Note: The current implementation still blocks during the DNS lookup. Use a
+numeric IP address as hostname to be truly nonblocking.
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) may be returned. However, connection errors may also be
+reported on first read or write on the socket.
+
+
+### moonbridge_io.tcplisten(hostname, port)
+
+Attempts to open a TCP port for listening. To listen on the loopback interface,
+use "::1" as hostname if IPv6 shall be used, or use "127.0.0.1" as hostname if
+IPv4 shall be used. To listen on all available interfaces, use "::" (IPv6) or
+"0.0.0.0" (IPv4) respectively.
+
+In case of an I/O error, nil (as first return value) plus an error message (as
+second return value) may be returned. On success, a listener object is returned
+which supports the methods :accept(), :accept_nb(), and :close(). See reference
+for moonbridge.io_locallisten(...).
+
+
+### moonbridge_io.timeref(previous)
+
+Helper function which returns a time reference (in SI-seconds). If a value is
+passed as an optional argument to the function, then that value is substracted
+from the result. A common idiom is:
+
+    local starttime = moonbridge_io.timeref()
+    [...]
+    while true do
+        [...]
+        if not moonbridge_io.poll(
+          input_set,
+          output_set,
+          timeout - moonbridge_io.timeref(starttime)
+        ) then
+            error("Timeout")
+        end
+        [...]
+    end
+
+
+
+HTTP module
+-----------
+
+The HTTP module exports the function moonbridge_http.generate_handler(callback)
+that converts an HTTP handler to a "connect" handler. See file "helloworld.lua"
+for a simple example or "example_application.lua" for a more complex example of
+invocation. A table with options may be passed either as a second argument, or
+as a first argument preceeding the callback function (whichever is more
+convenient).
+
+The following options are supported:
+
+- request_body_size_limit: maximum size of payload of HTTP request body
+  (transfer encoding is allowed to add a limited amount of extra data)
+- chunk_size: optional default value for maximum_input_chunk_size and
+  minimum_output_chunk_size
+- request_header_size_limit: maximum size of HTTP request headers
+- maximum_input_chunk_size: maximum chunk size when streaming a request body or
+  certain POST fields (bigger chunks will be fragmented automatically)
+- minimum_output_chunk_size: minimum size for a chunk when sending a response
+  body (smaller chunks will be buffered and concatenated with future data;
+  ignored when request:flush() is called)
+- static_headers: a set of headers to be included in every HTTP response
+  (may be a string, a table or strings, or a table of key-value pairs)
+
+The callback function receives a single request object as argument, which is
+described below.
+
+
+### request.body
+
+The request body (without headers) as a string. Accessing this value makes
+further access to request.post_params and request.post_params_list, or
+invocation of request:stream_request_body(...) impossible.
+
+
+### request:close_after_finish()
+
+Closes the connection after answering the request.
+
+This method can only be called before the HTTP response header section has been
+finished (i.e. before request:finish_headers(), request:send_data(...), or
+request:finish() were called), but it may be called before a status code has
+been sent using request:send_status(...).
+
+A corresponding "Connection: close" header is automatically sent.
+
+See also request:monologue().
+
+
+### request:consume_input()
+
+Starts processing the request body (if existent) to set the values
+request.post_params, request.post_params_list, request.post_metadata, and
+and request.post_metadata_list and/or to call POST field stream handlers that
+have been previously registered with request:stream_post_param(...) or
+request:stream_post_params(...), or to call a previously registered request
+body stream handler that was set with request:set_request_body_streamer().
+
+This method gets invoked automatically when the POST param tables
+(request.post_params, etc.) are accessed or if request.body is accessed.
+
+
+### request.cookies
+
+A table with all cookies sent by the client.
+
+
+### request.faulty
+
+Normally set to false. In case of a write error on the client connection or
+certain other unexpected errors, this value is set to true before a Lua error
+is raised.
+
+A faulty request handle must not be used, or another Lua error will be raised.
+
+
+### request:finish()
+
+Finishes and flushes a HTTP response. An HTTP status, all headers, and the
+response body (if applicable) must have been previously sent. May be called
+multiple times (performs no operation if called on a finished request handle).
+Gets automatically invoked when the callback handler returns. After calling
+this method explicitly, no further data may be written.
+
+
+### request:finish_headers()
+
+Finishes and flushes the HTTP response header section. May be called multiple
+times, as long as the request is not finished completely. This method is
+automatically invoked if the application is beginning to send a response body.
+After calling this method, no further headers may be sent.
+
+
+### request:flush()
+
+Flushes any pending output data. Note: In order to mark the end of a response
+body, it is required to call request:finish().
+
+
+### request.fresh
+
+Set to false whenever the request object has been used (e.g. data has been read
+or sent out, or a stream handler was installed); true otherwise.
+
+
+### request.get_params
+
+A table that maps field names to their corresponding GET value. If there are
+several GET values with the given field name, then the first value is used.
+
+Note: May be implemented through metamethods, but does support iteration
+through pairs(...).
+
+
+### request.get_params_list
+
+A table that maps field names to a sequence of their corresponding GET values.
+
+Note: May be implemented through metamethods, but does support iteration
+through pairs(...).
+
+
+### request.headers
+
+A table that maps (case-insensitively) a HTTP header field name to a sequence
+of values. For each occurrence of the respective header line, a string entry is
+created in that sequence. Non-existent headers are mapped to an empty table.
+
+
+### request.headers_csv_string
+
+A table that maps (case-insensitively) a HTTP header field name to a comma
+separated string. Multiple occurrences of the header with the given field name
+are automatically merged into the comma separated string.
+
+
+### request.headers_csv_table
+
+A table that maps (case-insensitively) a HTTP header field name to a sequence
+of values. One entry is created in that sequence for every comma separated
+value of each header with the given field name.
+
+
+### request.headers_flags
+
+A table that maps (case-insensitively) a HTTP header field name to another
+table which (again case-insensitively) maps a string to a boolean, depending on
+whether this string occurred in the list of comma separated values of one
+header line with the given field name that was the key in the first table.
+
+
+### request.headers_value
+
+A table that maps (case-insensitively) a HTTP header field name to a value. If
+multiple header lines with the given field name have been received, false is
+used as value.
+
+
+### request.method
+
+The HTTP request method, e.g. "HEAD", "GET", or "POST".
+
+
+### request:monologue()
+
+Same as request:close_after_finish() but additionally discards all input data
+immediately.
+
+
+### request.path
+
+The requested path without a leading slash and without the query part (e.g.
+"index.html" if "/index.html?a=b&c=d" has been requested). For the query part,
+see request.query.
+
+This value will be nil if (and only if) the request method is "OPTIONS" with a
+request target equal to "*" (see also asterisk-form of request-target in
+section 5.3.4 in RFC 7230).
+
+
+### request.post_metadata
+
+Only set for multipart/form-data POST requests. A table that maps field names
+to their corresponding POST metadata table which contains two entries:
+"file_name" and "content_type". If there are several POST values with the given
+field name, then the first value/file is used.
+
+Note: May be implemented through metamethods, but does support iteration
+through pairs(...).
+
+
+### request.post_metadata_list
+
+Only set for multipart/form-data POST requests. A table that maps field names
+to a sequence with their corresponding POST metadata tables. Needed if multiple
+files are uploaded with the same field name.
+
+Note: May be implemented through metamethods, but does support iteration
+through pairs(...).
+
+
+### request.post_params
+
+A table that maps field names to their corresponding POST value. If there are
+several POST values with the given field name, then the first value is used.
+
+Note: May be implemented through metamethods, but does support iteration
+through pairs(...).
+
+
+### request.post_params_list
+
+A table that maps field names to a sequence of their corresponding POST values.
+
+Note: May be implemented through metamethods, but does support iteration
+through pairs(...).
+
+
+### request.query
+
+Query part of the request target including the leading question mark, e.g.
+"?a=b&c=d" if the requested target is "/index.html?a=b&c=d". The data is
+automatically parsed and made available through request.get_params and
+request.get_params_list.
+
+If there is no query part given in the request target, then this string is
+the empty string. This value will be nil if (and only if) the request method
+is "OPTIONS" with a request target equal to "*" (see also asterisk-form of
+request-target in section 5.3.4 in RFC 7230).
+
+
+### request:send_data(...)
+
+Sends data as response body. All arguments are converted via tostring(...) and
+concatenated. May be called multiple times until the request has been finished
+by calling request:finish().
+
+If the request method (see request.method) is "HEAD", then calls to
+request:send_data(...) are automatically ignored.
+
+
+### request:send_header(key, value)
+
+Sends a HTTP response header that consists of the given key and the given
+value. Note: Key and value must be provided as separate arguments. Before any
+headers can be sent, a HTTP status must have been set with
+request:send_status(status_string).
+
+
+### request:send_status(status_string)
+
+Sends a HTTP response status that is given as a string consisting of a 3-digit
+number and an explanatory string, e.g. "200 OK" or "404 Not Found". This
+function must be called once before any headers or response body data may be
+sent.
+
+
+### request.socket
+
+The underlaying socket. Can be used to force a TCP RST, etc.
+
+
+### request:stream_post_param(field_name, callback)
+
+Registers a stream handler for the given POST parameter. The callback function
+will be called in the following manner:
+
+- For the initial chunk, the first chunk gets passed as first argument while a
+  table with metadata ("field_name" and "content_type") gets passed as second
+  argument. In case of an immediate EOF (i.e. an empty file), the passed
+  chunk is the empty string. In all other cases the chunk has a length greater
+  than zero.
+- For any remaining chunks, the respective chunk gets passed as first and only
+  argument (no metadata). Here, the chunk has always a length greater than
+  zero.
+- To indicate the end of the stream, the callback function is called without
+  arguments. This also happens in case of an immediate EOF (see above).
+
+In case of an immediate EOF (i.e. an empty file), the callback function is thus
+called as follows:
+
+- The first time with an empty string as first argument, and with the metadata
+  as second argument.
+- The second time without any arguments.
+
+Note that request:consume_input() needs to be called to enforce streaming to
+finish.
+
+
+### request:stream_post_params(pattern, callback)
+
+Same as request:stream_post_param(...) but providing a string pattern to match
+multiple field names (e.g. "^file_[0-9]+$").
+
+
+### request:stream_request_body(callback)
+
+Registeres a stream handler for the whole request body. For each chunk of the
+request body, the callback function is called with the corresponding chunk. End
+of data is indicated by passing a nil value to the callback functuion.
+
+Note that request:consume_input() needs to be called to enforce streaming to
+finish.
+
+
+### request:stream_request_body_now(callback)
+
+Start streaming of request body immediately. On EOF the function returns and
+the callback function is *not* called with nil as argument.
+
+

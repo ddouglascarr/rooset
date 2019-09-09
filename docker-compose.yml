@@ -38,3 +38,20 @@ services:
     volumes:
       - ./lfcore:/opt/lfcore
       - ./etc:/opt/etc
+
+  lffrontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    environment:
+      - PGHOST=db
+      - PGUSER=postgres
+      - PGDATABASE=liquid_feedback
+    ports:
+      - "8081:8080"
+    links:
+      - db
+    volumes:
+      - ./lffrontend:/opt/frontend
+      - ./lfframework:/opt/framework
+    entrypoint: /usr/local/bin/keep-alive

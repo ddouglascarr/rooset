@@ -1,0 +1,9 @@
+#!/bin/bash
+
+/opt/moonbridge/moonbridge \
+  /opt/framework/framework/bin/mcp.lua \
+  /opt/framework/framework/ \
+  /opt/frontend/ \
+  main \
+  ${FRONTEND_CONFIG}
+
