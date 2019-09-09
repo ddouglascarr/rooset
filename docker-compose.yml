@@ -37,3 +37,4 @@ services:
     entrypoint: /usr/local/bin/keep-alive
     volumes:
       - ./lfcore:/opt/lfcore
+      - ./etc:/opt/etc
