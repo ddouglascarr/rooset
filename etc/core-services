@@ -24,13 +24,13 @@ sleep ${CORE_SERVICES_INITIAL_DELAY}
 
 while ${keep_running}; do
   echo "---: lf_update"
-  /opt/core/lf_update dbname=${PGDATABASE}
+  /opt/lfcore/lf_update dbname=${PGDATABASE}
 
   echo "---: lf_update_issue_order"
-  /opt/core/lf_update_issue_order dbname=${PGDATABASE}
+  /opt/lfcore/lf_update_issue_order dbname=${PGDATABASE}
 
   echo "---: lf_update_suggestion_order"
-  /opt/core/lf_update_suggestion_order dbname=${PGDATABASE}
+  /opt/lfcore/lf_update_suggestion_order dbname=${PGDATABASE}
   
   sleep ${CORE_SERVICES_REPEAT_DELAY}
 done
