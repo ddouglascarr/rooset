@@ -93,3 +93,23 @@ There are some development tools available, to make manual testing easier.
 ```
   $ roosetdev help
 ```
+
+
+## Docker Setup
+
+Docker will run a fully contained Gitlab container, as well as the lfcontainers.
+
+```
+$ docker-compose build
+$ docker-compose up
+
+
+# Run core services manually
+$ docker-compose exec lfcore
+$ /usr/local/bin/core-services
+
+# Run frontend server manually
+$ docker-compose exec lffrontend
+$ /usr/local/bin/start-server
+
+```
