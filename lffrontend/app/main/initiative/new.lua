@@ -59,7 +59,7 @@ else
 end
 
 ui.tag{ tag = "div", attr = { id="initiative-editor" }, content="" }
-ui.script{ static = "js/foobar.js" }
+ui.script{ static = "js/bundle.js" }
 
 -- ui.form{
 --   module = "initiative",
