@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build-client": "webpack --config webpack.client.config.js",
-    "watch-client": "webpack-dev-server --config webpack.client.config.js",
+    "watch-client": "webpack-dev-server --config webpack.client.config.js --host 0.0.0.0",
     "lint": "eslint ./src --ext .ts,.tsx"
   },
   "devDependencies": {
@@ -21,6 +21,5 @@
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.2"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
