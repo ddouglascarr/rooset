@@ -1,8 +1,0 @@
-syntax = "proto3";
-package messages;
-
-import "google/protobuf/descriptor.proto";
-
-extend google.protobuf.MessageOptions {
-  string AggregateRootField = 51235;
-}

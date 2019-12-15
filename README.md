@@ -8,108 +8,71 @@ Rooset is a democratic structured decision system. Work in progress
 
 ### Requiremnts
 
-- Golang 1.10 +
-- Node.js 8 LTS +
-- struct2ts (go install github.com/OneOfOne/struct2ts)
-- Protobuf golang (https://github.com/golang/protobuf)
-- Postgres 9.x +
-- Redis
+- docker
+- docker-compose
 
-### Bash environment
-
-There's a bunch of env variables. source `etc/set-env` to set them. 
-
-This will source a file at `etc/set-secrets-env`. Use this to override default options
-and set secret values. The following needs to be set in that file for Github OAuth to work:
-- ROOSET_GITHUB_CLIENT_ID
-- ROOSET_GITHUB_CLIENT_SECRET
-- ROOSET_GITHUB_APP_ID
-- ROOSET_GITHUB_APP_PRIVATE_KEY
-
-All commands assume you're in this directory, and that these env variables are set.
+### Initial setup of development environment
 
 ```
-  $ . etc/set-env
+  $ docker-compose up -d
+  $ docker-exec lfcore bash
+  # init-test-db
 ```
 
-### Postgres DBs
+Re-running `init-test-db` will drop all data and reset the database to the 
+development scenario.
 
-Rooset follows the CQRS pattern. 
+### Using the development environment
 
-It needs 2 postgres databases, `rooset_cmd` and `rooset_query`. 
+The relevant part of the host filesystem is mounted on top of the containers,
+so you can edit the code on the host, and it will appear in the contianers.
 
-There's a Bash script to set them up.
 
-```
-  $ etc/reset-dbs
-```
-
-### Frontend
-
-It's all written in typescript. Build it and the server handles the rest.
+Run the containers
 
 ```
-  $ cd pages
-  $ npm install
-  $ npm run build
+  $ docker-compose up
 ```
 
-During development
+Start the core services. These will run every 5 seconds.
 
 ```
-  $ npm run watch
+  $ docker-compose exec lfcore bash
+  # core-services
 ```
 
-### Generate and install
+Start the frontend server. There is no autorestart.
+It is available on the host at `http://localhost:8081'.
 
 ```
-  $ go generate ./...
-  $ go install ./cmd/rooset
-  $ go install ./cmd/roosetdev
+  $ docker-compose exec lffrontend bash
+  # frontend-server
 ```
 
+There are a number of test users set up. All their passwords are `login`.
 
-## Running
-
-There are 2 components, an http server and a projection processor. Both need to be
-running for the system to be fully functional.
-
-Run a server on port 12345
-
-```
-  $ rooset server
-```
-
-Run the projection processor
-```
-  $ rooset projproc
-```
-
-
-## Development
-
-There are some development tools available, to make manual testing easier.
-
-```
-  $ roosetdev help
-```
-
-
-## Docker Setup
-
-Docker will run a fully contained Gitlab container, as well as the lfcontainers.
-
-```
-$ docker-compose build
-$ docker-compose up
-
-
-# Run core services manually
-$ docker-compose exec lfcore
-$ /usr/local/bin/core-services
-
-# Run frontend server manually
-$ docker-compose exec lffrontend
-$ /usr/local/bin/start-server
-
-```
+Usernames:
+  - admin
+  - determined_poitras
+  - tender_hugle
+  - dreamy_almeida
+  - thirsty_swirles
+  - goofy_heisenberg
+  - thirsty_babbage
+  - sick_lamarr
+  - admiring_sammet
+  - compassionate_bose
+  - fervent_wright
+  - focused_bell
+  - elated_meninsky
+  - romantic_carson
+  - admiring_bartik
+  - evil_austin
+  - mad_mcnulty
+  - insane_poincare
+  - jovial_blackwell
+  - goofy_khorana
+  - kickass_fermat
+  - drunk_saha
+  - angry_ritchie
+  - desperate_easley
