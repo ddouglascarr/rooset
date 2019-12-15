@@ -1,0 +1,11 @@
+.*\.o$
+.*\.so$
+doc/autodoc.html
+framework.precompiled
+demo-app.precompiled
+framework/lib/atom.lua
+framework/lib/luatex.lua
+framework/lib/mondelefant.lua
+framework/lib/mondelefant_atom_connector.lua
+framework/lib/nihil.lua
+

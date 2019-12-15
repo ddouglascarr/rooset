@@ -1,0 +1,116 @@
+#trace_content ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#trace_content {
+  margin: 12pt;
+  padding: 9px;
+  border-radius: 2px;
+  background-color: #ffffff;
+}
+#trace_content #system_error {
+  font-family: monospace;
+}
+#trace_content ul li {
+  margin-top: 10px;
+}
+#trace_content ul li .trace_head {
+  padding: 3px 5px;
+  border-radius: 2px 2px 0 0;
+}
+#trace_content ul li .trace_head:last-child {
+  border-radius: 2px;
+}
+#trace_content ul li ul {
+  border-radius: 0 0 2px 2px;
+}
+#trace_content ul li:first-child {
+  margin-top: 0;
+}
+#trace_content ul ul {
+  padding: 10px;
+}
+#trace_content .trace_config > ul {
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+#trace_content .trace_config > .trace_head {
+  background-color: #ccc;
+  color: #000;
+}
+#trace_content .trace_request > ul {
+  background-color: #afa;
+}
+#trace_content .trace_request > .trace_head {
+  background-color: #0c0;
+}
+#trace_content .trace_filter > ul {
+  background-color: #ccf;
+  border: 1px solid #00c;
+  border-top: none;
+}
+#trace_content .trace_filter > .trace_head {
+  background-color: #00c;
+  color: #fff;
+}
+#trace_content .trace_view > ul {
+  background-color: #cfc;
+  border: 1px solid #0c0;
+  border-top: none;
+}
+#trace_content .trace_view > .trace_head {
+  background-color: #0c0;
+  color: #000;
+}
+#trace_content .trace_action_neutral > ul {
+  background-color: #ffa;
+  border: 1px solid #fe0;
+}
+#trace_content .trace_action_neutral > .trace_head {
+  background-color: #fe0;
+  color: #000;
+}
+#trace_content .trace_action_success > ul {
+  background-color: #afa;
+  border: 1px solid #fe0;
+}
+#trace_content .trace_action_success > .trace_head {
+  background-color: #fe0;
+  color: #000;
+}
+#trace_content .trace_action_softfail > ul {
+  background-color: #faa;
+  border: 1px solid #fe0;
+}
+#trace_content .trace_action_softfail > .trace_head {
+  background-color: #fe0;
+  color: #000;
+}
+#trace_content .trace_sql {
+  background-color: #fff;
+  padding: 2px 4px;
+  margin-top: 8px;
+}
+#trace_content .trace_sql_time {
+  float: right;
+  font-weight: bold;
+}
+#trace_content .trace_error {
+  background-color: #faa;
+  color: #000;
+  font-weight: bold;
+  border: 1px solid #c00;
+}
+#trace_content .trace_exectime {
+  background-color: #ccc;
+  font-weight: bold;
+  border-radius: 2px;
+}
+#trace_content .time {
+  float: right;
+}
+#trace_content .total_duration {
+  font-weight: bold;
+}

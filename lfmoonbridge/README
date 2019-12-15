@@ -1,0 +1,25 @@
+Quickstart guide:
+
+$ make
+$ ./moonbridge example_application.lua
+
+Hint: use bmake on GNU systems
+
+Then connect to http://localhost:8080/
+
+To learn more, check example_application.lua and reference.txt files. If you
+experence any touble during compilation, please edit the Makefile to match
+your system.
+
+
+Further notes:
+
+The moonbridge binary may be compiled with a string that gets appended
+to LUA_PATH (package.path) in order to allow proper inclusion of
+"moonbridge_http.lua" independent of the current working directory.
+Set the MOONBR_LUA_PATH variable to a string consisting of the path
+where "moonbridge_http.lua" will be installed plus "/?.lua" if you want
+to use this feature, e.g.:
+
+$ make MOONBR_LUA_PATH=/usr/local/lib/moonbridge/?.lua
+

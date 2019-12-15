@@ -1,0 +1,44 @@
+body {
+  background-color: #bfc;
+  font-family: sans-serif;
+}
+
+table {
+  border-spacing: 4px;
+}
+
+table th {
+  text-align: left;
+}
+
+table th, table td {
+  padding: 1ex 0.5em;
+  background: #f0fff4;
+}
+
+table .numeric {
+  text-align: right;
+}
+
+input[type=text] {
+  background: #f0fff4;
+  border: none;
+}
+
+input {
+  padding: 0.5ex 0.5em;
+}
+
+#chat {
+  background: #fff;
+  margin-bottom: 1ex;
+  padding: 0.5ex 0.5em;
+}
+
+#chat .line .name {
+  margin-right: 0.5em;
+  color: #777;
+}
+
+#chat .line .msg {
+}
