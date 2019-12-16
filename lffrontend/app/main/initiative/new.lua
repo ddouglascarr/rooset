@@ -58,6 +58,7 @@ else
   }
 end
 
+ui.tag{ tag = "h3", content="Text Editor Demo" }
 ui.tag{ tag = "div", attr = { id="initiative-editor" }, content="" }
 ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/bundle.js" }, content="" }
 
