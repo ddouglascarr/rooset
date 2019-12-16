@@ -25,6 +25,21 @@ export const initProsemirror = () => {
   });
 };
 
+export const initInitiativeForm = (el: HTMLFormElement) => {
+  el.onsubmit = (e) => {
+    e.preventDefault();
+    const fields = el.elements;
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      if (field instanceof HTMLInputElement && field.name === 'doc') {
+        console.log('docField', field);
+        field.value = JSON.stringify(view.state.doc, null, 2);
+      }
+    }
+    el.submit();
+  };
+};
+
 export const logProsemirrorState = () => {
   console.log('doc', JSON.stringify(view.state.doc, null, 2));
 };

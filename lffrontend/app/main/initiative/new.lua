@@ -60,6 +60,28 @@ end
 
 ui.tag{ tag = "h3", content="Text Editor Demo" }
 ui.tag{ tag = "div", attr = { id="initiative-editor" }, content="" }
+ui.form{
+  module = "initiative",
+  action = "validate",
+  params = {
+    area_id = area.id,
+    issue_id = issue and issue.id or nil,
+  },
+  attr = { id = "initiative-form" },
+  content = function()
+    ui.field.hidden{ type="text", name="doc", value="", attr = { id="doc-field" } }
+    ui.tag{
+      tag = "input",
+      attr = {
+        type = "submit",
+        class = "btn btn-default",
+        value = _'Submit'
+      },
+      content = ""
+    }
+  end,
+}
+
 ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/bundle.js" }, content="" }
 ui.tag{ tag = "button", attr = { onclick="window.logProsemirrorState()" }, content="log editor state" }
 
