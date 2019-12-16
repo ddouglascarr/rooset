@@ -9,8 +9,7 @@ declare module global {
 global.logProsemirrorState = logProsemirrorState;
 console.log('bundle loaded');
 
-// TODO: don't use an assertion here
-const initiativeForm = document.getElementById('initiative-form') as HTMLFormElement;
-if (initiativeForm) {
+const initiativeForm = document.getElementById('initiative-form');
+if (initiativeForm && initiativeForm instanceof HTMLFormElement) {
   initInitiativeForm(initiativeForm);
 }
