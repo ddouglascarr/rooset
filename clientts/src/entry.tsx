@@ -1,13 +1,13 @@
 import { initProsemirror, initInitiativeForm, logProsemirrorState } from './editor';
 
-initProsemirror();
+console.log('bundle loaded');
 
 declare module global {
   function logProsemirrorState(): void;
 }
-
 global.logProsemirrorState = logProsemirrorState;
-console.log('bundle loaded');
+
+initProsemirror(document.getElementById('initiative-editor')!);
 
 const initiativeForm = document.getElementById('initiative-form');
 if (initiativeForm && initiativeForm instanceof HTMLFormElement) {

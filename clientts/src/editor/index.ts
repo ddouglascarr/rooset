@@ -7,7 +7,7 @@ import {baseKeymap} from "prosemirror-commands"
 
 let view: EditorView;
 
-export const initProsemirror = () => {
+export const initProsemirror = (el: Element) => {
   const state = EditorState.create({
     schema,
     plugins: [
@@ -20,7 +20,7 @@ export const initProsemirror = () => {
     ],
   });
 
-  view = new EditorView(document.getElementById('initiative-editor')!, {
+  view = new EditorView(el, {
     state,
   });
 };
@@ -33,7 +33,7 @@ export const initInitiativeForm = (el: HTMLFormElement) => {
       const field = fields[i];
       if (field instanceof HTMLInputElement && field.name === 'doc') {
         console.log('docField', field);
-        field.value = JSON.stringify(view.state.doc, null, 2);
+        field.value = JSON.stringify(view.state.doc);
       }
     }
     el.submit();
