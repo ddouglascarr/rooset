@@ -20,10 +20,10 @@ module.exports = {
         ignoreRestSiblings: false,
       },
     ],
-    // "@typescript-eslint/explicit-function-return-type": {
-    //   allowExpressions: false,
-    //   allowTypedFunctionExpressions: true,
-    //   allowHigherOrderFunctions: true,
-    // },
+    "@typescript-eslint/explicit-function-return-type": {
+      allowExpressions: false,
+      allowTypedFunctionExpressions: true,
+      allowHigherOrderFunctions: true,
+    },
   },
 };
