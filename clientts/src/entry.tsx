@@ -2,6 +2,10 @@ import { initProsemirror, logProsemirrorState } from './editor';
 
 initProsemirror();
 
-setInterval(() => logProsemirrorState(), 10000);
+declare module global {
+  function logProsemirrorState(): void;
+}
+
+global.logProsemirrorState = logProsemirrorState;
 console.log('bundle loaded');
 
