@@ -6,8 +6,9 @@
   "author": "Daniel Carr <d.douglas.carr@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build-client": "webpack --config webpack.client.config.js",
-    "watch-client": "webpack-dev-server --config webpack.client.config.js --host 0.0.0.0",
+    "build": "webpack --config webpack.client.config.js",
+    "start": "webpack-dev-server --config webpack.client.config.js --host 0.0.0.0",
+    "watch-git-service": "nodemon dist/gitService.js",
     "lint": "eslint ./src --ext .ts,.tsx"
   },
   "devDependencies": {
@@ -20,6 +21,7 @@
     "@typescript-eslint/eslint-plugin": "^2.4.0",
     "@typescript-eslint/parser": "^2.4.0",
     "eslint": "^6.7.2",
+    "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "ts-loader": "^6.2.0",
     "typescript": "^3.7.3",
