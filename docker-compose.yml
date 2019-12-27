@@ -51,6 +51,7 @@ services:
       - "8081:8080"
     links:
       - db
+      - gitService
     volumes:
       - ./lffrontend:/opt/frontend
       - ./lfframework:/opt/framework
@@ -61,6 +62,19 @@ services:
     volumes:
       - ./clientts:/opt/clientts
       - ./etc:/opt/etc
-    entrypoint: /opt/etc/keep-alive
+    working_dir: /opt/clientts
+    command: npm run start
     ports:
       - "8082:8080"
+
+  gitService:
+    image: node:erbium-stretch
+    volumes:
+      - ./clientts:/opt/clientts
+      - ./etc:/opt/etc
+    working_dir: /opt/clientts
+    command: ./node_modules/.bin/nodemon dist/gitService.js
+    ports:
+      - "8083:8080"
+
+

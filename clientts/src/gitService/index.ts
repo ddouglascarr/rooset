@@ -1,1 +1,1 @@
-console.log('gitService mark');
+console.log('gitService');
