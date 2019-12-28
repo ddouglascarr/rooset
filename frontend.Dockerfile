@@ -3,6 +3,7 @@ FROM debian:buster
 RUN apt-get -y update && apt-get install -y \
     build-essential \
     curl \
+    jq \
     lua5.3 \
     liblua5.3-dev \
     libbsd-dev \
@@ -36,6 +37,8 @@ RUN cd /opt/framework && \
   make
 
 ADD ./etc/frontend-server /usr/local/bin/
+ADD ./etc/jwt-encode /usr/local/bin/
+ADD ./etc/jwt-decode /usr/local/bin/
 
 EXPOSE 8080
 ENTRYPOINT [ "/usr/local/bin/frontend-server" ]

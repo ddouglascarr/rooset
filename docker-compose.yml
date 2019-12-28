@@ -47,6 +47,7 @@ services:
       - PGHOST=db
       - PGUSER=postgres
       - PGDATABASE=liquid_feedback
+      - ROOSET_JWT_SECRET="development"
     ports:
       - "8081:8080"
     links:
@@ -55,6 +56,8 @@ services:
     volumes:
       - ./lffrontend:/opt/frontend
       - ./lfframework:/opt/framework
+      - ./etc/jwt-encode:/usr/local/bin/jwt-encode
+      - ./etc/jwt-decode:/usr/local/bin/jwt-decode
     entrypoint: /usr/local/bin/keep-alive
 
   clientts:
