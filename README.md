@@ -49,6 +49,9 @@ It is available on the host at `http://localhost:8081'.
   # frontend-server
 ```
 
+Webpack dev server will start automatically
+```
+
 There are a number of test users set up. All their passwords are `login`.
 
 Usernames:
