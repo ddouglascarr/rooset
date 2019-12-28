@@ -119,12 +119,12 @@ INSERT INTO "policy" (
     TRUE, FALSE
   );
 
-INSERT INTO "unit" ("id", "parent_id", "name") VALUES
-  ( 1, NULL, 'Solar System'),           -- id 1
-  ( 2, 1   , 'Earth Moon Federation'),  -- id 2
-  ( 3, 2   , 'Earth'),                  -- id 3
-  ( 4, 2   , 'Moon'),                   -- id 4
-  ( 5, 1   , 'Mars');                   -- id 5
+INSERT INTO "unit" ("id", "parent_id", "name", "external_reference") VALUES
+  ( 1, NULL, 'Solar System', 'solar-system'),                               -- id 1
+  ( 2, 1   , 'Earth Moon Federation', 'earth-moon-federation' ),            -- id 2
+  ( 3, 2   , 'Earth', 'earth'),                                             -- id 3
+  ( 4, 2   , 'Moon', 'moon'),                                               -- id 4
+  ( 5, 1   , 'Mars', 'mars');                                                -- id 5
 
 INSERT INTO "area" ("id", "unit_id", "name") VALUES
   ( 1, 1, 'Statutes of the United Solar System'),       -- id  1

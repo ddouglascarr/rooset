@@ -1,9 +1,9 @@
 import {schema} from 'prosemirror-schema-basic';
 import {EditorState} from 'prosemirror-state';
 import {EditorView} from 'prosemirror-view';
-import {undo, redo, history} from "prosemirror-history"
-import {keymap} from "prosemirror-keymap"
-import {baseKeymap} from "prosemirror-commands"
+import {undo, redo, history} from 'prosemirror-history';
+import {keymap} from 'prosemirror-keymap';
+import {baseKeymap} from 'prosemirror-commands';
 
 let view: EditorView;
 
@@ -25,8 +25,9 @@ export const initProsemirror = (el: Element) => {
   });
 };
 
+// TODO: post to the git service instead
 export const initInitiativeForm = (el: HTMLFormElement) => {
-  el.onsubmit = (e) => {
+  el.onsubmit = e => {
     e.preventDefault();
     const fields = el.elements;
     for (let i = 0; i < fields.length; i++) {
