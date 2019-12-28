@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 
+	"github.com/ddouglascarr/rooset/gitservice"
 	"github.com/shabbyrobe/cmdy"
 	"github.com/shabbyrobe/cmdy/arg"
 )
@@ -22,7 +22,7 @@ func (t *gitServiceCmd) Synopsis() string {
 func (t *gitServiceCmd) Configure(flags *cmdy.FlagSet, args *arg.ArgSet) {}
 
 func (t *gitServiceCmd) Run(ctx cmdy.Context) error {
-	fmt.Println("Hello Cmdy World")
+	gitservice.Run()
 	return nil
 }
 
