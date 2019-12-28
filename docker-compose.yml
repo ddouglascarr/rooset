@@ -55,6 +55,7 @@ services:
     volumes:
       - ./lffrontend:/opt/frontend
       - ./lfframework:/opt/framework
+      - ./etc:/opt/etc
     entrypoint: /usr/local/bin/keep-alive
 
   clientts:

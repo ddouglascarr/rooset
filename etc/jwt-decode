@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # credit: https://willhaley.com/blog/generate-jwt-with-bash/
 set -euo pipefail
+secret="${ROOSET_JWT_SECRET}"
+token=${1};
 
 #
 # JWT Decoder Bash Script
 #
 
-secret="${ROOSET_JWT_SECRET}"
 
 base64_encode()
 {
@@ -51,8 +52,6 @@ hmacsha256_encode()
     printf '%s' "${input}" | openssl dgst -binary -sha256 -hmac "${secret}"
 }
 
-# Read the token from stdin
-declare token=${1:-$(</dev/stdin)};
 
 IFS='.' read -ra pieces <<< "$token"
 
@@ -61,5 +60,10 @@ declare payload=${pieces[1]}
 declare signature=${pieces[2]}
 
 verify_signature "${header}.${payload}" "${signature}"
-echo "${payload}" | base64_decode | jq
 
+echo '{}' | jq -c \
+  --argjson payload "$(echo -n ${payload} | base64_decode)"  \
+  --argjson header "$(echo -n ${header} | base64_decode)"  \
+  '
+  .payload=$payload | .header=$header
+  '

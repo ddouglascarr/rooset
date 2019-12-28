@@ -59,6 +59,7 @@ else
 end
 
 ui.tag{ tag = "h3", content="Text Editor Demo" }
+ui.tag{ tag = "p", content=jwt.encode({ foo="bar" }) }
 ui.tag{ tag = "div", attr = { id="initiative-editor" }, content="" }
 ui.form{
   module = "initiative",
@@ -83,6 +84,8 @@ ui.form{
 }
 
 ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/bundle.js" }, content="" }
+ui.tag{ tag = "script", attr = { type="text/javascript" }, content="console.log('foobar');" }
+
 ui.tag{ tag = "button", attr = { onclick="window.logProsemirrorState()" }, content="log editor state" }
 
 -- ui.form{
