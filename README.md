@@ -49,13 +49,7 @@ It is available on the host at `http://localhost:8081'.
   # frontend-server
 ```
 
-Start the webpack dev server.
-It is availaable on the host at `http://localhost:8082'.
-
-```
-  $ docker-compose exec clientts bash
-  # cd /opt/clientts
-  # npm run watch-client
+Webpack dev server will start automatically
 ```
 
 There are a number of test users set up. All their passwords are `login`.
