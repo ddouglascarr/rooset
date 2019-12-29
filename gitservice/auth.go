@@ -12,19 +12,28 @@ import (
 type JWTHandlerFunc func(
 	w http.ResponseWriter,
 	r *http.Request,
-	jWTPayload JWTPayload,
+	token *jwt.Token,
 )
 
-//JWTPayload represents the payload sent by the JWT token
-type JWTPayload struct {
+//NewInitiativeClaims represents the payload sent by the JWT token
+type NewInitiativeClaims struct {
 	UnitID         int64
 	RepositoryName string
 }
 
 //Valid makes it a Claims object
-func (p *JWTPayload) Valid() error {
+func (p *NewInitiativeClaims) Valid() error {
 	// TODO: any validation actually required here?
 	return nil
+}
+
+func keyFunc(token *jwt.Token) (interface{}, error) {
+	// TODO: handle expiry
+	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+	}
+	// TODO: get key from config
+	return []byte("development"), nil
 }
 
 //ValidatedJWT closure for wrapping handlers which rely on a JWT payload
@@ -32,7 +41,6 @@ func (p *JWTPayload) Valid() error {
 func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		var claims JWTPayload
 
 		var tokenHeader string
 		for i, tk := range r.Header["Authorization"] {
@@ -50,13 +58,7 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		token, err := jwt.ParseWithClaims(tokenHeader, &claims, func(token *jwt.Token) (interface{}, error) {
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-			}
-			// TODO: get key from config
-			return []byte("development"), nil
-		})
+		token, err := jwt.Parse(tokenHeader, keyFunc)
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			io.WriteString(w, fmt.Sprintf(`{"errors":["Invalid auth token", "%s"]}`, err))
@@ -69,6 +71,6 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		f(w, r, claims)
+		f(w, r, token)
 	}
 }
