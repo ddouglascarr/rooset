@@ -1,6 +1,7 @@
 package gitservice
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -13,7 +14,7 @@ func Run() {
 		jWTPayload JWTPayload,
 	) {
 		res.WriteHeader(http.StatusOK)
-		io.WriteString(res, `{"hello":"world"}`)
+		io.WriteString(res, fmt.Sprintf(`{"hello":"%s"}`, jWTPayload.RepositoryName))
 	}))
 	http.ListenAndServe(":8080", nil)
 }

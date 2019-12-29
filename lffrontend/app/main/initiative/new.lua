@@ -88,10 +88,8 @@ ui.tag{
   tag = "script",
   content="window.rooset_editor_jwt = '" ..
     jwt.encode({
-      unit_id=area.unit_id,
-      issue_id=issue_id,
-      repository_name=area.unit.external_reference,
-      type='NewInitiative',
+      UnitID=area.unit_id,
+      RepositoryName=area.unit.external_reference,
     }) .. "';",
 }
 ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/bundle.js" }, content="" }

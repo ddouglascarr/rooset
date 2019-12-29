@@ -17,7 +17,14 @@ type JWTHandlerFunc func(
 
 //JWTPayload represents the payload sent by the JWT token
 type JWTPayload struct {
-	UnitID string
+	UnitID         int64
+	RepositoryName string
+}
+
+//Valid makes it a Claims object
+func (p *JWTPayload) Valid() error {
+	// TODO: any validation actually required here?
+	return nil
 }
 
 //ValidatedJWT closure for wrapping handlers which rely on a JWT payload
@@ -25,6 +32,7 @@ type JWTPayload struct {
 func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
+		var claims JWTPayload
 
 		var tokenHeader string
 		for i, tk := range r.Header["Authorization"] {
@@ -42,7 +50,7 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		token, err := jwt.Parse(tokenHeader, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(tokenHeader, &claims, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 			}
@@ -61,6 +69,6 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		f(w, r, JWTPayload{UnitID: "123"})
+		f(w, r, claims)
 	}
 }
