@@ -37,8 +37,7 @@ RUN cd /opt/framework && \
   make
 
 ADD ./etc/frontend-server /usr/local/bin/
-ADD ./etc/jwt-encode /usr/local/bin/
-ADD ./etc/jwt-decode /usr/local/bin/
+Add ./etc /opt/etc
 
 EXPOSE 8080
 ENTRYPOINT [ "/usr/local/bin/frontend-server" ]
