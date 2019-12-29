@@ -10,7 +10,7 @@ import (
 
 //Run starts a server on 8080
 func Run() {
-	http.HandleFunc("/doc", ValidatedJWT(func(
+	http.HandleFunc("/new-initiative", ValidatedJWT(func(
 		res http.ResponseWriter,
 		req *http.Request,
 		token *jwt.Token,
