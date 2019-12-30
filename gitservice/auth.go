@@ -6,29 +6,54 @@ import (
 	"net/http"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/pkg/errors"
 )
 
 //JWTHandlerFunc http handler function that requires the JWT payload.
 type JWTHandlerFunc func(
 	w http.ResponseWriter,
 	r *http.Request,
-	token *jwt.Token,
+	claims *Claims,
 )
 
-//NewInitiativeClaims represents the payload sent by the JWT token
-type NewInitiativeClaims struct {
-	UnitID         int64
-	RepositoryName string
+//Operation enum of operations allowed in claim
+type Operation string
+
+const (
+	//CreateInitiative create a new or competing initiative
+	CreateInitiative = Operation("CreateInitiative")
+	//UpdateInitiative update an initiative
+	UpdateInitiative = Operation("UpdateInitiative")
+)
+
+//Valid validates Operation enum
+func (o Operation) Valid() error {
+	switch o {
+	case CreateInitiative:
+	case UpdateInitiative:
+	default:
+		return fmt.Errorf("Invalid Operation: %s", o)
+	}
+	return nil
+}
+
+//Claims represents the payload sent by the JWT token
+type Claims struct {
+	RepositoryName       string `json:"RepositoryName"`
+	InitiativeBranchName string
+	Operation            Operation
 }
 
 //Valid makes it a Claims object
-func (p *NewInitiativeClaims) Valid() error {
-	// TODO: any validation actually required here?
+func (p *Claims) Valid() error {
+	if err := p.Operation.Valid(); err != nil {
+		return err
+	}
 	return nil
 }
 
 func keyFunc(token *jwt.Token) (interface{}, error) {
-	// TODO: handle expiry
+	// TODO: handle expiry ?
 	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 		return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 	}
@@ -42,6 +67,7 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
+		var claims Claims
 		var tokenHeader string
 		for i, tk := range r.Header["Authorization"] {
 			tokenHeader = tk
@@ -58,10 +84,10 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		token, err := jwt.Parse(tokenHeader, keyFunc)
+		token, err := jwt.ParseWithClaims(tokenHeader, &claims, keyFunc)
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
-			io.WriteString(w, fmt.Sprintf(`{"errors":["Invalid auth token", "%s"]}`, err))
+			io.WriteString(w, errors.Wrap(err, "Invalid auth token").Error())
 			return
 		}
 
@@ -71,6 +97,6 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		f(w, r, token)
+		f(w, r, &claims)
 	}
 }

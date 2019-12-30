@@ -27,7 +27,7 @@ func createCommit(
 	branch string,
 	actions []Action,
 ) (*GitRecord, error) {
-	url := fmt.Sprintf("https://gitlab.com/api/v4/%s/repository/commit", repositoryName)
+	url := fmt.Sprintf("https://gitlab.com/api/v4/projects/ddouglascarr%%2F%s/repository/commits", repositoryName)
 	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "rooset: commit request failed")

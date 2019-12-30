@@ -82,14 +82,14 @@ ui.form{
   end,
 }
 
--- TODO: work out what we actually want to encode here
 -- TODO: implement the git service stuff
 ui.tag{ 
   tag = "script",
   content="window.rooset_editor_jwt = '" ..
     jwt.encode({
-      UnitID=area.unit_id,
       RepositoryName=area.unit.external_reference,
+      InitiativeBranchName="",
+      Operation="CreateInitiative",
     }) .. "';",
 }
 ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/bundle.js" }, content="" }

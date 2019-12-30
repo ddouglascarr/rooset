@@ -23,10 +23,9 @@ type GitRecord struct {
 
 func createInitiative(
 	repositoryName string,
-	branch string,
 	actions []Action, // will be validated externally TODO: mabye not?
 ) (*GitRecord, error) {
-	return createCommit(repositoryName, "master", branch, actions)
+	return createCommit(repositoryName, "master", genID(), actions)
 }
 
 func updateInitiative(
