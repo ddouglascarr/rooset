@@ -7,15 +7,12 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/ddouglascarr/rooset/conf"
 	"github.com/pkg/errors"
 )
 
 //SHA is the sha of a git commit
 type SHA string
-
-const (
-	gitlabAuthTk = "SspxkurfsP5DQMMsogUS" // TODO: get from config
-)
 
 type createCommitGitlabResp struct {
 	ID string `json:"id"`
@@ -27,12 +24,13 @@ func createCommit(
 	branch string,
 	actions []Action,
 ) (*GitRecord, error) {
-	url := fmt.Sprintf("http://localhost:9080/api/v4/projects/determined_poitras%%2F%s/repository/commits", repositoryName)
+	url := fmt.Sprintf("%s/api/v4/projects/1/repository/commits",
+		conf.Gitlab.Host)
 	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "rooset: commit request failed")
 	}
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer: %s", gitlabAuthTk))
+	req.Header.Add("Private-Token", conf.Gitlab.BearerTk)
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
 
