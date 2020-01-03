@@ -1,6 +1,7 @@
 package gitservice
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -18,15 +19,35 @@ type createCommitGitlabResp struct {
 	ID string `json:"id"`
 }
 
+type gitlabCommitsReq struct {
+	ID            string   `json:"id"`
+	Branch        string   `json:"branch"`
+	CommitMessage string   `json:"commit_message"`
+	StartBranch   string   `json:"start_branch"`
+	Actions       []Action `json:"actions"`
+}
+
 func createCommit(
 	repositoryName string,
 	startBranch string,
 	branch string,
 	actions []Action,
 ) (*GitRecord, error) {
-	url := fmt.Sprintf("%s/api/v4/projects/1/repository/commits",
-		conf.Gitlab.Host)
-	req, err := http.NewRequest("POST", url, nil)
+	gitlabID := fmt.Sprintf("%s%%2F%s", conf.Gitlab.AccountName, repositoryName)
+	reqBody, err := json.Marshal(gitlabCommitsReq{
+		ID:            repositoryName,
+		Branch:        branch,
+		CommitMessage: "createCommit",
+		StartBranch:   startBranch,
+		Actions:       actions,
+	})
+	if err != nil {
+		return nil, errors.Wrap(err, "rooset: gitlab request marshall failed")
+	}
+	url := fmt.Sprintf(
+		"%s/api/v4/projects/%s/repository/commits",
+		conf.Gitlab.Host, gitlabID)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return nil, errors.Wrap(err, "rooset: commit request failed")
 	}
@@ -41,6 +62,7 @@ func createCommit(
 	if err != nil {
 		return nil, errors.Wrap(err, "rooset: commit request failed")
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != 201 {
 		return nil, fmt.Errorf("rooset: commit request failed with status %d", resp.StatusCode)
