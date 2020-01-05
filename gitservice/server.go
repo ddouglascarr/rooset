@@ -38,6 +38,7 @@ func Run() {
 
 		gitRecord, err := createInitiative(
 			claims.RepositoryName,
+			claims.AreaID,
 			body.Actions,
 		)
 		if err != nil {

@@ -88,6 +88,7 @@ ui.tag{
   content="window.rooset_editor_jwt = '" ..
     jwt.encode({
       RepositoryName=area.unit.external_reference,
+      AreaID=area.id,
       InitiativeBranchName="",
       Operation="CreateInitiative",
     }) .. "';",

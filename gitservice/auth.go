@@ -40,6 +40,7 @@ func (o Operation) Valid() error {
 //Claims represents the payload sent by the JWT token
 type Claims struct {
 	RepositoryName       string `json:"RepositoryName"`
+	AreaID               int64
 	InitiativeBranchName string
 	Operation            Operation
 }
