@@ -47,7 +47,6 @@ func createGitlabCommit(
 	branch string,
 	actions []Action,
 ) (*GitRecord, error) {
-	gitlabID := fmt.Sprintf("%s%%2F%s", conf.Gitlab.AccountName, repositoryName)
 	reqBody, err := json.Marshal(gitlabCommitsReq{
 		ID:            repositoryName,
 		Branch:        branch,
@@ -60,7 +59,7 @@ func createGitlabCommit(
 	}
 	url := fmt.Sprintf(
 		"%s/api/v4/projects/%s/repository/commits",
-		conf.Gitlab.Host, gitlabID)
+		conf.Gitlab.Host, buildGitlabID(repositoryName))
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return nil, errors.Wrap(err, "rooset: commit request failed")
@@ -95,7 +94,68 @@ func createGitlabCommit(
 	return &GitRecord{BranchName: branch, SHA: parsedBody.ID}, nil
 }
 
-func listGitlabAreaBlobs(repositoryName string, areaID int64) ([]BlobRecord, error) {
-	// TODO: implement
-	return nil, nil
+func buildGitlabID(repositoryName string) string {
+	return fmt.Sprintf("%s%%2F%s", conf.Gitlab.AccountName, repositoryName)
+}
+
+type gitlabTreeResp struct {
+	SHA  string `json:"id"`
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+
+func convertTreeResps(resps []gitlabTreeResp) []BlobRecord {
+	var blobRecords []BlobRecord
+	for _, resp := range resps {
+		if resp.Type == "blob" {
+			blobRecords = append(blobRecords, BlobRecord{
+				SHA:  resp.SHA,
+				Name: resp.Name,
+			})
+		}
+	}
+	return blobRecords
+}
+
+func listGitlabAreaBlobs(repositoryName string, areaID int64, SHA string) ([]BlobRecord, error) {
+	url := fmt.Sprintf(
+		"%s/api/v4/projects/%s/repository/tree?path=%s&ref=%s",
+		conf.Gitlab.Host,
+		buildGitlabID(repositoryName),
+		fmt.Sprintf("areas%%2F%d", areaID),
+		SHA,
+	)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "rooset: listGitlabAreaBlobs request failed")
+	}
+	req.Header.Add("Private-Token", conf.Gitlab.BearerTk)
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/json")
+
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, errors.Wrap(err, "rooset: commit request failed")
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("rooset: commit request failed with status %d", resp.StatusCode)
+	}
+
+	var parsedBody []gitlabTreeResp
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "rooset: failed to parse response body")
+	}
+
+	if err := json.Unmarshal(body, &parsedBody); err != nil {
+		return nil, errors.Wrap(err, "rooset: failed to parse response body")
+	}
+
+	return convertTreeResps(parsedBody), nil
 }

@@ -29,11 +29,11 @@ type GitRecord struct {
 //BlobRecord describes a blob in the repo
 type BlobRecord struct {
 	SHA  string
-	Path string
+	Name string
 }
 
-func listAreaFiles(repositoryName string, areaID int64) ([]BlobRecord, error) {
-	return listGitlabAreaBlobs(repositoryName, areaID)
+func listAreaFiles(repositoryName string, areaID int64, SHA string) ([]BlobRecord, error) {
+	return listGitlabAreaBlobs(repositoryName, areaID, SHA)
 }
 
 func createInitiative(
