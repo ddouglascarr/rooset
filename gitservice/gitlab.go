@@ -19,15 +19,29 @@ type createCommitGitlabResp struct {
 	ID string `json:"id"`
 }
 
-type gitlabCommitsReq struct {
-	ID            string   `json:"id"`
-	Branch        string   `json:"branch"`
-	CommitMessage string   `json:"commit_message"`
-	StartBranch   string   `json:"start_branch"`
-	Actions       []Action `json:"actions"`
+type gitlabAction struct {
+	Action   ActionType `json:"action"`
+	FilePath string     `json:"file_path"`
+	Content  string     `json:"content"`
 }
 
-func createCommit(
+func convertActions(actions []Action) []gitlabAction {
+	gitlabActions := make([]gitlabAction, len(actions))
+	for idx, action := range actions {
+		gitlabActions[idx] = gitlabAction(action)
+	}
+	return gitlabActions
+}
+
+type gitlabCommitsReq struct {
+	ID            string         `json:"id"`
+	Branch        string         `json:"branch"`
+	CommitMessage string         `json:"commit_message"`
+	StartBranch   string         `json:"start_branch"`
+	Actions       []gitlabAction `json:"actions"`
+}
+
+func createGitlabCommit(
 	repositoryName string,
 	startBranch string,
 	branch string,
@@ -39,7 +53,7 @@ func createCommit(
 		Branch:        branch,
 		CommitMessage: "createCommit",
 		StartBranch:   startBranch,
-		Actions:       actions,
+		Actions:       convertActions(actions),
 	})
 	if err != nil {
 		return nil, errors.Wrap(err, "rooset: gitlab request marshall failed")
@@ -79,4 +93,9 @@ func createCommit(
 	}
 
 	return &GitRecord{BranchName: branch, SHA: parsedBody.ID}, nil
+}
+
+func listGitlabAreaBlobs(repositoryName string, areaID int64) ([]BlobRecord, error) {
+	// TODO: implement
+	return nil, nil
 }

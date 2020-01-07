@@ -15,15 +15,25 @@ const (
 
 //Action describes the creation or deletion of a single file
 type Action struct {
-	Action   ActionType `json:"action"`
-	FilePath string     `json:"file_path"`
-	Content  string     `json:"content"`
+	Action   ActionType
+	FilePath string
+	Content  string
 }
 
 //GitRecord given to lffrontend for foreign key reference.
 type GitRecord struct {
 	BranchName string
 	SHA        string
+}
+
+//BlobRecord describes a blob in the repo
+type BlobRecord struct {
+	SHA  string
+	Path string
+}
+
+func listAreaFiles(repositoryName string, areaID int64) ([]BlobRecord, error) {
+	return listGitlabAreaBlobs(repositoryName, areaID)
 }
 
 func createInitiative(
@@ -35,7 +45,7 @@ func createInitiative(
 	if err != nil {
 		return nil, err
 	}
-	return createCommit(repositoryName, "master", genID(), actions)
+	return createGitlabCommit(repositoryName, "master", genID(), actions)
 }
 
 func updateInitiative(
