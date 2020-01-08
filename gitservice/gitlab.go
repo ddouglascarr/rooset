@@ -159,3 +159,38 @@ func listGitlabAreaBlobs(repositoryName string, areaID int64, SHA string) ([]Blo
 
 	return convertTreeResps(parsedBody), nil
 }
+
+func getGitlabBlob(repositoryName string, SHA string) (*Blob, error) {
+	url := fmt.Sprintf(
+		"%s/api/v4/projects/%s/repository/blobs/%s/raw",
+		conf.Gitlab.Host,
+		buildGitlabID(repositoryName),
+		SHA,
+	)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "rooset: listGitlabAreaBlobs request failed")
+	}
+	req.Header.Add("Private-Token", conf.Gitlab.BearerTk)
+	req.Header.Add("Accept", "text/plain")
+
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, errors.Wrap(err, "rooset: commit request failed")
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("rooset: commit request failed with status %d", resp.StatusCode)
+	}
+
+	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "rooset: failed to parse response body")
+	}
+
+	return &Blob{SHA: SHA, Content: string(content)}, nil
+}

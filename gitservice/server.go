@@ -29,6 +29,16 @@ type ListAreaBlobsResp struct {
 	BlobRecords []BlobRecord
 }
 
+//GetBlobReq request body for /get-blob
+type GetBlobReq struct {
+	SHA string
+}
+
+//GetBlobResp response body for /get-blob
+type GetBlobResp struct {
+	Blob Blob
+}
+
 //Run starts a server on 8080
 func Run() {
 	http.HandleFunc("/new-initiative", ValidatedJWT(func(
@@ -93,6 +103,40 @@ func Run() {
 		}
 
 		respBody, err := json.Marshal(ListAreaBlobsResp{BlobRecords: blobRecords})
+		if err != nil {
+			res.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: failed to marshal response").Error()))
+			return
+		}
+		res.WriteHeader(http.StatusOK)
+		io.WriteString(res, string(respBody))
+	}))
+
+	http.HandleFunc("/get-blob", ValidatedJWT(func(
+		res http.ResponseWriter,
+		req *http.Request,
+		claims *Claims,
+	) {
+		var body GetBlobReq
+		decoder := json.NewDecoder(req.Body)
+		err := decoder.Decode(&body)
+		if err != nil {
+			res.WriteHeader(http.StatusBadRequest)
+			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: invalid request body").Error()))
+			return
+		}
+
+		blob, err := getBlob(claims.RepositoryName, body.SHA)
+		if err != nil {
+			res.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: git operation failed").Error()))
+			return
+		}
+
+		respBody, err := json.Marshal(GetBlobResp{Blob: *blob})
 		if err != nil {
 			res.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,

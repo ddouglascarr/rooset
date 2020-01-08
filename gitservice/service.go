@@ -36,6 +36,16 @@ func listAreaFiles(repositoryName string, areaID int64, SHA string) ([]BlobRecor
 	return listGitlabAreaBlobs(repositoryName, areaID, SHA)
 }
 
+//Blob is a blob in the repo
+type Blob struct {
+	SHA     string
+	Content string
+}
+
+func getBlob(repositoryName, SHA string) (*Blob, error) {
+	return getGitlabBlob(repositoryName, SHA)
+}
+
 func createInitiative(
 	repositoryName string,
 	areaID int64,
