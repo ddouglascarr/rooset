@@ -1,9 +1,6 @@
 package gitservice
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/ddouglascarr/rooset/gitlab"
 	"github.com/ddouglascarr/rooset/messages"
 )
@@ -19,18 +16,14 @@ func getBlob(repositoryName, SHA string) (*messages.Blob, error) {
 func createInitiative(
 	repositoryName string,
 	areaID int64,
-	actions []messages.Action,
+	actions []messages.FileAction,
 ) (*messages.GitRecord, error) {
-	err := validateActionPaths(areaID, actions)
-	if err != nil {
-		return nil, err
-	}
-	return gitlab.CreateGitlabCommit(repositoryName, "master", genID(), actions)
+	return gitlab.CreateGitlabCommit(repositoryName, areaID, "master", genID(), actions)
 }
 
 func updateInitiative(
 	repositoryName string,
-	actions []messages.Action,
+	actions []messages.FileAction,
 	prevRecord *messages.GitRecord,
 ) (*messages.GitRecord, error) {
 	return nil, nil
@@ -38,7 +31,7 @@ func updateInitiative(
 
 func createSuggestion(
 	repositoryName string,
-	actions []messages.Action,
+	actions []messages.FileAction,
 	initiativeRecord *messages.GitRecord,
 ) (*messages.GitRecord, error) {
 	return nil, nil
@@ -46,42 +39,8 @@ func createSuggestion(
 
 func updateSuggestion(
 	repositoryName string,
-	actions []messages.Action,
+	actions []messages.FileAction,
 	prevRecord *messages.GitRecord,
 ) (*messages.GitRecord, error) {
 	return nil, nil
-}
-
-func validateActionPaths(areaID int64, actions []messages.Action) error {
-	for _, action := range actions {
-		for idx, piece := range strings.Split(action.FilePath, "/") {
-			switch idx {
-			case 0:
-				if piece != "areas" {
-					return fmt.Errorf("rooset: invalid FilePath %s", action.FilePath)
-				}
-			case 1:
-				if string(areaID) == piece {
-					return fmt.Errorf("rooset: unpermitted AreaID, should be %d, was %s", areaID, piece)
-				}
-			case 2:
-				for i, p := range strings.Split(piece, ".") {
-					switch i {
-					case 0:
-						continue
-					case 1:
-						if p != "json" {
-							return fmt.Errorf("rooset: invalid FilePath %s, must end in .json", action.FilePath)
-						}
-					default:
-						return fmt.Errorf("rooset: invalid FilePath %s, must end in .json", action.FilePath)
-					}
-				}
-			default:
-				return fmt.Errorf("rooset: invalid FilePath %s", action.FilePath)
-
-			}
-		}
-	}
-	return nil
 }

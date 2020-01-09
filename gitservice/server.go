@@ -30,7 +30,7 @@ func Run() {
 		gitRecord, err := createInitiative(
 			claims.RepositoryName,
 			claims.AreaID,
-			body.Actions,
+			body.FileActions,
 		)
 		if err != nil {
 			res.WriteHeader(http.StatusInternalServerError)

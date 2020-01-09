@@ -18,15 +18,19 @@ type createCommitGitlabResp struct {
 }
 
 type gitlabAction struct {
-	Action   messages.ActionType `json:"action"`
-	FilePath string              `json:"file_path"`
-	Content  string              `json:"content"`
+	Action   messages.FileActionType `json:"action"`
+	FilePath string                  `json:"file_path"`
+	Content  string                  `json:"content"`
 }
 
-func convertActions(actions []messages.Action) []gitlabAction {
+func convertActions(areaID int64, actions []messages.FileAction) []gitlabAction {
 	gitlabActions := make([]gitlabAction, len(actions))
 	for idx, action := range actions {
-		gitlabActions[idx] = gitlabAction(action)
+		gitlabActions[idx] = gitlabAction{
+			Action:   action.Action,
+			Content:  action.Content,
+			FilePath: fmt.Sprintf("areas/%d/%s", areaID, action.FileName),
+		}
 	}
 	return gitlabActions
 }
@@ -42,16 +46,17 @@ type gitlabCommitsReq struct {
 //CreateGitlabCommit create a commit with a collection of actions
 func CreateGitlabCommit(
 	repositoryName string,
+	areaID int64,
 	startBranch string,
 	branch string,
-	actions []messages.Action,
+	actions []messages.FileAction,
 ) (*messages.GitRecord, error) {
 	reqBody, err := json.Marshal(gitlabCommitsReq{
 		ID:            repositoryName,
 		Branch:        branch,
 		CommitMessage: "createCommit",
 		StartBranch:   startBranch,
-		Actions:       convertActions(actions),
+		Actions:       convertActions(areaID, actions),
 	})
 	if err != nil {
 		return nil, errors.Wrap(err, "rooset: gitlab request marshall failed")
