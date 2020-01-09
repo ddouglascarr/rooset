@@ -3,86 +3,56 @@ package gitservice
 import (
 	"fmt"
 	"strings"
+
+	"github.com/ddouglascarr/rooset/gitlab"
+	"github.com/ddouglascarr/rooset/messages"
 )
 
-//ActionType enum for creating actions
-type ActionType string
-
-const (
-	create = ActionType("create")
-	update = ActionType("update")
-)
-
-//Action describes the creation or deletion of a single file
-type Action struct {
-	Action   ActionType
-	FilePath string
-	Content  string
+func listAreaFiles(repositoryName string, areaID int64, SHA string) ([]messages.BlobRecord, error) {
+	return gitlab.ListGitlabAreaBlobs(repositoryName, areaID, SHA)
 }
 
-//GitRecord given to lffrontend for foreign key reference.
-type GitRecord struct {
-	BranchName string
-	SHA        string
-}
-
-//BlobRecord describes a blob in the repo
-type BlobRecord struct {
-	SHA  string
-	Name string
-}
-
-func listAreaFiles(repositoryName string, areaID int64, SHA string) ([]BlobRecord, error) {
-	return listGitlabAreaBlobs(repositoryName, areaID, SHA)
-}
-
-//Blob is a blob in the repo
-type Blob struct {
-	SHA     string
-	Content string
-}
-
-func getBlob(repositoryName, SHA string) (*Blob, error) {
-	return getGitlabBlob(repositoryName, SHA)
+func getBlob(repositoryName, SHA string) (*messages.Blob, error) {
+	return gitlab.GetGitlabBlob(repositoryName, SHA)
 }
 
 func createInitiative(
 	repositoryName string,
 	areaID int64,
-	actions []Action,
-) (*GitRecord, error) {
+	actions []messages.Action,
+) (*messages.GitRecord, error) {
 	err := validateActionPaths(areaID, actions)
 	if err != nil {
 		return nil, err
 	}
-	return createGitlabCommit(repositoryName, "master", genID(), actions)
+	return gitlab.CreateGitlabCommit(repositoryName, "master", genID(), actions)
 }
 
 func updateInitiative(
 	repositoryName string,
-	actions []Action,
-	prevRecord *GitRecord,
-) (*GitRecord, error) {
+	actions []messages.Action,
+	prevRecord *messages.GitRecord,
+) (*messages.GitRecord, error) {
 	return nil, nil
 }
 
 func createSuggestion(
 	repositoryName string,
-	actions []Action,
-	initiativeRecord *GitRecord,
-) (*GitRecord, error) {
+	actions []messages.Action,
+	initiativeRecord *messages.GitRecord,
+) (*messages.GitRecord, error) {
 	return nil, nil
 }
 
 func updateSuggestion(
 	repositoryName string,
-	actions []Action,
-	prevRecord *GitRecord,
-) (*GitRecord, error) {
+	actions []messages.Action,
+	prevRecord *messages.GitRecord,
+) (*messages.GitRecord, error) {
 	return nil, nil
 }
 
-func validateActionPaths(areaID int64, actions []Action) error {
+func validateActionPaths(areaID int64, actions []messages.Action) error {
 	for _, action := range actions {
 		for idx, piece := range strings.Split(action.FilePath, "/") {
 			switch idx {

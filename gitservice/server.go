@@ -6,38 +6,9 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/ddouglascarr/rooset/messages"
 	"github.com/pkg/errors"
 )
-
-//NewInitiativeReq request body for /new-initiative
-type NewInitiativeReq struct {
-	Actions []Action
-}
-
-//NewInitiativeResp response body for /new-initiative
-type NewInitiativeResp struct {
-	GitRecord GitRecord
-}
-
-//ListAreaBlobsReq request body for /list-area-blobs
-type ListAreaBlobsReq struct {
-	SHA string
-}
-
-//ListAreaBlobsResp response body for /list-area-blobs
-type ListAreaBlobsResp struct {
-	BlobRecords []BlobRecord
-}
-
-//GetBlobReq request body for /get-blob
-type GetBlobReq struct {
-	SHA string
-}
-
-//GetBlobResp response body for /get-blob
-type GetBlobResp struct {
-	Blob Blob
-}
 
 //Run starts a server on 8080
 func Run() {
@@ -46,7 +17,7 @@ func Run() {
 		req *http.Request,
 		claims *Claims,
 	) {
-		var body NewInitiativeReq
+		var body messages.NewInitiativeReq
 		decoder := json.NewDecoder(req.Body)
 		err := decoder.Decode(&body)
 		if err != nil {
@@ -68,7 +39,7 @@ func Run() {
 			return
 		}
 
-		respBody, err := json.Marshal(NewInitiativeResp{GitRecord: *gitRecord})
+		respBody, err := json.Marshal(messages.NewInitiativeResp{GitRecord: *gitRecord})
 		if err != nil {
 			res.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,
@@ -84,7 +55,7 @@ func Run() {
 		req *http.Request,
 		claims *Claims,
 	) {
-		var body ListAreaBlobsReq
+		var body messages.ListAreaBlobsReq
 		decoder := json.NewDecoder(req.Body)
 		err := decoder.Decode(&body)
 		if err != nil {
@@ -102,7 +73,7 @@ func Run() {
 			return
 		}
 
-		respBody, err := json.Marshal(ListAreaBlobsResp{BlobRecords: blobRecords})
+		respBody, err := json.Marshal(messages.ListAreaBlobsResp{BlobRecords: blobRecords})
 		if err != nil {
 			res.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,
@@ -118,7 +89,7 @@ func Run() {
 		req *http.Request,
 		claims *Claims,
 	) {
-		var body GetBlobReq
+		var body messages.GetBlobReq
 		decoder := json.NewDecoder(req.Body)
 		err := decoder.Decode(&body)
 		if err != nil {
@@ -136,7 +107,7 @@ func Run() {
 			return
 		}
 
-		respBody, err := json.Marshal(GetBlobResp{Blob: *blob})
+		respBody, err := json.Marshal(messages.GetBlobResp{Blob: *blob})
 		if err != nil {
 			res.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,
