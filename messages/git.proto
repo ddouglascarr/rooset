@@ -1,0 +1,29 @@
+syntax = "proto3";
+package messages;
+
+message Blob {
+  string SHA = 1;
+  string Content = 2;
+}
+
+enum FileActionType {
+  Create = 0;
+  Update = 1;
+}
+
+message FileAction {
+  FileActionType Action = 1;
+  string FileName = 2;
+  string Content = 3;
+}
+
+message CommitRecord {
+  string SHA = 1;
+  string BranchName = 2;
+}
+
+message BlobRecord {
+  string SHA = 1;
+  string Name = 2;
+}
+

@@ -47,11 +47,11 @@ hmacsha256_sign()
 	printf '%s' "${input}" | openssl dgst -binary -sha256 -hmac "${secret}"
 }
 
-header_base64=$(echo "${header}" | json | base64_encode)
-payload_base64=$(echo "${payload}" | json | base64_encode)
+header_base64=$(echo -n "${header}" | json | base64_encode)
+payload_base64=$(echo -n "${payload}" | json | base64_encode)
 
-header_payload=$(echo "${header_base64}.${payload_base64}")
-signature=$(echo "${header_payload}" | hmacsha256_sign | base64_encode)
+header_payload=$(echo -n "${header_base64}.${payload_base64}")
+signature=$(echo -n "${header_payload}" | hmacsha256_sign | base64_encode)
 
 echo "${header_payload}.${signature}"
 

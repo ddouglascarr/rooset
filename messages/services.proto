@@ -1,0 +1,28 @@
+syntax = "proto3";
+package messages;
+
+import "git.proto";
+
+message NewInitiativeReq {
+  repeated FileAction FileActions = 1;
+}
+
+message NewInitiativeResp {
+  CommitRecord CommitRecord  = 1;
+}
+
+message GetBlobReq {
+  string SHA = 1;
+}
+
+message GetBlobResp {
+  Blob Blob = 1;
+}
+
+message ListAreaBlobsReq {
+  string SHA = 1;
+}
+
+message ListAreaBlobsResp {
+  repeated BlobRecord BlobRecords = 1;
+}
