@@ -1,4 +1,4 @@
-import { initProsemirror, initInitiativeForm, logProsemirrorState } from './editor';
+import {initProsemirror, initInitiativeForm, logProsemirrorState} from 'editor';
 
 console.log('bundle loaded');
 

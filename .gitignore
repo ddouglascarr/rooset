@@ -2,3 +2,5 @@ volumes/
 lfcore/lf_update
 lfcore/lf_export
 lfcore/lf_update_issue_order
+/node_modules/
+/dist/

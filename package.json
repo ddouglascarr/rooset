@@ -6,10 +6,10 @@
   "author": "Daniel Carr <d.douglas.carr@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --config webpack.client.config.js",
-    "start": "webpack-dev-server --config webpack.client.config.js --host 0.0.0.0",
-    "watch-git-service": "nodemon dist/gitService.js",
-    "lint": "eslint ./src --ext .ts,.tsx"
+    "build": "webpack --config ./conf/webpack.config.js",
+    "start": "webpack-dev-server --config ./conf/webpack.config.js --host 0.0.0.0",
+    "watch-validation-service": "nodemon dist/validationService.js",
+    "lint": "eslint ./ --ext .ts,.tsx"
   },
   "devDependencies": {
     "@types/express": "^4.17.2",

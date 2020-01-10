@@ -93,7 +93,7 @@ ui.tag{
       Operation="CreateInitiative",
     }) .. "';",
 }
-ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/bundle.js" }, content="" }
+ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/newInitiative.js" }, content="" }
 ui.tag{ tag = "script", attr = { type="text/javascript" }, content="console.log('foobar');" }
 
 ui.tag{ tag = "button", attr = { onclick="window.logProsemirrorState()" }, content="log editor state" }

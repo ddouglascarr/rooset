@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./dist/",
-    "baseUrl": "./src/",
+    "baseUrl": "./",
     "strict": true,
     "noImplicitAny": true,
     "module": "es6",
@@ -11,8 +11,7 @@
     "sourceMap": true,
     "allowJs": false,
     "typeRoots": [
-      "node_modules/@types",
-      "src/typings"
+      "node_modules/@types"
     ]
   }
 }

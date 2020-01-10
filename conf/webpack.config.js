@@ -4,7 +4,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = [
   {
-    entry: './src/entry.tsx',
+    entry: './initiativeclient/newInitiativeEntry.tsx',
     mode: isProd ? 'production' : 'development',
     devtool: isProd
       ? 'cheap-module-source-map'
@@ -25,16 +25,16 @@ module.exports = [
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
-      modules: ['node_modules', 'src'],
+      modules: ['node_modules', '..'],
     },
     output: {
-      filename: 'bundle.js',
-      path: path.resolve(__dirname, 'dist'),
+      filename: 'newInitiative.js',
+      path: path.resolve(__dirname, '..', 'dist'),
     },
   },
   {
     target: 'node',
-    entry: './src/gitService/index.ts',
+    entry: './validationserivce/index.ts',
     mode: isProd ? 'production' : 'development',
     devtool: isProd
       ? 'cheap-module-source-map'
@@ -50,10 +50,10 @@ module.exports = [
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
-      modules: ['node_modules', 'src'],
+      modules: ['node_modules', '.'],
     },
     output: {
-      filename: 'gitService.js',
+      filename: 'validationService.js',
       path: path.resolve(__dirname, 'dist'),
     },
   },
