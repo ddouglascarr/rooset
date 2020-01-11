@@ -33,7 +33,7 @@ export const initInitiativeForm = (el: HTMLFormElement, tk: string) => {
     const reqBody = new messages.NewInitiativeReq({
       FileActions: [
         {
-          Action: 0,
+          Action: messages.FileActionType.Create,
           FileName: 'test_file',
           Content: JSON.stringify(view.state.doc),
         },
