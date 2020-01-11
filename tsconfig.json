@@ -8,10 +8,9 @@
     "moduleResolution": "node",
     "target": "es5",
     "jsx": "react",
+    "jsxFactory": "h",
     "sourceMap": true,
     "allowJs": false,
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "typeRoots": ["node_modules/@types"]
   }
 }

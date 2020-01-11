@@ -59,6 +59,7 @@ else
 end
 
 ui.tag{ tag = "h3", content="Text Editor Demo" }
+ui.tag{ tag = "div", attr = { id="initiative-file-list" }, content="" }
 ui.tag{ tag = "div", attr = { id="initiative-editor" }, content="" }
 ui.form{
   module = "initiative",
@@ -94,9 +95,17 @@ ui.tag{
     }) .. "';",
 }
 ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/newInitiative.js" }, content="" }
-ui.tag{ tag = "script", attr = { type="text/javascript" }, content="console.log('foobar');" }
-
-ui.tag{ tag = "button", attr = { onclick="window.logProsemirrorState()" }, content="log editor state" }
+ui.tag{ tag = "script", attr = { type="text/javascript" }, content=[[
+initNewInitiativePage({
+  fileListEl: document.getElementById('initiative-file-list'),
+  proseMirrorEl: document.getElementById('initiative-editor'),
+  tk: ']] .. jwt.encode({
+  RepositoryName=area.unit.external_reference,
+  AreaID=area.id,
+  InitiativeBranchName="",
+  Operation="CreateInitiative",
+}) .. "'})"
+}
 
 -- ui.form{
 --   module = "initiative",
