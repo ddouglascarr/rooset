@@ -4,6 +4,7 @@ import {EditorView} from 'prosemirror-view';
 import {undo, redo, history} from 'prosemirror-history';
 import {keymap} from 'prosemirror-keymap';
 import {baseKeymap} from 'prosemirror-commands';
+import {messages} from 'messages';
 
 let view: EditorView;
 
@@ -26,18 +27,33 @@ export const initProsemirror = (el: Element) => {
 };
 
 // TODO: post to the git service instead
-export const initInitiativeForm = (el: HTMLFormElement) => {
-  el.onsubmit = e => {
+export const initInitiativeForm = (el: HTMLFormElement, tk: string) => {
+  el.onsubmit = async e => {
     e.preventDefault();
-    const fields = el.elements;
-    for (let i = 0; i < fields.length; i++) {
-      const field = fields[i];
-      if (field instanceof HTMLInputElement && field.name === 'doc') {
-        console.log('docField', field);
-        field.value = JSON.stringify(view.state.doc);
-      }
+    const reqBody = new messages.NewInitiativeReq({
+      FileActions: [
+        {
+          Action: 0,
+          FileName: 'test_file',
+          Content: JSON.stringify(view.state.doc),
+        },
+      ],
+    });
+    const resp = await window.fetch('http://localhost:8080/new-initiative', {
+      method: 'post',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: {
+        Authorization: tk,
+      },
+      body: JSON.stringify(messages.NewInitiativeReq.toObject(reqBody)),
+    });
+
+    if (resp.ok) {
+      console.log('yay', resp);
+    } else {
+      console.log('boo', resp);
     }
-    el.submit();
   };
 };
 
