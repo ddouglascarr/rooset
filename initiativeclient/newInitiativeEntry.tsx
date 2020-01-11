@@ -5,11 +5,11 @@ console.log('bundle loaded');
 
 declare module global {
   function logProsemirrorState(): void;
-  function initNewInitiativePage(
-    fileListEl: HTMLElement,
-    proseMirrorEl: HTMLElement,
-    tk: string,
-  ): void;
+  function initNewInitiativePage(args: {
+    fileListEl: HTMLElement;
+    proseMirrorEl: HTMLElement;
+    tk: string;
+  }): void;
 }
 global.logProsemirrorState = logProsemirrorState;
 global.initNewInitiativePage = initNewInitiativePage;
