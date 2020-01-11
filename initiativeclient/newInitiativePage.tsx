@@ -13,7 +13,8 @@ type State =
   | {
       status: 'READY';
       blobList: Array<messages.IBlobRecord>;
-      doc: messages.IBlob;
+      docs: {[SHA: string]: string}; //
+      activeDoc: string;
     }
   | {status: 'FAILED'; message: string};
 
@@ -93,10 +94,12 @@ class NewInitiativePage extends Component<Props, State> {
           });
           return;
         }
+        const blob = messages.GetBlobResp.fromObject(body).Blob!;
         this.setState({
           status: 'READY',
           blobList: this.state.blobList,
-          doc: messages.GetBlobResp.fromObject(body).Blob!,
+          docs: {[blob.SHA!]: blob.Content!},
+          activeDoc: blob.SHA!,
         });
       } else {
         this.setState({
@@ -118,8 +121,8 @@ class NewInitiativePage extends Component<Props, State> {
     this.setState({status: 'LOADING_LIST'});
     await this.loadBlobList();
     if (this.state.status !== 'LOADING_DOC') return;
-    // TODO: if not blobs in area, fail
 
+    // if no blobs in area, fail
     const sha = this.state.blobList[0] ? this.state.blobList[0].SHA : undefined;
     if (!sha) {
       this.setState({
@@ -134,7 +137,7 @@ class NewInitiativePage extends Component<Props, State> {
 
   render() {
     if (this.state.status === 'READY') {
-      return <div>{this.state.doc.Content}</div>;
+      return <div>{this.state.docs[this.state.activeDoc]}</div>;
     }
     return <div>Hello World: {this.state.status}</div>;
   }
