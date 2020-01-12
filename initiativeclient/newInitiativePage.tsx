@@ -6,6 +6,7 @@ import {initProsemirror} from 'editor';
 
 type Props = {
   tk: string;
+  areaID: number;
   proseMirrorEl: HTMLElement;
 };
 
@@ -17,7 +18,7 @@ type State =
       status: 'READY';
       doc: string;
     }
-  | {status: 'COMPLETE'}
+  | {status: 'COMPLETE'; commitTk: string}
   | {status: 'FAILED'; message: string};
 
 class NewInitiativePage extends Component<Props, State> {
@@ -90,8 +91,11 @@ class NewInitiativePage extends Component<Props, State> {
         body: JSON.stringify(messages.NewInitiativeReq.toObject(reqBody)),
       });
       if (resp.ok) {
+        const body = await resp.json();
         this.setState({
           status: 'COMPLETE',
+          // TODO: any
+          commitTk: await body.Tk,
         });
       } else {
         this.setState({
@@ -120,12 +124,13 @@ class NewInitiativePage extends Component<Props, State> {
         JSON.parse(this.state.doc),
       );
     }
+
+    if (this.state.status === 'COMPLETE') {
+      window.location.href = `/initiative/new.html?area_id=${this.props.areaID}&tk=${this.state.commitTk}`;
+    }
   }
 
   render() {
-    if (this.state.status === 'COMPLETE') {
-      return <div>Complete</div>;
-    }
     if (this.state.status === 'READY') {
       return (
         <div>
@@ -140,10 +145,15 @@ class NewInitiativePage extends Component<Props, State> {
 export const initNewInitiativePage = (args: {
   fileListEl: HTMLElement;
   proseMirrorEl: HTMLElement;
+  areaID: number;
   tk: string;
 }) => {
   render(
-    <NewInitiativePage proseMirrorEl={args.proseMirrorEl} tk={args.tk} />,
+    <NewInitiativePage
+      areaID={args.areaID}
+      proseMirrorEl={args.proseMirrorEl}
+      tk={args.tk}
+    />,
     args.fileListEl,
   );
 };

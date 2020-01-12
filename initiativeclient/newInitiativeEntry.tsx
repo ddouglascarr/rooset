@@ -7,6 +7,7 @@ declare module global {
     fileListEl: HTMLElement;
     proseMirrorEl: HTMLElement;
     tk: string;
+    areaID: number;
   }): void;
 }
 

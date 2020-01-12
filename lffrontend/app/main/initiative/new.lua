@@ -58,248 +58,225 @@ else
   }
 end
 
-ui.tag{ tag = "h3", content="Text Editor Demo" }
-ui.tag{ tag = "div", attr = { id="initiative-editor" }, content="" }
-ui.tag{ tag = "div", attr = { id="initiative-form" }, content="" }
-ui.tag{
-  tag = "div",
+ui.form{
+  module = "initiative",
+  action = "create",
+  params = {
+    area_id = area.id,
+    issue_id = issue and issue.id or nil
+  },
+  attr = { class = "vertical" },
   content = function()
-    ui.field.hidden{ type="text", name="doc", value="", attr = { id="doc-field" } }
-  end,
-}
+  
+    if preview then
+      ui.section( function()
+        ui.sectionHead( function()
+          ui.heading{ level = 1, content = encode.html(param.get("name")) }
+          if not issue then
+            ui.container { content = policy.name }
+          end
+	  if param.get("free_timing") then
+	    ui.container { content = param.get("free_timing") }
+	  end
+          slot.put("<br />")
 
-ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/newInitiative.js" }, content="" }
-ui.tag{ tag = "script", attr = { type="text/javascript" }, content=[[
-initNewInitiativePage({
-  fileListEl: document.getElementById('initiative-form'),
-  proseMirrorEl: document.getElementById('initiative-editor'),
-  tk: ']] .. jwt.encode({
-  RepositoryName=area.unit.external_reference,
-  AreaID=area.id,
-  InitiativeBranchName="",
-  Operation="CreateInitiative",
-}) .. "'})"
-}
+          ui.field.hidden{ name = "formatting_engine", value = param.get("formatting_engine") }
+          ui.field.hidden{ name = "policy_id", value = param.get("policy_id") }
+          ui.field.hidden{ name = "name", value = param.get("name") }
+          ui.field.hidden{ name = "draft", value = param.get("draft") }
+          ui.field.hidden{ name = "free_timing", value = param.get("free_timing") }
+          ui.field.hidden{ name = "polling", value = param.get("polling", atom.boolean) }
+          local formatting_engine
+          if config.enforce_formatting_engine then
+            formatting_engine = config.enforce_formatting_engine
+          else
+            formatting_engine = param.get("formatting_engine")
+          end
+          ui.container{
+            attr = { class = "draft" },
+            content = function()
+              slot.put(format.wiki_text(param.get("draft"), formatting_engine))
+            end
+          }
+          slot.put("<br />")
 
--- ui.form{
---   module = "initiative",
---   action = "create",
---   params = {
---     area_id = area.id,
---     issue_id = issue and issue.id or nil
---   },
---   attr = { class = "vertical" },
---   content = function()
---   
---     if preview then
---       ui.section( function()
---         ui.sectionHead( function()
---           ui.heading{ level = 1, content = encode.html(param.get("name")) }
---           if not issue then
---             ui.container { content = policy.name }
---           end
--- 	  if param.get("free_timing") then
--- 	    ui.container { content = param.get("free_timing") }
--- 	  end
---           slot.put("<br />")
--- 
---           ui.field.hidden{ name = "formatting_engine", value = param.get("formatting_engine") }
---           ui.field.hidden{ name = "policy_id", value = param.get("policy_id") }
---           ui.field.hidden{ name = "name", value = param.get("name") }
---           ui.field.hidden{ name = "draft", value = param.get("draft") }
---           ui.field.hidden{ name = "free_timing", value = param.get("free_timing") }
---           ui.field.hidden{ name = "polling", value = param.get("polling", atom.boolean) }
---           local formatting_engine
---           if config.enforce_formatting_engine then
---             formatting_engine = config.enforce_formatting_engine
---           else
---             formatting_engine = param.get("formatting_engine")
---           end
---           ui.container{
---             attr = { class = "draft" },
---             content = function()
---               slot.put(format.wiki_text(param.get("draft"), formatting_engine))
---             end
---           }
---           slot.put("<br />")
--- 
---           ui.tag{
---             tag = "input",
---             attr = {
---               type = "submit",
---               class = "btn btn-default",
---               value = _'Publish now'
---             },
---             content = ""
---           }
---           slot.put("<br />")
---           slot.put("<br />")
---           ui.tag{
---             tag = "input",
---             attr = {
---               type = "submit",
---               name = "edit",
---               class = "btn-link",
---               value = _'Edit again'
---             },
---             content = ""
---           }
---           slot.put(" | ")
---           if issue then
---             ui.link{ content = _"Cancel", module = "issue", view = "show", id = issue.id }
---           else
---             ui.link{ content = _"Cancel", module = "area", view = "show", id = area.id }
---           end
---         end )
---       end )
---     else
---       
---      
---       execute.view{ module = "initiative", view = "_sidebar_wikisyntax" }
--- 
---       ui.section( function()
---         if preview then
---           ui.sectionHead( function()
---             ui.heading { level = 1, content = _"Edit again" }
---           end )
---         elseif issue_id then
---           ui.sectionHead( function()
---             ui.heading { level = 1, content = _"Add a new competing initiative to issue" }
---           end )
---         else
---           ui.sectionHead( function()
---             ui.heading { level = 1, content = _"Create a new issue" }
---           end )
---         end
---       
---         ui.sectionRow( function()
---           if not preview and not issue_id then
---             ui.container { attr = { class = "section" }, content = _"Before creating a new issue, please check any existant issues before, if the topic is already in discussion." }
---             slot.put("<br />")
---           end
---           if not issue_id then
---             local tmp = { { id = -1, name = "" } }
---             for i, allowed_policy in ipairs(area.allowed_policies) do
---               if not allowed_policy.polling or app.session.member:has_polling_right_for_unit_id(area.unit_id) then
---                 tmp[#tmp+1] = allowed_policy
---               end
---             end
---             ui.heading{ level = 2, content = _"Please choose a policy for the new issue:" }
---             ui.field.select{
---               name = "policy_id",
---               foreign_records = tmp,
---               foreign_id = "id",
---               foreign_name = "name",
---               value = param.get("policy_id", atom.integer) or area.default_policy and area.default_policy.id
---             }
---             if policy and policy.free_timeable then
--- 	      local available_timings
--- 	      if config.free_timing and config.free_timing.available_func then
--- 		available_timings = config.free_timing.available_func(policy)
--- 		if available_timings == false then
--- 		  error("error in free timing config")
--- 		end
--- 	      end
--- 	      ui.heading{ level = 4, content = _"Free timing:" }
--- 	      if available_timings then
--- 		ui.field.select{
--- 		  name = "free_timing",
--- 		  foreign_records = available_timings,
--- 		  foreign_id = "id",
--- 		  foreign_name = "name",
--- 		  value = param.get("free_timing")
--- 		}
--- 	      else
--- 		ui.field.text{
--- 		  name = "free_timing",
--- 		  value = param.get("free_timing")
--- 		}
--- 	      end
---             end
---           end
--- 
---           if issue and issue.policy.polling and app.session.member:has_polling_right_for_unit_id(area.unit_id) then
---             slot.put("<br />")
---             ui.field.boolean{ name = "polling", label = _"No admission needed", value = polling }
---           end
---           
---           slot.put("<br />")
---           ui.heading { level = 2, content = _"Enter a title for your initiative (max. 140 chars):" }
---           ui.field.text{
---             attr = { style = "width: 100%;" },
---             name  = "name",
---             value = param.get("name")
---           }
---           ui.container { content = _"The title is the figurehead of your iniative. It should be short but meaningful! As others identifies your initiative by this title, you cannot change it later!" }
---           
---           if not config.enforce_formatting_engine then
---             slot.put("<br />")
---             ui.heading { level = 4, content = _"Choose a formatting engine:" }
---             ui.field.select{
---               name = "formatting_engine",
---               foreign_records = config.formatting_engines,
---               attr = {id = "formatting_engine"},
---               foreign_id = "id",
---               foreign_name = "name",
---               value = param.get("formatting_engine")
---             }
---           end
---           slot.put("<br />")
--- 
---           ui.heading { level = 2, content = _"Enter your proposal and/or reasons:" }
---           ui.field.text{
---             name = "draft",
---             multiline = true, 
---             attr = { style = "height: 50ex; width: 100%;" },
---             value = param.get("draft") or config.draft_template or [[
--- Proposal
--- ======
--- 
--- Replace me with your proposal.
--- 
--- 
--- Reasons
--- ======
--- 
--- Argument 1
--- ------
--- 
--- Replace me with your first argument
--- 
--- 
--- Argument 2
--- ------
--- 
--- Replace me with your second argument
--- 
--- ]]
---           }
---           if not issue or issue.state == "admission" or issue.state == "discussion" then
---             ui.container { content = _"You can change your text again anytime during admission and discussion phase" }
---           else
---             ui.container { content = _"You cannot change your text again later, because this issue is already in verfication phase!" }
---           end
---           slot.put("<br />")
---           ui.tag{
---             tag = "input",
---             attr = {
---               type = "submit",
---               name = "preview",
---               class = "btn btn-default",
---               value = _'Preview'
---             },
---             content = ""
---           }
---           slot.put("<br />")
---           slot.put("<br />")
---           
---           if issue then
---             ui.link{ content = _"Cancel", module = "issue", view = "show", id = issue.id }
---           else
---             ui.link{ content = _"Cancel", module = "area", view = "show", id = area.id }
---           end
---         end )
---       end )
---     end
---   end
--- }
+          ui.tag{
+            tag = "input",
+            attr = {
+              type = "submit",
+              class = "btn btn-default",
+              value = _'Publish now'
+            },
+            content = ""
+          }
+          slot.put("<br />")
+          slot.put("<br />")
+          ui.tag{
+            tag = "input",
+            attr = {
+              type = "submit",
+              name = "edit",
+              class = "btn-link",
+              value = _'Edit again'
+            },
+            content = ""
+          }
+          slot.put(" | ")
+          if issue then
+            ui.link{ content = _"Cancel", module = "issue", view = "show", id = issue.id }
+          else
+            ui.link{ content = _"Cancel", module = "area", view = "show", id = area.id }
+          end
+        end )
+      end )
+    else
+      
+     
+      execute.view{ module = "initiative", view = "_sidebar_wikisyntax" }
+
+      ui.section( function()
+        if preview then
+          ui.sectionHead( function()
+            ui.heading { level = 1, content = _"Edit again" }
+          end )
+        elseif issue_id then
+          ui.sectionHead( function()
+            ui.heading { level = 1, content = _"Add a new competing initiative to issue" }
+          end )
+        else
+          ui.sectionHead( function()
+            ui.heading { level = 1, content = _"Create a new issue" }
+          end )
+        end
+      
+        ui.sectionRow( function()
+          if not preview and not issue_id then
+            ui.container { attr = { class = "section" }, content = _"Before creating a new issue, please check any existant issues before, if the topic is already in discussion." }
+            slot.put("<br />")
+          end
+          if not issue_id then
+            local tmp = { { id = -1, name = "" } }
+            for i, allowed_policy in ipairs(area.allowed_policies) do
+              if not allowed_policy.polling or app.session.member:has_polling_right_for_unit_id(area.unit_id) then
+                tmp[#tmp+1] = allowed_policy
+              end
+            end
+            ui.heading{ level = 2, content = _"Please choose a policy for the new issue:" }
+            ui.field.select{
+              name = "policy_id",
+              foreign_records = tmp,
+              foreign_id = "id",
+              foreign_name = "name",
+              value = param.get("policy_id", atom.integer) or area.default_policy and area.default_policy.id
+            }
+            if policy and policy.free_timeable then
+	      local available_timings
+	      if config.free_timing and config.free_timing.available_func then
+		available_timings = config.free_timing.available_func(policy)
+		if available_timings == false then
+		  error("error in free timing config")
+		end
+	      end
+	      ui.heading{ level = 4, content = _"Free timing:" }
+	      if available_timings then
+		ui.field.select{
+		  name = "free_timing",
+		  foreign_records = available_timings,
+		  foreign_id = "id",
+		  foreign_name = "name",
+		  value = param.get("free_timing")
+		}
+	      else
+		ui.field.text{
+		  name = "free_timing",
+		  value = param.get("free_timing")
+		}
+	      end
+            end
+          end
+
+          if issue and issue.policy.polling and app.session.member:has_polling_right_for_unit_id(area.unit_id) then
+            slot.put("<br />")
+            ui.field.boolean{ name = "polling", label = _"No admission needed", value = polling }
+          end
+          
+          slot.put("<br />")
+          ui.heading { level = 2, content = _"Enter a title for your initiative (max. 140 chars):" }
+          ui.field.text{
+            attr = { style = "width: 100%;" },
+            name  = "name",
+            value = param.get("name")
+          }
+          ui.container { content = _"The title is the figurehead of your iniative. It should be short but meaningful! As others identifies your initiative by this title, you cannot change it later!" }
+          
+          if not config.enforce_formatting_engine then
+            slot.put("<br />")
+            ui.heading { level = 4, content = _"Choose a formatting engine:" }
+            ui.field.select{
+              name = "formatting_engine",
+              foreign_records = config.formatting_engines,
+              attr = {id = "formatting_engine"},
+              foreign_id = "id",
+              foreign_name = "name",
+              value = param.get("formatting_engine")
+            }
+          end
+          slot.put("<br />")
+
+          ui.heading { level = 2, content = _"Enter your proposal and/or reasons:" }
+          ui.field.text{
+            name = "draft",
+            multiline = true, 
+            attr = { style = "height: 50ex; width: 100%;" },
+            value = param.get("draft") or config.draft_template or [[
+Proposal
+======
+
+Replace me with your proposal.
+
+
+Reasons
+======
+
+Argument 1
+------
+
+Replace me with your first argument
+
+
+Argument 2
+------
+
+Replace me with your second argument
+
+]]
+          }
+          if not issue or issue.state == "admission" or issue.state == "discussion" then
+            ui.container { content = _"You can change your text again anytime during admission and discussion phase" }
+          else
+            ui.container { content = _"You cannot change your text again later, because this issue is already in verfication phase!" }
+          end
+          slot.put("<br />")
+          ui.tag{
+            tag = "input",
+            attr = {
+              type = "submit",
+              name = "preview",
+              class = "btn btn-default",
+              value = _'Preview'
+            },
+            content = ""
+          }
+          slot.put("<br />")
+          slot.put("<br />")
+          
+          if issue then
+            ui.link{ content = _"Cancel", module = "issue", view = "show", id = issue.id }
+          else
+            ui.link{ content = _"Cancel", module = "area", view = "show", id = area.id }
+          end
+        end )
+      end )
+    end
+  end
+}

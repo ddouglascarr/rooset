@@ -283,6 +283,9 @@ export namespace messages {
 
         /** NewInitiativeResp CommitRecord */
         CommitRecord?: (messages.ICommitRecord|null);
+
+        /** NewInitiativeResp Tk */
+        Tk?: (string|null);
     }
 
     /** Represents a NewInitiativeResp. */
@@ -296,6 +299,9 @@ export namespace messages {
 
         /** NewInitiativeResp CommitRecord. */
         public CommitRecord?: (messages.ICommitRecord|null);
+
+        /** NewInitiativeResp Tk. */
+        public Tk: string;
 
         /**
          * Verifies a NewInitiativeResp message.

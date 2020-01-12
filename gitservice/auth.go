@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/ddouglascarr/rooset/conf"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
 )
@@ -111,4 +112,20 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 
 		f(w, r, &claims)
 	}
+}
+
+//BuildCommitRecordTk builds a jwt token to be passed to lffronted detailing a new
+// commit.
+func BuildCommitRecordTk(sHA string, branchName string) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"SHA":        sHA,
+		"BranchName": branchName,
+	})
+
+	tkStr, err := token.SignedString([]byte(conf.Auth.JWTKey))
+	if err != nil {
+		return "", errors.Wrap(err, "rooset: failed to sign CommitRecord JWT key")
+	}
+
+	return tkStr, nil
 }

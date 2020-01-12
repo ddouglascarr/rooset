@@ -39,8 +39,18 @@ func Run() {
 			return
 		}
 
+		tk, err := BuildCommitRecordTk(CommitRecord.SHA, CommitRecord.BranchName)
+		if err != nil {
+			res.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,
+				err.Error()))
+			return
+		}
 		m := jsonpb.Marshaler{}
-		respBody, err := m.MarshalToString(&messages.NewInitiativeResp{CommitRecord: CommitRecord})
+		respBody, err := m.MarshalToString(&messages.NewInitiativeResp{
+			CommitRecord: CommitRecord,
+			Tk:           tk,
+		})
 		if err != nil {
 			res.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,

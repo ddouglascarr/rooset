@@ -9,6 +9,7 @@ message NewInitiativeReq {
 
 message NewInitiativeResp {
   CommitRecord CommitRecord  = 1;
+  string Tk = 2;
 }
 
 message GetDocReq {

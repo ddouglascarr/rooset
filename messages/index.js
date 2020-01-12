@@ -641,6 +641,7 @@ $root.messages = (function() {
          * @memberof messages
          * @interface INewInitiativeResp
          * @property {messages.ICommitRecord|null} [CommitRecord] NewInitiativeResp CommitRecord
+         * @property {string|null} [Tk] NewInitiativeResp Tk
          */
 
         /**
@@ -667,6 +668,14 @@ $root.messages = (function() {
         NewInitiativeResp.prototype.CommitRecord = null;
 
         /**
+         * NewInitiativeResp Tk.
+         * @member {string} Tk
+         * @memberof messages.NewInitiativeResp
+         * @instance
+         */
+        NewInitiativeResp.prototype.Tk = "";
+
+        /**
          * Verifies a NewInitiativeResp message.
          * @function verify
          * @memberof messages.NewInitiativeResp
@@ -682,6 +691,9 @@ $root.messages = (function() {
                 if (error)
                     return "CommitRecord." + error;
             }
+            if (message.Tk != null && message.hasOwnProperty("Tk"))
+                if (!$util.isString(message.Tk))
+                    return "Tk: string expected";
             return null;
         };
 
@@ -702,6 +714,8 @@ $root.messages = (function() {
                     throw TypeError(".messages.NewInitiativeResp.CommitRecord: object expected");
                 message.CommitRecord = $root.messages.CommitRecord.fromObject(object.CommitRecord);
             }
+            if (object.Tk != null)
+                message.Tk = String(object.Tk);
             return message;
         };
 
@@ -718,10 +732,14 @@ $root.messages = (function() {
             if (!options)
                 options = {};
             var object = {};
-            if (options.defaults)
+            if (options.defaults) {
                 object.CommitRecord = null;
+                object.Tk = "";
+            }
             if (message.CommitRecord != null && message.hasOwnProperty("CommitRecord"))
                 object.CommitRecord = $root.messages.CommitRecord.toObject(message.CommitRecord, options);
+            if (message.Tk != null && message.hasOwnProperty("Tk"))
+                object.Tk = message.Tk;
             return object;
         };
 
