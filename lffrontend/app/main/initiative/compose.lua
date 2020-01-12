@@ -26,7 +26,7 @@ ui.tag{
 ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/newInitiative.js" }, content="" }
 ui.tag{ tag = "script", attr = { type="text/javascript" }, content=[[
 initNewInitiativePage({
-  fileListEl: document.getElementById('initiative-form'),
+  rootEl: document.getElementById('initiative-form'),
   proseMirrorEl: document.getElementById('initiative-editor'),
   areaID: ]] .. area.id .. [[,
   tk: ']] .. jwt.encode({

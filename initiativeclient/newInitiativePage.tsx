@@ -143,7 +143,7 @@ class NewInitiativePage extends Component<Props, State> {
 }
 
 export const initNewInitiativePage = (args: {
-  fileListEl: HTMLElement;
+  rootEl: HTMLElement;
   proseMirrorEl: HTMLElement;
   areaID: number;
   tk: string;
@@ -154,6 +154,6 @@ export const initNewInitiativePage = (args: {
       proseMirrorEl={args.proseMirrorEl}
       tk={args.tk}
     />,
-    args.fileListEl,
+    args.rootEl,
   );
 };

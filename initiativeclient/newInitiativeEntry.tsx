@@ -4,7 +4,7 @@ console.log('bundle loaded');
 
 declare module global {
   function initNewInitiativePage(args: {
-    fileListEl: HTMLElement;
+    rootEl: HTMLElement;
     proseMirrorEl: HTMLElement;
     tk: string;
     areaID: number;
