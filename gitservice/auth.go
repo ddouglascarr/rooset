@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/ddouglascarr/rooset/conf"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
 )
@@ -62,10 +63,21 @@ func keyFunc(token *jwt.Token) (interface{}, error) {
 	return []byte("development"), nil
 }
 
+// TODO: tighten this up
+func setupResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+}
+
 //ValidatedJWT closure for wrapping handlers which rely on a JWT payload
 //responsds with error codes if the JWT token is invalid
 func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		setupResponse(&w, r)
+		if r.Method == "OPTIONS" {
+			return
+		}
 		w.Header().Set("Content-Type", "application/json")
 
 		var claims Claims
@@ -100,4 +112,20 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 
 		f(w, r, &claims)
 	}
+}
+
+//BuildCommitRecordTk builds a jwt token to be passed to lffronted detailing a new
+// commit.
+func BuildCommitRecordTk(sHA string, branchName string) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"SHA":        sHA,
+		"BranchName": branchName,
+	})
+
+	tkStr, err := token.SignedString([]byte(conf.Auth.JWTKey))
+	if err != nil {
+		return "", errors.Wrap(err, "rooset: failed to sign CommitRecord JWT key")
+	}
+
+	return tkStr, nil
 }

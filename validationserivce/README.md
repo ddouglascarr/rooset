@@ -1,4 +1,4 @@
-# Git Service
+# Validation Service
 
 Temporary stub service for validating documents against the document schema
 

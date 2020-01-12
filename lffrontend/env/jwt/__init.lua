@@ -17,5 +17,6 @@ function jwt.decode(token)
     resp = resp .. line
   end
   local _, _, code = dec:close()
-  if code == 0 then return json.decode(resp) else error("unauthorized") end
+  local doc, _ = json.import(resp)
+  if code == 0 then return doc else error("unauthorized") end
 end

@@ -1,18 +1,16 @@
 {
   "compilerOptions": {
     "outDir": "./dist/",
-    "baseUrl": "./src/",
+    "baseUrl": "./",
     "strict": true,
     "noImplicitAny": true,
     "module": "es6",
     "moduleResolution": "node",
     "target": "es5",
     "jsx": "react",
+    "jsxFactory": "h",
     "sourceMap": true,
     "allowJs": false,
-    "typeRoots": [
-      "node_modules/@types",
-      "src/typings"
-    ]
+    "typeRoots": ["node_modules/@types"]
   }
 }

@@ -230,7 +230,7 @@ ui.sidebar ( "tab-whatcanido", function ()
             ui.tag { content = function ()
               ui.tag { content = _"If you cannot find any appropriate existing issue, " }
               ui.link {
-                module = "initiative", view = "new",
+                module = "initiative", view = "compose",
                 params = { area_id = area.id },
                 text = _"start an initiative in a new issue"
               }

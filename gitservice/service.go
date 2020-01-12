@@ -16,9 +16,21 @@ func getBlob(repositoryName, SHA string) (*messages.Blob, error) {
 func createInitiative(
 	repositoryName string,
 	areaID int64,
-	actions []*messages.FileAction,
+	content string,
 ) (*messages.CommitRecord, error) {
-	return gitlab.CreateGitlabCommit(repositoryName, areaID, "master", genID(), actions)
+	return gitlab.CreateGitlabCommit(
+		repositoryName,
+		areaID,
+		"master",
+		genID(),
+		[]*messages.FileAction{
+			&messages.FileAction{
+				Action:   messages.FileActionType_Update,
+				FileName: "doc.json",
+				Content:  content,
+			},
+		},
+	)
 }
 
 func updateInitiative(
