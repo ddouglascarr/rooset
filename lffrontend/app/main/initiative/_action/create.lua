@@ -136,6 +136,9 @@ end
 
 local initiative = Initiative:new()
 
+local tkContent = jwt.decode(param.get("tk"))
+initiative.external_reference = tkContent.payload.BranchName
+
 if not issue then
   issue = Issue:new()
   issue.area_id = area.id
@@ -179,6 +182,7 @@ draft.initiative_id = initiative.id
 draft.formatting_engine = formatting_engine
 draft.content = param.get("draft")
 draft.author_id = app.session.member.id
+draft.external_reference = tkContent.payload.SHA
 draft:save()
 
 local initiator = Initiator:new()

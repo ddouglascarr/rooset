@@ -80,6 +80,7 @@ ui.form{
 	  end
           slot.put("<br />")
 
+          ui.field.hidden{ name = "tk", value = param.get("tk") }
           ui.field.hidden{ name = "formatting_engine", value = param.get("formatting_engine") }
           ui.field.hidden{ name = "policy_id", value = param.get("policy_id") }
           ui.field.hidden{ name = "name", value = param.get("name") }
@@ -132,6 +133,7 @@ ui.form{
     else
       
      
+      ui.field.hidden{ name = "tk", value = param.get("tk") }
       execute.view{ module = "initiative", view = "_sidebar_wikisyntax" }
 
       ui.section( function()
