@@ -233,8 +233,8 @@ export namespace messages {
     /** Properties of a NewInitiativeReq. */
     interface INewInitiativeReq {
 
-        /** NewInitiativeReq FileActions */
-        FileActions?: (messages.IFileAction[]|null);
+        /** NewInitiativeReq Content */
+        Content?: (string|null);
     }
 
     /** Represents a NewInitiativeReq. */
@@ -246,8 +246,8 @@ export namespace messages {
          */
         constructor(properties?: messages.INewInitiativeReq);
 
-        /** NewInitiativeReq FileActions. */
-        public FileActions: messages.IFileAction[];
+        /** NewInitiativeReq Content. */
+        public Content: string;
 
         /**
          * Verifies a NewInitiativeReq message.
@@ -321,6 +321,102 @@ export namespace messages {
 
         /**
          * Converts this NewInitiativeResp to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a GetDocReq. */
+    interface IGetDocReq {
+
+        /** GetDocReq GitRef */
+        GitRef?: (string|null);
+    }
+
+    /** Represents a GetDocReq. */
+    class GetDocReq implements IGetDocReq {
+
+        /**
+         * Constructs a new GetDocReq.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: messages.IGetDocReq);
+
+        /** GetDocReq GitRef. */
+        public GitRef: string;
+
+        /**
+         * Verifies a GetDocReq message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a GetDocReq message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns GetDocReq
+         */
+        public static fromObject(object: { [k: string]: any }): messages.GetDocReq;
+
+        /**
+         * Creates a plain object from a GetDocReq message. Also converts values to other types if specified.
+         * @param message GetDocReq
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: messages.GetDocReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this GetDocReq to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a GetDocResp. */
+    interface IGetDocResp {
+
+        /** GetDocResp Blob */
+        Blob?: (messages.IBlob|null);
+    }
+
+    /** Represents a GetDocResp. */
+    class GetDocResp implements IGetDocResp {
+
+        /**
+         * Constructs a new GetDocResp.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: messages.IGetDocResp);
+
+        /** GetDocResp Blob. */
+        public Blob?: (messages.IBlob|null);
+
+        /**
+         * Verifies a GetDocResp message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a GetDocResp message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns GetDocResp
+         */
+        public static fromObject(object: { [k: string]: any }): messages.GetDocResp;
+
+        /**
+         * Creates a plain object from a GetDocResp message. Also converts values to other types if specified.
+         * @param message GetDocResp
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: messages.GetDocResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this GetDocResp to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };

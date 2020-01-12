@@ -4,11 +4,19 @@ package messages;
 import "git.proto";
 
 message NewInitiativeReq {
-  repeated FileAction FileActions = 1;
+  string Content = 1;
 }
 
 message NewInitiativeResp {
   CommitRecord CommitRecord  = 1;
+}
+
+message GetDocReq {
+  string GitRef = 1;
+}
+
+message GetDocResp {
+  Blob Blob = 1;
 }
 
 message GetBlobReq {

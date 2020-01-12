@@ -540,7 +540,7 @@ $root.messages = (function() {
          * Properties of a NewInitiativeReq.
          * @memberof messages
          * @interface INewInitiativeReq
-         * @property {Array.<messages.IFileAction>|null} [FileActions] NewInitiativeReq FileActions
+         * @property {string|null} [Content] NewInitiativeReq Content
          */
 
         /**
@@ -552,7 +552,6 @@ $root.messages = (function() {
          * @param {messages.INewInitiativeReq=} [properties] Properties to set
          */
         function NewInitiativeReq(properties) {
-            this.FileActions = [];
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -560,12 +559,12 @@ $root.messages = (function() {
         }
 
         /**
-         * NewInitiativeReq FileActions.
-         * @member {Array.<messages.IFileAction>} FileActions
+         * NewInitiativeReq Content.
+         * @member {string} Content
          * @memberof messages.NewInitiativeReq
          * @instance
          */
-        NewInitiativeReq.prototype.FileActions = $util.emptyArray;
+        NewInitiativeReq.prototype.Content = "";
 
         /**
          * Verifies a NewInitiativeReq message.
@@ -578,15 +577,9 @@ $root.messages = (function() {
         NewInitiativeReq.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.FileActions != null && message.hasOwnProperty("FileActions")) {
-                if (!Array.isArray(message.FileActions))
-                    return "FileActions: array expected";
-                for (var i = 0; i < message.FileActions.length; ++i) {
-                    var error = $root.messages.FileAction.verify(message.FileActions[i]);
-                    if (error)
-                        return "FileActions." + error;
-                }
-            }
+            if (message.Content != null && message.hasOwnProperty("Content"))
+                if (!$util.isString(message.Content))
+                    return "Content: string expected";
             return null;
         };
 
@@ -602,16 +595,8 @@ $root.messages = (function() {
             if (object instanceof $root.messages.NewInitiativeReq)
                 return object;
             var message = new $root.messages.NewInitiativeReq();
-            if (object.FileActions) {
-                if (!Array.isArray(object.FileActions))
-                    throw TypeError(".messages.NewInitiativeReq.FileActions: array expected");
-                message.FileActions = [];
-                for (var i = 0; i < object.FileActions.length; ++i) {
-                    if (typeof object.FileActions[i] !== "object")
-                        throw TypeError(".messages.NewInitiativeReq.FileActions: object expected");
-                    message.FileActions[i] = $root.messages.FileAction.fromObject(object.FileActions[i]);
-                }
-            }
+            if (object.Content != null)
+                message.Content = String(object.Content);
             return message;
         };
 
@@ -628,13 +613,10 @@ $root.messages = (function() {
             if (!options)
                 options = {};
             var object = {};
-            if (options.arrays || options.defaults)
-                object.FileActions = [];
-            if (message.FileActions && message.FileActions.length) {
-                object.FileActions = [];
-                for (var j = 0; j < message.FileActions.length; ++j)
-                    object.FileActions[j] = $root.messages.FileAction.toObject(message.FileActions[j], options);
-            }
+            if (options.defaults)
+                object.Content = "";
+            if (message.Content != null && message.hasOwnProperty("Content"))
+                object.Content = message.Content;
             return object;
         };
 
@@ -755,6 +737,211 @@ $root.messages = (function() {
         };
 
         return NewInitiativeResp;
+    })();
+
+    messages.GetDocReq = (function() {
+
+        /**
+         * Properties of a GetDocReq.
+         * @memberof messages
+         * @interface IGetDocReq
+         * @property {string|null} [GitRef] GetDocReq GitRef
+         */
+
+        /**
+         * Constructs a new GetDocReq.
+         * @memberof messages
+         * @classdesc Represents a GetDocReq.
+         * @implements IGetDocReq
+         * @constructor
+         * @param {messages.IGetDocReq=} [properties] Properties to set
+         */
+        function GetDocReq(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GetDocReq GitRef.
+         * @member {string} GitRef
+         * @memberof messages.GetDocReq
+         * @instance
+         */
+        GetDocReq.prototype.GitRef = "";
+
+        /**
+         * Verifies a GetDocReq message.
+         * @function verify
+         * @memberof messages.GetDocReq
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GetDocReq.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.GitRef != null && message.hasOwnProperty("GitRef"))
+                if (!$util.isString(message.GitRef))
+                    return "GitRef: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a GetDocReq message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof messages.GetDocReq
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {messages.GetDocReq} GetDocReq
+         */
+        GetDocReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.messages.GetDocReq)
+                return object;
+            var message = new $root.messages.GetDocReq();
+            if (object.GitRef != null)
+                message.GitRef = String(object.GitRef);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GetDocReq message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof messages.GetDocReq
+         * @static
+         * @param {messages.GetDocReq} message GetDocReq
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetDocReq.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.GitRef = "";
+            if (message.GitRef != null && message.hasOwnProperty("GitRef"))
+                object.GitRef = message.GitRef;
+            return object;
+        };
+
+        /**
+         * Converts this GetDocReq to JSON.
+         * @function toJSON
+         * @memberof messages.GetDocReq
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetDocReq.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GetDocReq;
+    })();
+
+    messages.GetDocResp = (function() {
+
+        /**
+         * Properties of a GetDocResp.
+         * @memberof messages
+         * @interface IGetDocResp
+         * @property {messages.IBlob|null} [Blob] GetDocResp Blob
+         */
+
+        /**
+         * Constructs a new GetDocResp.
+         * @memberof messages
+         * @classdesc Represents a GetDocResp.
+         * @implements IGetDocResp
+         * @constructor
+         * @param {messages.IGetDocResp=} [properties] Properties to set
+         */
+        function GetDocResp(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * GetDocResp Blob.
+         * @member {messages.IBlob|null|undefined} Blob
+         * @memberof messages.GetDocResp
+         * @instance
+         */
+        GetDocResp.prototype.Blob = null;
+
+        /**
+         * Verifies a GetDocResp message.
+         * @function verify
+         * @memberof messages.GetDocResp
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GetDocResp.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.Blob != null && message.hasOwnProperty("Blob")) {
+                var error = $root.messages.Blob.verify(message.Blob);
+                if (error)
+                    return "Blob." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a GetDocResp message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof messages.GetDocResp
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {messages.GetDocResp} GetDocResp
+         */
+        GetDocResp.fromObject = function fromObject(object) {
+            if (object instanceof $root.messages.GetDocResp)
+                return object;
+            var message = new $root.messages.GetDocResp();
+            if (object.Blob != null) {
+                if (typeof object.Blob !== "object")
+                    throw TypeError(".messages.GetDocResp.Blob: object expected");
+                message.Blob = $root.messages.Blob.fromObject(object.Blob);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a GetDocResp message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof messages.GetDocResp
+         * @static
+         * @param {messages.GetDocResp} message GetDocResp
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetDocResp.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults)
+                object.Blob = null;
+            if (message.Blob != null && message.hasOwnProperty("Blob"))
+                object.Blob = $root.messages.Blob.toObject(message.Blob, options);
+            return object;
+        };
+
+        /**
+         * Converts this GetDocResp to JSON.
+         * @function toJSON
+         * @memberof messages.GetDocResp
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetDocResp.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return GetDocResp;
     })();
 
     messages.GetBlobReq = (function() {

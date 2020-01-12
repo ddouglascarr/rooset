@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/ddouglascarr/rooset/gitlab"
 	"github.com/ddouglascarr/rooset/messages"
 	"github.com/gogo/protobuf/jsonpb"
 	"github.com/pkg/errors"
@@ -29,7 +30,7 @@ func Run() {
 		CommitRecord, err := createInitiative(
 			claims.RepositoryName,
 			claims.AreaID,
-			body.FileActions,
+			body.Content,
 		)
 		if err != nil {
 			res.WriteHeader(http.StatusInternalServerError)
@@ -82,6 +83,40 @@ func Run() {
 		}
 		res.WriteHeader(http.StatusOK)
 		io.WriteString(res, string(respBody))
+	}))
+
+	http.HandleFunc("/get-doc", ValidatedJWT(func(
+		res http.ResponseWriter,
+		req *http.Request,
+		claims *Claims,
+	) {
+		var body messages.GetDocReq
+		err := jsonpb.Unmarshal(req.Body, &body)
+		if err != nil {
+			res.WriteHeader(http.StatusBadRequest)
+			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: invalid request body").Error()))
+			return
+		}
+
+		blob, err := gitlab.GetDoc(claims.RepositoryName, claims.AreaID, body.GitRef)
+		if err != nil {
+			res.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: git operation failed").Error()))
+			return
+		}
+
+		m := jsonpb.Marshaler{}
+		respBody, err := m.MarshalToString(&messages.GetDocResp{Blob: blob})
+		if err != nil {
+			res.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(res, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: failed to marshal response").Error()))
+			return
+		}
+		res.WriteHeader(http.StatusOK)
+		io.WriteString(res, respBody)
 	}))
 
 	http.HandleFunc("/get-blob", ValidatedJWT(func(

@@ -31,13 +31,7 @@ export const initInitiativeForm = (el: HTMLFormElement, tk: string) => {
   el.onsubmit = async e => {
     e.preventDefault();
     const reqBody = new messages.NewInitiativeReq({
-      FileActions: [
-        {
-          Action: messages.FileActionType.Create,
-          FileName: 'test_file',
-          Content: JSON.stringify(view.state.doc),
-        },
-      ],
+      Content: JSON.stringify(view.state.doc),
     });
     const resp = await window.fetch('http://localhost:8080/new-initiative', {
       method: 'post',

@@ -12,9 +12,7 @@ type State =
   | {status: 'LOADING_DOC'; blobList: Array<messages.IBlobRecord>}
   | {
       status: 'READY';
-      blobList: Array<messages.IBlobRecord>;
-      docs: {[SHA: string]: string}; //
-      activeDoc: string;
+      doc: string;
     }
   | {status: 'FAILED'; message: string};
 
@@ -24,23 +22,23 @@ class NewInitiativePage extends Component<Props, State> {
     this.state = {status: 'IDLE' as const};
   }
 
-  loadBlobList = async () => {
-    const reqBody = messages.ListAreaBlobsReq.fromObject({
-      SHA: 'master',
+  loadDoc = async () => {
+    const reqBody = messages.GetDocReq.fromObject({
+      GitRef: 'master',
     });
     try {
-      const resp = await window.fetch('http://localhost:8080/list-area-blobs', {
+      const resp = await window.fetch('http://localhost:8080/get-doc', {
         method: 'post',
         mode: 'cors',
         cache: 'no-cache',
         headers: {
           Authorization: this.props.tk,
         },
-        body: JSON.stringify(messages.ListAreaBlobsReq.toObject(reqBody)),
+        body: JSON.stringify(messages.GetDocReq.toObject(reqBody)),
       });
       if (resp.ok) {
         const body = await resp.json();
-        const reason = messages.ListAreaBlobsResp.verify(body);
+        const reason = messages.GetDocReq.verify(body);
         if (reason) {
           this.setState({
             status: 'FAILED',
@@ -48,58 +46,9 @@ class NewInitiativePage extends Component<Props, State> {
           });
           return;
         }
-        this.setState({
-          status: 'LOADING_DOC',
-          blobList: messages.ListAreaBlobsResp.fromObject(body).BlobRecords,
-        });
-      } else {
-        this.setState({
-          status: 'FAILED',
-          // TODO: parse this better
-          message: 'Sorry, something went wrong with your network request.',
-        });
-      }
-    } catch (err) {
-      this.setState({
-        status: 'FAILED',
-        message:
-          'Sorry, something went wrong with your network request. Please check your connection and try again',
-      });
-    }
-  };
-
-  loadDocBlob = async (sha: string) => {
-    if (this.state.status !== 'LOADING_DOC') return;
-    const reqBody = messages.GetBlobReq.fromObject({
-      SHA: sha,
-    });
-    try {
-      const resp = await window.fetch('http://localhost:8080/get-blob', {
-        method: 'post',
-        mode: 'cors',
-        cache: 'no-cache',
-        headers: {
-          Authorization: this.props.tk,
-        },
-        body: JSON.stringify(messages.ListAreaBlobsReq.toObject(reqBody)),
-      });
-
-      if (resp.ok) {
-        const body = await resp.json();
-        const reason = messages.GetBlobResp.verify(body);
-        if (reason) {
-          this.setState({
-            status: 'FAILED',
-            message: `invalid server response ${reason}`,
-          });
-          return;
-        }
-        const blob = messages.GetBlobResp.fromObject(body).Blob!;
         this.setState({
           status: 'READY',
-          blobList: this.state.blobList,
-          docs: {[blob.SHA!]: blob.Content!},
-          activeDoc: blob.SHA!,
+          doc: messages.GetDocResp.fromObject(body).Blob!.Content!!,
         });
       } else {
         this.setState({
@@ -119,25 +68,12 @@ class NewInitiativePage extends Component<Props, State> {
 
   async componentDidMount() {
     this.setState({status: 'LOADING_LIST'});
-    await this.loadBlobList();
-    if (this.state.status !== 'LOADING_DOC') return;
-
-    // if no blobs in area, fail
-    const sha = this.state.blobList[0] ? this.state.blobList[0].SHA : undefined;
-    if (!sha) {
-      this.setState({
-        status: 'FAILED',
-        message: 'Sorry, the area is not configured properly',
-      });
-      return;
-    }
-
-    await this.loadDocBlob(sha);
+    await this.loadDoc();
   }
 
   render() {
     if (this.state.status === 'READY') {
-      return <div>{this.state.docs[this.state.activeDoc]}</div>;
+      return <div>{this.state.doc}</div>;
     }
     return <div>Hello World: {this.state.status}</div>;
   }
