@@ -59,45 +59,19 @@ else
 end
 
 ui.tag{ tag = "h3", content="Text Editor Demo" }
-ui.tag{ tag = "div", attr = { id="initiative-file-list" }, content="" }
 ui.tag{ tag = "div", attr = { id="initiative-editor" }, content="" }
-ui.form{
-  module = "initiative",
-  action = "validate",
-  params = {
-    area_id = area.id,
-    issue_id = issue and issue.id or nil,
-  },
-  attr = { id = "initiative-form" },
+ui.tag{ tag = "div", attr = { id="initiative-form" }, content="" }
+ui.tag{
+  tag = "div",
   content = function()
     ui.field.hidden{ type="text", name="doc", value="", attr = { id="doc-field" } }
-    ui.tag{
-      tag = "input",
-      attr = {
-        type = "submit",
-        class = "btn btn-default",
-        value = _'Submit'
-      },
-      content = ""
-    }
   end,
 }
 
--- TODO: implement the git service stuff
-ui.tag{ 
-  tag = "script",
-  content="window.rooset_editor_jwt = '" ..
-    jwt.encode({
-      RepositoryName=area.unit.external_reference,
-      AreaID=area.id,
-      InitiativeBranchName="",
-      Operation="CreateInitiative",
-    }) .. "';",
-}
 ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/newInitiative.js" }, content="" }
 ui.tag{ tag = "script", attr = { type="text/javascript" }, content=[[
 initNewInitiativePage({
-  fileListEl: document.getElementById('initiative-file-list'),
+  fileListEl: document.getElementById('initiative-form'),
   proseMirrorEl: document.getElementById('initiative-editor'),
   tk: ']] .. jwt.encode({
   RepositoryName=area.unit.external_reference,

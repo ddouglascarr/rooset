@@ -25,7 +25,7 @@ func createInitiative(
 		genID(),
 		[]*messages.FileAction{
 			&messages.FileAction{
-				Action:   messages.FileActionType_Create,
+				Action:   messages.FileActionType_Update,
 				FileName: "doc.json",
 				Content:  content,
 			},

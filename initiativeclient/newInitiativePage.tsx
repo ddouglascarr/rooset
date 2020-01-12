@@ -1,5 +1,8 @@
 import {render, h, Component} from 'preact';
+import {EditorView} from 'prosemirror-view';
+
 import {messages} from 'messages';
+import {initProsemirror} from 'editor';
 
 type Props = {
   tk: string;
@@ -14,12 +17,16 @@ type State =
       status: 'READY';
       doc: string;
     }
+  | {status: 'COMPLETE'}
   | {status: 'FAILED'; message: string};
 
 class NewInitiativePage extends Component<Props, State> {
+  editorView: null | EditorView;
+
   constructor() {
     super();
     this.state = {status: 'IDLE' as const};
+    this.editorView = null;
   }
 
   loadDoc = async () => {
@@ -66,16 +73,67 @@ class NewInitiativePage extends Component<Props, State> {
     }
   };
 
-  async componentDidMount() {
+  createInitiative = async () => {
+    if (this.editorView === null) return;
+    const reqBody = new messages.NewInitiativeReq({
+      Content: JSON.stringify(this.editorView.state.doc),
+    });
+
+    try {
+      const resp = await window.fetch('http://localhost:8080/new-initiative', {
+        method: 'post',
+        mode: 'cors',
+        cache: 'no-cache',
+        headers: {
+          Authorization: this.props.tk,
+        },
+        body: JSON.stringify(messages.NewInitiativeReq.toObject(reqBody)),
+      });
+      if (resp.ok) {
+        this.setState({
+          status: 'COMPLETE',
+        });
+      } else {
+        this.setState({
+          status: 'FAILED',
+          message: 'failed to create initiative',
+        });
+      }
+    } catch (err) {
+      this.setState({
+        status: 'FAILED',
+        message:
+          'Sorry, something went wrong with your network request. Please check your connection and try again',
+      });
+    }
+  };
+
+  componentDidMount() {
     this.setState({status: 'LOADING_LIST'});
-    await this.loadDoc();
+    this.loadDoc();
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (this.state.status === 'READY' && prevState.status !== 'READY') {
+      this.editorView = initProsemirror(
+        this.props.proseMirrorEl,
+        JSON.parse(this.state.doc),
+      );
+    }
   }
 
   render() {
-    if (this.state.status === 'READY') {
-      return <div>{this.state.doc}</div>;
+    if (this.state.status === 'COMPLETE') {
+      return <div>Complete</div>;
     }
-    return <div>Hello World: {this.state.status}</div>;
+    if (this.state.status === 'READY') {
+      return (
+        <div>
+          <button onClick={() => this.createInitiative()}>Next...</button>
+        </div>
+      );
+    }
+    return <div>Loading: {this.state.status}</div>;
   }
 }
 
