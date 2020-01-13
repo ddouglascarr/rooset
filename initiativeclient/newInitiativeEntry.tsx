@@ -7,7 +7,8 @@ declare module global {
     rootEl: HTMLElement;
     proseMirrorEl: HTMLElement;
     tk: string;
-    areaID: number;
+    repositoryName: string;
+    areaID: string;
   }): void;
 }
 

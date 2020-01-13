@@ -1,0 +1,16 @@
+syntax = "proto3";
+package messages;
+
+import "google/protobuf/descriptor.proto";
+
+enum FieldAuth {
+  // The field does not require auth (default)
+  NotRequired = 0; 
+
+  // The field must appear in a JWT token claim
+  JWTAuthRequired = 1; 
+}
+
+extend google.protobuf.FieldOptions {
+  FieldAuth auth = 60354;
+}

@@ -18,29 +18,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-type FileActionType int32
-
-const (
-	FileActionType_Create FileActionType = 0
-	FileActionType_Update FileActionType = 1
-)
-
-var FileActionType_name = map[int32]string{
-	0: "Create",
-	1: "Update",
-}
-var FileActionType_value = map[string]int32{
-	"Create": 0,
-	"Update": 1,
-}
-
-func (x FileActionType) String() string {
-	return proto.EnumName(FileActionType_name, int32(x))
-}
-func (FileActionType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_git_41c97041831518ee, []int{0}
-}
-
 type Blob struct {
 	SHA                  string   `protobuf:"bytes,1,opt,name=SHA,proto3" json:"SHA,omitempty"`
 	Content              string   `protobuf:"bytes,2,opt,name=Content,proto3" json:"Content,omitempty"`
@@ -53,7 +30,7 @@ func (m *Blob) Reset()         { *m = Blob{} }
 func (m *Blob) String() string { return proto.CompactTextString(m) }
 func (*Blob) ProtoMessage()    {}
 func (*Blob) Descriptor() ([]byte, []int) {
-	return fileDescriptor_git_41c97041831518ee, []int{0}
+	return fileDescriptor_git_41f820f4560ab91f, []int{0}
 }
 func (m *Blob) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Blob.Unmarshal(m, b)
@@ -87,60 +64,6 @@ func (m *Blob) GetContent() string {
 	return ""
 }
 
-type FileAction struct {
-	Action               FileActionType `protobuf:"varint,1,opt,name=Action,proto3,enum=messages.FileActionType" json:"Action,omitempty"`
-	FileName             string         `protobuf:"bytes,2,opt,name=FileName,proto3" json:"FileName,omitempty"`
-	Content              string         `protobuf:"bytes,3,opt,name=Content,proto3" json:"Content,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_unrecognized     []byte         `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
-}
-
-func (m *FileAction) Reset()         { *m = FileAction{} }
-func (m *FileAction) String() string { return proto.CompactTextString(m) }
-func (*FileAction) ProtoMessage()    {}
-func (*FileAction) Descriptor() ([]byte, []int) {
-	return fileDescriptor_git_41c97041831518ee, []int{1}
-}
-func (m *FileAction) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_FileAction.Unmarshal(m, b)
-}
-func (m *FileAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_FileAction.Marshal(b, m, deterministic)
-}
-func (dst *FileAction) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FileAction.Merge(dst, src)
-}
-func (m *FileAction) XXX_Size() int {
-	return xxx_messageInfo_FileAction.Size(m)
-}
-func (m *FileAction) XXX_DiscardUnknown() {
-	xxx_messageInfo_FileAction.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_FileAction proto.InternalMessageInfo
-
-func (m *FileAction) GetAction() FileActionType {
-	if m != nil {
-		return m.Action
-	}
-	return FileActionType_Create
-}
-
-func (m *FileAction) GetFileName() string {
-	if m != nil {
-		return m.FileName
-	}
-	return ""
-}
-
-func (m *FileAction) GetContent() string {
-	if m != nil {
-		return m.Content
-	}
-	return ""
-}
-
 type CommitRecord struct {
 	SHA                  string   `protobuf:"bytes,1,opt,name=SHA,proto3" json:"SHA,omitempty"`
 	BranchName           string   `protobuf:"bytes,2,opt,name=BranchName,proto3" json:"BranchName,omitempty"`
@@ -153,7 +76,7 @@ func (m *CommitRecord) Reset()         { *m = CommitRecord{} }
 func (m *CommitRecord) String() string { return proto.CompactTextString(m) }
 func (*CommitRecord) ProtoMessage()    {}
 func (*CommitRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_git_41c97041831518ee, []int{2}
+	return fileDescriptor_git_41f820f4560ab91f, []int{1}
 }
 func (m *CommitRecord) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CommitRecord.Unmarshal(m, b)
@@ -199,7 +122,7 @@ func (m *BlobRecord) Reset()         { *m = BlobRecord{} }
 func (m *BlobRecord) String() string { return proto.CompactTextString(m) }
 func (*BlobRecord) ProtoMessage()    {}
 func (*BlobRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_git_41c97041831518ee, []int{3}
+	return fileDescriptor_git_41f820f4560ab91f, []int{2}
 }
 func (m *BlobRecord) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BlobRecord.Unmarshal(m, b)
@@ -235,28 +158,21 @@ func (m *BlobRecord) GetName() string {
 
 func init() {
 	proto.RegisterType((*Blob)(nil), "messages.Blob")
-	proto.RegisterType((*FileAction)(nil), "messages.FileAction")
 	proto.RegisterType((*CommitRecord)(nil), "messages.CommitRecord")
 	proto.RegisterType((*BlobRecord)(nil), "messages.BlobRecord")
-	proto.RegisterEnum("messages.FileActionType", FileActionType_name, FileActionType_value)
 }
 
-func init() { proto.RegisterFile("git.proto", fileDescriptor_git_41c97041831518ee) }
+func init() { proto.RegisterFile("git.proto", fileDescriptor_git_41f820f4560ab91f) }
 
-var fileDescriptor_git_41c97041831518ee = []byte{
-	// 220 bytes of a gzipped FileDescriptorProto
+var fileDescriptor_git_41f820f4560ab91f = []byte{
+	// 141 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4c, 0xcf, 0x2c, 0xd1,
 	0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0xc8, 0x4d, 0x2d, 0x2e, 0x4e, 0x4c, 0x4f, 0x2d, 0x56,
 	0x32, 0xe2, 0x62, 0x71, 0xca, 0xc9, 0x4f, 0x12, 0x12, 0xe0, 0x62, 0x0e, 0xf6, 0x70, 0x94, 0x60,
 	0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x02, 0x31, 0x85, 0x24, 0xb8, 0xd8, 0x9d, 0xf3, 0xf3, 0x4a, 0x52,
-	0xf3, 0x4a, 0x24, 0x98, 0xc0, 0xa2, 0x30, 0xae, 0x52, 0x09, 0x17, 0x97, 0x5b, 0x66, 0x4e, 0xaa,
-	0x63, 0x72, 0x49, 0x66, 0x7e, 0x9e, 0x90, 0x01, 0x17, 0x1b, 0x84, 0x05, 0xd6, 0xcc, 0x67, 0x24,
-	0xa1, 0x07, 0x33, 0x5c, 0x0f, 0xa1, 0x2a, 0xa4, 0xb2, 0x20, 0x35, 0x08, 0xaa, 0x4e, 0x48, 0x8a,
-	0x8b, 0x03, 0x24, 0xe3, 0x97, 0x98, 0x9b, 0x0a, 0x35, 0x1a, 0xce, 0x47, 0xb6, 0x95, 0x19, 0xd5,
-	0x56, 0x07, 0x2e, 0x1e, 0xe7, 0xfc, 0xdc, 0xdc, 0xcc, 0x92, 0xa0, 0xd4, 0xe4, 0xfc, 0xa2, 0x14,
-	0x2c, 0x2e, 0x96, 0xe3, 0xe2, 0x72, 0x2a, 0x4a, 0xcc, 0x4b, 0xce, 0x40, 0x32, 0x19, 0x49, 0x44,
-	0xc9, 0x88, 0x8b, 0x0b, 0xe4, 0x57, 0x9c, 0xfa, 0x85, 0xb8, 0x58, 0x90, 0x74, 0x82, 0xd9, 0x5a,
-	0x1a, 0x5c, 0x7c, 0xa8, 0xbe, 0x10, 0xe2, 0xe2, 0x62, 0x73, 0x2e, 0x4a, 0x4d, 0x2c, 0x49, 0x15,
-	0x60, 0x00, 0xb1, 0x43, 0x0b, 0x52, 0x40, 0x6c, 0xc6, 0x24, 0x36, 0x70, 0xd0, 0x1a, 0x03, 0x02,
-	0x00, 0x00, 0xff, 0xff, 0x12, 0x7c, 0xea, 0xd9, 0x67, 0x01, 0x00, 0x00,
+	0xf3, 0x4a, 0x24, 0x98, 0xc0, 0xa2, 0x30, 0xae, 0x92, 0x03, 0x17, 0x8f, 0x73, 0x7e, 0x6e, 0x6e,
+	0x66, 0x49, 0x50, 0x6a, 0x72, 0x7e, 0x51, 0x0a, 0x16, 0xbd, 0x72, 0x5c, 0x5c, 0x4e, 0x45, 0x89,
+	0x79, 0xc9, 0x19, 0x7e, 0x89, 0xb9, 0xa9, 0x50, 0xed, 0x48, 0x22, 0x4a, 0x46, 0x5c, 0x5c, 0x20,
+	0x5b, 0x71, 0xea, 0x17, 0xe2, 0x62, 0x41, 0xd2, 0x09, 0x66, 0x27, 0xb1, 0x81, 0x9d, 0x6e, 0x0c,
+	0x08, 0x00, 0x00, 0xff, 0xff, 0x3a, 0x92, 0x31, 0x21, 0xc7, 0x00, 0x00, 0x00,
 }

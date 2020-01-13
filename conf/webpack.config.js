@@ -54,7 +54,7 @@ module.exports = [
     },
     output: {
       filename: 'validationService.js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, '..', 'dist'),
     },
   },
 ];

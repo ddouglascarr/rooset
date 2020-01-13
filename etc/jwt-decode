@@ -36,8 +36,8 @@ base64_decode()
 
 verify_signature()
 {
-    declare header_and_payload=${1}
-    expected=$(echo "${header_and_payload}" | hmacsha256_encode | base64_encode)
+    declare header_and_claims=${1}
+    expected=$(echo "${header_and_claims}" | hmacsha256_encode | base64_encode)
     actual=${2}
 
     if [ "${expected}" != "${actual}" ]
@@ -56,14 +56,14 @@ hmacsha256_encode()
 IFS='.' read -ra pieces <<< "$token"
 
 declare header=${pieces[0]}
-declare payload=${pieces[1]}
+declare claims=${pieces[1]}
 declare signature=${pieces[2]}
 
-verify_signature "${header}.${payload}" "${signature}"
+verify_signature "${header}.${claims}" "${signature}"
 
 echo '{}' | jq -c \
-  --argjson payload "$(echo -n ${payload} | base64_decode)"  \
+  --argjson claims "$(echo -n ${claims} | base64_decode)"  \
   --argjson header "$(echo -n ${header} | base64_decode)"  \
   '
-  .payload=$payload | .header=$header
+  .claims=$claims | .header=$header
   '

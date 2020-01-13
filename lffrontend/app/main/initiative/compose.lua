@@ -28,11 +28,12 @@ ui.tag{ tag = "script", attr = { type="text/javascript" }, content=[[
 initNewInitiativePage({
   rootEl: document.getElementById('initiative-form'),
   proseMirrorEl: document.getElementById('initiative-editor'),
-  areaID: ]] .. area.id .. [[,
+  repositoryName: ']] .. area.unit.external_reference .. [[',
+  areaID: ']] .. area.id .. [[',
   tk: ']] .. jwt.encode({
-  RepositoryName=area.unit.external_reference,
-  AreaID=area.id,
-  InitiativeBranchName="",
-  Operation="CreateInitiative",
+  RepositoryName={area.unit.external_reference},
+  AreaID={"'" .. area.id .. "'"},
+  Op={"messages.NewInitiativeReq", "messages.GetDocReq"},
+  Svc={"gitsvc"},
 }) .. "'})"
 }

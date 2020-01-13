@@ -4,9 +4,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"reflect"
 
 	"github.com/ddouglascarr/rooset/conf"
+	"github.com/ddouglascarr/rooset/messages"
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/golang/protobuf/descriptor"
+	"github.com/golang/protobuf/jsonpb"
+	"github.com/golang/protobuf/proto"
+	protocdesc "github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/pkg/errors"
 )
 
@@ -14,45 +20,8 @@ import (
 type JWTHandlerFunc func(
 	w http.ResponseWriter,
 	r *http.Request,
-	claims *Claims,
+	m proto.Message,
 )
-
-//Operation enum of operations allowed in claim
-type Operation string
-
-const (
-	//CreateInitiative create a new or competing initiative
-	CreateInitiative = Operation("CreateInitiative")
-	//UpdateInitiative update an initiative
-	UpdateInitiative = Operation("UpdateInitiative")
-)
-
-//Valid validates Operation enum
-func (o Operation) Valid() error {
-	switch o {
-	case CreateInitiative:
-	case UpdateInitiative:
-	default:
-		return fmt.Errorf("Invalid Operation: %s", o)
-	}
-	return nil
-}
-
-//Claims represents the payload sent by the JWT token
-type Claims struct {
-	RepositoryName       string `json:"RepositoryName"`
-	AreaID               int64
-	InitiativeBranchName string
-	Operation            Operation
-}
-
-//Valid makes it a Claims object
-func (p *Claims) Valid() error {
-	if err := p.Operation.Valid(); err != nil {
-		return err
-	}
-	return nil
-}
 
 func keyFunc(token *jwt.Token) (interface{}, error) {
 	// TODO: handle expiry ?
@@ -70,9 +39,11 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
-//ValidatedJWT closure for wrapping handlers which rely on a JWT payload
-//responsds with error codes if the JWT token is invalid
-func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
+//withAuthenticatedMessage closure for wrapping handlers which rely on a JWT payload
+//responsds with error codes if the JWT token is invalid. It authenticates the request body
+//as well, and calls the handle function with a unmarshaled proto.Message
+// TODO: the authentication part of this needs testing
+func withAuthenticatedMessage(messageType string, f JWTHandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		setupResponse(&w, r)
 		if r.Method == "OPTIONS" {
@@ -80,7 +51,7 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 		}
 		w.Header().Set("Content-Type", "application/json")
 
-		var claims Claims
+		var claims jwt.MapClaims
 		var tokenHeader string
 		for i, tk := range r.Header["Authorization"] {
 			tokenHeader = tk
@@ -110,7 +81,46 @@ func ValidatedJWT(f JWTHandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		f(w, r, &claims)
+		// check claims against body
+		pbtype := proto.MessageType(messageType)
+		msg := reflect.New(pbtype.Elem()).Interface().(descriptor.Message)
+		err = jsonpb.Unmarshal(r.Body, msg)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: invalid request body").Error()))
+			return
+		}
+
+		isAuth, failureMessage, err := authOpAndSvc(messageType, &claims)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: auth system error").Error()))
+			return
+		}
+		if !isAuth {
+			w.WriteHeader(http.StatusUnauthorized)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				failureMessage))
+			return
+		}
+
+		isAuth, failureMessage, err = authReqAgainstClaims(msg, &claims)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: auth system error").Error()))
+			return
+		}
+		if !isAuth {
+			w.WriteHeader(http.StatusUnauthorized)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				failureMessage))
+			return
+		}
+
+		f(w, r, msg)
 	}
 }
 
@@ -128,4 +138,102 @@ func BuildCommitRecordTk(sHA string, branchName string) (string, error) {
 	}
 
 	return tkStr, nil
+}
+
+func doesFieldNeedValidation(fd *protocdesc.FieldDescriptorProto) (bool, error) {
+	ex, err := proto.GetExtension(fd.Options, messages.E_Auth)
+	if ex == nil {
+		return false, nil
+	}
+	if err != nil {
+		return true, err
+	}
+	auth, ok := ex.(*messages.FieldAuth)
+	if !ok {
+		return true, errors.New("rooset: auth option cast failed")
+	}
+	if auth.String() == messages.FieldAuth_JWTAuthRequired.String() {
+		return true, nil
+	}
+	return false, nil
+}
+
+func isStringInSlice(s []interface{}, v string) bool {
+	for _, sv := range s {
+		strV, ok := sv.(string)
+		if !ok {
+			return false
+		}
+		if strV == v {
+			return true
+		}
+	}
+	return false
+}
+
+func authOpAndSvc(messageType string, claims *jwt.MapClaims) (bool, string, error) {
+	opsRaw, ok := (*claims)["Op"]
+	if !ok {
+		return false, "claims.Op missing", nil
+	}
+
+	ops, ok := opsRaw.([]interface{})
+	if !ok {
+		return false, "claims.Op must be an array", nil
+	}
+
+	isAuthed := isStringInSlice(ops, messageType)
+	if !isAuthed {
+		return false, fmt.Sprintf("claims.Op does not include %s", messageType), nil
+	}
+
+	svcRaw, ok := (*claims)["Svc"]
+	if !ok {
+		return false, "claims.Svc missing", nil
+	}
+
+	svc, ok := svcRaw.([]interface{})
+	if !ok {
+		return false, "claims.Svc must be an array", nil
+	}
+
+	isAuthed = isStringInSlice(svc, "gitsvc")
+	if !isAuthed {
+		return false, fmt.Sprintf("claims.Svc does not include %s", "gitsvc"), nil
+	}
+
+	return true, "", nil
+}
+
+func authReqAgainstClaims(msg descriptor.Message, claims *jwt.MapClaims) (bool, string, error) {
+	_, md := descriptor.ForMessage(msg)
+	for _, fd := range md.Field {
+		isAuth, err := doesFieldNeedValidation(fd)
+		if err != nil {
+			return false, "system error", errors.Wrap(err, "rooset: proto error")
+		}
+		if !isAuth {
+			continue
+		}
+		msgValue := reflect.ValueOf(msg)
+		fieldValue := reflect.Indirect(msgValue).FieldByName(*fd.Name)
+		fieldStr, ok := fieldValue.Interface().(string)
+		if !ok || fieldStr == "" {
+			return false, fmt.Sprintf("body.%s must be a non-empty string", *fd.Name), nil
+		}
+		claimField, ok := (*claims)[*fd.Name]
+		if !ok {
+			return false, fmt.Sprintf("claims.%s missing", *fd.Name), nil
+		}
+		claimFieldVals, ok := claimField.([]interface{})
+		if !ok {
+			return false, fmt.Sprintf("claims.%s should be array", *fd.Name), nil
+		}
+
+		isAuthed := isStringInSlice(claimFieldVals, fieldStr)
+		if !isAuthed {
+			return false, fmt.Sprintf("claims.%s does not include %s", *fd.Name, fieldStr), nil
+		}
+	}
+	return true, "", nil
 }

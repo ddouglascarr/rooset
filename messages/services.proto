@@ -2,9 +2,12 @@ syntax = "proto3";
 package messages;
 
 import "git.proto";
+import "options.proto";
 
 message NewInitiativeReq {
-  string Content = 1;
+  string RepositoryName = 1 [(auth) = JWTAuthRequired];
+  string AreaID = 2 [(auth) = JWTAuthRequired];
+  string Content = 3;
 }
 
 message NewInitiativeResp {
@@ -13,25 +16,12 @@ message NewInitiativeResp {
 }
 
 message GetDocReq {
-  string GitRef = 1;
+  string RepositoryName = 1 [(auth) = JWTAuthRequired];
+  string AreaID = 2 [(auth) = JWTAuthRequired];
+  string GitRef = 3;
 }
 
 message GetDocResp {
   Blob Blob = 1;
 }
 
-message GetBlobReq {
-  string SHA = 1;
-}
-
-message GetBlobResp {
-  Blob Blob = 1;
-}
-
-message ListAreaBlobsReq {
-  string SHA = 1;
-}
-
-message ListAreaBlobsResp {
-  repeated BlobRecord BlobRecords = 1;
-}

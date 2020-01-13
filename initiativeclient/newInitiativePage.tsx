@@ -6,7 +6,8 @@ import {initProsemirror} from 'editor';
 
 type Props = {
   tk: string;
-  areaID: number;
+  repositoryName: string;
+  areaID: string;
   proseMirrorEl: HTMLElement;
 };
 
@@ -33,17 +34,22 @@ class NewInitiativePage extends Component<Props, State> {
   loadDoc = async () => {
     const reqBody = messages.GetDocReq.fromObject({
       GitRef: 'master',
+      RepositoryName: this.props.repositoryName,
+      AreaID: this.props.areaID,
     });
     try {
-      const resp = await window.fetch('http://localhost:8080/get-doc', {
-        method: 'post',
-        mode: 'cors',
-        cache: 'no-cache',
-        headers: {
-          Authorization: this.props.tk,
+      const resp = await window.fetch(
+        'http://localhost:8080/rpc/messages.GetDocReq',
+        {
+          method: 'post',
+          mode: 'cors',
+          cache: 'no-cache',
+          headers: {
+            Authorization: this.props.tk,
+          },
+          body: JSON.stringify(messages.GetDocReq.toObject(reqBody)),
         },
-        body: JSON.stringify(messages.GetDocReq.toObject(reqBody)),
-      });
+      );
       if (resp.ok) {
         const body = await resp.json();
         const reason = messages.GetDocReq.verify(body);
@@ -77,19 +83,24 @@ class NewInitiativePage extends Component<Props, State> {
   createInitiative = async () => {
     if (this.editorView === null) return;
     const reqBody = new messages.NewInitiativeReq({
+      RepositoryName: this.props.repositoryName,
+      AreaID: this.props.areaID,
       Content: JSON.stringify(this.editorView.state.doc),
     });
 
     try {
-      const resp = await window.fetch('http://localhost:8080/new-initiative', {
-        method: 'post',
-        mode: 'cors',
-        cache: 'no-cache',
-        headers: {
-          Authorization: this.props.tk,
+      const resp = await window.fetch(
+        'http://localhost:8080/rpc/messages.NewInitiativeReq',
+        {
+          method: 'post',
+          mode: 'cors',
+          cache: 'no-cache',
+          headers: {
+            Authorization: this.props.tk,
+          },
+          body: JSON.stringify(messages.NewInitiativeReq.toObject(reqBody)),
         },
-        body: JSON.stringify(messages.NewInitiativeReq.toObject(reqBody)),
-      });
+      );
       if (resp.ok) {
         const body = await resp.json();
         this.setState({
@@ -145,11 +156,13 @@ class NewInitiativePage extends Component<Props, State> {
 export const initNewInitiativePage = (args: {
   rootEl: HTMLElement;
   proseMirrorEl: HTMLElement;
-  areaID: number;
+  repositoryName: string;
+  areaID: string;
   tk: string;
 }) => {
   render(
     <NewInitiativePage
+      repositoryName={args.repositoryName}
       areaID={args.areaID}
       proseMirrorEl={args.proseMirrorEl}
       tk={args.tk}

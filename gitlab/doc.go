@@ -12,13 +12,13 @@ import (
 )
 
 //GetDoc fetches a raw blob by SHA
-func GetDoc(repositoryName string, areaID int64, gitRef string) (*messages.Blob, error) {
+func GetDoc(msg *messages.GetDocReq) (*messages.Blob, error) {
 	url := fmt.Sprintf(
-		"%s/api/v4/projects/%s/repository/files/areas%%2F%d%%2Fdoc.json/raw?ref=%s",
+		"%s/api/v4/projects/%s/repository/files/areas%%2F%s%%2Fdoc.json/raw?ref=%s",
 		conf.Gitlab.Host,
-		buildGitlabID(repositoryName),
-		areaID,
-		gitRef,
+		buildGitlabID(msg.RepositoryName),
+		msg.AreaID,
+		msg.GitRef,
 	)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -45,5 +45,5 @@ func GetDoc(repositoryName string, areaID int64, gitRef string) (*messages.Blob,
 		return nil, errors.Wrap(err, "rooset: gitlab.GetDoc failed to parse response body")
 	}
 
-	return &messages.Blob{SHA: gitRef, Content: string(content)}, nil
+	return &messages.Blob{SHA: msg.GitRef, Content: string(content)}, nil
 }
