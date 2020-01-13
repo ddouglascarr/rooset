@@ -5,10 +5,11 @@ import {messages} from 'messages';
 import {initProsemirror} from 'editor';
 
 type Props = {
-  tk: string;
-  repositoryName: string;
-  areaID: string;
-  proseMirrorEl: HTMLElement;
+  Tk: string;
+  RepositoryName: string;
+  AreaID: string;
+  IssueID: string | undefined;
+  ProseMirrorEl: HTMLElement;
 };
 
 type State =
@@ -34,8 +35,8 @@ class NewInitiativePage extends Component<Props, State> {
   loadDoc = async () => {
     const reqBody = messages.GetDocReq.fromObject({
       GitRef: 'master',
-      RepositoryName: this.props.repositoryName,
-      AreaID: this.props.areaID,
+      RepositoryName: this.props.RepositoryName,
+      AreaID: this.props.AreaID,
     });
     try {
       const resp = await window.fetch(
@@ -45,7 +46,7 @@ class NewInitiativePage extends Component<Props, State> {
           mode: 'cors',
           cache: 'no-cache',
           headers: {
-            Authorization: this.props.tk,
+            Authorization: this.props.Tk,
           },
           body: JSON.stringify(messages.GetDocReq.toObject(reqBody)),
         },
@@ -83,8 +84,8 @@ class NewInitiativePage extends Component<Props, State> {
   createInitiative = async () => {
     if (this.editorView === null) return;
     const reqBody = new messages.NewInitiativeReq({
-      RepositoryName: this.props.repositoryName,
-      AreaID: this.props.areaID,
+      RepositoryName: this.props.RepositoryName,
+      AreaID: this.props.AreaID,
       Content: JSON.stringify(this.editorView.state.doc),
     });
 
@@ -96,7 +97,7 @@ class NewInitiativePage extends Component<Props, State> {
           mode: 'cors',
           cache: 'no-cache',
           headers: {
-            Authorization: this.props.tk,
+            Authorization: this.props.Tk,
           },
           body: JSON.stringify(messages.NewInitiativeReq.toObject(reqBody)),
         },
@@ -131,13 +132,16 @@ class NewInitiativePage extends Component<Props, State> {
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (this.state.status === 'READY' && prevState.status !== 'READY') {
       this.editorView = initProsemirror(
-        this.props.proseMirrorEl,
+        this.props.ProseMirrorEl,
         JSON.parse(this.state.doc),
       );
     }
 
     if (this.state.status === 'COMPLETE') {
-      window.location.href = `/initiative/new.html?area_id=${this.props.areaID}&tk=${this.state.commitTk}`;
+      const issueIDParam = this.props.IssueID
+        ? `issue_id=${this.props.IssueID}&`
+        : '';
+      window.location.href = `/initiative/new.html?area_id=${this.props.AreaID}&${issueIDParam}tk=${this.state.commitTk}`;
     }
   }
 
@@ -153,20 +157,23 @@ class NewInitiativePage extends Component<Props, State> {
   }
 }
 
-export const initNewInitiativePage = (args: {
-  rootEl: HTMLElement;
-  proseMirrorEl: HTMLElement;
-  repositoryName: string;
-  areaID: string;
-  tk: string;
-}) => {
+export type InitNewInitiativePageArgs = {
+  RootEl: HTMLElement;
+  ProseMirrorEl: HTMLElement;
+  RepositoryName: string;
+  AreaID: string;
+  IssueID?: string;
+  Tk: string;
+};
+export const initNewInitiativePage = (args: InitNewInitiativePageArgs) => {
   render(
     <NewInitiativePage
-      repositoryName={args.repositoryName}
-      areaID={args.areaID}
-      proseMirrorEl={args.proseMirrorEl}
-      tk={args.tk}
+      RepositoryName={args.RepositoryName}
+      AreaID={args.AreaID}
+      IssueID={args.IssueID}
+      ProseMirrorEl={args.ProseMirrorEl}
+      Tk={args.Tk}
     />,
-    args.rootEl,
+    args.RootEl,
   );
 };

@@ -422,7 +422,7 @@ ui.sidebar ( "tab-whatcanido", function ()
           end }
           ui.tag { tag = "li", content = function ()
             ui.link {
-              module = "initiative", view = "new", 
+              module = "initiative", view = "compose", 
               params = { issue_id = issue.id },
               content = _"start a new competing initiative"
             }

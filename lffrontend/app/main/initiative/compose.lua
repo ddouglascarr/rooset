@@ -24,16 +24,41 @@ ui.tag{
 }
 
 ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/newInitiative.js" }, content="" }
-ui.tag{ tag = "script", attr = { type="text/javascript" }, content=[[
-initNewInitiativePage({
-  rootEl: document.getElementById('initiative-form'),
-  proseMirrorEl: document.getElementById('initiative-editor'),
-  repositoryName: ']] .. area.unit.external_reference .. [[',
-  areaID: ']] .. area.id .. [[',
-  tk: ']] .. jwt.encode({
-  RepositoryName={area.unit.external_reference},
-  AreaID={"'" .. area.id .. "'"},
-  Op={"messages.NewInitiativeReq", "messages.GetDocReq"},
-  Svc={"gitsvc"},
-}) .. "'})"
+
+local new_initiative_payload = {
+  RepositoryName = area.unit.external_reference,
+  AreaID = tostring(area.id),
+  Tk = jwt.encode({
+    RepositoryName={area.unit.external_reference},
+    AreaID={"'" .. area.id .. "'"},
+    Op={"messages.NewInitiativeReq", "messages.GetDocReq"},
+    Svc={"gitsvc"},
+  })
 }
+if issue_id then
+  new_initiative_payload['IssueID'] = issue_id
+end
+
+ui.tag{ tag="script", attr = { type="text/javascript" },  content=function() 
+slot.put("/* <![CDATA[ */")
+slot.put([[
+  initNewInitiativePage(Object.assign({
+    RootEl: document.getElementById('initiative-form'),
+    ProseMirrorEl: document.getElementById('initiative-editor'),
+  }, ]]  .. encode.json(new_initiative_payload) .. [[)
+  );
+]])
+slot.put("/* ]]> */")
+end
+}
+
+--   repositoryName: ']] .. area.unit.external_reference .. [[',
+--   areaID: ']] .. area.id .. [[',
+--   issueID: ']] .. issue_id == nil and '' or issue_id .. [[',
+--   tk: ']] .. jwt.encode({
+--   RepositoryName={area.unit.external_reference},
+--   AreaID={"'" .. area.id .. "'"},
+--   Op={"messages.NewInitiativeReq", "messages.GetDocReq"},
+--   Svc={"gitsvc"},
+-- }) .. "'})"
+-- }

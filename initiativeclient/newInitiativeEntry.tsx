@@ -1,15 +1,12 @@
-import {initNewInitiativePage} from './newInitiativePage';
+import {
+  initNewInitiativePage,
+  InitNewInitiativePageArgs,
+} from './newInitiativePage';
 
 console.log('bundle loaded');
 
 declare module global {
-  function initNewInitiativePage(args: {
-    rootEl: HTMLElement;
-    proseMirrorEl: HTMLElement;
-    tk: string;
-    repositoryName: string;
-    areaID: string;
-  }): void;
+  function initNewInitiativePage(args: InitNewInitiativePageArgs): void;
 }
 
 global.initNewInitiativePage = initNewInitiativePage;
