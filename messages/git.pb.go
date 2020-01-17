@@ -3,9 +3,11 @@
 
 package messages
 
-import proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
+import (
+	fmt "fmt"
+	proto "github.com/golang/protobuf/proto"
+	math "math"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -16,7 +18,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type Blob struct {
 	SHA                  string   `protobuf:"bytes,1,opt,name=SHA,proto3" json:"SHA,omitempty"`
@@ -30,16 +32,17 @@ func (m *Blob) Reset()         { *m = Blob{} }
 func (m *Blob) String() string { return proto.CompactTextString(m) }
 func (*Blob) ProtoMessage()    {}
 func (*Blob) Descriptor() ([]byte, []int) {
-	return fileDescriptor_git_41f820f4560ab91f, []int{0}
+	return fileDescriptor_0d2ecb6e8d788208, []int{0}
 }
+
 func (m *Blob) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Blob.Unmarshal(m, b)
 }
 func (m *Blob) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Blob.Marshal(b, m, deterministic)
 }
-func (dst *Blob) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Blob.Merge(dst, src)
+func (m *Blob) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Blob.Merge(m, src)
 }
 func (m *Blob) XXX_Size() int {
 	return xxx_messageInfo_Blob.Size(m)
@@ -76,16 +79,17 @@ func (m *CommitRecord) Reset()         { *m = CommitRecord{} }
 func (m *CommitRecord) String() string { return proto.CompactTextString(m) }
 func (*CommitRecord) ProtoMessage()    {}
 func (*CommitRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_git_41f820f4560ab91f, []int{1}
+	return fileDescriptor_0d2ecb6e8d788208, []int{1}
 }
+
 func (m *CommitRecord) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CommitRecord.Unmarshal(m, b)
 }
 func (m *CommitRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CommitRecord.Marshal(b, m, deterministic)
 }
-func (dst *CommitRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CommitRecord.Merge(dst, src)
+func (m *CommitRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CommitRecord.Merge(m, src)
 }
 func (m *CommitRecord) XXX_Size() int {
 	return xxx_messageInfo_CommitRecord.Size(m)
@@ -122,16 +126,17 @@ func (m *BlobRecord) Reset()         { *m = BlobRecord{} }
 func (m *BlobRecord) String() string { return proto.CompactTextString(m) }
 func (*BlobRecord) ProtoMessage()    {}
 func (*BlobRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_git_41f820f4560ab91f, []int{2}
+	return fileDescriptor_0d2ecb6e8d788208, []int{2}
 }
+
 func (m *BlobRecord) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BlobRecord.Unmarshal(m, b)
 }
 func (m *BlobRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BlobRecord.Marshal(b, m, deterministic)
 }
-func (dst *BlobRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BlobRecord.Merge(dst, src)
+func (m *BlobRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BlobRecord.Merge(m, src)
 }
 func (m *BlobRecord) XXX_Size() int {
 	return xxx_messageInfo_BlobRecord.Size(m)
@@ -162,9 +167,9 @@ func init() {
 	proto.RegisterType((*BlobRecord)(nil), "messages.BlobRecord")
 }
 
-func init() { proto.RegisterFile("git.proto", fileDescriptor_git_41f820f4560ab91f) }
+func init() { proto.RegisterFile("git.proto", fileDescriptor_0d2ecb6e8d788208) }
 
-var fileDescriptor_git_41f820f4560ab91f = []byte{
+var fileDescriptor_0d2ecb6e8d788208 = []byte{
 	// 141 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4c, 0xcf, 0x2c, 0xd1,
 	0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0xc8, 0x4d, 0x2d, 0x2e, 0x4e, 0x4c, 0x4f, 0x2d, 0x56,

@@ -23,10 +23,18 @@ ui.tag{
   end,
 }
 
-ui.tag{ tag = "script", attr = { type="text/javascript", src="http://localhost:8082/newInitiative.js" }, content="" }
+ui.tag{
+  tag = "script", 
+  attr = {
+    type="text/javascript",
+    src=config.static_content_host_external .. "/newInitiative.js",
+  },
+  content="",
+}
 
 local new_initiative_payload = {
   RepositoryName = area.unit.external_reference,
+  DocsvcHostExternal=config.docsvc_host_external,
   AreaID = tostring(area.id),
   Tk = jwt.encode({
     RepositoryName={area.unit.external_reference},

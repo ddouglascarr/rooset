@@ -10,6 +10,7 @@ type Props = {
   AreaID: string;
   IssueID: string | undefined;
   ProseMirrorEl: HTMLElement;
+  DocsvcHostExternal: string;
 };
 
 type State =
@@ -40,7 +41,7 @@ class NewInitiativePage extends Component<Props, State> {
     });
     try {
       const resp = await window.fetch(
-        'http://localhost:8080/rpc/messages.GetDocReq',
+        `${this.props.DocsvcHostExternal}/rpc/messages.GetDocReq`,
         {
           method: 'post',
           mode: 'cors',
@@ -91,7 +92,7 @@ class NewInitiativePage extends Component<Props, State> {
 
     try {
       const resp = await window.fetch(
-        'http://localhost:8080/rpc/messages.NewInitiativeReq',
+        `${this.props.DocsvcHostExternal}/rpc/messages.NewInitiativeReq`,
         {
           method: 'post',
           mode: 'cors',
@@ -160,6 +161,7 @@ class NewInitiativePage extends Component<Props, State> {
 export type InitNewInitiativePageArgs = {
   RootEl: HTMLElement;
   ProseMirrorEl: HTMLElement;
+  DocsvcHostExternal: string;
   RepositoryName: string;
   AreaID: string;
   IssueID?: string;
@@ -168,6 +170,7 @@ export type InitNewInitiativePageArgs = {
 export const initNewInitiativePage = (args: InitNewInitiativePageArgs) => {
   render(
     <NewInitiativePage
+      DocsvcHostExternal={args.DocsvcHostExternal}
       RepositoryName={args.RepositoryName}
       AreaID={args.AreaID}
       IssueID={args.IssueID}

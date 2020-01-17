@@ -3,10 +3,12 @@
 
 package messages
 
-import proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import descriptor "github.com/golang/protobuf/protoc-gen-go/descriptor"
+import (
+	fmt "fmt"
+	proto "github.com/golang/protobuf/proto"
+	descriptor "github.com/golang/protobuf/protoc-gen-go/descriptor"
+	math "math"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -17,7 +19,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type FieldAuth int32
 
@@ -32,6 +34,7 @@ var FieldAuth_name = map[int32]string{
 	0: "NotRequired",
 	1: "JWTAuthRequired",
 }
+
 var FieldAuth_value = map[string]int32{
 	"NotRequired":     0,
 	"JWTAuthRequired": 1,
@@ -40,8 +43,9 @@ var FieldAuth_value = map[string]int32{
 func (x FieldAuth) String() string {
 	return proto.EnumName(FieldAuth_name, int32(x))
 }
+
 func (FieldAuth) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_options_e33b21747b4a99bc, []int{0}
+	return fileDescriptor_110d40819f1994f9, []int{0}
 }
 
 var E_Auth = &proto.ExtensionDesc{
@@ -58,9 +62,9 @@ func init() {
 	proto.RegisterExtension(E_Auth)
 }
 
-func init() { proto.RegisterFile("options.proto", fileDescriptor_options_e33b21747b4a99bc) }
+func init() { proto.RegisterFile("options.proto", fileDescriptor_110d40819f1994f9) }
 
-var fileDescriptor_options_e33b21747b4a99bc = []byte{
+var fileDescriptor_110d40819f1994f9 = []byte{
 	// 163 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xcd, 0x2f, 0x28, 0xc9,
 	0xcc, 0xcf, 0x2b, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0xc8, 0x4d, 0x2d, 0x2e, 0x4e,

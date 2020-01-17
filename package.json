@@ -8,7 +8,7 @@
   "scripts": {
     "build": "webpack --config ./conf/webpack.config.js",
     "start": "webpack-dev-server --config ./conf/webpack.config.js --host 0.0.0.0",
-    "watch-validation-service": "nodemon dist/validationService.js",
+    "watch-docvalidationsvc": "nodemon dist/docvalidationsvc.js",
     "lint": "eslint ./ --ext .ts,.tsx"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 #!/bin/bash
 
 export ROOSET_JWT_KEY="development"
-export ROOSET_GITLAB_SERVER="http://localhost:9080"
+export ROOSET_GITLAB_HOST_INTERNAL="http://localhost:9080"
 export ROOSET_GITLAB_ACCOUNT="determined_poitras"
 export ROOSET_GITLAB_BEARER_TK="sNwhYqoM7NgxnWF-adjq"

@@ -34,7 +34,7 @@ module.exports = [
   },
   {
     target: 'node',
-    entry: './validationserivce/index.ts',
+    entry: './docvalidationsvc/index.ts',
     mode: isProd ? 'production' : 'development',
     devtool: isProd
       ? 'cheap-module-source-map'
@@ -53,7 +53,7 @@ module.exports = [
       modules: ['node_modules', '.'],
     },
     output: {
-      filename: 'validationService.js',
+      filename: 'docvalidationsvc.js',
       path: path.resolve(__dirname, '..', 'dist'),
     },
   },

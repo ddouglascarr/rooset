@@ -3,9 +3,11 @@
 
 package messages
 
-import proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
+import (
+	fmt "fmt"
+	proto "github.com/golang/protobuf/proto"
+	math "math"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -16,7 +18,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type NewInitiativeReq struct {
 	RepositoryName       string   `protobuf:"bytes,1,opt,name=RepositoryName,proto3" json:"RepositoryName,omitempty"`
@@ -31,16 +33,17 @@ func (m *NewInitiativeReq) Reset()         { *m = NewInitiativeReq{} }
 func (m *NewInitiativeReq) String() string { return proto.CompactTextString(m) }
 func (*NewInitiativeReq) ProtoMessage()    {}
 func (*NewInitiativeReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_services_338fd1f2c19aa7f3, []int{0}
+	return fileDescriptor_8e16ccb8c5307b32, []int{0}
 }
+
 func (m *NewInitiativeReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NewInitiativeReq.Unmarshal(m, b)
 }
 func (m *NewInitiativeReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_NewInitiativeReq.Marshal(b, m, deterministic)
 }
-func (dst *NewInitiativeReq) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NewInitiativeReq.Merge(dst, src)
+func (m *NewInitiativeReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NewInitiativeReq.Merge(m, src)
 }
 func (m *NewInitiativeReq) XXX_Size() int {
 	return xxx_messageInfo_NewInitiativeReq.Size(m)
@@ -84,16 +87,17 @@ func (m *NewInitiativeResp) Reset()         { *m = NewInitiativeResp{} }
 func (m *NewInitiativeResp) String() string { return proto.CompactTextString(m) }
 func (*NewInitiativeResp) ProtoMessage()    {}
 func (*NewInitiativeResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_services_338fd1f2c19aa7f3, []int{1}
+	return fileDescriptor_8e16ccb8c5307b32, []int{1}
 }
+
 func (m *NewInitiativeResp) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NewInitiativeResp.Unmarshal(m, b)
 }
 func (m *NewInitiativeResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_NewInitiativeResp.Marshal(b, m, deterministic)
 }
-func (dst *NewInitiativeResp) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NewInitiativeResp.Merge(dst, src)
+func (m *NewInitiativeResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NewInitiativeResp.Merge(m, src)
 }
 func (m *NewInitiativeResp) XXX_Size() int {
 	return xxx_messageInfo_NewInitiativeResp.Size(m)
@@ -131,16 +135,17 @@ func (m *GetDocReq) Reset()         { *m = GetDocReq{} }
 func (m *GetDocReq) String() string { return proto.CompactTextString(m) }
 func (*GetDocReq) ProtoMessage()    {}
 func (*GetDocReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_services_338fd1f2c19aa7f3, []int{2}
+	return fileDescriptor_8e16ccb8c5307b32, []int{2}
 }
+
 func (m *GetDocReq) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetDocReq.Unmarshal(m, b)
 }
 func (m *GetDocReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetDocReq.Marshal(b, m, deterministic)
 }
-func (dst *GetDocReq) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetDocReq.Merge(dst, src)
+func (m *GetDocReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDocReq.Merge(m, src)
 }
 func (m *GetDocReq) XXX_Size() int {
 	return xxx_messageInfo_GetDocReq.Size(m)
@@ -183,16 +188,17 @@ func (m *GetDocResp) Reset()         { *m = GetDocResp{} }
 func (m *GetDocResp) String() string { return proto.CompactTextString(m) }
 func (*GetDocResp) ProtoMessage()    {}
 func (*GetDocResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_services_338fd1f2c19aa7f3, []int{3}
+	return fileDescriptor_8e16ccb8c5307b32, []int{3}
 }
+
 func (m *GetDocResp) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetDocResp.Unmarshal(m, b)
 }
 func (m *GetDocResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetDocResp.Marshal(b, m, deterministic)
 }
-func (dst *GetDocResp) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetDocResp.Merge(dst, src)
+func (m *GetDocResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDocResp.Merge(m, src)
 }
 func (m *GetDocResp) XXX_Size() int {
 	return xxx_messageInfo_GetDocResp.Size(m)
@@ -217,9 +223,9 @@ func init() {
 	proto.RegisterType((*GetDocResp)(nil), "messages.GetDocResp")
 }
 
-func init() { proto.RegisterFile("services.proto", fileDescriptor_services_338fd1f2c19aa7f3) }
+func init() { proto.RegisterFile("services.proto", fileDescriptor_8e16ccb8c5307b32) }
 
-var fileDescriptor_services_338fd1f2c19aa7f3 = []byte{
+var fileDescriptor_8e16ccb8c5307b32 = []byte{
 	// 255 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x91, 0xc1, 0x4a, 0xc3, 0x40,
 	0x10, 0x86, 0x49, 0x2c, 0xd1, 0x8c, 0x1a, 0x74, 0x0f, 0x25, 0x14, 0x05, 0xd9, 0x93, 0x07, 0x09,

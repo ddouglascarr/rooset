@@ -10,5 +10,5 @@ app.post('/validate', (req: express.Request, res: express.Response) => {
 });
 
 app.listen(8080, () => {
-  console.log('gitService started ...');
+  console.log('docvalidationsvc started ...');
 });

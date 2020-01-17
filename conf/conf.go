@@ -21,7 +21,7 @@ var (
 
 func init() {
 	Gitlab = gitlabConf{
-		Host:        os.Getenv("ROOSET_GITLAB_SERVER"),
+		Host:        os.Getenv("ROOSET_GITLAB_HOST_INTERNAL"),
 		AccountName: os.Getenv("ROOSET_GITLAB_ACCOUNT"),
 		BearerTk:    os.Getenv("ROOSET_GITLAB_BEARER_TK"),
 	}

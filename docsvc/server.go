@@ -1,4 +1,4 @@
-package gitservice
+package docsvc
 
 import (
 	"fmt"

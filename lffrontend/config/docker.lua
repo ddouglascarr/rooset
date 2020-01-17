@@ -44,7 +44,23 @@ config.localhost = false
 
 -- Connection information for the LiquidFeedback database
 -- ------------------------------------------------------------------------
-config.database = { engine='postgresql', dbname='liquid_feedback', host='db', user='postgres', port='5432'}
+config.database = { 
+  engine='postgresql', 
+  dbname=os.getenv("PGDATABASE"),
+  host=os.getenv("PGHOST"), 
+  user=os.getenv("PGUSER"), 
+  port=os.getenv("PGPORT"),
+}
+
+
+-- Static content
+-- ------------------------------------------------------------------------
+config.static_content_host_external = os.getenv("ROOSET_STATIC_CONTENT_HOST_EXTERNAL")
+
+-- docsvc
+-- ------------------------------------------------------------------------
+config.docsvc_host_external = os.getenv("ROOSET_DOCSVC_HOST_EXTERNAL")
+config.docsvc_host_internal = os.getenv("ROOSET_DOCSVC_HOST_INTERNAL")
 
 
 -- Location of the rocketwiki binaries

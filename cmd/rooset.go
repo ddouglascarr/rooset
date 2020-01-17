@@ -4,34 +4,34 @@ import (
 	"context"
 	"os"
 
-	"github.com/ddouglascarr/rooset/gitservice"
+	"github.com/ddouglascarr/rooset/docsvc"
 	"github.com/shabbyrobe/cmdy"
 	"github.com/shabbyrobe/cmdy/arg"
 )
 
-type gitServiceCmd struct{}
+type docsvcCmd struct{}
 
-func newGitServiceCmd() cmdy.Command {
-	return &gitServiceCmd{}
+func newDocsvcCmd() cmdy.Command {
+	return &docsvcCmd{}
 }
 
-func (t *gitServiceCmd) Synopsis() string {
+func (t *docsvcCmd) Synopsis() string {
 	return "Server for validating and saving rooset document to a git server"
 }
 
-func (t *gitServiceCmd) Configure(flags *cmdy.FlagSet, args *arg.ArgSet) {}
+func (t *docsvcCmd) Configure(flags *cmdy.FlagSet, args *arg.ArgSet) {}
 
-func (t *gitServiceCmd) Run(ctx cmdy.Context) error {
-	gitservice.Run()
+func (t *docsvcCmd) Run(ctx cmdy.Context) error {
+	docsvc.Run()
 	return nil
 }
 
 func run() error {
 	mainGroupBuilder := func() cmdy.Command {
 		return cmdy.NewGroup(
-			"Git Service",
+			"docsvc",
 			cmdy.Builders{
-				"gitservice": newGitServiceCmd,
+				"docsvc": newDocsvcCmd,
 			},
 		)
 	}

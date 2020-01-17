@@ -28,12 +28,8 @@ services:
       dockerfile: core.Dockerfile
     links:
       - db
-    environment:
-      - PGHOST=db
-      - PGUSER=postgres
-      - PGDATABASE=liquid_feedback
-      - CORE_SERVICES_INITIAL_DELAY=1
-      - CORE_SERVICES_REPEAT_DELAY=3
+    env_file:
+      - conf/dockerdev.env
     entrypoint: /usr/local/bin/keep-alive
     volumes:
       - ./lfcore:/opt/lfcore
@@ -43,16 +39,12 @@ services:
     build:
       context: .
       dockerfile: frontend.Dockerfile
-    environment:
-      - PGHOST=db
-      - PGUSER=postgres
-      - PGDATABASE=liquid_feedback
-      - ROOSET_JWT_SECRET=development
+    env_file:
+      - conf/dockerdev.env
     ports:
       - "8081:8080"
     links:
       - db
-      - gitService
     volumes:
       - ./lffrontend:/opt/frontend
       - ./lfframework:/opt/framework
@@ -62,20 +54,31 @@ services:
   webpack:
     image: node:erbium-stretch
     volumes:
-      - .:/opt/rooset
-    working_dir: /opt/rooset
-    command: /opt/rooset/etc/keep-alive
+      - .:/go/src/github.com/ddouglascarr/rooset
+    working_dir: /go/src/github.com/ddouglascarr/rooset
+    command: npm run start
     ports:
       - "8082:8080"
 
-  gitService:
+  docvalidationsvc:
     image: node:erbium-stretch
     volumes:
-      - ./clientts:/opt/clientts
-      - ./etc:/opt/etc
-    working_dir: /opt/clientts
-    command: ./node_modules/.bin/nodemon dist/gitService.js
+      - .:/go/src/github.com/ddouglascarr/rooset
+    working_dir: /go/src/github.com/ddouglascarr/rooset
+    command: node_modules/.bin/nodemon dist/docvalidationsvc.js
     ports:
       - "8083:8080"
 
-
+  docsvc:
+    build:
+      context: .
+      dockerfile: docsvc.Dockerfile
+    env_file:
+      - conf/dockerdev.env
+    volumes:
+      - .:/go/src/github.com/ddouglascarr/rooset
+    working_dir: /go/src/github.com/ddouglascarr/rooset
+    command: go run cmd/rooset.go docsvc
+    # command: /go/src/github.com/ddouglascarr/rooset/etc/keep-alive
+    ports:
+      - "8084:8080"

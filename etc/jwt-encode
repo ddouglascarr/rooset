@@ -9,7 +9,7 @@ payload=${1}
 # JWT Encoder Bash Script
 #
 
-secret="${ROOSET_JWT_SECRET}"
+secret="${ROOSET_JWT_KEY}"
 
 # Static header fields.
 header='{

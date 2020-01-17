@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # credit: https://willhaley.com/blog/generate-jwt-with-bash/
 set -euo pipefail
-secret="${ROOSET_JWT_SECRET}"
+secret="${ROOSET_JWT_KEY}"
 token=${1};
 
 #
