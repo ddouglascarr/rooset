@@ -1,40 +1,6 @@
-slot.select ( 'instance_name', function ()
-  slot.put(" @ ")
-  slot.put ( encode.html ( config.instance_name ) )
-end)
-
-  
 slot.select ( 'navigation_right', function ()
 
-  if app.session:has_access ("anonymous") and not (app.session.needs_delegation_check) then
-  
-    ui.form {
-      attr = { class = "inline search" },
-      method = "get",
-      module = "index", view   = "search",
-      content = function ()
-        
-        ui.field.text {
-          attr = { placeholder = _"search" },
-          name = "q"
-        }
-        
-      end 
-    }
-
-    ui.link {
-      attr = { class = "searchLink" },
-      module = "index", view = "search", content = function ()
-        ui.image { static = "icons/16/magnifier.png" }
-      end
-    }
-    
-  end
-  
   if app.session.member == nil then
-    
-    slot.put ( " " )
-    
     ui.link {
       text   = _"Login",
       module = 'index',
@@ -45,29 +11,16 @@ slot.select ( 'navigation_right', function ()
         redirect_id = param.get_id()
       }
     }
-    
-    slot.put ( " " )
   end
-  
-  if app.session.member == nil and not config.registration_disabled then
-    
-    ui.link {
-      text   = _"Registration",
-      module = 'index',
-      view   = 'register'
-    }
-
-  end
-  
   
   if app.session.member then
-  
-    slot.put ( " " )
-    
-    ui.tag { attr = { id = "member_menu" }, content = function()
-      util.micro_avatar(app.session.member)
-    end }
-    
+    ui.tag {
+      tag = "li",
+      attr = { class = "pure-menu-item" },
+      content = function () 
+        util.micro_avatar(app.session.member)
+      end
+    }
   end -- if app.session.member
     
 end)
