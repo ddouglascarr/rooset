@@ -1,7 +1,7 @@
 import {
   initNewInitiativePage,
   InitNewInitiativePageArgs,
-} from './newInitiativePage';
+} from './NewInitiativePage';
 
 console.log('bundle loaded');
 

@@ -4,6 +4,8 @@ RUN apt-get update && apt-get install -y \
   autoconf \
   automake \
   libtool \
+  libxml2 \
+  libxml2-dev \
   curl \
   make \
   g++ \

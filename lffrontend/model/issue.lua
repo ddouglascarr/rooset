@@ -214,7 +214,6 @@ function Issue:get_state_name_for_state(value)
 end
 
 
-
 function Issue:get_search_selector(search_string)
   return self:new_selector()
     :join('"initiative"', nil, '"initiative"."issue_id" = "issue"."id"')

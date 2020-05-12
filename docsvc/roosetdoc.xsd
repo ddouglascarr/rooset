@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Forked from the XHTML strict DTD at
+  http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd
+  Converted to xsd because I couldn't find DTD library for Golang
+  
+  It is intended to be a subset of HTML5. The following elements have been
+  added from that:
+    - <article> is the root node
+    - <section>
+  
+  Any complying document should render well in a modern HTML5 compliant browser
+-->
+<!-- ================== Imported Names ==================================== -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:simpleType name="Number">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <!-- one or more digits -->
+  <!-- =================== Text Elements ==================================== -->
+  <!-- %Inline; covers inline or "text-level" elements -->
+  <!-- ================== Block level elements ============================== -->
+  <xs:element name="lists" abstract="true" substitutionGroup="block">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="li"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="block" abstract="true"/>
+  <!-- TODO: whats this? -->
+  <!-- =================== Document Body ==================================== -->
+  <xs:element name="article">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="section"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- =================== Paragraphs ======================================= -->
+  <xs:element name="p" substitutionGroup="block" type="xs:string"/>
+  <!-- =================== Headings ========================================= -->
+  <!--
+    There are three levels of headings from h1 (the most important)
+    to h3 (the least important).
+    
+    h1 is reserved for the document heading, but is currently not legal
+    anywhere in the schema.
+    
+    h2 is for section headings. It is required and only allowed at the start of a
+    section.
+    
+    h3 is for subheadings within sections.
+  -->
+  <xs:element name="h1" type="xs:string"/>
+  <xs:element name="h2" type="xs:string"/>
+  <xs:element name="h3" substitutionGroup="block" type="xs:string"/>
+  <!-- =================== Sections ========================================= -->
+  <!-- from HTML5, must start with an h2 -->
+  <xs:element name="section">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="h2"/>
+        <xs:element maxOccurs="unbounded" ref="block"/>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- =================== Lists ============================================ -->
+  <!-- Unordered list -->
+  <xs:element name="ul" substitutionGroup="lists"/>
+  <!-- Ordered (numbered) list -->
+  <xs:element name="ol" substitutionGroup="lists"/>
+  <!-- list item -->
+  <xs:element name="li" type="xs:string"/>
+  <!-- definition lists - dt for term, dd for its definition -->
+  <!-- possibly implement in future, add a di (definition item) to wrap dt and dd -->
+  <!-- =================== Preformatted Text ================================ -->
+  <!-- content is %Inline; excluding "img|object|big|small|sub|sup" -->
+  <!-- possibly implement in future -->
+  <!-- =================== Block-like Quotes ================================ -->
+  <!-- possibly implement in future -->
+  <!-- ===================== Inline Elements ================================ -->
+  <!-- TODO: implement -->
+  <!-- ===================== Tables ========================================= -->
+  <xs:element name="table" substitutionGroup="block">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="caption"/>
+        <xs:element minOccurs="0" ref="thead"/>
+        <xs:element ref="tbody"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="caption" type="xs:string"/>
+  <xs:element name="thead">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="1" ref="tr"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tbody">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="1" ref="tr"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tr">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="1" ref="td"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="td">
+    <xs:complexType mixed="true">
+      <xs:attribute name="rowspan" default="1" type="Number"/>
+      <xs:attribute name="colspan" default="1" type="Number"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+<!-- removed th, as it isn't enforced. Enforce having a tbody instead -->

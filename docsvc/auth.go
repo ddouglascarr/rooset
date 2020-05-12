@@ -124,17 +124,16 @@ func withAuthenticatedMessage(messageType string, f JWTHandlerFunc) http.Handler
 	}
 }
 
-//BuildCommitRecordTk builds a jwt token to be passed to lffronted detailing a new
-// commit.
-func BuildCommitRecordTk(sHA string, branchName string) (string, error) {
+//BuildDocSHATk builds a jwt token to be passed to lffronted detailing a new
+// document.
+func BuildDocSHATk(sHA string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"SHA":        sHA,
-		"BranchName": branchName,
+		"SHA": sHA,
 	})
 
 	tkStr, err := token.SignedString([]byte(conf.Auth.JWTKey))
 	if err != nil {
-		return "", errors.Wrap(err, "rooset: failed to sign CommitRecord JWT key")
+		return "", errors.Wrap(err, "rooset: failed to sign doc SHA")
 	}
 
 	return tkStr, nil

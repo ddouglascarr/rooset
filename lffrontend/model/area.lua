@@ -137,3 +137,31 @@ function Area.object_get:name_with_unit_name()
     return self.name
   end
 end
+
+function Area.object_get:current_external_reference()
+  -- fetches the external reference of the last winning initiative
+  -- in the area. If that doesn't exist, use the external_reference on
+  -- the area model.
+  --
+  -- All external references are blobs, so the external_reference on area
+  -- is the seed blob. 
+  --
+  -- TODO: if this works, make it more explicit by renaming 
+  -- area.external_reference => area.seed_external_reference
+
+  local last_winning_initiative = Initiative:new_selector()
+    :join("issue", nil, "issue.id = initiative.issue_id")
+    :join("area", nil, "area.id = issue.area_id")
+    :add_where{ "area.id = ?", self.id}
+    :add_where{ "issue.state = 'finished_with_winner'" }
+    :add_where{ "initiative.winner = true" }
+    :add_order_by('issue.closed DESC')
+    :optional_object_mode()
+    :exec()
+
+  if last_winning_initiative then
+    return last_winning_initiative.external_reference
+  else
+    return self.external_reference
+  end
+end

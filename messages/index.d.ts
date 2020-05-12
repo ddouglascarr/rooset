@@ -2,277 +2,109 @@ import * as $protobuf from "protobufjs";
 /** Namespace messages. */
 export namespace messages {
 
-    /** Properties of a Blob. */
-    interface IBlob {
+    /** Properties of a CreateDocReq. */
+    interface ICreateDocReq {
 
-        /** Blob SHA */
-        SHA?: (string|null);
+        /** CreateDocReq UserID */
+        UserID?: (string|null);
 
-        /** Blob Content */
+        /** CreateDocReq Content */
         Content?: (string|null);
     }
 
-    /** Represents a Blob. */
-    class Blob implements IBlob {
+    /** Represents a CreateDocReq. */
+    class CreateDocReq implements ICreateDocReq {
 
         /**
-         * Constructs a new Blob.
+         * Constructs a new CreateDocReq.
          * @param [properties] Properties to set
          */
-        constructor(properties?: messages.IBlob);
+        constructor(properties?: messages.ICreateDocReq);
 
-        /** Blob SHA. */
-        public SHA: string;
+        /** CreateDocReq UserID. */
+        public UserID: string;
 
-        /** Blob Content. */
+        /** CreateDocReq Content. */
         public Content: string;
 
         /**
-         * Verifies a Blob message.
+         * Verifies a CreateDocReq message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a Blob message from a plain object. Also converts values to their respective internal types.
+         * Creates a CreateDocReq message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns Blob
+         * @returns CreateDocReq
          */
-        public static fromObject(object: { [k: string]: any }): messages.Blob;
+        public static fromObject(object: { [k: string]: any }): messages.CreateDocReq;
 
         /**
-         * Creates a plain object from a Blob message. Also converts values to other types if specified.
-         * @param message Blob
+         * Creates a plain object from a CreateDocReq message. Also converts values to other types if specified.
+         * @param message CreateDocReq
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: messages.Blob, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: messages.CreateDocReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this Blob to JSON.
+         * Converts this CreateDocReq to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a CommitRecord. */
-    interface ICommitRecord {
+    /** Properties of a CreateDocResp. */
+    interface ICreateDocResp {
 
-        /** CommitRecord SHA */
+        /** CreateDocResp SHA */
         SHA?: (string|null);
 
-        /** CommitRecord BranchName */
-        BranchName?: (string|null);
-    }
-
-    /** Represents a CommitRecord. */
-    class CommitRecord implements ICommitRecord {
-
-        /**
-         * Constructs a new CommitRecord.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: messages.ICommitRecord);
-
-        /** CommitRecord SHA. */
-        public SHA: string;
-
-        /** CommitRecord BranchName. */
-        public BranchName: string;
-
-        /**
-         * Verifies a CommitRecord message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a CommitRecord message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns CommitRecord
-         */
-        public static fromObject(object: { [k: string]: any }): messages.CommitRecord;
-
-        /**
-         * Creates a plain object from a CommitRecord message. Also converts values to other types if specified.
-         * @param message CommitRecord
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: messages.CommitRecord, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this CommitRecord to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a BlobRecord. */
-    interface IBlobRecord {
-
-        /** BlobRecord SHA */
-        SHA?: (string|null);
-
-        /** BlobRecord Name */
-        Name?: (string|null);
-    }
-
-    /** Represents a BlobRecord. */
-    class BlobRecord implements IBlobRecord {
-
-        /**
-         * Constructs a new BlobRecord.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: messages.IBlobRecord);
-
-        /** BlobRecord SHA. */
-        public SHA: string;
-
-        /** BlobRecord Name. */
-        public Name: string;
-
-        /**
-         * Verifies a BlobRecord message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a BlobRecord message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns BlobRecord
-         */
-        public static fromObject(object: { [k: string]: any }): messages.BlobRecord;
-
-        /**
-         * Creates a plain object from a BlobRecord message. Also converts values to other types if specified.
-         * @param message BlobRecord
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: messages.BlobRecord, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this BlobRecord to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a NewInitiativeReq. */
-    interface INewInitiativeReq {
-
-        /** NewInitiativeReq RepositoryName */
-        RepositoryName?: (string|null);
-
-        /** NewInitiativeReq AreaID */
-        AreaID?: (string|null);
-
-        /** NewInitiativeReq Content */
-        Content?: (string|null);
-    }
-
-    /** Represents a NewInitiativeReq. */
-    class NewInitiativeReq implements INewInitiativeReq {
-
-        /**
-         * Constructs a new NewInitiativeReq.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: messages.INewInitiativeReq);
-
-        /** NewInitiativeReq RepositoryName. */
-        public RepositoryName: string;
-
-        /** NewInitiativeReq AreaID. */
-        public AreaID: string;
-
-        /** NewInitiativeReq Content. */
-        public Content: string;
-
-        /**
-         * Verifies a NewInitiativeReq message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a NewInitiativeReq message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns NewInitiativeReq
-         */
-        public static fromObject(object: { [k: string]: any }): messages.NewInitiativeReq;
-
-        /**
-         * Creates a plain object from a NewInitiativeReq message. Also converts values to other types if specified.
-         * @param message NewInitiativeReq
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: messages.NewInitiativeReq, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this NewInitiativeReq to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a NewInitiativeResp. */
-    interface INewInitiativeResp {
-
-        /** NewInitiativeResp CommitRecord */
-        CommitRecord?: (messages.ICommitRecord|null);
-
-        /** NewInitiativeResp Tk */
+        /** CreateDocResp Tk */
         Tk?: (string|null);
     }
 
-    /** Represents a NewInitiativeResp. */
-    class NewInitiativeResp implements INewInitiativeResp {
+    /** Represents a CreateDocResp. */
+    class CreateDocResp implements ICreateDocResp {
 
         /**
-         * Constructs a new NewInitiativeResp.
+         * Constructs a new CreateDocResp.
          * @param [properties] Properties to set
          */
-        constructor(properties?: messages.INewInitiativeResp);
+        constructor(properties?: messages.ICreateDocResp);
 
-        /** NewInitiativeResp CommitRecord. */
-        public CommitRecord?: (messages.ICommitRecord|null);
+        /** CreateDocResp SHA. */
+        public SHA: string;
 
-        /** NewInitiativeResp Tk. */
+        /** CreateDocResp Tk. */
         public Tk: string;
 
         /**
-         * Verifies a NewInitiativeResp message.
+         * Verifies a CreateDocResp message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a NewInitiativeResp message from a plain object. Also converts values to their respective internal types.
+         * Creates a CreateDocResp message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns NewInitiativeResp
+         * @returns CreateDocResp
          */
-        public static fromObject(object: { [k: string]: any }): messages.NewInitiativeResp;
+        public static fromObject(object: { [k: string]: any }): messages.CreateDocResp;
 
         /**
-         * Creates a plain object from a NewInitiativeResp message. Also converts values to other types if specified.
-         * @param message NewInitiativeResp
+         * Creates a plain object from a CreateDocResp message. Also converts values to other types if specified.
+         * @param message CreateDocResp
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: messages.NewInitiativeResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: messages.CreateDocResp, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this NewInitiativeResp to JSON.
+         * Converts this CreateDocResp to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -281,14 +113,8 @@ export namespace messages {
     /** Properties of a GetDocReq. */
     interface IGetDocReq {
 
-        /** GetDocReq RepositoryName */
-        RepositoryName?: (string|null);
-
-        /** GetDocReq AreaID */
-        AreaID?: (string|null);
-
-        /** GetDocReq GitRef */
-        GitRef?: (string|null);
+        /** GetDocReq SHA */
+        SHA?: (string|null);
     }
 
     /** Represents a GetDocReq. */
@@ -300,14 +126,8 @@ export namespace messages {
          */
         constructor(properties?: messages.IGetDocReq);
 
-        /** GetDocReq RepositoryName. */
-        public RepositoryName: string;
-
-        /** GetDocReq AreaID. */
-        public AreaID: string;
-
-        /** GetDocReq GitRef. */
-        public GitRef: string;
+        /** GetDocReq SHA. */
+        public SHA: string;
 
         /**
          * Verifies a GetDocReq message.
@@ -341,8 +161,11 @@ export namespace messages {
     /** Properties of a GetDocResp. */
     interface IGetDocResp {
 
-        /** GetDocResp Blob */
-        Blob?: (messages.IBlob|null);
+        /** GetDocResp SHA */
+        SHA?: (string|null);
+
+        /** GetDocResp Content */
+        Content?: (string|null);
     }
 
     /** Represents a GetDocResp. */
@@ -354,8 +177,11 @@ export namespace messages {
          */
         constructor(properties?: messages.IGetDocResp);
 
-        /** GetDocResp Blob. */
-        public Blob?: (messages.IBlob|null);
+        /** GetDocResp SHA. */
+        public SHA: string;
+
+        /** GetDocResp Content. */
+        public Content: string;
 
         /**
          * Verifies a GetDocResp message.

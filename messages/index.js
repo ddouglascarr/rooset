@@ -18,25 +18,25 @@ $root.messages = (function() {
      */
     var messages = {};
 
-    messages.Blob = (function() {
+    messages.CreateDocReq = (function() {
 
         /**
-         * Properties of a Blob.
+         * Properties of a CreateDocReq.
          * @memberof messages
-         * @interface IBlob
-         * @property {string|null} [SHA] Blob SHA
-         * @property {string|null} [Content] Blob Content
+         * @interface ICreateDocReq
+         * @property {string|null} [UserID] CreateDocReq UserID
+         * @property {string|null} [Content] CreateDocReq Content
          */
 
         /**
-         * Constructs a new Blob.
+         * Constructs a new CreateDocReq.
          * @memberof messages
-         * @classdesc Represents a Blob.
-         * @implements IBlob
+         * @classdesc Represents a CreateDocReq.
+         * @implements ICreateDocReq
          * @constructor
-         * @param {messages.IBlob=} [properties] Properties to set
+         * @param {messages.ICreateDocReq=} [properties] Properties to set
          */
-        function Blob(properties) {
+        function CreateDocReq(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -44,35 +44,35 @@ $root.messages = (function() {
         }
 
         /**
-         * Blob SHA.
-         * @member {string} SHA
-         * @memberof messages.Blob
+         * CreateDocReq UserID.
+         * @member {string} UserID
+         * @memberof messages.CreateDocReq
          * @instance
          */
-        Blob.prototype.SHA = "";
+        CreateDocReq.prototype.UserID = "";
 
         /**
-         * Blob Content.
+         * CreateDocReq Content.
          * @member {string} Content
-         * @memberof messages.Blob
+         * @memberof messages.CreateDocReq
          * @instance
          */
-        Blob.prototype.Content = "";
+        CreateDocReq.prototype.Content = "";
 
         /**
-         * Verifies a Blob message.
+         * Verifies a CreateDocReq message.
          * @function verify
-         * @memberof messages.Blob
+         * @memberof messages.CreateDocReq
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        Blob.verify = function verify(message) {
+        CreateDocReq.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.SHA != null && message.hasOwnProperty("SHA"))
-                if (!$util.isString(message.SHA))
-                    return "SHA: string expected";
+            if (message.UserID != null && message.hasOwnProperty("UserID"))
+                if (!$util.isString(message.UserID))
+                    return "UserID: string expected";
             if (message.Content != null && message.hasOwnProperty("Content"))
                 if (!$util.isString(message.Content))
                     return "Content: string expected";
@@ -80,81 +80,81 @@ $root.messages = (function() {
         };
 
         /**
-         * Creates a Blob message from a plain object. Also converts values to their respective internal types.
+         * Creates a CreateDocReq message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
-         * @memberof messages.Blob
+         * @memberof messages.CreateDocReq
          * @static
          * @param {Object.<string,*>} object Plain object
-         * @returns {messages.Blob} Blob
+         * @returns {messages.CreateDocReq} CreateDocReq
          */
-        Blob.fromObject = function fromObject(object) {
-            if (object instanceof $root.messages.Blob)
+        CreateDocReq.fromObject = function fromObject(object) {
+            if (object instanceof $root.messages.CreateDocReq)
                 return object;
-            var message = new $root.messages.Blob();
-            if (object.SHA != null)
-                message.SHA = String(object.SHA);
+            var message = new $root.messages.CreateDocReq();
+            if (object.UserID != null)
+                message.UserID = String(object.UserID);
             if (object.Content != null)
                 message.Content = String(object.Content);
             return message;
         };
 
         /**
-         * Creates a plain object from a Blob message. Also converts values to other types if specified.
+         * Creates a plain object from a CreateDocReq message. Also converts values to other types if specified.
          * @function toObject
-         * @memberof messages.Blob
+         * @memberof messages.CreateDocReq
          * @static
-         * @param {messages.Blob} message Blob
+         * @param {messages.CreateDocReq} message CreateDocReq
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        Blob.toObject = function toObject(message, options) {
+        CreateDocReq.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
             var object = {};
             if (options.defaults) {
-                object.SHA = "";
+                object.UserID = "";
                 object.Content = "";
             }
-            if (message.SHA != null && message.hasOwnProperty("SHA"))
-                object.SHA = message.SHA;
+            if (message.UserID != null && message.hasOwnProperty("UserID"))
+                object.UserID = message.UserID;
             if (message.Content != null && message.hasOwnProperty("Content"))
                 object.Content = message.Content;
             return object;
         };
 
         /**
-         * Converts this Blob to JSON.
+         * Converts this CreateDocReq to JSON.
          * @function toJSON
-         * @memberof messages.Blob
+         * @memberof messages.CreateDocReq
          * @instance
          * @returns {Object.<string,*>} JSON object
          */
-        Blob.prototype.toJSON = function toJSON() {
+        CreateDocReq.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        return Blob;
+        return CreateDocReq;
     })();
 
-    messages.CommitRecord = (function() {
+    messages.CreateDocResp = (function() {
 
         /**
-         * Properties of a CommitRecord.
+         * Properties of a CreateDocResp.
          * @memberof messages
-         * @interface ICommitRecord
-         * @property {string|null} [SHA] CommitRecord SHA
-         * @property {string|null} [BranchName] CommitRecord BranchName
+         * @interface ICreateDocResp
+         * @property {string|null} [SHA] CreateDocResp SHA
+         * @property {string|null} [Tk] CreateDocResp Tk
          */
 
         /**
-         * Constructs a new CommitRecord.
+         * Constructs a new CreateDocResp.
          * @memberof messages
-         * @classdesc Represents a CommitRecord.
-         * @implements ICommitRecord
+         * @classdesc Represents a CreateDocResp.
+         * @implements ICreateDocResp
          * @constructor
-         * @param {messages.ICommitRecord=} [properties] Properties to set
+         * @param {messages.ICreateDocResp=} [properties] Properties to set
          */
-        function CommitRecord(properties) {
+        function CreateDocResp(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -162,408 +162,35 @@ $root.messages = (function() {
         }
 
         /**
-         * CommitRecord SHA.
+         * CreateDocResp SHA.
          * @member {string} SHA
-         * @memberof messages.CommitRecord
+         * @memberof messages.CreateDocResp
          * @instance
          */
-        CommitRecord.prototype.SHA = "";
+        CreateDocResp.prototype.SHA = "";
 
         /**
-         * CommitRecord BranchName.
-         * @member {string} BranchName
-         * @memberof messages.CommitRecord
-         * @instance
-         */
-        CommitRecord.prototype.BranchName = "";
-
-        /**
-         * Verifies a CommitRecord message.
-         * @function verify
-         * @memberof messages.CommitRecord
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        CommitRecord.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.SHA != null && message.hasOwnProperty("SHA"))
-                if (!$util.isString(message.SHA))
-                    return "SHA: string expected";
-            if (message.BranchName != null && message.hasOwnProperty("BranchName"))
-                if (!$util.isString(message.BranchName))
-                    return "BranchName: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a CommitRecord message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof messages.CommitRecord
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {messages.CommitRecord} CommitRecord
-         */
-        CommitRecord.fromObject = function fromObject(object) {
-            if (object instanceof $root.messages.CommitRecord)
-                return object;
-            var message = new $root.messages.CommitRecord();
-            if (object.SHA != null)
-                message.SHA = String(object.SHA);
-            if (object.BranchName != null)
-                message.BranchName = String(object.BranchName);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a CommitRecord message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof messages.CommitRecord
-         * @static
-         * @param {messages.CommitRecord} message CommitRecord
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        CommitRecord.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.defaults) {
-                object.SHA = "";
-                object.BranchName = "";
-            }
-            if (message.SHA != null && message.hasOwnProperty("SHA"))
-                object.SHA = message.SHA;
-            if (message.BranchName != null && message.hasOwnProperty("BranchName"))
-                object.BranchName = message.BranchName;
-            return object;
-        };
-
-        /**
-         * Converts this CommitRecord to JSON.
-         * @function toJSON
-         * @memberof messages.CommitRecord
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        CommitRecord.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return CommitRecord;
-    })();
-
-    messages.BlobRecord = (function() {
-
-        /**
-         * Properties of a BlobRecord.
-         * @memberof messages
-         * @interface IBlobRecord
-         * @property {string|null} [SHA] BlobRecord SHA
-         * @property {string|null} [Name] BlobRecord Name
-         */
-
-        /**
-         * Constructs a new BlobRecord.
-         * @memberof messages
-         * @classdesc Represents a BlobRecord.
-         * @implements IBlobRecord
-         * @constructor
-         * @param {messages.IBlobRecord=} [properties] Properties to set
-         */
-        function BlobRecord(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * BlobRecord SHA.
-         * @member {string} SHA
-         * @memberof messages.BlobRecord
-         * @instance
-         */
-        BlobRecord.prototype.SHA = "";
-
-        /**
-         * BlobRecord Name.
-         * @member {string} Name
-         * @memberof messages.BlobRecord
-         * @instance
-         */
-        BlobRecord.prototype.Name = "";
-
-        /**
-         * Verifies a BlobRecord message.
-         * @function verify
-         * @memberof messages.BlobRecord
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        BlobRecord.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.SHA != null && message.hasOwnProperty("SHA"))
-                if (!$util.isString(message.SHA))
-                    return "SHA: string expected";
-            if (message.Name != null && message.hasOwnProperty("Name"))
-                if (!$util.isString(message.Name))
-                    return "Name: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a BlobRecord message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof messages.BlobRecord
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {messages.BlobRecord} BlobRecord
-         */
-        BlobRecord.fromObject = function fromObject(object) {
-            if (object instanceof $root.messages.BlobRecord)
-                return object;
-            var message = new $root.messages.BlobRecord();
-            if (object.SHA != null)
-                message.SHA = String(object.SHA);
-            if (object.Name != null)
-                message.Name = String(object.Name);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a BlobRecord message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof messages.BlobRecord
-         * @static
-         * @param {messages.BlobRecord} message BlobRecord
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        BlobRecord.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.defaults) {
-                object.SHA = "";
-                object.Name = "";
-            }
-            if (message.SHA != null && message.hasOwnProperty("SHA"))
-                object.SHA = message.SHA;
-            if (message.Name != null && message.hasOwnProperty("Name"))
-                object.Name = message.Name;
-            return object;
-        };
-
-        /**
-         * Converts this BlobRecord to JSON.
-         * @function toJSON
-         * @memberof messages.BlobRecord
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        BlobRecord.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return BlobRecord;
-    })();
-
-    messages.NewInitiativeReq = (function() {
-
-        /**
-         * Properties of a NewInitiativeReq.
-         * @memberof messages
-         * @interface INewInitiativeReq
-         * @property {string|null} [RepositoryName] NewInitiativeReq RepositoryName
-         * @property {string|null} [AreaID] NewInitiativeReq AreaID
-         * @property {string|null} [Content] NewInitiativeReq Content
-         */
-
-        /**
-         * Constructs a new NewInitiativeReq.
-         * @memberof messages
-         * @classdesc Represents a NewInitiativeReq.
-         * @implements INewInitiativeReq
-         * @constructor
-         * @param {messages.INewInitiativeReq=} [properties] Properties to set
-         */
-        function NewInitiativeReq(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * NewInitiativeReq RepositoryName.
-         * @member {string} RepositoryName
-         * @memberof messages.NewInitiativeReq
-         * @instance
-         */
-        NewInitiativeReq.prototype.RepositoryName = "";
-
-        /**
-         * NewInitiativeReq AreaID.
-         * @member {string} AreaID
-         * @memberof messages.NewInitiativeReq
-         * @instance
-         */
-        NewInitiativeReq.prototype.AreaID = "";
-
-        /**
-         * NewInitiativeReq Content.
-         * @member {string} Content
-         * @memberof messages.NewInitiativeReq
-         * @instance
-         */
-        NewInitiativeReq.prototype.Content = "";
-
-        /**
-         * Verifies a NewInitiativeReq message.
-         * @function verify
-         * @memberof messages.NewInitiativeReq
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        NewInitiativeReq.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.RepositoryName != null && message.hasOwnProperty("RepositoryName"))
-                if (!$util.isString(message.RepositoryName))
-                    return "RepositoryName: string expected";
-            if (message.AreaID != null && message.hasOwnProperty("AreaID"))
-                if (!$util.isString(message.AreaID))
-                    return "AreaID: string expected";
-            if (message.Content != null && message.hasOwnProperty("Content"))
-                if (!$util.isString(message.Content))
-                    return "Content: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a NewInitiativeReq message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof messages.NewInitiativeReq
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {messages.NewInitiativeReq} NewInitiativeReq
-         */
-        NewInitiativeReq.fromObject = function fromObject(object) {
-            if (object instanceof $root.messages.NewInitiativeReq)
-                return object;
-            var message = new $root.messages.NewInitiativeReq();
-            if (object.RepositoryName != null)
-                message.RepositoryName = String(object.RepositoryName);
-            if (object.AreaID != null)
-                message.AreaID = String(object.AreaID);
-            if (object.Content != null)
-                message.Content = String(object.Content);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a NewInitiativeReq message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof messages.NewInitiativeReq
-         * @static
-         * @param {messages.NewInitiativeReq} message NewInitiativeReq
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        NewInitiativeReq.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.defaults) {
-                object.RepositoryName = "";
-                object.AreaID = "";
-                object.Content = "";
-            }
-            if (message.RepositoryName != null && message.hasOwnProperty("RepositoryName"))
-                object.RepositoryName = message.RepositoryName;
-            if (message.AreaID != null && message.hasOwnProperty("AreaID"))
-                object.AreaID = message.AreaID;
-            if (message.Content != null && message.hasOwnProperty("Content"))
-                object.Content = message.Content;
-            return object;
-        };
-
-        /**
-         * Converts this NewInitiativeReq to JSON.
-         * @function toJSON
-         * @memberof messages.NewInitiativeReq
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        NewInitiativeReq.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        return NewInitiativeReq;
-    })();
-
-    messages.NewInitiativeResp = (function() {
-
-        /**
-         * Properties of a NewInitiativeResp.
-         * @memberof messages
-         * @interface INewInitiativeResp
-         * @property {messages.ICommitRecord|null} [CommitRecord] NewInitiativeResp CommitRecord
-         * @property {string|null} [Tk] NewInitiativeResp Tk
-         */
-
-        /**
-         * Constructs a new NewInitiativeResp.
-         * @memberof messages
-         * @classdesc Represents a NewInitiativeResp.
-         * @implements INewInitiativeResp
-         * @constructor
-         * @param {messages.INewInitiativeResp=} [properties] Properties to set
-         */
-        function NewInitiativeResp(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * NewInitiativeResp CommitRecord.
-         * @member {messages.ICommitRecord|null|undefined} CommitRecord
-         * @memberof messages.NewInitiativeResp
-         * @instance
-         */
-        NewInitiativeResp.prototype.CommitRecord = null;
-
-        /**
-         * NewInitiativeResp Tk.
+         * CreateDocResp Tk.
          * @member {string} Tk
-         * @memberof messages.NewInitiativeResp
+         * @memberof messages.CreateDocResp
          * @instance
          */
-        NewInitiativeResp.prototype.Tk = "";
+        CreateDocResp.prototype.Tk = "";
 
         /**
-         * Verifies a NewInitiativeResp message.
+         * Verifies a CreateDocResp message.
          * @function verify
-         * @memberof messages.NewInitiativeResp
+         * @memberof messages.CreateDocResp
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        NewInitiativeResp.verify = function verify(message) {
+        CreateDocResp.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.CommitRecord != null && message.hasOwnProperty("CommitRecord")) {
-                var error = $root.messages.CommitRecord.verify(message.CommitRecord);
-                if (error)
-                    return "CommitRecord." + error;
-            }
+            if (message.SHA != null && message.hasOwnProperty("SHA"))
+                if (!$util.isString(message.SHA))
+                    return "SHA: string expected";
             if (message.Tk != null && message.hasOwnProperty("Tk"))
                 if (!$util.isString(message.Tk))
                     return "Tk: string expected";
@@ -571,63 +198,60 @@ $root.messages = (function() {
         };
 
         /**
-         * Creates a NewInitiativeResp message from a plain object. Also converts values to their respective internal types.
+         * Creates a CreateDocResp message from a plain object. Also converts values to their respective internal types.
          * @function fromObject
-         * @memberof messages.NewInitiativeResp
+         * @memberof messages.CreateDocResp
          * @static
          * @param {Object.<string,*>} object Plain object
-         * @returns {messages.NewInitiativeResp} NewInitiativeResp
+         * @returns {messages.CreateDocResp} CreateDocResp
          */
-        NewInitiativeResp.fromObject = function fromObject(object) {
-            if (object instanceof $root.messages.NewInitiativeResp)
+        CreateDocResp.fromObject = function fromObject(object) {
+            if (object instanceof $root.messages.CreateDocResp)
                 return object;
-            var message = new $root.messages.NewInitiativeResp();
-            if (object.CommitRecord != null) {
-                if (typeof object.CommitRecord !== "object")
-                    throw TypeError(".messages.NewInitiativeResp.CommitRecord: object expected");
-                message.CommitRecord = $root.messages.CommitRecord.fromObject(object.CommitRecord);
-            }
+            var message = new $root.messages.CreateDocResp();
+            if (object.SHA != null)
+                message.SHA = String(object.SHA);
             if (object.Tk != null)
                 message.Tk = String(object.Tk);
             return message;
         };
 
         /**
-         * Creates a plain object from a NewInitiativeResp message. Also converts values to other types if specified.
+         * Creates a plain object from a CreateDocResp message. Also converts values to other types if specified.
          * @function toObject
-         * @memberof messages.NewInitiativeResp
+         * @memberof messages.CreateDocResp
          * @static
-         * @param {messages.NewInitiativeResp} message NewInitiativeResp
+         * @param {messages.CreateDocResp} message CreateDocResp
          * @param {$protobuf.IConversionOptions} [options] Conversion options
          * @returns {Object.<string,*>} Plain object
          */
-        NewInitiativeResp.toObject = function toObject(message, options) {
+        CreateDocResp.toObject = function toObject(message, options) {
             if (!options)
                 options = {};
             var object = {};
             if (options.defaults) {
-                object.CommitRecord = null;
+                object.SHA = "";
                 object.Tk = "";
             }
-            if (message.CommitRecord != null && message.hasOwnProperty("CommitRecord"))
-                object.CommitRecord = $root.messages.CommitRecord.toObject(message.CommitRecord, options);
+            if (message.SHA != null && message.hasOwnProperty("SHA"))
+                object.SHA = message.SHA;
             if (message.Tk != null && message.hasOwnProperty("Tk"))
                 object.Tk = message.Tk;
             return object;
         };
 
         /**
-         * Converts this NewInitiativeResp to JSON.
+         * Converts this CreateDocResp to JSON.
          * @function toJSON
-         * @memberof messages.NewInitiativeResp
+         * @memberof messages.CreateDocResp
          * @instance
          * @returns {Object.<string,*>} JSON object
          */
-        NewInitiativeResp.prototype.toJSON = function toJSON() {
+        CreateDocResp.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        return NewInitiativeResp;
+        return CreateDocResp;
     })();
 
     messages.GetDocReq = (function() {
@@ -636,9 +260,7 @@ $root.messages = (function() {
          * Properties of a GetDocReq.
          * @memberof messages
          * @interface IGetDocReq
-         * @property {string|null} [RepositoryName] GetDocReq RepositoryName
-         * @property {string|null} [AreaID] GetDocReq AreaID
-         * @property {string|null} [GitRef] GetDocReq GitRef
+         * @property {string|null} [SHA] GetDocReq SHA
          */
 
         /**
@@ -657,28 +279,12 @@ $root.messages = (function() {
         }
 
         /**
-         * GetDocReq RepositoryName.
-         * @member {string} RepositoryName
+         * GetDocReq SHA.
+         * @member {string} SHA
          * @memberof messages.GetDocReq
          * @instance
          */
-        GetDocReq.prototype.RepositoryName = "";
-
-        /**
-         * GetDocReq AreaID.
-         * @member {string} AreaID
-         * @memberof messages.GetDocReq
-         * @instance
-         */
-        GetDocReq.prototype.AreaID = "";
-
-        /**
-         * GetDocReq GitRef.
-         * @member {string} GitRef
-         * @memberof messages.GetDocReq
-         * @instance
-         */
-        GetDocReq.prototype.GitRef = "";
+        GetDocReq.prototype.SHA = "";
 
         /**
          * Verifies a GetDocReq message.
@@ -691,15 +297,9 @@ $root.messages = (function() {
         GetDocReq.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.RepositoryName != null && message.hasOwnProperty("RepositoryName"))
-                if (!$util.isString(message.RepositoryName))
-                    return "RepositoryName: string expected";
-            if (message.AreaID != null && message.hasOwnProperty("AreaID"))
-                if (!$util.isString(message.AreaID))
-                    return "AreaID: string expected";
-            if (message.GitRef != null && message.hasOwnProperty("GitRef"))
-                if (!$util.isString(message.GitRef))
-                    return "GitRef: string expected";
+            if (message.SHA != null && message.hasOwnProperty("SHA"))
+                if (!$util.isString(message.SHA))
+                    return "SHA: string expected";
             return null;
         };
 
@@ -715,12 +315,8 @@ $root.messages = (function() {
             if (object instanceof $root.messages.GetDocReq)
                 return object;
             var message = new $root.messages.GetDocReq();
-            if (object.RepositoryName != null)
-                message.RepositoryName = String(object.RepositoryName);
-            if (object.AreaID != null)
-                message.AreaID = String(object.AreaID);
-            if (object.GitRef != null)
-                message.GitRef = String(object.GitRef);
+            if (object.SHA != null)
+                message.SHA = String(object.SHA);
             return message;
         };
 
@@ -737,17 +333,10 @@ $root.messages = (function() {
             if (!options)
                 options = {};
             var object = {};
-            if (options.defaults) {
-                object.RepositoryName = "";
-                object.AreaID = "";
-                object.GitRef = "";
-            }
-            if (message.RepositoryName != null && message.hasOwnProperty("RepositoryName"))
-                object.RepositoryName = message.RepositoryName;
-            if (message.AreaID != null && message.hasOwnProperty("AreaID"))
-                object.AreaID = message.AreaID;
-            if (message.GitRef != null && message.hasOwnProperty("GitRef"))
-                object.GitRef = message.GitRef;
+            if (options.defaults)
+                object.SHA = "";
+            if (message.SHA != null && message.hasOwnProperty("SHA"))
+                object.SHA = message.SHA;
             return object;
         };
 
@@ -771,7 +360,8 @@ $root.messages = (function() {
          * Properties of a GetDocResp.
          * @memberof messages
          * @interface IGetDocResp
-         * @property {messages.IBlob|null} [Blob] GetDocResp Blob
+         * @property {string|null} [SHA] GetDocResp SHA
+         * @property {string|null} [Content] GetDocResp Content
          */
 
         /**
@@ -790,12 +380,20 @@ $root.messages = (function() {
         }
 
         /**
-         * GetDocResp Blob.
-         * @member {messages.IBlob|null|undefined} Blob
+         * GetDocResp SHA.
+         * @member {string} SHA
          * @memberof messages.GetDocResp
          * @instance
          */
-        GetDocResp.prototype.Blob = null;
+        GetDocResp.prototype.SHA = "";
+
+        /**
+         * GetDocResp Content.
+         * @member {string} Content
+         * @memberof messages.GetDocResp
+         * @instance
+         */
+        GetDocResp.prototype.Content = "";
 
         /**
          * Verifies a GetDocResp message.
@@ -808,11 +406,12 @@ $root.messages = (function() {
         GetDocResp.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.Blob != null && message.hasOwnProperty("Blob")) {
-                var error = $root.messages.Blob.verify(message.Blob);
-                if (error)
-                    return "Blob." + error;
-            }
+            if (message.SHA != null && message.hasOwnProperty("SHA"))
+                if (!$util.isString(message.SHA))
+                    return "SHA: string expected";
+            if (message.Content != null && message.hasOwnProperty("Content"))
+                if (!$util.isString(message.Content))
+                    return "Content: string expected";
             return null;
         };
 
@@ -828,11 +427,10 @@ $root.messages = (function() {
             if (object instanceof $root.messages.GetDocResp)
                 return object;
             var message = new $root.messages.GetDocResp();
-            if (object.Blob != null) {
-                if (typeof object.Blob !== "object")
-                    throw TypeError(".messages.GetDocResp.Blob: object expected");
-                message.Blob = $root.messages.Blob.fromObject(object.Blob);
-            }
+            if (object.SHA != null)
+                message.SHA = String(object.SHA);
+            if (object.Content != null)
+                message.Content = String(object.Content);
             return message;
         };
 
@@ -849,10 +447,14 @@ $root.messages = (function() {
             if (!options)
                 options = {};
             var object = {};
-            if (options.defaults)
-                object.Blob = null;
-            if (message.Blob != null && message.hasOwnProperty("Blob"))
-                object.Blob = $root.messages.Blob.toObject(message.Blob, options);
+            if (options.defaults) {
+                object.SHA = "";
+                object.Content = "";
+            }
+            if (message.SHA != null && message.hasOwnProperty("SHA"))
+                object.SHA = message.SHA;
+            if (message.Content != null && message.hasOwnProperty("Content"))
+                object.Content = message.Content;
             return object;
         };
 
@@ -873,7 +475,7 @@ $root.messages = (function() {
     /**
      * FieldAuth enum.
      * @name messages.FieldAuth
-     * @enum {string}
+     * @enum {number}
      * @property {number} NotRequired=0 NotRequired value
      * @property {number} JWTAuthRequired=1 JWTAuthRequired value
      */
@@ -2440,7 +2042,7 @@ $root.google = (function() {
             /**
              * Type enum.
              * @name google.protobuf.FieldDescriptorProto.Type
-             * @enum {string}
+             * @enum {number}
              * @property {number} TYPE_DOUBLE=1 TYPE_DOUBLE value
              * @property {number} TYPE_FLOAT=2 TYPE_FLOAT value
              * @property {number} TYPE_INT64=3 TYPE_INT64 value
@@ -2486,7 +2088,7 @@ $root.google = (function() {
             /**
              * Label enum.
              * @name google.protobuf.FieldDescriptorProto.Label
-             * @enum {string}
+             * @enum {number}
              * @property {number} LABEL_OPTIONAL=1 LABEL_OPTIONAL value
              * @property {number} LABEL_REQUIRED=2 LABEL_REQUIRED value
              * @property {number} LABEL_REPEATED=3 LABEL_REPEATED value
@@ -3650,7 +3252,7 @@ $root.google = (function() {
             /**
              * OptimizeMode enum.
              * @name google.protobuf.FileOptions.OptimizeMode
-             * @enum {string}
+             * @enum {number}
              * @property {number} SPEED=1 SPEED value
              * @property {number} CODE_SIZE=2 CODE_SIZE value
              * @property {number} LITE_RUNTIME=3 LITE_RUNTIME value
@@ -4142,7 +3744,7 @@ $root.google = (function() {
             /**
              * CType enum.
              * @name google.protobuf.FieldOptions.CType
-             * @enum {string}
+             * @enum {number}
              * @property {number} STRING=0 STRING value
              * @property {number} CORD=1 CORD value
              * @property {number} STRING_PIECE=2 STRING_PIECE value
@@ -4158,7 +3760,7 @@ $root.google = (function() {
             /**
              * JSType enum.
              * @name google.protobuf.FieldOptions.JSType
-             * @enum {string}
+             * @enum {number}
              * @property {number} JS_NORMAL=0 JS_NORMAL value
              * @property {number} JS_STRING=1 JS_STRING value
              * @property {number} JS_NUMBER=2 JS_NUMBER value

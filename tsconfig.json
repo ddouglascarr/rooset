@@ -11,6 +11,10 @@
     "jsxFactory": "h",
     "sourceMap": true,
     "allowJs": false,
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types", "tstypes"],
+    "paths": {
+      "react": ["node_modules/preact/compat"],
+      "react-dom": ["node_modules/preact/compat"]
+    }
   }
 }

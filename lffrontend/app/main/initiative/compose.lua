@@ -13,6 +13,8 @@ else
   area:load_delegation_info_once_for_member_id(app.session.member_id)
 end
 
+-- load the current document
+
 ui.tag{ tag = "h3", content="Initiative Editor" }
 ui.tag{ tag = "div", attr = { id="initiative-editor" }, content="" }
 ui.tag{ tag = "div", attr = { id="initiative-form" }, content="" }
@@ -36,10 +38,13 @@ local new_initiative_payload = {
   RepositoryName = area.unit.external_reference,
   DocsvcHostExternal=config.docsvc_host_external,
   AreaID = tostring(area.id),
+  DocSHA=area.current_external_reference,
+  UserID=tostring(app.session.member_id),
   Tk = jwt.encode({
     RepositoryName={area.unit.external_reference},
     AreaID={"'" .. area.id .. "'"},
-    Op={"messages.NewInitiativeReq", "messages.GetDocReq"},
+    UserID={tostring(app.session.member_id)},
+    Op={"messages.CreateDocReq", "messages.GetDocReq"},
     Svc={"gitsvc"},
   })
 }
@@ -59,14 +64,3 @@ slot.put([[
 slot.put("/* ]]> */")
 end
 }
-
---   repositoryName: ']] .. area.unit.external_reference .. [[',
---   areaID: ']] .. area.id .. [[',
---   issueID: ']] .. issue_id == nil and '' or issue_id .. [[',
---   tk: ']] .. jwt.encode({
---   RepositoryName={area.unit.external_reference},
---   AreaID={"'" .. area.id .. "'"},
---   Op={"messages.NewInitiativeReq", "messages.GetDocReq"},
---   Svc={"gitsvc"},
--- }) .. "'})"
--- }

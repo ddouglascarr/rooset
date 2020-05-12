@@ -24,36 +24,16 @@ module.exports = [
       ],
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.tsx', '.ts', '.jsx', '.js'],
       modules: ['node_modules', '..'],
+      alias: {
+        react: 'preact/compat',
+        'react-dom/test-utils': 'preact/test-utils',
+        'react-dom': 'preact/compat',
+      },
     },
     output: {
       filename: 'newInitiative.js',
-      path: path.resolve(__dirname, '..', 'dist'),
-    },
-  },
-  {
-    target: 'node',
-    entry: './docvalidationsvc/index.ts',
-    mode: isProd ? 'production' : 'development',
-    devtool: isProd
-      ? 'cheap-module-source-map'
-      : 'cheap-module-eval-source-map',
-    module: {
-      rules: [
-        {
-          test: /\.tsx?$/,
-          loader: 'ts-loader',
-          exclude: /node_modules/,
-        },
-      ],
-    },
-    resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
-      modules: ['node_modules', '.'],
-    },
-    output: {
-      filename: 'docvalidationsvc.js',
       path: path.resolve(__dirname, '..', 'dist'),
     },
   },

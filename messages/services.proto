@@ -1,27 +1,27 @@
 syntax = "proto3";
 package messages;
 
-import "git.proto";
 import "options.proto";
 
-message NewInitiativeReq {
-  string RepositoryName = 1 [(auth) = JWTAuthRequired];
-  string AreaID = 2 [(auth) = JWTAuthRequired];
-  string Content = 3;
+message CreateDocReq {
+  // we need to auth something, so this is it.
+  // TODO: work out rate limiting. user should not be able to 
+  // create lots of documents before expiry of token
+  string UserID = 1 [(auth) = JWTAuthRequired];
+  string Content = 2;
 }
 
-message NewInitiativeResp {
-  CommitRecord CommitRecord  = 1;
+message CreateDocResp {
+  string SHA = 1;
   string Tk = 2;
 }
 
 message GetDocReq {
-  string RepositoryName = 1 [(auth) = JWTAuthRequired];
-  string AreaID = 2 [(auth) = JWTAuthRequired];
-  string GitRef = 3;
+  string SHA = 1; 
 }
 
 message GetDocResp {
-  Blob Blob = 1;
+  string SHA = 1;
+  string Content = 2;
 }
 

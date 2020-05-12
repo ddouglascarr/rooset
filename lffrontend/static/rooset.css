@@ -70,3 +70,33 @@
   }
 }
 
+.rooset-document {}
+
+.rooset-document h1, .rooset-document h2, .rooset-document h3 {
+  font-family: serif;
+  margin-top: 0;
+}
+
+.rooset-document section {
+  font-family: serif;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* for comparing 2 document */
+.rooset-document section ins {
+  background-color: #acf2bd;
+  text-decoration: none;
+}
+.rooset-document section del {
+  background-color: #fdb8c0;
+  text-decoration: line-through;
+}
+
+.editor__section--dimmed {
+  opacity: 0.5;
+}
+.editor__section-tools {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}

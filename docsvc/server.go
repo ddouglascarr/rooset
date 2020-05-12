@@ -5,21 +5,36 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/ddouglascarr/rooset/gitlab"
 	"github.com/ddouglascarr/rooset/messages"
-	"github.com/golang/protobuf/jsonpb"
+	"github.com/gogo/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
+	"github.com/lestrrat-go/libxml2"
+	"github.com/lestrrat-go/libxml2/xsd"
 	"github.com/pkg/errors"
 )
 
+// bundle the schema in the binary
+//go:generate go run ../cmd/includetext.go docsvc schemaStr ./roosetdoc.xsd ./roosetdoc.go
+
+// TODO: move stuff out of handlers
+// TODO: proper server
+// TODO: work out error handling
+
 //Run starts a server on 8080
 func Run() {
-	http.HandleFunc("/rpc/messages.NewInitiativeReq", withAuthenticatedMessage("messages.NewInitiativeReq", func(
+	// try validation:
+	schema, err := xsd.Parse([]byte(schemaStr))
+	if err != nil {
+		panic(err)
+	}
+	defer schema.Free()
+
+	http.HandleFunc("/rpc/messages.CreateDocReq", withAuthenticatedMessage("messages.CreateDocReq", func(
 		w http.ResponseWriter,
 		r *http.Request,
 		msg proto.Message,
 	) {
-		body, ok := msg.(*messages.NewInitiativeReq)
+		body, ok := msg.(*messages.CreateDocReq)
 		if !ok {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
@@ -27,16 +42,38 @@ func Run() {
 			return
 		}
 
-		CommitRecord, err := gitlab.CreateInitiative(body)
-
+		sHA, doc, err := processHTML(body.Content)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "rooset: git commit failed").Error()))
+				"rooset: invalid document"))
 			return
 		}
 
-		tk, err := BuildCommitRecordTk(CommitRecord.SHA, CommitRecord.BranchName)
+		xmlDoc, err := libxml2.ParseString(doc)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				"rooset: invalid document"))
+			return
+		}
+
+		if err := schema.Validate(xmlDoc); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				"rooset: invalid doc"))
+			return
+		}
+
+		err = saveBlob(sHA, doc)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: system error saving doc")))
+			return
+		}
+
+		tk, err := BuildDocSHATk(sHA)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
@@ -44,9 +81,9 @@ func Run() {
 			return
 		}
 		m := jsonpb.Marshaler{}
-		respBody, err := m.MarshalToString(&messages.NewInitiativeResp{
-			CommitRecord: CommitRecord,
-			Tk:           tk,
+		respBody, err := m.MarshalToString(&messages.CreateDocResp{
+			SHA: sHA,
+			Tk:  tk,
 		})
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -71,24 +108,29 @@ func Run() {
 			return
 		}
 
-		blob, err := gitlab.GetDoc(body)
+		blob, err := getBlob(body.SHA)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "rooset: git operation failed").Error()))
+				errors.Wrap(err, "rooset: system error fetching doc")))
 			return
 		}
 
 		m := jsonpb.Marshaler{}
-		respBody, err := m.MarshalToString(&messages.GetDocResp{Blob: blob})
+		respBody, err := m.MarshalToString(&messages.GetDocResp{
+			SHA:     body.SHA,
+			Content: string(blob),
+		})
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
 				errors.Wrap(err, "rooset: failed to marshal response").Error()))
 			return
 		}
+
 		w.WriteHeader(http.StatusOK)
-		io.WriteString(w, respBody)
+		io.WriteString(w, string(respBody))
 	}))
+
 	http.ListenAndServe(":8080", nil)
 }
