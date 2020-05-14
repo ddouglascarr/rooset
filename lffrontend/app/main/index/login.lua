@@ -1,3 +1,5 @@
+slot.set_layout("rooset", "text/html")
+
 ui.tag{
   tag = "noscript",
   content = function()

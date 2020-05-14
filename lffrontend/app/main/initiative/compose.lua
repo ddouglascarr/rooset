@@ -1,5 +1,6 @@
 local issue
 local area
+slot.set_layout("rooset", "text/html")
 
 local issue_id = param.get("issue_id", atom.integer)
 if issue_id then
