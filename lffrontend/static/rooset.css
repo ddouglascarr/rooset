@@ -61,3 +61,13 @@
   margin-top: 1em;
   margin-bottom: 1em;
 }
+
+div.icon24 {
+  width: 24px;
+  height: 24px;
+}
+
+div.icon24 svg {
+  width:24px;
+  height: 24px;
+}

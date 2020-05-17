@@ -7,7 +7,7 @@ function util.micro_avatar(member, member_name)
   end
   
   local function doit()
-    ui.tag { tag = "i", attr = { class = "material-icons" }, content = "person" }
+    ui.icon("person")
 
     -- lf provided avitar functionality
     -- if config.fastpath_url_func then
