@@ -496,7 +496,7 @@ CREATE TABLE "area" (
         "active"                BOOLEAN         NOT NULL DEFAULT TRUE,
         "name"                  TEXT            NOT NULL,
         "description"           TEXT            NOT NULL DEFAULT '',
-        "external_reference"    TEXT,
+        "external_reference"    TEXT            NOT NULL, -- TODO: rename initial_external_reference
         "direct_member_count"   INT4,
         "member_weight"         INT4,
         "text_search_data"      TSVECTOR );
@@ -512,7 +512,7 @@ CREATE TRIGGER "update_text_search_data"
 COMMENT ON TABLE "area" IS 'Subject areas';
 
 COMMENT ON COLUMN "area"."active"              IS 'TRUE means new issues can be created in this area';
-COMMENT ON COLUMN "area"."external_reference"  IS 'Opaque data field to store an external reference';
+COMMENT ON COLUMN "area"."external_reference"  IS 'Opaque data field to store an external reference to the initial state of the area';
 COMMENT ON COLUMN "area"."direct_member_count" IS 'Number of active members of that area (ignoring their weight), as calculated from view "area_member_count"';
 COMMENT ON COLUMN "area"."member_weight"       IS 'Same as "direct_member_count" but respecting delegations';
 
@@ -672,6 +672,14 @@ COMMENT ON COLUMN "issue_order_in_admission_state"."order_in_area" IS 'Order of 
 COMMENT ON COLUMN "issue_order_in_admission_state"."order_in_unit" IS 'Order of issues in admission state within all areas of a unit; NULL values sort last';
 
 
+CREATE TABLE "issue_section" (
+  PRIMARY KEY ("issue_id", "external_reference"),  
+  "issue_id"                    INT4            NOT NULL REFERENCES "issue" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "external_reference"                          TEXT            NOT NULL );
+
+COMMENT ON TABLE "issue_section" IS 'Issues have a set of section refs which are under deliberation';
+
+
 CREATE TABLE "issue_setting" (
         PRIMARY KEY ("member_id", "key", "issue_id"),
         "member_id"             INT4            REFERENCES "member" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
@@ -812,14 +820,15 @@ COMMENT ON TABLE "initiative_setting" IS 'Place for frontend to store initiative
 
 CREATE TABLE "draft" (
         UNIQUE ("initiative_id", "id"),  -- index needed for foreign-key on table "supporter"
-        "initiative_id"         INT4            NOT NULL REFERENCES "initiative" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-        "id"                    SERIAL8         PRIMARY KEY,
-        "created"               TIMESTAMPTZ     NOT NULL DEFAULT now(),
-        "author_id"             INT4            NOT NULL REFERENCES "member" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-        "formatting_engine"     TEXT,
-        "content"               TEXT            NOT NULL,
-        "external_reference"    TEXT,
-        "text_search_data"      TSVECTOR );
+        "initiative_id"             INT4            NOT NULL REFERENCES "initiative" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+        "id"                        SERIAL8         PRIMARY KEY,
+        "created"                   TIMESTAMPTZ     NOT NULL DEFAULT now(),
+        "author_id"                 INT4            NOT NULL REFERENCES "member" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+        "formatting_engine"         TEXT,
+        "content"                   TEXT            NOT NULL,
+        "external_reference"        TEXT            NOT NULL,
+        "base_external_reference"   TEXT            NOT NULL,
+        "text_search_data"          TSVECTOR );
 CREATE INDEX "draft_created_idx" ON "draft" ("created");
 CREATE INDEX "draft_author_id_created_idx" ON "draft" ("author_id", "created");
 CREATE INDEX "draft_text_search_data_idx" ON "draft" USING gin ("text_search_data");
@@ -833,6 +842,7 @@ COMMENT ON TABLE "draft" IS 'Drafts of initiatives to solve issues; Frontends mu
 COMMENT ON COLUMN "draft"."formatting_engine"  IS 'Allows different formatting engines (i.e. wiki formats) to be used';
 COMMENT ON COLUMN "draft"."content"            IS 'Text of the draft in a format depending on the field "formatting_engine"';
 COMMENT ON COLUMN "draft"."external_reference" IS 'Opaque data field to store an external reference';
+COMMENT ON COLUMN "draft"."base_external_reference" IS 'Opaque data field to store an external reference to the base on which the external_refernce is created from';
 
 
 CREATE TABLE "rendered_draft" (

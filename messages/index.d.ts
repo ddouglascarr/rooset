@@ -8,6 +8,9 @@ export namespace messages {
         /** CreateDocReq UserID */
         UserID?: (string|null);
 
+        /** CreateDocReq BaseSHA */
+        BaseSHA?: (string|null);
+
         /** CreateDocReq Content */
         Content?: (string|null);
     }
@@ -23,6 +26,9 @@ export namespace messages {
 
         /** CreateDocReq UserID. */
         public UserID: string;
+
+        /** CreateDocReq BaseSHA. */
+        public BaseSHA: string;
 
         /** CreateDocReq Content. */
         public Content: string;
@@ -62,6 +68,12 @@ export namespace messages {
         /** CreateDocResp SHA */
         SHA?: (string|null);
 
+        /** CreateDocResp BaseSHA */
+        BaseSHA?: (string|null);
+
+        /** CreateDocResp ModifiedSectionIDs */
+        ModifiedSectionIDs?: (string[]|null);
+
         /** CreateDocResp Tk */
         Tk?: (string|null);
     }
@@ -77,6 +89,12 @@ export namespace messages {
 
         /** CreateDocResp SHA. */
         public SHA: string;
+
+        /** CreateDocResp BaseSHA. */
+        public BaseSHA: string;
+
+        /** CreateDocResp ModifiedSectionIDs. */
+        public ModifiedSectionIDs: string[];
 
         /** CreateDocResp Tk. */
         public Tk: string;
@@ -115,6 +133,9 @@ export namespace messages {
 
         /** GetDocReq SHA */
         SHA?: (string|null);
+
+        /** GetDocReq BaseSHA */
+        BaseSHA?: (string|null);
     }
 
     /** Represents a GetDocReq. */
@@ -128,6 +149,9 @@ export namespace messages {
 
         /** GetDocReq SHA. */
         public SHA: string;
+
+        /** GetDocReq BaseSHA. */
+        public BaseSHA: string;
 
         /**
          * Verifies a GetDocReq message.
@@ -164,8 +188,14 @@ export namespace messages {
         /** GetDocResp SHA */
         SHA?: (string|null);
 
+        /** GetDocResp BaseSHA */
+        BaseSHA?: (string|null);
+
         /** GetDocResp Content */
         Content?: (string|null);
+
+        /** GetDocResp ModifiedSectionIDs */
+        ModifiedSectionIDs?: (string[]|null);
     }
 
     /** Represents a GetDocResp. */
@@ -180,8 +210,14 @@ export namespace messages {
         /** GetDocResp SHA. */
         public SHA: string;
 
+        /** GetDocResp BaseSHA. */
+        public BaseSHA: string;
+
         /** GetDocResp Content. */
         public Content: string;
+
+        /** GetDocResp ModifiedSectionIDs. */
+        public ModifiedSectionIDs: string[];
 
         /**
          * Verifies a GetDocResp message.

@@ -8,20 +8,31 @@ message CreateDocReq {
   // TODO: work out rate limiting. user should not be able to 
   // create lots of documents before expiry of token
   string UserID = 1 [(auth) = JWTAuthRequired];
-  string Content = 2;
+  string BaseSHA = 2;
+  string Content = 3;
 }
 
 message CreateDocResp {
   string SHA = 1;
-  string Tk = 2;
+  string BaseSHA = 2;
+  repeated string ModifiedSectionIDs = 3;
+  
+  // Token to pass to lffrontend that contains SHA, BaseSHA and ModifiedSectionIDs
+  string Tk = 4;
 }
 
 message GetDocReq {
+  // Get a doc, and return its content, with a list of sections that are
+  // different between the Base doc. Just send the same SHA for both if you
+  // just want to get the doc
   string SHA = 1; 
+  string BaseSHA = 2;
 }
 
 message GetDocResp {
   string SHA = 1;
-  string Content = 2;
+  string BaseSHA = 2;
+  string Content = 3;
+  repeated string ModifiedSectionIDs = 4;
 }
 

@@ -25,6 +25,7 @@ $root.messages = (function() {
          * @memberof messages
          * @interface ICreateDocReq
          * @property {string|null} [UserID] CreateDocReq UserID
+         * @property {string|null} [BaseSHA] CreateDocReq BaseSHA
          * @property {string|null} [Content] CreateDocReq Content
          */
 
@@ -52,6 +53,14 @@ $root.messages = (function() {
         CreateDocReq.prototype.UserID = "";
 
         /**
+         * CreateDocReq BaseSHA.
+         * @member {string} BaseSHA
+         * @memberof messages.CreateDocReq
+         * @instance
+         */
+        CreateDocReq.prototype.BaseSHA = "";
+
+        /**
          * CreateDocReq Content.
          * @member {string} Content
          * @memberof messages.CreateDocReq
@@ -73,6 +82,9 @@ $root.messages = (function() {
             if (message.UserID != null && message.hasOwnProperty("UserID"))
                 if (!$util.isString(message.UserID))
                     return "UserID: string expected";
+            if (message.BaseSHA != null && message.hasOwnProperty("BaseSHA"))
+                if (!$util.isString(message.BaseSHA))
+                    return "BaseSHA: string expected";
             if (message.Content != null && message.hasOwnProperty("Content"))
                 if (!$util.isString(message.Content))
                     return "Content: string expected";
@@ -93,6 +105,8 @@ $root.messages = (function() {
             var message = new $root.messages.CreateDocReq();
             if (object.UserID != null)
                 message.UserID = String(object.UserID);
+            if (object.BaseSHA != null)
+                message.BaseSHA = String(object.BaseSHA);
             if (object.Content != null)
                 message.Content = String(object.Content);
             return message;
@@ -113,10 +127,13 @@ $root.messages = (function() {
             var object = {};
             if (options.defaults) {
                 object.UserID = "";
+                object.BaseSHA = "";
                 object.Content = "";
             }
             if (message.UserID != null && message.hasOwnProperty("UserID"))
                 object.UserID = message.UserID;
+            if (message.BaseSHA != null && message.hasOwnProperty("BaseSHA"))
+                object.BaseSHA = message.BaseSHA;
             if (message.Content != null && message.hasOwnProperty("Content"))
                 object.Content = message.Content;
             return object;
@@ -143,6 +160,8 @@ $root.messages = (function() {
          * @memberof messages
          * @interface ICreateDocResp
          * @property {string|null} [SHA] CreateDocResp SHA
+         * @property {string|null} [BaseSHA] CreateDocResp BaseSHA
+         * @property {Array.<string>|null} [ModifiedSectionIDs] CreateDocResp ModifiedSectionIDs
          * @property {string|null} [Tk] CreateDocResp Tk
          */
 
@@ -155,6 +174,7 @@ $root.messages = (function() {
          * @param {messages.ICreateDocResp=} [properties] Properties to set
          */
         function CreateDocResp(properties) {
+            this.ModifiedSectionIDs = [];
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -168,6 +188,22 @@ $root.messages = (function() {
          * @instance
          */
         CreateDocResp.prototype.SHA = "";
+
+        /**
+         * CreateDocResp BaseSHA.
+         * @member {string} BaseSHA
+         * @memberof messages.CreateDocResp
+         * @instance
+         */
+        CreateDocResp.prototype.BaseSHA = "";
+
+        /**
+         * CreateDocResp ModifiedSectionIDs.
+         * @member {Array.<string>} ModifiedSectionIDs
+         * @memberof messages.CreateDocResp
+         * @instance
+         */
+        CreateDocResp.prototype.ModifiedSectionIDs = $util.emptyArray;
 
         /**
          * CreateDocResp Tk.
@@ -191,6 +227,16 @@ $root.messages = (function() {
             if (message.SHA != null && message.hasOwnProperty("SHA"))
                 if (!$util.isString(message.SHA))
                     return "SHA: string expected";
+            if (message.BaseSHA != null && message.hasOwnProperty("BaseSHA"))
+                if (!$util.isString(message.BaseSHA))
+                    return "BaseSHA: string expected";
+            if (message.ModifiedSectionIDs != null && message.hasOwnProperty("ModifiedSectionIDs")) {
+                if (!Array.isArray(message.ModifiedSectionIDs))
+                    return "ModifiedSectionIDs: array expected";
+                for (var i = 0; i < message.ModifiedSectionIDs.length; ++i)
+                    if (!$util.isString(message.ModifiedSectionIDs[i]))
+                        return "ModifiedSectionIDs: string[] expected";
+            }
             if (message.Tk != null && message.hasOwnProperty("Tk"))
                 if (!$util.isString(message.Tk))
                     return "Tk: string expected";
@@ -211,6 +257,15 @@ $root.messages = (function() {
             var message = new $root.messages.CreateDocResp();
             if (object.SHA != null)
                 message.SHA = String(object.SHA);
+            if (object.BaseSHA != null)
+                message.BaseSHA = String(object.BaseSHA);
+            if (object.ModifiedSectionIDs) {
+                if (!Array.isArray(object.ModifiedSectionIDs))
+                    throw TypeError(".messages.CreateDocResp.ModifiedSectionIDs: array expected");
+                message.ModifiedSectionIDs = [];
+                for (var i = 0; i < object.ModifiedSectionIDs.length; ++i)
+                    message.ModifiedSectionIDs[i] = String(object.ModifiedSectionIDs[i]);
+            }
             if (object.Tk != null)
                 message.Tk = String(object.Tk);
             return message;
@@ -229,12 +284,22 @@ $root.messages = (function() {
             if (!options)
                 options = {};
             var object = {};
+            if (options.arrays || options.defaults)
+                object.ModifiedSectionIDs = [];
             if (options.defaults) {
                 object.SHA = "";
+                object.BaseSHA = "";
                 object.Tk = "";
             }
             if (message.SHA != null && message.hasOwnProperty("SHA"))
                 object.SHA = message.SHA;
+            if (message.BaseSHA != null && message.hasOwnProperty("BaseSHA"))
+                object.BaseSHA = message.BaseSHA;
+            if (message.ModifiedSectionIDs && message.ModifiedSectionIDs.length) {
+                object.ModifiedSectionIDs = [];
+                for (var j = 0; j < message.ModifiedSectionIDs.length; ++j)
+                    object.ModifiedSectionIDs[j] = message.ModifiedSectionIDs[j];
+            }
             if (message.Tk != null && message.hasOwnProperty("Tk"))
                 object.Tk = message.Tk;
             return object;
@@ -261,6 +326,7 @@ $root.messages = (function() {
          * @memberof messages
          * @interface IGetDocReq
          * @property {string|null} [SHA] GetDocReq SHA
+         * @property {string|null} [BaseSHA] GetDocReq BaseSHA
          */
 
         /**
@@ -287,6 +353,14 @@ $root.messages = (function() {
         GetDocReq.prototype.SHA = "";
 
         /**
+         * GetDocReq BaseSHA.
+         * @member {string} BaseSHA
+         * @memberof messages.GetDocReq
+         * @instance
+         */
+        GetDocReq.prototype.BaseSHA = "";
+
+        /**
          * Verifies a GetDocReq message.
          * @function verify
          * @memberof messages.GetDocReq
@@ -300,6 +374,9 @@ $root.messages = (function() {
             if (message.SHA != null && message.hasOwnProperty("SHA"))
                 if (!$util.isString(message.SHA))
                     return "SHA: string expected";
+            if (message.BaseSHA != null && message.hasOwnProperty("BaseSHA"))
+                if (!$util.isString(message.BaseSHA))
+                    return "BaseSHA: string expected";
             return null;
         };
 
@@ -317,6 +394,8 @@ $root.messages = (function() {
             var message = new $root.messages.GetDocReq();
             if (object.SHA != null)
                 message.SHA = String(object.SHA);
+            if (object.BaseSHA != null)
+                message.BaseSHA = String(object.BaseSHA);
             return message;
         };
 
@@ -333,10 +412,14 @@ $root.messages = (function() {
             if (!options)
                 options = {};
             var object = {};
-            if (options.defaults)
+            if (options.defaults) {
                 object.SHA = "";
+                object.BaseSHA = "";
+            }
             if (message.SHA != null && message.hasOwnProperty("SHA"))
                 object.SHA = message.SHA;
+            if (message.BaseSHA != null && message.hasOwnProperty("BaseSHA"))
+                object.BaseSHA = message.BaseSHA;
             return object;
         };
 
@@ -361,7 +444,9 @@ $root.messages = (function() {
          * @memberof messages
          * @interface IGetDocResp
          * @property {string|null} [SHA] GetDocResp SHA
+         * @property {string|null} [BaseSHA] GetDocResp BaseSHA
          * @property {string|null} [Content] GetDocResp Content
+         * @property {Array.<string>|null} [ModifiedSectionIDs] GetDocResp ModifiedSectionIDs
          */
 
         /**
@@ -373,6 +458,7 @@ $root.messages = (function() {
          * @param {messages.IGetDocResp=} [properties] Properties to set
          */
         function GetDocResp(properties) {
+            this.ModifiedSectionIDs = [];
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -388,12 +474,28 @@ $root.messages = (function() {
         GetDocResp.prototype.SHA = "";
 
         /**
+         * GetDocResp BaseSHA.
+         * @member {string} BaseSHA
+         * @memberof messages.GetDocResp
+         * @instance
+         */
+        GetDocResp.prototype.BaseSHA = "";
+
+        /**
          * GetDocResp Content.
          * @member {string} Content
          * @memberof messages.GetDocResp
          * @instance
          */
         GetDocResp.prototype.Content = "";
+
+        /**
+         * GetDocResp ModifiedSectionIDs.
+         * @member {Array.<string>} ModifiedSectionIDs
+         * @memberof messages.GetDocResp
+         * @instance
+         */
+        GetDocResp.prototype.ModifiedSectionIDs = $util.emptyArray;
 
         /**
          * Verifies a GetDocResp message.
@@ -409,9 +511,19 @@ $root.messages = (function() {
             if (message.SHA != null && message.hasOwnProperty("SHA"))
                 if (!$util.isString(message.SHA))
                     return "SHA: string expected";
+            if (message.BaseSHA != null && message.hasOwnProperty("BaseSHA"))
+                if (!$util.isString(message.BaseSHA))
+                    return "BaseSHA: string expected";
             if (message.Content != null && message.hasOwnProperty("Content"))
                 if (!$util.isString(message.Content))
                     return "Content: string expected";
+            if (message.ModifiedSectionIDs != null && message.hasOwnProperty("ModifiedSectionIDs")) {
+                if (!Array.isArray(message.ModifiedSectionIDs))
+                    return "ModifiedSectionIDs: array expected";
+                for (var i = 0; i < message.ModifiedSectionIDs.length; ++i)
+                    if (!$util.isString(message.ModifiedSectionIDs[i]))
+                        return "ModifiedSectionIDs: string[] expected";
+            }
             return null;
         };
 
@@ -429,8 +541,17 @@ $root.messages = (function() {
             var message = new $root.messages.GetDocResp();
             if (object.SHA != null)
                 message.SHA = String(object.SHA);
+            if (object.BaseSHA != null)
+                message.BaseSHA = String(object.BaseSHA);
             if (object.Content != null)
                 message.Content = String(object.Content);
+            if (object.ModifiedSectionIDs) {
+                if (!Array.isArray(object.ModifiedSectionIDs))
+                    throw TypeError(".messages.GetDocResp.ModifiedSectionIDs: array expected");
+                message.ModifiedSectionIDs = [];
+                for (var i = 0; i < object.ModifiedSectionIDs.length; ++i)
+                    message.ModifiedSectionIDs[i] = String(object.ModifiedSectionIDs[i]);
+            }
             return message;
         };
 
@@ -447,14 +568,24 @@ $root.messages = (function() {
             if (!options)
                 options = {};
             var object = {};
+            if (options.arrays || options.defaults)
+                object.ModifiedSectionIDs = [];
             if (options.defaults) {
                 object.SHA = "";
+                object.BaseSHA = "";
                 object.Content = "";
             }
             if (message.SHA != null && message.hasOwnProperty("SHA"))
                 object.SHA = message.SHA;
+            if (message.BaseSHA != null && message.hasOwnProperty("BaseSHA"))
+                object.BaseSHA = message.BaseSHA;
             if (message.Content != null && message.hasOwnProperty("Content"))
                 object.Content = message.Content;
+            if (message.ModifiedSectionIDs && message.ModifiedSectionIDs.length) {
+                object.ModifiedSectionIDs = [];
+                for (var j = 0; j < message.ModifiedSectionIDs.length; ++j)
+                    object.ModifiedSectionIDs[j] = message.ModifiedSectionIDs[j];
+            }
             return object;
         };
 

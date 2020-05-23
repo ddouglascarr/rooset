@@ -11,7 +11,7 @@ function jwt.encode(payload)
 end
 
 function jwt.decode(token)
-  local dec = io.popen("/opt/etc/jwt-decode " .. token, "r")
+  local dec = io.popen("/opt/etc/jwtdecode " .. token, "r")
   local resp = ""
   for line in dec:lines() do
     resp = resp .. line

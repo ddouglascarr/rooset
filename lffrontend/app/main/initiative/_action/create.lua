@@ -1,5 +1,6 @@
 local issue
 local area
+local tkContent = jwt.decode(param.get("tk"))
 
 local issue_id = param.get("issue_id", atom.integer)
 if issue_id then
@@ -14,6 +15,7 @@ if issue_id then
     slot.put_into("error", _"Current phase is already closed.")
     return false
   end
+  -- TODO: validate that tkContent modified sections == same as issue
   area = issue.area
 else
   local area_id = param.get("area_id", atom.integer)
@@ -136,9 +138,6 @@ end
 
 local initiative = Initiative:new()
 
-local tkContent = jwt.decode(param.get("tk"))
-initiative.external_reference = tkContent.claims.BranchName
-
 if not issue then
   issue = Issue:new()
   issue.area_id = area.id
@@ -156,8 +155,26 @@ if not issue then
     end
     
   end
+
+  -- check that there are no conflicting sections
+  for k, open_section_id in pairs(area.open_admitted_section_references) do
+    for k, new_section_id in pairs(tkContent.Claims.ModifiedSectionIDs) do
+      if new_section_id == open_section_id then
+        -- TODO: helpful message with link to conflicting issue 
+        slot.put_into("error", _"This initiative is trying to modify a seciton that is already under discussion")
+        return false
+      end
+    end
+  end
   
   issue:save()
+
+  for k, v in pairs(tkContent.Claims.ModifiedSectionIDs) do
+    local issue_section = IssueSection:new()
+    issue_section.issue_id = issue.id
+    issue_section.external_reference = v
+    issue_section:save()
+  end
 
   if config.etherpad then
     local result = net.curl(
@@ -182,7 +199,8 @@ draft.initiative_id = initiative.id
 draft.formatting_engine = formatting_engine
 draft.content = param.get("draft")
 draft.author_id = app.session.member.id
-draft.external_reference = tkContent.claims.SHA
+draft.external_reference = tkContent.Claims.SHA
+draft.base_external_reference = tkContent.Claims.BaseSHA
 draft:save()
 
 local initiator = Initiator:new()

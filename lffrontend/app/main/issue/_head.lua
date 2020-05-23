@@ -3,7 +3,6 @@ local initiative = param.get("initiative", "table")
 
 local member = param.get ( "member", "table" )
 
-
 ui.title ( function ()
 
   ui.tag {

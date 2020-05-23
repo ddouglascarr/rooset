@@ -65,6 +65,22 @@ func Run() {
 			return
 		}
 
+		baseDoc, err := getBlob(body.BaseSHA)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: system error fetching base doc")))
+			return
+		}
+
+		modifiedSectionIDs, err := DiffDocs(baseDoc, []byte(doc))
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "rooset: system error comparing docs")))
+			return
+		}
+
 		err = saveBlob(sHA, doc)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -73,7 +89,7 @@ func Run() {
 			return
 		}
 
-		tk, err := BuildDocSHATk(sHA)
+		tk, err := BuildDocSHATk(sHA, body.BaseSHA, modifiedSectionIDs)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
@@ -82,8 +98,10 @@ func Run() {
 		}
 		m := jsonpb.Marshaler{}
 		respBody, err := m.MarshalToString(&messages.CreateDocResp{
-			SHA: sHA,
-			Tk:  tk,
+			SHA:                sHA,
+			BaseSHA:            body.BaseSHA,
+			ModifiedSectionIDs: modifiedSectionIDs,
+			Tk:                 tk,
 		})
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

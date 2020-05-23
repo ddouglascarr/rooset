@@ -8,12 +8,15 @@ import (
 func TestProcessHTMLHashIgnoresWhitespace(t *testing.T) {
 	userHTML := `
 	<article>
-	  <section>
+	  <section id="uid0">
 		<p>foo</p>
+	  </section>
+	  <section id="uid1">
+		<p>bar</p>
 	  </section>
 	</article>
   `
-	sysHTML := `<article><section><p>foo</p></section></article>`
+	sysHTML := `<article><section id="uid0"><p>foo</p></section><section id="uid1"><p>bar</p></section></article>`
 
 	SHA0, resultHTML0, err := processHTML(userHTML)
 	if err != nil {

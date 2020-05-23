@@ -126,9 +126,12 @@ func withAuthenticatedMessage(messageType string, f JWTHandlerFunc) http.Handler
 
 //BuildDocSHATk builds a jwt token to be passed to lffronted detailing a new
 // document.
-func BuildDocSHATk(sHA string) (string, error) {
+// TODO: statically type claims somehow
+func BuildDocSHATk(sHA string, baseSHA string, modifiedSectionIDs []string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"SHA": sHA,
+		"SHA":                sHA,
+		"BaseSHA":            baseSHA,
+		"ModifiedSectionIDs": modifiedSectionIDs,
 	})
 
 	tkStr, err := token.SignedString([]byte(conf.Auth.JWTKey))

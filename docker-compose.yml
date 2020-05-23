@@ -59,7 +59,7 @@ services:
       - .:/go/src/github.com/ddouglascarr/rooset
       - ./volumes/blobs/:/var/lib/docsvc/blobs/
     working_dir: /go/src/github.com/ddouglascarr/rooset
-    command: go run cmd/rooset.go docsvc
-    # command: /go/src/github.com/ddouglascarr/rooset/etc/keep-alive
+    # command: go run cmd/rooset.go docsvc
+    command: /go/src/github.com/ddouglascarr/rooset/etc/keep-alive
     ports:
       - "8084:8080"

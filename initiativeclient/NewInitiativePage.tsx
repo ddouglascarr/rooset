@@ -86,6 +86,7 @@ class NewInitiativePage extends Component<Props, State> {
     if (this.state.Status !== 'READY') return;
     const reqBody = new messages.CreateDocReq({
       UserID: this.props.UserID,
+      BaseSHA: this.props.DocSHA,
       Content: serializeDoc(this.state.NewDoc),
     });
 

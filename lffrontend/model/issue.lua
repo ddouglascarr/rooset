@@ -43,6 +43,15 @@ Issue:add_reference{
 
 Issue:add_reference{
   mode          = '1m',
+  to            = 'IssueSection',
+  this_key      = 'id',
+  that_key      = 'issue_id',
+  ref           = 'sections',
+  back_ref      = 'issue'
+}
+
+Issue:add_reference{
+  mode          = '1m',
   to            = "Interest",
   this_key      = 'id',
   that_key      = 'issue_id',
@@ -273,4 +282,13 @@ function Issue.object_get:state_time_text()
   else
     return _("ends in #{state_time_left}", { state_time_left = self.state_time_left })
   end
+end
+
+function Issue.object_get:section_external_references()
+  local section_references = {}
+  for k, v in ipairs(self.sections) do
+    section_references[k] = v.external_reference
+  end
+
+  return section_references
 end
