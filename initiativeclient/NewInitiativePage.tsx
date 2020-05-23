@@ -12,6 +12,7 @@ type Props = {
   AreaID: string;
   IssueID: string | undefined;
   DocsvcHostExternal: string;
+  OpenAdmittedSections: {[SectionID: string]: {IssueID: number}};
 };
 
 type State =
@@ -157,6 +158,7 @@ class NewInitiativePage extends Component<Props, State> {
             onUpdateDoc={(newDoc: Doc) => {
               this.setState({NewDoc: newDoc});
             }}
+            OpenAdmittedSections={this.props.OpenAdmittedSections}
           />
           <button onClick={() => this.createDoc()}>Next...</button>
         </div>
@@ -166,14 +168,8 @@ class NewInitiativePage extends Component<Props, State> {
   }
 }
 
-export type InitNewInitiativePageArgs = {
+export type InitNewInitiativePageArgs = Props & {
   RootEl: HTMLElement;
-  DocsvcHostExternal: string;
-  AreaID: string;
-  UserID: string;
-  IssueID?: string;
-  DocSHA: string;
-  Tk: string;
 };
 
 export const initNewInitiativePage = (args: InitNewInitiativePageArgs) => {
@@ -185,6 +181,7 @@ export const initNewInitiativePage = (args: InitNewInitiativePageArgs) => {
       UserID={args.UserID}
       DocSHA={args.DocSHA}
       Tk={args.Tk}
+      OpenAdmittedSections={args.OpenAdmittedSections}
     />,
     args.RootEl,
   );

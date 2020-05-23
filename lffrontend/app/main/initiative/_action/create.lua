@@ -157,11 +157,11 @@ if not issue then
   end
 
   -- check that there are no conflicting sections
-  for k, open_section_id in pairs(area.open_admitted_section_references) do
+  for k, open_section in ipairs(area.open_admitted_sections) do
     for k, new_section_id in pairs(tkContent.Claims.ModifiedSectionIDs) do
-      if new_section_id == open_section_id then
-        -- TODO: helpful message with link to conflicting issue 
-        slot.put_into("error", _"This initiative is trying to modify a seciton that is already under discussion")
+      if new_section_id == open_section.external_reference then
+        -- TODO: link to conflicting issue 
+        slot.put_into("error", _"This initiative is trying to modify a seciton that is already under discussion in issue #" .. open_section.issue_id)
         return false
       end
     end

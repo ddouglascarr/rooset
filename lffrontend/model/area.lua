@@ -166,21 +166,13 @@ function Area.object_get:current_external_reference()
   end
 end
 
-function Area.object_get:open_admitted_section_references()
-  -- fetches all section references for issues in the area that are admitted
+function Area.object_get:open_admitted_sections()
+  -- fetches all sections for issues in the area that are admitted
   -- and not closed
-
-  local selector = IssueSection:new_selector()
+  return IssueSection:new_selector()
     :join("issue", nil, "issue.id = issue_section.issue_id")
     :join("area", nil, "area.id = issue.area_id")
     :add_where{"area.id = ?", self.id}
     :add_where{"issue.state = 'discussion' OR issue.state = 'verification' OR issue.state = 'voting'"}
     :exec()
-
-  local section_references = {}
-  for k, v in ipairs(selector) do
-    section_references[k] = v.external_reference 
-  end
-
-  return section_references
 end

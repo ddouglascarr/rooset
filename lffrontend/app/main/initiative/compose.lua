@@ -41,6 +41,7 @@ local new_initiative_payload = {
   AreaID = tostring(area.id),
   DocSHA=area.current_external_reference,
   UserID=tostring(app.session.member_id),
+  OpenAdmittedSections={},  -- populated below
   Tk = jwt.encode({
     RepositoryName={area.unit.external_reference},
     AreaID={"'" .. area.id .. "'"},
@@ -49,8 +50,15 @@ local new_initiative_payload = {
     Svc={"gitsvc"},
   })
 }
+
 if issue_id then
   new_initiative_payload['IssueID'] = issue_id
+end
+
+for k, open_section in ipairs(area.open_admitted_sections)  do
+  new_initiative_payload['OpenAdmittedSections'][open_section.external_reference] = {
+    IssueID = open_section.issue_id,
+  }
 end
 
 ui.tag{ tag="script", attr = { type="text/javascript" },  content=function() 

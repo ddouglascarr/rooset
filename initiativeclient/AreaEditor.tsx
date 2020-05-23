@@ -34,6 +34,7 @@ type SectionEditorProps = {
   OldSection: Section;
   NewSection: Section;
   EditingSectionID: null | string;
+  ConflictingIssueID: null | number;
   onEdit: (sectionID: string) => void;
   onEditComplete: (sectionID: string, content: string) => void;
 };
@@ -108,9 +109,20 @@ class SectionEditor extends Component<SectionEditorProps, {}> {
           <button
             className="pure-button"
             onClick={() => this.props.onEdit(this.props.ID)}
-            disabled={this.props.EditingSectionID !== null}>
+            disabled={
+              this.props.EditingSectionID !== null ||
+              this.props.ConflictingIssueID !== null
+            }>
             Edit
           </button>
+          {this.props.ConflictingIssueID ? (
+            <div>
+              This section is under deliberation in issue{' '}
+              <a href={`/issue/show/${this.props.ConflictingIssueID}.html`}>
+                #{this.props.ConflictingIssueID}
+              </a>
+            </div>
+          ) : null}
         </div>
         <div className="pure-u-4-5 rooset-document">
           <SectionBody
@@ -125,7 +137,12 @@ class SectionEditor extends Component<SectionEditorProps, {}> {
     //
   }
 }
-type Props = {OldDoc: Doc; NewDoc: Doc; onUpdateDoc: (newDoc: Doc) => void};
+type Props = {
+  OldDoc: Doc;
+  NewDoc: Doc;
+  onUpdateDoc: (newDoc: Doc) => void;
+  OpenAdmittedSections: {[sectionID: string]: {IssueID: number}};
+};
 type State = {EditingSectionID: null | string};
 export class AreaEditor extends Component<Props, State> {
   constructor() {
@@ -165,6 +182,9 @@ export class AreaEditor extends Component<Props, State> {
               );
               this.setState({EditingSectionID: null});
             }}
+            ConflictingIssueID={
+              this.props.OpenAdmittedSections[ID]?.IssueID || null
+            }
           />
         ))}
       </Fragment>
