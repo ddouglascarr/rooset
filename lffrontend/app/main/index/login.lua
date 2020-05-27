@@ -16,7 +16,7 @@ ui.section(function()
 ui.form{
   module = 'index',
   action = 'login',
-  attr = { class = 'pure-form pure-form-stacked' },
+  attr = { class = 'container pure-form pure-form-stacked' },
   routing = {
     ok = {
       mode   = 'redirect',
@@ -51,7 +51,6 @@ ui.form{
               tag = "input",
               attr = {
                 type = "submit",
-                class = "pure-button pure-button-primary",
                 value = _'Login'
               },
               content = ""

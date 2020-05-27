@@ -58,3 +58,21 @@ export const serializeDoc = (doc: Doc) => {
   wrapper.append(articleEl);
   return wrapper.innerHTML;
 };
+
+export const compareDocs = (docA: Doc, docB: Doc) => {
+  if (docA.Order.length !== docB.Order.length) return false;
+
+  for (let i = 0; i < docA.Order.length; i++) {
+    if (docA.Order[i] !== docB.Order[i]) return false;
+  }
+
+  for (const sectionID of Object.keys(docA.Sections)) {
+    if (
+      docA.Sections[sectionID].Content !== docB.Sections[sectionID]?.Content
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+};

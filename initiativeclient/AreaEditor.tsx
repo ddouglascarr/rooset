@@ -84,15 +84,13 @@ class SectionEditor extends Component<SectionEditorProps, {}> {
     // this section is being edited
     if (this.props.EditingSectionID === this.props.ID) {
       return (
-        <div className="pure-g">
-          <div className="pure-u-1-5">
-            <button
-              className="pure-button pure-button-primary"
-              onClick={() => this.finishTinymce()}>
+        <div className="editor__section">
+          <div className="editor__section-tools">
+            <button className="" onClick={() => this.finishTinymce()}>
               Done
             </button>
           </div>
-          <div className="pure-u-4-5">
+          <div className="editor__section-body">
             <textarea ref={this.editorRef} />
           </div>
         </div>
@@ -102,29 +100,30 @@ class SectionEditor extends Component<SectionEditorProps, {}> {
     return (
       <div
         className={[
-          'pure-g',
+          'editor__section',
           this.props.EditingSectionID !== null ? 'editor__section--dimmed' : '',
         ].join(' ')}>
-        <div className="pure-u-1-5 editor__section-tools">
-          <button
-            className="pure-button"
-            onClick={() => this.props.onEdit(this.props.ID)}
-            disabled={
-              this.props.EditingSectionID !== null ||
-              this.props.ConflictingIssueID !== null
-            }>
-            Edit
-          </button>
+        <div className="editor__section-tools">
           {this.props.ConflictingIssueID ? (
-            <div>
+            <div className="editor__section-tools-conflicting-section">
               This section is under deliberation in issue{' '}
               <a href={`/issue/show/${this.props.ConflictingIssueID}.html`}>
                 #{this.props.ConflictingIssueID}
               </a>
             </div>
-          ) : null}
+          ) : (
+            <button
+              className=""
+              onClick={() => this.props.onEdit(this.props.ID)}
+              disabled={
+                this.props.EditingSectionID !== null ||
+                this.props.ConflictingIssueID !== null
+              }>
+              Edit
+            </button>
+          )}
         </div>
-        <div className="pure-u-4-5 rooset-document">
+        <div className="editor__section-body rooset-document">
           <SectionBody
             OldSection={this.props.OldSection}
             NewSection={this.props.NewSection}

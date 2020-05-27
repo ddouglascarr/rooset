@@ -2,7 +2,7 @@ import {render, h, Component} from 'preact';
 
 import {messages} from 'messages';
 
-import {parseDoc, serializeDoc, Doc} from './doc';
+import {Doc, parseDoc, serializeDoc, compareDocs} from './doc';
 import {AreaEditor} from './AreaEditor';
 
 type Props = {
@@ -152,6 +152,17 @@ class NewInitiativePage extends Component<Props, State> {
     if (this.state.Status === 'READY') {
       return (
         <div>
+          <div className="editor__doc-tools">
+            <div className="editor__doc-tools-left" />
+
+            <div className="editor__doc-tools-right">
+              <button
+                onClick={() => this.createDoc()}
+                disabled={compareDocs(this.state.OldDoc, this.state.NewDoc)}>
+                Propose Changes
+              </button>
+            </div>
+          </div>
           <AreaEditor
             OldDoc={this.state.OldDoc}
             NewDoc={this.state.NewDoc}
@@ -160,7 +171,6 @@ class NewInitiativePage extends Component<Props, State> {
             }}
             OpenAdmittedSections={this.props.OpenAdmittedSections}
           />
-          <button onClick={() => this.createDoc()}>Next...</button>
         </div>
       );
     }

@@ -7,7 +7,6 @@ if issue_id then
   issue = Issue:new_selector():add_where{"id=?",issue_id}:single_object_mode():exec()
   issue:load_everything_for_member_id(app.session.member_id)
   area = issue.area
-
 else
   local area_id = param.get("area_id", atom.integer)
   area = Area:new_selector():add_where{"id=?",area_id}:single_object_mode():exec()
@@ -16,15 +15,35 @@ end
 
 -- load the current document
 
-ui.tag{ tag = "h3", content="Initiative Editor" }
-ui.tag{ tag = "div", attr = { id="initiative-editor" }, content="" }
-ui.tag{ tag = "div", attr = { id="initiative-form" }, content="" }
-ui.tag{
-  tag = "div",
-  content = function()
-    ui.field.hidden{ type="text", name="doc", value="", attr = { id="doc-field" } }
+slot.put_into("toolbar", ui.tag{
+  tag= "div",
+  attr = { class="toolbar" },
+  content=function()
+    ui.tag{
+      tag="div", attr={class="container"}, 
+      content=function()
+        ui.tag{
+          tag="div", 
+          attr={class="toolbar__title"},
+          content=area.name,
+        }
+        ui.tag{tag="div", attr={class="toolbar__tab_container"},
+          content=function()
+            ui.tag{tag="div", attr={class="toolbar__tab"}, content=function()
+              ui.link{module="area", view="show", id=area.id, content="Issues"}
+            end}
+            ui.tag{tag="div", attr={class="toolbar__tab toolbar__tab--active"},
+              content="Document"}
+          end,
+        }
+      end,
+    }
   end,
-}
+})
+
+ui.tag{ tag = "div", attr = { class="container" }, content=function()
+  ui.tag{ tag = "div", attr = { id="initiative-form" }, content="" }
+end}
 
 ui.tag{
   tag = "script", 
@@ -41,7 +60,7 @@ local new_initiative_payload = {
   AreaID = tostring(area.id),
   DocSHA=area.current_external_reference,
   UserID=tostring(app.session.member_id),
-  OpenAdmittedSections={},  -- populated below
+  OpenAdmittedSections=json.object{},  -- populated below
   Tk = jwt.encode({
     RepositoryName={area.unit.external_reference},
     AreaID={"'" .. area.id .. "'"},
@@ -66,7 +85,6 @@ slot.put("/* <![CDATA[ */")
 slot.put([[
   initNewInitiativePage(Object.assign({
     RootEl: document.getElementById('initiative-form'),
-    ProseMirrorEl: document.getElementById('initiative-editor'),
   }, ]]  .. encode.json(new_initiative_payload) .. [[)
   );
 ]])

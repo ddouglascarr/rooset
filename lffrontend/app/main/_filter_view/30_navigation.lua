@@ -15,8 +15,7 @@ slot.select ( 'navigation_right', function ()
   
   if app.session.member then
     ui.tag {
-      tag = "li",
-      attr = { class = "pure-menu-item" },
+      tag = "div",
       content = function () 
         util.micro_avatar(app.session.member)
       end
