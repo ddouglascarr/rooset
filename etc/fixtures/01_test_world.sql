@@ -233,6 +233,33 @@ INSERT INTO "privilege" ("unit_id", "member_id", "voting_right")
   FROM "member"
   WHERE "member"."id" > 15 AND "member"."id" < 24;
 
+-- membership: all members are members of alien affairs
+INSERT INTO "membership" ("member_id", "area_id") VALUES
+  (1, 7),
+  (2, 7),
+  (3, 7),
+  (4, 7),
+  (5, 7),
+  (6, 7),
+  (7, 7),
+  (8, 7),
+  (9, 7),
+  (10, 7),
+  (11, 7),
+  (12, 7),
+  (13, 7),
+  (14, 7),
+  (15, 7),
+  (16, 7),
+  (17, 7),
+  (18, 7),
+  (19, 7),
+  (20, 7),
+  (21, 7),
+  (22, 7),
+  (23, 7),
+  (24, 7);
+
 -- Solar System unit delegations
 INSERT INTO "delegation"
     ("id", "truster_id", "scope", "unit_id", "trustee_id") VALUES
@@ -259,11 +286,12 @@ INSERT INTO "delegation"
     ("id", "truster_id", "scope", "area_id", "trustee_id") VALUES
     (14,  3,  'area', 7, 13),       -- Almeida delegates to Carson
     (15,  9,  'area', 7, 13),       -- Bose delegates to Carson
-    (16,  19, 'area', 7, 5);        -- Khorana delegates to Heisenberg
+    (16,  19, 'area', 7, 13),       -- Khorana delegates to Carson 
+    (17,  13, 'area', 7, 1);        -- Carson delegates to Poitras 
 
 -- Solar System Comet Defence area delegations
 INSERT INTO "delegation"
     ("id", "truster_id", "scope", "area_id", "trustee_id") VALUES
-    (17,  3,  'area', 6, 2);        -- Almeida delegates to Hugle
+    (18,  3,  'area', 6, 2);        -- Almeida delegates to Hugle
 
 
