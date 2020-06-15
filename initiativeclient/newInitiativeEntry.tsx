@@ -1,19 +1,30 @@
+import {h, render} from 'preact';
 import {
-  initNewInitiativePage,
-  InitNewInitiativePageArgs,
-} from './NewInitiativePage';
-
-console.log('bundle loaded');
+  NewInitiativePage,
+  NewInitiativePageProps,
+} from './components/NewInitiativePage';
 
 declare module global {
   function initNewInitiativePage(args: InitNewInitiativePageArgs): void;
 }
 
+export type InitNewInitiativePageArgs = NewInitiativePageProps & {
+  RootEl: HTMLElement;
+};
+
+export const initNewInitiativePage = (args: InitNewInitiativePageArgs) => {
+  render(
+    <NewInitiativePage
+      DocsvcHostExternal={args.DocsvcHostExternal}
+      AreaID={args.AreaID}
+      IssueID={args.IssueID}
+      UserID={args.UserID}
+      DocSHA={args.DocSHA}
+      Tk={args.Tk}
+      OpenAdmittedSections={args.OpenAdmittedSections}
+    />,
+    args.RootEl,
+  );
+};
+
 global.initNewInitiativePage = initNewInitiativePage;
-
-// global.initProsemirror(document.getElementById('initiative-editor')!);
-
-// const initiativeForm = document.getElementById('initiative-form');
-// if (initiativeForm && initiativeForm instanceof HTMLFormElement) {
-//   initInitiativeForm(initiativeForm, global.rooset_editor_jwt);
-// }

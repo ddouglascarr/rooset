@@ -1,4 +1,6 @@
 // tools for parsing rooset docs
+import {useState, useEffect} from 'preact/hooks';
+import {messages} from 'messages';
 
 type ID = string;
 type SHA = string;
@@ -75,4 +77,196 @@ export const compareDocs = (docA: Doc, docB: Doc) => {
   }
 
   return true;
+};
+
+abstract class AbstractDocState<TStateUnion, TData> {
+  protected readonly setState: (newState: TStateUnion) => void;
+  public readonly Data: TData;
+
+  public constructor(setState: (newState: TStateUnion) => void, Data: TData) {
+    this.setState = setState;
+    this.Data = Data;
+  }
+}
+
+export class DocStateIdle extends AbstractDocState<DocState, {}> {}
+export class DocStateLoading extends AbstractDocState<DocState, {}> {}
+
+type DocStateSubmittingData = DocReadyData;
+export class DocStateSubmitting extends AbstractDocState<
+  DocState,
+  DocStateSubmittingData
+> {}
+
+type DocCompleteData = {
+  NewDocTk: string;
+  NewDocSHA: string;
+} & DocReadyData;
+export class DocStateComplete extends AbstractDocState<
+  DocState,
+  DocCompleteData
+> {}
+
+type DocFailedData = {readonly Message: string};
+export class DocStateFailed extends AbstractDocState<DocState, DocFailedData> {}
+
+type DocReadyData = {
+  readonly SHA: string;
+  readonly OldDoc: Doc;
+  readonly NewDoc: Doc;
+};
+
+export class DocStateReady extends AbstractDocState<DocState, DocReadyData> {
+  public updateDoc = (newDoc: Doc) => {
+    this.setState(
+      new DocStateReady(this.setState, {
+        SHA: this.Data.SHA,
+        OldDoc: this.Data.OldDoc,
+        NewDoc: newDoc,
+      }),
+    );
+  };
+
+  public updateSection = (sectionID: string, content: string) => {
+    this.updateDoc({
+      ...this.Data.NewDoc,
+      Sections: {
+        ...this.Data.NewDoc.Sections,
+        [sectionID]: {
+          ID: sectionID,
+          Content: content,
+        },
+      },
+    });
+  };
+
+  public submitDoc = async (
+    userID: string,
+    docsvcHostExternal: string,
+    tk: string,
+  ) => {
+    this.setState(new DocStateSubmitting(this.setState, this.Data));
+    const reqBody = new messages.CreateDocReq({
+      UserID: userID,
+      BaseSHA: this.Data.SHA,
+      Content: serializeDoc(this.Data.NewDoc),
+    });
+
+    try {
+      const resp = await window.fetch(
+        `${docsvcHostExternal}/rpc/messages.CreateDocReq`,
+        {
+          method: 'post',
+          mode: 'cors',
+          cache: 'no-cache',
+          headers: {
+            Authorization: tk,
+          },
+          body: JSON.stringify(messages.CreateDocReq.toObject(reqBody)),
+        },
+      );
+      if (resp.ok) {
+        const body = await resp.json();
+        this.setState(
+          new DocStateComplete(this.setState, {
+            ...this.Data,
+            NewDocTk: await body.Tk,
+            NewDocSHA: await body.SHA,
+          }),
+        );
+      } else {
+        this.setState(
+          new DocStateFailed(this.setState, {
+            Message: 'failed to create initiative',
+          }),
+        );
+      }
+    } catch (err) {
+      this.setState(
+        new DocStateFailed(this.setState, {
+          Message:
+            'Sorry, something went wrong with your network request. Please check your connection and try again',
+        }),
+      );
+    }
+  };
+}
+
+export type DocState =
+  | DocStateIdle
+  | DocStateLoading
+  | DocStateReady
+  | DocStateFailed
+  | DocStateSubmitting
+  | DocStateComplete;
+
+export const useDocState = (
+  docsvcHostExternal: string,
+  tk: string,
+  baseDocSHA: string,
+): DocState => {
+  const [state, setState] = useState(
+    // TODO: you can't pass setState yet cos it doesn't exist.
+    new DocStateIdle((newState: DocState) => undefined, {}),
+  );
+  useEffect(() => {
+    setState(new DocStateLoading(setState, {}));
+
+    const loadDoc = async () => {
+      const reqBody = messages.GetDocReq.fromObject({
+        SHA: baseDocSHA,
+      });
+      try {
+        const resp = await window.fetch(
+          `${docsvcHostExternal}/rpc/messages.GetDocReq`,
+          {
+            method: 'post',
+            mode: 'cors',
+            cache: 'no-cache',
+            headers: {
+              Authorization: tk,
+            },
+            body: JSON.stringify(messages.GetDocReq.toObject(reqBody)),
+          },
+        );
+        if (resp.ok) {
+          const body = await resp.json();
+          const reason = messages.GetDocReq.verify(body);
+          if (reason) {
+            setState(
+              new DocStateFailed(setState, {
+                Message: `invalid server response ${reason}`,
+              }),
+            );
+            return;
+          }
+          const docStr = messages.GetDocResp.fromObject(body)?.Content;
+          const doc = parseDoc(docStr);
+          setState(
+            new DocStateReady(setState, {
+              OldDoc: doc,
+              NewDoc: doc,
+              SHA: baseDocSHA,
+            }),
+          );
+          return;
+        } else {
+          setState(
+            new DocStateFailed(setState, {
+              Message: 'failed',
+            }),
+          );
+        }
+      } catch (err) {
+        setState(
+          new DocStateFailed(setState, {
+            Message: 'failed',
+          }),
+        );
+      }
+    };
+    loadDoc();
+  }, [baseDocSHA]);
+
+  return state;
 };
