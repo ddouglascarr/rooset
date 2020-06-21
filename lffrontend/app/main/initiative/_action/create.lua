@@ -187,6 +187,8 @@ if not issue then
   end
 end
 
+-- TODO: check that only sections for the issue are in the tkContent.Claims.ModifiedSectionIDs
+
 if param.get("polling", atom.boolean) and app.session.member:has_polling_right_for_unit_id(area.unit_id) then
   initiative.polling = true
 end
