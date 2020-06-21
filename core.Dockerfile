@@ -17,7 +17,7 @@ RUN pip install markdown2
 ADD ./lfcore/ /opt/lfcore/
 ADD ./etc/keep-alive /usr/local/bin/
 ADD ./etc/core-services /usr/local/bin/
-ADD ./etc/init-test-db /usr/local/bin/
+ADD ./etc/init-dev-db /usr/local/bin/
 
 WORKDIR /opt/lfcore
 RUN bmake

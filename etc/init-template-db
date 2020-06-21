@@ -1,0 +1,28 @@
+#!/bin/bash
+set -euo pipefail
+
+################################################################################
+#
+# init-template-db
+#
+# (re)creates the rooset template db, which is used to create test dbs
+#
+# usage:
+#
+#   $ init-template-db
+#
+################################################################################
+
+test_template_db="rooset_template"
+test_db="rooset_test"
+
+dropdb --if-exists ${test_template_db}
+createdb ${test_template_db}
+
+# PGDATABASE should be set to the main db, not the template, so override.
+export PGDATABASE=${test_template_db}
+
+psql -v "ON_ERROR_STOP=1" -f /opt/rooset/lfcore/core.sql
+psql -v "ON_ERROR_STOP=1" -f /opt/rooset/lfcore/automatic_state_changes.sql
+psql -v "ON_ERROR_STOP=1" -f /opt/rooset/etc/fixtures/00_utils.sql 
+psql -v "ON_ERROR_STOP=1" -f /opt/rooset/etc/fixtures/01_system_settings.sql 

@@ -38,6 +38,8 @@ services:
       - ./lffrontend:/opt/frontend
       - ./lfframework:/opt/framework
       - ./etc:/opt/etc
+      # TODO: just use this one
+      - .:/opt/rooset
     entrypoint: /usr/local/bin/keep-alive
 
   webpack:
