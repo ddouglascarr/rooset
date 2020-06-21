@@ -11,12 +11,13 @@ WEBMCP_VERSION = "2.1.0"
 --[[--
 WEBMCP_MODE
 
-A constant set to "listen" in case of a network request, or set to "interactive" in case of interactive mode.
+A constant set to "listen" in case of a network request, or set to "interactive" in case of interactive mode and "test" for running an integration test.
 --]]--
 if _MOONBRIDGE_VERSION then
   WEBMCP_MODE = "listen"
 else
   WEBMCP_MODE = "interactive"
+  -- test mode is set during arg parsing
 end
 --//--
 
@@ -52,11 +53,19 @@ Application name (usually "main"). May be nil in case of interactive mode.
 --]]--
 -- set in mcp.lua
 --//--
+--
+
+--[[--
+WEBMCP_TEST_FILE
+
+File with a single test in it to run
+
+--]]--
 
 -- determine framework and bath path from command line arguments
 -- or print usage synopsis (if applicable)
 do
-  local arg1, arg2, arg3 = ...
+  local arg1, arg2, arg3, arg4, arg5, arg6 = ...
   local helpout
   if
     arg1 == "-h" or arg1 == "--help" or
@@ -81,6 +90,17 @@ do
   WEBMCP_FRAMEWORK_PATH = append_trailing_slash(arg1)
   WEBMCP_BASE_PATH      = append_trailing_slash(arg2)
   WEBMCP_APP_NAME       = arg3
+
+  -- run test
+  if WEBMCP_MODE == "interactive" and arg1 == "-t" or arg1 == "--test" then
+    WEBMCP_MODE = "test"
+    WEBMCP_FRAMEWORK_PATH = append_trailing_slash(arg2)
+    WEBMCP_BASE_PATH      = append_trailing_slash(arg3)
+    WEBMCP_APP_NAME       = arg4
+    WEBMCP_CONFIG_NAMES = {arg5}
+    WEBMCP_TEST_FILE      = arg6
+    print("TEST MODE: " .. WEBMCP_TEST_FILE)
+  end
 end
 
 -- setup search paths for libraries
@@ -338,7 +358,7 @@ This function is a variant of Moonbridge's listen{...} function which has been w
 
 --]]--
 -- prepare for interactive or listen mode
-if WEBMCP_MODE == "interactive" then
+if WEBMCP_MODE == "interactive" or WEBMCP_MODE == "test" then
   function listen()  -- overwrite Moonbridge's listen function
     -- ignore listen function calls for interactive mode
   end
@@ -400,4 +420,11 @@ execute.prefork_initializers()
 -- perform post-fork initializations (once) in case of interactive mode
 if WEBMCP_MODE == "interactive" then
   postfork_init()
+end
+
+-- run test
+if WEBMCP_MODE == "test" then
+  postfork_init()
+  print("running test: " .. WEBMCP_TEST_FILE)
+  dofile(WEBMCP_TEST_FILE)
 end
