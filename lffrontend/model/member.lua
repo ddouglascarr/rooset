@@ -327,8 +327,6 @@ function Member.object:set_password(password)
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz./"
   )
 
-  local dbg = require('debugger')
-  dbg()
   local hash = extos.crypt(password, hash_prefix)
 
   if not hash or hash:sub(1, #hash_prefix) ~= hash_prefix then

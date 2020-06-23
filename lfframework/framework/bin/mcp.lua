@@ -399,7 +399,10 @@ execute.prefork_initializers()
 
 -- perform post-fork initializations (once) in case of interactive mode
 if WEBMCP_MODE == "interactive" then
-  postfork_init()
+  -- used to call postfork_init here, but that was removed because it's not
+  -- always desired. call execute.postfork_initializers() to access db, etc.
+
+  multirand = require "multirand"
   if WEBMCP_INTERACTIVE_FILE then
     dofile(WEBMCP_INTERACTIVE_FILE)
   end
