@@ -1,0 +1,11 @@
+#!/bin/bash
+
+export PGDATABASE=rooset_test
+
+lua \
+  /opt/framework/framework/bin/mcp.lua \
+  /opt/framework/framework/ \
+  /opt/frontend/ \
+  main \
+  ${FRONTEND_CONFIG} \
+  /opt/frontend/test/my_test.lua

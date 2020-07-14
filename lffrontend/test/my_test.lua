@@ -28,6 +28,10 @@ function build_ctx()
 end
 
 function test_test()
+  assert(
+    config.database.dbname == 'rooset_test',
+    'database must be called rooset_test')
+
   assert(os.execute('dropdb --if-exists rooset_test && createdb -T rooset_template rooset_test'), "could not create database")
 
   execute.postfork_initializers()
