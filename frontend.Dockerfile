@@ -19,25 +19,25 @@ RUN apt-get -y update && apt-get install -y \
 
 RUN pip install markdown2
 
-ADD ./lfmoonbridge /opt/moonbridge
-ADD ./lfframework /opt/framework
-ADD ./lffrontend /opt/frontend
+ADD ./lfmoonbridge /opt/rooset/lfmoonbridge
+ADD ./lfframework /opt/rooset/lfframework
+ADD ./lffrontend /opt/rooset/lffrontend
+ADD ./etc /opt/rooset/etc
+
 ADD ./etc/keep-alive /usr/local/bin/keep-alive
 
 # Install Moonbridge
-RUN cd /opt/moonbridge && \
-  pmake MOONBR_LUA_PATH=/opt/moonbridge/?.lua
+RUN cd /opt/rooset/lfmoonbridge && \
+  pmake MOONBR_LUA_PATH=/opt/rooset/lfmoonbridge/?.lua
 
-ENV MOONBR_LUA_PATH="/opt/moonbridge/?.lua"   
-ENV LUA_PATH="/opt/moonbridge/?.lua;./?.lua;./?.lc;"
+ENV MOONBR_LUA_PATH="/opt/rooset/lfmoonbridge/?.lua"   
+ENV LUA_PATH="/opt/rooset/lffrontend/?.lua;/opt/rooset/lfmoonbridge/?.lua;./?.lua;./?.lc;"
 ENV FRONTEND_CONFIG="docker"
 
 # Install webMCP framework
-RUN cd /opt/framework && \
+RUN cd /opt/rooset/lfframework && \
   make
 
-ADD ./etc/frontend-server /usr/local/bin/
-Add ./etc /opt/etc
 
 EXPOSE 8080
-ENTRYPOINT [ "/usr/local/bin/frontend-server" ]
+ENTRYPOINT [ "/opt/rooset/etc/frontend-server" ]

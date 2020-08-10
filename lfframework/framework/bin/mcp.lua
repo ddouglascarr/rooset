@@ -26,7 +26,7 @@ WEBMCP_CONFIG_NAMES
 A list of the selected configuration names.
 --]]--
 -- configuration names are provided as 4th, 5th, etc. command line argument
-WEBMCP_CONFIG_NAMES = {select(4, ...)}
+WEBMCP_CONFIG_NAMES = {}
 --//--
 
 --[[--
@@ -56,19 +56,17 @@ Application name (usually "main"). May be nil in case of interactive mode.
 -- determine framework and bath path from command line arguments
 -- or print usage synopsis (if applicable)
 do
-  local arg1, arg2, arg3 = ...
+  local arg1, arg2, arg3, arg4, arg5 = ...
   local helpout
   if
     arg1 == "-h" or arg1 == "--help" or
     arg2 == "-h" or arg2 == "--help"  -- if first arg is provided by wrapper
   then
-    helpout = io.stdout
-  elseif #WEBMCP_CONFIG_NAMES < 1 then
     helpout = io.stderr
   end
   if helpout then
-    helpout:write("Usage: moonbridge [moonbr opts] -- <framework path>/bin/mcp.lua <framework path> <app base path> <app name> <config name> [<config name> ...]\n")
-    helpout:write("   or: lua -i     [Lua opts]    -- <framework path>/bin/mcp.lua <framework path> <app base path> <app name> <config name> [<config name> ...]\n")
+    helpout:write("Usage: moonbridge [moonbr opts] -- <framework path>/bin/mcp.lua <framework path> <app base path> <app name> <config name> \n")
+    helpout:write("   or: lua [-i]    [Lua opts]    -- <framework path>/bin/mcp.lua <framework path> <app base path> <app name> <config name> [<lua_file>]\n")
     if helpout == io.stderr then
       return 1
     else
@@ -81,6 +79,8 @@ do
   WEBMCP_FRAMEWORK_PATH = append_trailing_slash(arg1)
   WEBMCP_BASE_PATH      = append_trailing_slash(arg2)
   WEBMCP_APP_NAME       = arg3
+  WEBMCP_CONFIG_NAMES   = {arg4}
+  WEBMCP_INTERACTIVE_FILE = arg5
 end
 
 -- setup search paths for libraries
@@ -399,5 +399,11 @@ execute.prefork_initializers()
 
 -- perform post-fork initializations (once) in case of interactive mode
 if WEBMCP_MODE == "interactive" then
-  postfork_init()
+  -- used to call postfork_init here, but that was removed because it's not
+  -- always desired. call execute.postfork_initializers() to access db, etc.
+
+  multirand = require "multirand"
+  if WEBMCP_INTERACTIVE_FILE then
+    dofile(WEBMCP_INTERACTIVE_FILE)
+  end
 end

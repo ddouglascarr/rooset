@@ -35,9 +35,10 @@ services:
     links:
       - db
     volumes:
-      - ./lffrontend:/opt/frontend
-      - ./lfframework:/opt/framework
-      - ./etc:/opt/etc
+      # dont just use ., as lfmoonbridge needs to be compiled in place
+      - ./etc:/opt/rooset/etc
+      - ./lfframework:/opt/rooset/lfframework
+      - ./lffrontend:/opt/rooset/lffrontend
     entrypoint: /usr/local/bin/keep-alive
 
   webpack:

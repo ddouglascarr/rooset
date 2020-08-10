@@ -1,8 +1,6 @@
-
 # Rooset
 
 Rooset is a democratic structured decision system. Work in progress
-
 
 ## Set Up
 
@@ -16,17 +14,16 @@ Rooset is a democratic structured decision system. Work in progress
 ```
   $ docker-compose up -d
   $ docker-exec lfcore bash
-  # init-test-db
+  # init-dev-db
 ```
 
-Re-running `init-test-db` will drop all data and reset the database to the 
+Re-running `init-dev-db` will drop all data and reset the database to the
 development scenario.
 
 ### Using the development environment
 
 The relevant part of the host filesystem is mounted on top of the containers,
 so you can edit the code on the host, and it will appear in the contianers.
-
 
 Run the containers
 
@@ -50,6 +47,7 @@ It is available on the host at `http://localhost:8081'.
 ```
 
 Webpack dev server will start automatically
+
 ```
 
 There are a number of test users set up. All their passwords are `login`.
@@ -79,3 +77,4 @@ Usernames:
   - drunk_saha
   - angry_ritchie
   - desperate_easley
+```

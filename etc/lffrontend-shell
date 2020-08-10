@@ -1,0 +1,8 @@
+#!/bin/bash
+
+lua -i \
+  /opt/rooset/lfframework/framework/bin/mcp.lua \
+  /opt/rooset/lfframework/framework/ \
+  /opt/rooset/lffrontend/ \
+  main \
+  ${FRONTEND_CONFIG}
