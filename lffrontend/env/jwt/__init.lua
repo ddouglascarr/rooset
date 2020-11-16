@@ -1,6 +1,6 @@
 function jwt.encode(payload)
   local json_payload = encode.json(payload)
-  local cmd = "/opt/etc/jwtencode '" .. json_payload .. "'"
+  local cmd = "/opt/rooset/etc/jwtencode '" .. json_payload .. "'"
   local enc = io.popen(cmd, "r")  
   local resp = ""
   for line in enc:lines() do
@@ -11,7 +11,7 @@ function jwt.encode(payload)
 end
 
 function jwt.decode(token)
-  local dec = io.popen("/opt/etc/jwtdecode " .. token, "r")
+  local dec = io.popen("/opt/rooset/etc/jwtdecode " .. token, "r")
   local resp = ""
   for line in dec:lines() do
     resp = resp .. line

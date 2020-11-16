@@ -262,8 +262,15 @@ function request.handler(http_request)
         http_request:send_header("Cache-Control", "no-cache")
       end
     end
-    http_request:send_header("Content-Type", slot.get_content_type())
-    http_request:send_data(slot.render_layout())
+
+    -- TODO(ddc): handle request headers with multiple accept values
+    if http_request.headers['Accept'][1] == 'application/json' then
+      http_request:send_header("Content-Type", "application/json")
+      http_request:send_data(encode.json(request.data))
+    else
+      http_request:send_header("Content-Type", slot.get_content_type())
+      http_request:send_data(slot.render_layout())
+    end
     http_request:finish()
   end
 

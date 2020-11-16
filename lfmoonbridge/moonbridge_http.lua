@@ -141,7 +141,11 @@ do
     params_list_mapping[params] = params_list
     return params_list, params
   end
+
 end
+
+-- (ddc) need this to set up mock requests in tests
+_G.new_params_list = new_params_list
 
 -- function parsing URL encoded form data and storing it in
 -- a key value-list pairs structure that has to be

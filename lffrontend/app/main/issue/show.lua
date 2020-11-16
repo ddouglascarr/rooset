@@ -38,6 +38,22 @@ execute.view {
   }
 }
 
+
+-- json
+request.data.state = issue.state
+request.data.issue_id = issue.id
+request.data.area_id = issue.area_id
+request.data.policy_id = issue.policy_id
+
+-- TODO(ddc): delete. Just here to show what it's like to do this
+request.data.initiatives = json.array{}
+for k, initiative in ipairs(issue.initiatives) do
+	request.data.initiatives[#request.data.initiatives+1] = json.object{
+		initiative_id=initiative.id,
+	}
+end
+
+
 ui.section( function ()
   
   execute.view{ 

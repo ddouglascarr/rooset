@@ -6,9 +6,12 @@ if not area then
   return
 end
 
+request.data.area_id = area.id
+request.data.area_name = area.name
+
 area:load_delegation_info_once_for_member_id(app.session.member_id)
 
-app.html_title.title = area.name
+app.html_title.title = request.data.area_name
 app.html_title.subtitle = _("Area")
 
 execute.view {

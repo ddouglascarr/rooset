@@ -3,6 +3,9 @@ local initiative = param.get("initiative", "table")
 
 local member = param.get ( "member", "table" )
 
+request.data.issue_id = issue.id
+request.data.issue_state = issue.state
+
 ui.title ( function ()
 
   ui.tag {

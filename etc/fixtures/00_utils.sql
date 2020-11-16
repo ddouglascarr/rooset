@@ -7,7 +7,6 @@ CREATE FUNCTION "time_warp"(warp_interval INTERVAL) RETURNS VOID
         "accepted"     = "accepted"     - warp_interval,
         "half_frozen"  = "half_frozen"  - warp_interval,
         "fully_frozen" = "fully_frozen" - warp_interval;
-      PERFORM "check_everything"();
       RETURN;
     END;
   $$;

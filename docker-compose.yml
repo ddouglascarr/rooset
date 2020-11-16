@@ -14,20 +14,20 @@ services:
   lfcore:
     build:
       context: .
-      dockerfile: core.Dockerfile
+      dockerfile: lf.Dockerfile
     links:
       - db
     env_file:
       - conf/dockerdev.env
-    entrypoint: /usr/local/bin/keep-alive
+    entrypoint: /opt/rooset/etc/keep-alive
     volumes:
-      - ./lfcore:/opt/lfcore
-      - ./etc:/opt/etc
+      - ./lfcore:/opt/rooset/lfcore
+      - ./etc:/opt/rooset/etc
 
   lffrontend:
     build:
       context: .
-      dockerfile: frontend.Dockerfile
+      dockerfile: lf.Dockerfile
     env_file:
       - conf/dockerdev.env
     ports:
@@ -39,7 +39,8 @@ services:
       - ./etc:/opt/rooset/etc
       - ./lfframework:/opt/rooset/lfframework
       - ./lffrontend:/opt/rooset/lffrontend
-    entrypoint: /usr/local/bin/keep-alive
+      - ./lfcore:/opt/rooset/lfcore
+    entrypoint: /opt/rooset/etc/keep-alive
 
   webpack:
     image: node:erbium-stretch
@@ -60,7 +61,7 @@ services:
       - .:/go/src/github.com/ddouglascarr/rooset
       - ./volumes/blobs/:/var/lib/docsvc/blobs/
     working_dir: /go/src/github.com/ddouglascarr/rooset
-    # command: go run cmd/rooset.go docsvc
-    command: /go/src/github.com/ddouglascarr/rooset/etc/keep-alive
+    command: go run cmd/rooset.go docsvc
+    # command: /go/src/github.com/ddouglascarr/rooset/etc/keep-alive
     ports:
       - "8084:8080"

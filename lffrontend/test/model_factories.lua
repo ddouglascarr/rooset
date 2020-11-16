@@ -13,7 +13,7 @@ function model_factories.build_policy(index, name, quorum_num)
 	p.issue_quorum_den = 100
 	p.issue_quorum_num = quorum_num
 
-	p.min_admission_time = TEST_INTERVAL
+	p.min_admission_time = '0 seconds'
 	p.max_admission_time = TEST_INTERVAL
 	p.discussion_time = TEST_INTERVAL
 	p.verification_time = TEST_INTERVAL
