@@ -61,9 +61,11 @@ function testing.initialize_session(member_id)
 end
 
 function testing.do_view(args)
-	local path = args.path
 	local params = args.params
 	local member_id = args.member_id
+	local module = args.module
+	local view = args.view
+	local id = args.id
 
 	testing.initialize_request()
 
@@ -71,7 +73,10 @@ function testing.do_view(args)
 		testing.initialize_session(member_id)
 	end
 
-	request._http_request.path = path
+	request._http_request.path = string.sub(
+		encode.url({ module = module,	view = view, id = id }),
+		2)
+
 	if params then
 		for k, v in pairs(params) do
 		  request._http_request.get_params_list[k] = v
@@ -87,19 +92,28 @@ function testing.do_view(args)
 end
 
 function testing.do_action(args)
-	local path = args.path
-	local params = args.params
+	local id = args.id
+	local params = args.params or {}
 	local member_id = args.member_id
+	local module = args.module
+	local action = args.action
 
 	testing.initialize_request()
 
 	if member_id then
-		testing.initialize_session(args.member_id)
+		testing.initialize_session(member_id)
 	end
 
-	request._http_request.path = path
+	-- get path, and strip leading /
+	request._http_request.path = string.sub(
+		encode.url{	module = module, action = action },
+		2)
+
 	if params then
 		for k, v in pairs(params) do
+			if type(v) ~= 'table' then
+				v = { tostring(v) }
+			end
 		  request._http_request.get_params_list[k] = v
 			request._http_request.post_params_list[k] = v
 		end
@@ -110,6 +124,9 @@ function testing.do_action(args)
 	-- module in the form under _webmcp_id somehow, and that id gets added to the route in
 	-- handler.lua.
   do
+		if id then
+      request._http_request.post_params["_webmcp_id"] = tostring(id)
+		end
     local post_id = request._http_request.post_params["_webmcp_id"]
     if post_id then
       request._route.id = post_id
@@ -118,12 +135,14 @@ function testing.do_action(args)
 
 	db:query('BEGIN')
 
-	execute.action{
+	action_status = execute.action{
 			module = request.get_module(),
 			action = request.get_action(),
 	}
 
 	db:query('COMMIT')
+
+	return action_status
 end
 
 function testing.do_time_warp(interval)
@@ -142,7 +161,15 @@ end
 
 
 function testing.eq(a, b, message)
+	message = message or ''
+	assert(b ~= nil, 'the comparitor is nil, use testing.assert_is_nil')
+	assert(a ~= nil, message .. ' : is nil')
 	assert(a == b, message .. ' : ' .. a .. ' != ' .. b)
+end
+
+function testing.assert_is_nil(a, message)
+	message = message or 'is not nil'
+	assert(a == nil, message .. ' : ' .. a .. ' != nil')
 end
 
 return testing 

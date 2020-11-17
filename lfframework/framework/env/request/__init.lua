@@ -15,7 +15,6 @@ request._mime_types = {
 }
 
 request.for_each(function()
-
   request.data = json.object{}
 	
   request._absolute_baseurl = nil
