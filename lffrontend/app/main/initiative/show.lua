@@ -1,6 +1,7 @@
 local initiative = Initiative:by_id ( param.get_id() )
 local member = app.session.member
 request.data.initiative_id = initiative.id
+request.data.initiative_admitted = initiative.admitted
 
 
 

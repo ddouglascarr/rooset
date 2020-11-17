@@ -40,7 +40,7 @@ execute.view {
 
 
 -- json
-request.data.state = issue.state
+request.data.issue_state = issue.state
 request.data.issue_id = issue.id
 request.data.area_id = issue.area_id
 request.data.policy_id = issue.policy_id

@@ -8,6 +8,7 @@ end
 
 request.data.area_id = area.id
 request.data.area_name = area.name
+request.data.area_current_external_reference = area.current_external_reference
 
 area:load_delegation_info_once_for_member_id(app.session.member_id)
 
