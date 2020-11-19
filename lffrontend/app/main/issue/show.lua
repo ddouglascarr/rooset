@@ -48,9 +48,9 @@ request.data.policy_id = issue.policy_id
 -- TODO(ddc): delete. Just here to show what it's like to do this
 request.data.initiatives = json.array{}
 for k, initiative in ipairs(issue.initiatives) do
-	request.data.initiatives[#request.data.initiatives+1] = json.object{
-		initiative_id=initiative.id,
-	}
+  request.data.initiatives[#request.data.initiatives+1] = json.object{
+    initiative_id=initiative.id,
+  }
 end
 
 

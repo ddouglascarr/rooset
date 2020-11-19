@@ -16,7 +16,7 @@ request._mime_types = {
 
 request.for_each(function()
   request.data = json.object{}
-	
+  
   request._absolute_baseurl = nil
   request._response_headers = {}
   request._force_absolute_baseurl = false

@@ -118,7 +118,7 @@ if not issue and policy.free_timeable then
     local timing_available = false
     for i, available_timing in ipairs(available_timings) do
       if available_timing.id == free_timing_string then
-	timing_available = true
+        timing_available = true
       end
     end
     if not timing_available then
