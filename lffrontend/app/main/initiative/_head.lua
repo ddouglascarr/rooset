@@ -23,7 +23,24 @@ ui.sectionHead( "initiativeInfo", function ()
 
     ui.heading { 
       level = 1,
-      content = initiative.display_name
+      content = initiative.display_name,
+      attr = { rtk='initiative-id', rtv=initiative.id },
+    }
+
+    ui.tag{
+      content="",
+      attr = {
+        rtk='initiative-is-admitted',
+        rtv=tostring(initiative.admitted),
+      },
+    }
+
+    ui.tag{
+      content="",
+      attr = {
+        rtk='initiative-current_draft-external_reference',
+        rtv=tostring(initiative.current_draft.external_reference),
+      },
     }
 
     ui.container { attr = { class = "support" }, content = function ()

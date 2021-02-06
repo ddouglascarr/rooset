@@ -14,7 +14,11 @@ if initiative.revoked then
 end
 
 ui.container{
-  attr = { class = class },
+  attr = {
+    class = class,
+    rtk = 'initiative-rank:' .. (initiative.rank and initiative.rank or 'x'),
+    rtv = initiative.id,
+  },
   content = function ()
     if initiative.rank ~= 1 and not for_event then
       execute.view {

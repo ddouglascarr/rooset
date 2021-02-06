@@ -265,7 +265,7 @@ Replace me with your second argument
               type = "submit",
               name = "preview",
               class = "btn btn-default",
-              value = _'Preview'
+              value = _'Submit'
             },
             content = ""
           }

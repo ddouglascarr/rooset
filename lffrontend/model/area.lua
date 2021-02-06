@@ -160,7 +160,7 @@ function Area.object_get:current_external_reference()
     :exec()
 
   if last_winning_initiative then
-    return last_winning_initiative.external_reference
+    return last_winning_initiative.current_draft.external_reference
   else
     return self.external_reference
   end

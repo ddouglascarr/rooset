@@ -349,6 +349,13 @@ ui.section( function()
                           ui.container{
                             attr = { style = "float: right; position: relative;" },
                             content = function()
+                              ui.tag{
+                                content="",
+                                attr={
+                                  rtk = 'voting-grade:initiative:' .. initiative.id,
+                                  rtv = grade,
+                                },
+                              }
                               ui.link{
                                 attr = { class = "clickable" },
                                 content = _"Show",

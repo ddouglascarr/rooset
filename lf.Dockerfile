@@ -43,18 +43,21 @@ RUN bmake
 # lffrontend setup
 ADD ./etc/keep-alive /usr/local/bin/keep-alive
 
+# Install Luarocks and deps
+RUN apt-get install -y luarocks
+RUN luarocks install htmlparser
+
 # Install Moonbridge
 RUN cd /opt/rooset/lfmoonbridge && \
   pmake MOONBR_LUA_PATH=/opt/rooset/lfmoonbridge/?.lua
 
 ENV MOONBR_LUA_PATH="/opt/rooset/lfmoonbridge/?.lua"   
-ENV LUA_PATH="/opt/rooset/lffrontend/?.lua;/opt/rooset/lfmoonbridge/?.lua;./?.lua;./?.lc;"
+ENV LUA_PATH="/opt/rooset/lffrontend/?.lua;/opt/rooset/lfmoonbridge/?.lua;;"
 ENV FRONTEND_CONFIG="docker"
 
 # Install webMCP framework
 RUN cd /opt/rooset/lfframework && \
   make
-
 
 EXPOSE 8080
 WORKDIR /opt/rooset/etc

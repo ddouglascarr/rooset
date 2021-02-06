@@ -4,8 +4,8 @@ set -euo pipefail
 dropdb --if-exists ${PGDATABASE}
 createdb ${PGDATABASE}
 
-psql -v "ON_ERROR_STOP=1" -f /opt/lfcore/core.sql
-psql -v "ON_ERROR_STOP=1" -f /opt/lfcore/automatic_state_changes.sql
-psql -v "ON_ERROR_STOP=1" -f /opt/etc/fixtures/00_utils.sql 
-psql -v "ON_ERROR_STOP=1" -f /opt/etc/fixtures/01_test_world.sql 
+psql -v "ON_ERROR_STOP=1" -f /opt/rooset/lfcore/core.sql
+psql -v "ON_ERROR_STOP=1" -f /opt/rooset/lfcore/automatic_state_changes.sql
+psql -v "ON_ERROR_STOP=1" -f /opt/rooset/etc/fixtures/00_utils.sql 
+psql -v "ON_ERROR_STOP=1" -f /opt/rooset/etc/fixtures/01_test_world.sql 
 

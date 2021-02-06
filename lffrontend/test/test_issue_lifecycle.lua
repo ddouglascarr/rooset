@@ -2,6 +2,8 @@ local model_factories = require 'test.model_factories'
 local BaseCtx = require 'test.base_ctx'
 local t = require 'test.testing'
 
+-- TODO: use a table test for the actual voting. So many possibilites
+
 t.it('show area', function()
   local ctx = BaseCtx:new()
 
@@ -19,6 +21,11 @@ t.it('show area', function()
     'payload should have correct name')
 
   t.eq(request.data.area_current_external_reference, ctx.area.current_external_reference)
+
+  html = t.HTML:new()
+  html:assert_rtv('area-name', ctx.area.name)
+  html:assert_rtv('area-id', ctx.area.id)
+  html:assert_rtv('area-current_external_reference', 'test_ref')
 end)
 
 t.it('show issue', function()
@@ -35,6 +42,10 @@ t.it('show issue', function()
   t.eq(request.data.issue_id, ctx.issue_0.id)
   t.eq(request.data.area_id, ctx.area.id)
   t.eq(request.data.policy_id, ctx.policy.id)
+
+  local html = t.HTML:new()
+  html:assert_rtv('issue-id', ctx.issue_0.id)
+  html:assert_rtv('issue-state', 'admission')
 end)
 
 t.it('create initiative', function ()
@@ -53,6 +64,14 @@ t.it('create initiative', function ()
   }
   t.eq(request.data.initiative_id, ctx.initiative_0.id, 'redirects to new initiative')
   t.eq(request.data.issue_state, 'admission', 'issue is in admission state')
+
+  local html = t.HTML:new()
+  html:assert_rtv('issue-state', 'admission', 'issue is in admission state')
+  html:assert_rtv('initiative-id', ctx.initiative_0.id, 'redirects to a new initiative')
+  html:assert_rtv('initiative-current_draft-external_reference', 'new_sha',
+    'includes external rerence from token')
+  html:assert_rtk_content('initiative-id', ctx.initiative_0.display_name,
+    'displays initiative name in heading')
 end)
 
 t.it('issue should be canceled if initiative quorum not reached', function()
@@ -70,7 +89,8 @@ t.it('issue should be canceled if initiative quorum not reached', function()
     member_id = ctx.member_determined_poitras.id,
   }
 
-  t.eq(request.data.issue_state, 'canceled_issue_not_accepted',
+  local html = t.HTML:new()
+  html:assert_rtv('issue-state', 'canceled_issue_not_accepted',
     'issue is in canceled state')
 end)
 
@@ -88,7 +108,9 @@ t.it('issue should enter discussion if quorum reached through explicit support',
     id = ctx.initiative_0.id,
     member_id = ctx.member_determined_poitras.id,
   }
-  t.eq(request.data.issue_state, 'discussion',
+
+  local html = t.HTML:new()
+  html:assert_rtv('issue-state', 'discussion',
     'issue should be in discussion state')
 end)
 
@@ -113,7 +135,9 @@ t.it('issue should enter discussion if quorum reached through area delegation', 
     id = ctx.initiative_0.id,
     member_id = ctx.member_determined_poitras.id,
   }
-  t.eq(request.data.issue_state, 'discussion',
+
+  local html = t.HTML:new()
+  html:assert_rtv('issue-state', 'discussion',
     'issue should be in discussion state')
 end)
 
@@ -139,7 +163,9 @@ t.it('issue should enter discussion if quorum reached through unit delegation', 
     id = ctx.initiative_0.id,
     member_id = ctx.member_determined_poitras.id,
   }
-  t.eq(request.data.issue_state, 'discussion',
+
+  local html = t.HTML:new()
+  html:assert_rtv('issue-state', 'discussion',
     'issue should be in discussion state')
 end)
 
@@ -164,7 +190,9 @@ t.it('issue should enter discussion if quorum reached through issue delegation',
     id = ctx.initiative_0.id,
     member_id = ctx.member_determined_poitras.id,
   }
-  t.eq(request.data.issue_state, 'discussion',
+
+  local html = t.HTML:new()
+  html:assert_rtv('issue-state', 'discussion',
     'issue should be in discussion state')
 end)
 
@@ -202,7 +230,8 @@ t.it('conflicting section admitted, other initiatives cancelled', function()
     id = ctx.initiative_0.id,
     member_id = ctx.member_determined_poitras.id,
   }
-  t.eq(request.data.issue_state, 'discussion',
+  local html = t.HTML:new()
+  html:assert_rtv('issue-state', 'discussion',
     'issue that reached quorum should be admitted')
 
   t.do_view{
@@ -211,7 +240,8 @@ t.it('conflicting section admitted, other initiatives cancelled', function()
     id = ctx.initiative_conflicting_with_0.id,
     member_id = ctx.member_determined_poitras.id,
   }
-  t.eq(request.data.issue_state, 'canceled_conflicting_section_admitted',
+  local html = t.HTML:new()
+  html:assert_rtv('issue-state', 'canceled_conflicting_section_admitted',
     'initiative that did not reach quorum should be cancelled')
 end)
 
@@ -231,11 +261,15 @@ t.it('create competing initiative', function()
     id = ctx.initiative_1.id,
     member_id = ctx.member_determined_poitras.id,
   }
-  t.eq(request.data.initiative_id, ctx.initiative_1.id)
-  t.eq(request.data.issue_state, 'discussion')
+
+  local html = t.HTML:new()
+  html:assert_rtv('issue-state', 'discussion')
+  html:assert_rtv('initiative-id', ctx.initiative_1.id)
+  html:assert_rtv('initiative-current_draft-external_reference', 'new_sha_1',
+    'includes external rerence from token')
 end)  
 
-t.it('competing intiiatives admitted to voting if they react initiative quorum', function()
+t.it('competing intiiatives admitted to voting if they reach initiative quorum', function()
   local ctx = BaseCtx:new()
   ctx:create_initiative_0()
   ctx:support_initiative{
@@ -264,4 +298,164 @@ t.it('competing intiiatives admitted to voting if they react initiative quorum',
     initiative_id=ctx.initiative_2.id,
     is_admitted = true,
   }
+end)
+
+t.it('members can submit a vote', function()
+  local ctx = BaseCtx:new()
+  ctx:advance_2_initiatives_to_voting_stage()
+
+  t.do_view{
+    module = 'vote',
+    view = 'list',
+    params = { issue_id = { tostring(ctx.issue_0.id) }},
+    member_id = ctx.member_determined_poitras.id,
+  }
+
+  -- before voting, everything is graded 0.
+  local html = t.HTML:new()
+  html:assert_rtv('voting-grade:initiative:' .. ctx.initiative_0.id, 0)
+  html:assert_rtv('voting-grade:initiative:' .. ctx.initiative_1.id, 0)
+
+  t.do_action{
+    module = 'vote',
+    action = 'update',
+    params = {
+      issue_id = { tostring(ctx.issue_0.id) },
+      scoring = { ctx.initiative_1.id .. ':1;' .. ctx.initiative_0.id .. ':-1;' },
+    },
+    member_id = ctx.member_determined_poitras.id,
+  }
+  
+  t.do_view{
+    module = 'vote',
+    view = 'list',
+    params = { issue_id = { tostring(ctx.issue_0.id) } },
+    member_id = ctx.member_determined_poitras.id,
+  }
+
+  -- after voting, grades are offsets from abstention.
+  local html = t.HTML:new()
+  html:assert_rtv('voting-grade:initiative:' .. ctx.initiative_0.id, '-1')
+  html:assert_rtv('voting-grade:initiative:' .. ctx.initiative_1.id, '1')
+end)
+
+t.it('winning initiative should be adopted', function()
+  local ctx = BaseCtx:new()
+  ctx:advance_2_initiatives_to_voting_stage()
+  
+  -- 2 people vote for 1, sq, 0
+  t.do_action{
+    module = 'vote',
+    action = 'update',
+    params = {
+      issue_id = { tostring(ctx.issue_0.id) },
+      scoring = { ctx.initiative_1.id .. ':1;' .. ctx.initiative_0.id .. ':-1;' },
+    },
+    member_id = ctx.member_determined_poitras.id,
+  }
+  t.do_action{
+    module = 'vote',
+    action = 'update',
+    params = {
+      issue_id = { tostring(ctx.issue_0.id) },
+      scoring = { ctx.initiative_1.id .. ':1;' .. ctx.initiative_0.id .. ':-1;' },
+    },
+    member_id = ctx.member_goofy_heisenberg.id,
+  }
+
+  -- 1 person votes sq, 1, 0
+  t.do_action{
+    module = 'vote',
+    action = 'update',
+    params = {
+      issue_id = { tostring(ctx.issue_0.id) },
+      scoring = { ctx.initiative_1.id .. ':-1;' .. ctx.initiative_0.id .. ':-2;' },
+    },
+    member_id = ctx.member_tender_hugle.id,
+  }
+
+  ctx:time_warp_one_period()  -- finish voting
+
+  t.do_view{
+    module = 'issue',
+    view = 'show',
+    id = ctx.issue_0.id,
+    member_id = ctx.member_determined_poitras.id,
+  }
+  local html = t.HTML:new()
+  html:assert_rtv('issue-id', ctx.issue_0.id)
+  html:assert_rtv('issue-state', 'finished_with_winner')
+  html:assert_rtv('initiative-rank:1', ctx.initiative_1.id,
+    'correct initiative is the winner')
+    
+  t.do_view{
+    module = 'area',
+    view = 'show',
+    id = ctx.area.id,
+    member_id = ctx.member_determined_poitras.id,
+  }
+  html = t.HTML:new()
+  html:assert_rtv('area-current_external_reference', 'new_sha_1',
+    'area current_external_reference updated to that of the winning initiative')
+  
+end)
+
+t.it('status quo should be able to be maintained', function()
+  local ctx = BaseCtx:new()
+  ctx:advance_2_initiatives_to_voting_stage()
+  
+  -- 2 people vote for sq, 1, 0
+  t.do_action{
+    module = 'vote',
+    action = 'update',
+    params = {
+      issue_id = { tostring(ctx.issue_0.id) },
+      scoring = { ctx.initiative_1.id .. ':-1;' .. ctx.initiative_0.id .. ':-22;' },
+    },
+    member_id = ctx.member_determined_poitras.id,
+  }
+  t.do_action{
+    module = 'vote',
+    action = 'update',
+    params = {
+      issue_id = { tostring(ctx.issue_0.id) },
+      scoring = { ctx.initiative_1.id .. ':-1;' .. ctx.initiative_0.id .. ':-2;' },
+    },
+    member_id = ctx.member_goofy_heisenberg.id,
+  }
+
+  -- 1 person votes 1, sq, 0
+  t.do_action{
+    module = 'vote',
+    action = 'update',
+    params = {
+      issue_id = { tostring(ctx.issue_0.id) },
+      scoring = { ctx.initiative_1.id .. ':1;' .. ctx.initiative_0.id .. ':-1;' },
+    },
+    member_id = ctx.member_tender_hugle.id,
+  }
+  ctx:time_warp_one_period()  -- finish voting
+
+  t.do_view{
+    module = 'issue',
+    view = 'show',
+    id = ctx.issue_0.id,
+    member_id = ctx.member_determined_poitras.id,
+  }
+  local html = t.HTML:new()
+  html:assert_rtv('issue-id', ctx.issue_0.id)
+  html:assert_rtv('issue-state', 'finished_without_winner')
+  html:assert_rtv('initiative-rank:1', ctx.initiative_1.id,
+    'correct initiative is still ranked 1 even though there is no winner')
+    
+  t.do_view{
+    module = 'area',
+    view = 'show',
+    id = ctx.area.id,
+    member_id = ctx.member_determined_poitras.id,
+  }
+  html = t.HTML:new()
+  html:assert_rtv('area-current_external_reference', 'test_ref',
+    'area current_external_reference remains as before')
+  
 end)

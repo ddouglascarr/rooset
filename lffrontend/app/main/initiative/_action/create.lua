@@ -132,7 +132,11 @@ if not issue and policy.free_timeable then
   end
 end
 
-if param.get("preview") or param.get("edit") then
+-- TODO: preview funcitonality is removed, but there's probably a
+-- bunch of cruft here from it. I also don't know how edit works here, so
+-- work that out
+-- if param.get("preview") or param.get("edit") then
+if param.get("edit") then
   return
 end
 

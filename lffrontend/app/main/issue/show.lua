@@ -45,6 +45,10 @@ request.data.issue_id = issue.id
 request.data.area_id = issue.area_id
 request.data.policy_id = issue.policy_id
 
+ui.tag{ attr = { rtk="issue-id", rtv=issue.id }, content="" }
+ui.tag{ attr = { rtk="issue-state", rtv=issue.state }, content="" }
+
+
 -- TODO(ddc): delete. Just here to show what it's like to do this
 request.data.initiatives = json.array{}
 for k, initiative in ipairs(issue.initiatives) do

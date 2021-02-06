@@ -17,11 +17,19 @@ ui.title ( function ()
     slot.put ( " » " )
   end }
 
-  ui.tag { attr = { class = "area" }, content = function()
+  ui.tag { attr = { rtk="area-current_external_reference", rtv=area.current_external_reference } }
+  ui.tag { attr = { class = "area", rtk="area-id", rtv=area.id }, content = function()
     -- area link
     ui.link {
       content = function()
-        ui.tag{ attr = { class = "name" }, content = area.name }
+        ui.tag{
+          attr = {
+            class = "name",
+            rtk="area-name",
+            rtv=area.name,
+          },
+          content = area.name,
+        }
       end,
       module = "area", view = "show",
       id = area.id

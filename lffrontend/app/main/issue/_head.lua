@@ -29,7 +29,10 @@ ui.title ( function ()
     content = function()
       ui.link {
         content = function()
-          ui.tag{ attr = { class = "name" }, content = issue.area.name }
+          ui.tag{
+            attr = { class = "name" },
+            content = issue.area.name,
+          }
         end,
         module = "area", view = "show",
         id = issue.area.id

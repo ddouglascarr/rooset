@@ -149,6 +149,33 @@ function BaseCtx:create_initiative_conflicting_with_0()
   return action_status
 end
 
+function BaseCtx:advance_2_initiatives_to_voting_stage()
+  self:create_initiative_0()
+  self:support_initiative{
+    member_id = self.member_tender_hugle.id,
+    initiative_id = self.initiative_0.id,
+  }
+
+  self:create_initiative_1_competes_with_0()
+  self:support_initiative{
+    member_id = self.member_dreamy_almeida.id,
+    initiative_id = self.initiative_1.id,
+  }
+
+  self:time_warp_one_period()  -- verification
+  self:time_warp_one_period()  -- voting
+
+  self:assert_initiative_admitted_to_voting{
+    initiative_id=self.initiative_0.id,
+    is_admitted = true,
+  }
+  self:assert_initiative_admitted_to_voting{
+    initiative_id=self.initiative_1.id,
+    is_admitted = true,
+  }
+end
+  
+
 function BaseCtx:support_initiative(args)
   local member_id = args.member_id
   local initiative_id = args.initiative_id
@@ -171,14 +198,15 @@ function BaseCtx:assert_initiative_admitted_to_voting(args)
     id = initiative_id,
     member_id = self.member_determined_poitras.id,
   }
-  t.eq(request.data.initiative_id, initiative_id)
-  t.eq(request.data.issue_state, 'voting')
+
+  local html = t.HTML:new()
+  html:assert_rtv('initiative-id', initiative_id)
+  html:assert_rtv('issue-state', 'voting')
 
   if is_admitted then
-    assert(request.data.initiative_admitted == true, 'initiative should be admitted')
+    html:assert_rtv('initiative-is-admitted', true, 'initiative should be admitted')
   else
-    assert(
-      request.data.initiative_admitted == nil or request.data.initiative_admitted == false,
+    html:assert_rtv('initiative-is-admitted', false,
       'initiative should not be admitted')
   end
 end
