@@ -11,6 +11,7 @@ import {
   compareDocs,
 } from '../../doc';
 import {Sections} from './Sections';
+import {Button} from '../UI'
 
 export type Props = {
   Tk: string;
@@ -45,29 +46,25 @@ export const CompetingInitiativePage = (props: Props) => {
   // Ready, Submitting, Complete states
   return (
     <div>
-      <div className="editor__doc-tools">
-        <div className="editor__doc-tools-left" />
-
-        <div className="editor__doc-tools-right">
-          {docState instanceof DocStateReady ? (
-            <button
-              onClick={() => {
-                docState.submitDoc(
-                  props.UserID,
-                  props.DocsvcHostExternal,
-                  props.Tk,
-                );
-              }}
-              disabled={compareDocs(
-                docState.Data.OldDoc,
-                docState.Data.NewDoc,
-              )}>
-              Propose Changes
-            </button>
-          ) : (
-            <button disabled>Submitting ...</button>
-          )}
-        </div>
+      <div className="flex justify-end pb-2">
+        {docState instanceof DocStateReady ? (
+          <Button
+            onClick={() => {
+              docState.submitDoc(
+                props.UserID,
+                props.DocsvcHostExternal,
+                props.Tk,
+              );
+            }}
+            disabled={compareDocs(
+              docState.Data.OldDoc,
+              docState.Data.NewDoc,
+            )}>
+            Propose Changes
+          </Button>
+        ) : (
+          <button disabled>Submitting ...</button>
+        )}
       </div>
       <Sections
         BaseDoc={docState.Data.OldDoc}

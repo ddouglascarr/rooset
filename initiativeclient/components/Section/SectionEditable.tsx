@@ -1,6 +1,8 @@
 import {h} from 'preact';
 import {Section} from '../../doc';
 import {SectionBody} from './SectionBody';
+import {SectionContainer, Tools, SectionBodyContainer} from './UI';
+import {Button} from '../UI'
 
 export type SectionEditableProps = {
   SectionID: string;
@@ -11,21 +13,23 @@ export type SectionEditableProps = {
 };
 
 export const SectionEditable = (props: SectionEditableProps) => (
-  <div
-    className={[
-      'editor__section',
-      props.Dimmed ? 'editor__section--dimmed' : '',
-    ].join(' ')}>
-    <div className="editor__section-tools">
-      <button className="" onClick={() => props.OnEdit(props.SectionID)}>
-        Edit
-      </button>
-    </div>
-    <div className="editor__section-body rooset-document">
+  <SectionContainer
+		Dimmed={props.Dimmed}
+	>
+    <Tools Grid>
+			<div>
+				<Button onClick={() => props.OnEdit(props.SectionID)}>
+          Edit
+        </Button>
+			</div>
+			<div></div>
+    </Tools>
+    <SectionBodyContainer>
       <SectionBody
         BaseSection={props.BaseSection}
         HeadSection={props.HeadSection}
       />
-    </div>
-  </div>
+    </SectionBodyContainer>
+  </SectionContainer>
 );
+

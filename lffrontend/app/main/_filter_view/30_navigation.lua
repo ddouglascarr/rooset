@@ -1,3 +1,6 @@
+-- set the unit name in the title
+slot.put_into('unit_name', app.unit.name)
+
 slot.select ( 'navigation_right', function ()
 
   if app.session.member == nil then
@@ -5,6 +8,9 @@ slot.select ( 'navigation_right', function ()
       text   = _"Login",
       module = 'index',
       view   = 'login',
+      attr = {
+        class = 'underline',
+      },
       params = {
         redirect_module = request.get_module(),
         redirect_view = request.get_view(),

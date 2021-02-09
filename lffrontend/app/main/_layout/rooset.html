@@ -4,15 +4,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><!-- WEBMCP SLOTNODIV html_title --></title>
-  <!-- TODO (ddouglascarr): what is gregor.js? -->
-  <link rel="stylesheet" type="text/css" media="screen" href="__BASEURL__/static/material-icons.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="__BASEURL__/static/gregor.js/gregor.css" />
-  <link rel="stylesheet" type="text/css" media="screen" href="__BASEURL__/static/pure.css" />
-  <link rel="stylesheet" type="text/css" media="screen" href="__BASEURL__/static/grids-responsive.css" />
-  <link rel="stylesheet" type="text/css" media="screen" href="__BASEURL__/static/rooset.css" />
+	<!-- TODO(ddc): get this from the external resources like webpack js -->
+  <link rel="stylesheet" type="text/css" media="screen" href="__BASEURL__/static/tailwind.css" />
   
   <!-- WEBMCP SLOTNODIV html_head -->
-  <!-- TODO (ddouglascarr): remove jquery & ie support -->
+  <!-- TODO(ddc): remove jquery & ie support -->
   <script src="__BASEURL__/static/js/jquery-1.11.1.min.js"></script>
   <script type="text/javascript">jsFail = true;</script>
   <![if !IE]>
@@ -24,23 +21,33 @@
 </head>
 <body style="">
 
-<header class="navbar">
-  <div class="container navbar__content">
-    <div class="navbar__left">
-      <span class="navbar__title">
-        TODO: unit name goes here
-      </span>
-    </div>
-    <div class="navbar__right">
-      <!--WEBMCP SLOTNODIV navigation_right -->
-    </div>
+<nav class="bg-gray-900">
+  <div class="flex max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="max-w-xl mx-auto flex flex-grow flex-shrink items-center justify-between h-12">
+			<div class="flex-shrink text-white text-lg font-semibold overflow-hidden">
+					<!-- TODO(ddc): overflow elipsis not working -->
+					<span rtk="unit-name" class="truncate">
+							<!--WEBMCP SLOTNODIV unit_name -->
+					</span>
+			</div>
+
+
+		<div class="flex-shrink-0 flex-grow-0 text-white">
+		  <!--WEBMCP SLOTNODIV navigation_right -->
+		</div>
+
+
+		</div>
   </div>
+</nav>
+
+<header class="bg-gray-100 border-b border-gray-200">
+		<!--WEBMCP SLOTNODIV toolbar -->
 </header>
-<!--WEBMCP SLOTNODIV toolbar -->
 <!--WEBMCP SLOTNODIV notification -->
 
 
-<main class="">
+<main class="max-w-7xl min-h-screen bg-white">
   <div class="layout_notice" id="layout_notice" onclick="document.getElementById('layout_notice').style.display='none';">
     <!-- WEBMCP SLOT notice -->
   </div>
@@ -66,15 +73,18 @@
   <!-- WEBMCP SLOTNODIV actions -->
   
   <!-- WEBMCP SLOTNODIV slideshow -->
-  <div class="main">
-    <!-- WEBMCP SLOTNODIV default -->
-    <!-- WEBMCP SLOTNODIV extra -->
-  </div>
-  <br style="clear: both;" />
-  <div class="footer">
-    <!-- WEBMCP SLOTNODIV footer -->
+  <div class="">
+		<div class="max-w-xl mx-auto bg-grey-100 py-3">
+			<!-- WEBMCP SLOTNODIV default -->
+			<!-- WEBMCP SLOTNODIV extra -->
+		</div>
   </div>
 </main>
+<footer class="max-w-7xl bg-gray-900">
+	<div class="max-w-xl mx-auto pt-1 pb-3 text-sm text-white">
+				<!-- WEBMCP SLOTNODIV footer -->
+	</div>
+</footer>
 
   <div id="trace">
     <!-- WEBMCP SLOTNODIV trace_button -->
@@ -109,6 +119,7 @@
     }
   </script>
   
+	<!-- TODO: only load this when needed -->
   <script type="text/javascript" src="/static/js/tinymce/tinymce.min.js"></script>
   <!-- WEBMCP SLOTNODIV script -->
   

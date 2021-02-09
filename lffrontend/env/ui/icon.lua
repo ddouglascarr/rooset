@@ -14,7 +14,7 @@ function ui.icon( icon_name )
 
   ui.tag {
     tag = 'div',
-    attr = { class = 'icon24' },
+    attr = { class = 'fill-current' },
     content = function() 
       slot.put(icon)
     end,

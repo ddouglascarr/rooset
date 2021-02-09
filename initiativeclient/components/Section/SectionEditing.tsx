@@ -1,5 +1,7 @@
 import {h, Component, createRef, RefObject} from 'preact';
 import {Section} from '../../doc';
+import {SectionContainer, Tools, SectionBodyContainer} from './UI';
+import {Button} from '../UI'
 
 // TODO: any
 declare const tinymce: any;
@@ -50,16 +52,19 @@ export class SectionEditing extends Component<SectionEditingProps, {}> {
 
   render() {
     return (
-      <div className="editor__section">
-        <div className="editor__section-tools">
-          <button className="" onClick={() => this.finishTinymce()}>
-            Done
-          </button>
-        </div>
-        <div className="editor__section-body">
+			<SectionContainer>
+        <Tools Grid>
+					<div></div>
+					<div>
+            <Button mode="primary" onClick={() => this.finishTinymce()}>
+              Done
+            </Button>
+					</div>
+				</Tools>
+        <SectionBodyContainer>
           <textarea ref={this.editorRef} />
-        </div>
-      </div>
+        </SectionBodyContainer>
+			</SectionContainer>
     );
   }
 }

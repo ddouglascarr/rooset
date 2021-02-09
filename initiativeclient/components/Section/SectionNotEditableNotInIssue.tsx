@@ -1,6 +1,7 @@
 import {h} from 'preact';
 import {Section} from '../../doc';
 import {SectionBody} from './SectionBody';
+import {SectionContainer, Tools, SectionBodyContainer} from './UI';
 
 type Props = {
   SectionID: string;
@@ -8,13 +9,13 @@ type Props = {
 };
 
 export const SectionNotEditableNotInIssue = (props: Props) => (
-  <div className="editor__section editor__section--dimmed">
-    <div className="editor__section-tools" />
-    <div className="editor__section-body rooset-document">
+	<SectionContainer Dimmed>
+		<Tools />
+		<SectionBodyContainer>
       <SectionBody
         BaseSection={props.BaseSection}
         HeadSection={props.BaseSection}
       />
-    </div>
-  </div>
+		</SectionBodyContainer>
+  </SectionContainer>
 );

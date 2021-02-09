@@ -3,6 +3,7 @@ import HTMLDiff from 'htmldiff-js';
 
 import {Section} from '../../doc';
 
+// TODO(ddc) style the diff
 export const SectionBody = (props: {
   HeadSection: Section;
   BaseSection: Section;
@@ -10,6 +11,7 @@ export const SectionBody = (props: {
   if (props.BaseSection.Content === props.HeadSection.Content) {
     return (
       <section
+			  className="prose"
         dangerouslySetInnerHTML={{
           __html: props.HeadSection.Content,
         }}
@@ -19,6 +21,7 @@ export const SectionBody = (props: {
 
   return (
     <section
+			className="prose"
       dangerouslySetInnerHTML={{
         __html: HTMLDiff.execute(
           props.BaseSection.Content,

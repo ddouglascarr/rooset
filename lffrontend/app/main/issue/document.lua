@@ -11,31 +11,47 @@ else
   -- TODO: error
 end
 
-slot.put_into("toolbar", ui.tag{
-  tag= "div",
-  attr = { class="toolbar" },
-  content=function()
-    ui.tag{
-      tag="div", attr={class="container"}, 
-      content=function()
-        ui.tag{
-          tag="div", 
-          attr={class="toolbar__title"},
-          content=area.name,
-        }
-        ui.tag{tag="div", attr={class="toolbar__tab_container"},
-          content=function()
-            ui.tag{tag="div", attr={class="toolbar__tab"}, content=function()
-              ui.link{module="issue", view="show", id=issue.id, content="Initiatives"}
-            end}
-            ui.tag{tag="div", attr={class="toolbar__tab toolbar__tab--active"},
-              content="Document"}
-          end,
-        }
-      end,
-    }
-  end,
-})
+-- TODO(ddc): copy-pasted from document.lua<area>
+local tab_link = function(is_active, content)
+  local classname = "ml-2 flex-grow-0 text-xs "
+  if is_active then
+    classname = classname .. "text-black font-bold border-b-2 border-black cursor-default"
+  else
+    classname = classname .. "text-blue-600 hover:underline" 
+  end
+  
+  ui.tag{
+    tag="div",
+    attr={class=classname},
+    content=content,
+  }
+end
+
+slot.put_into("toolbar", slot.use_temporary(function()
+  ui.tag{
+    tag= "div",
+    attr = { class="max-w-xl mx-auto pt-2" },
+    content=function()
+      ui.tag{
+        tag="h3", 
+        attr={class="text-xl font-bold leading-tight text-grey-900"},
+        content=area.name .. " › issue #" .. issue.id,
+      }
+      ui.tag{
+        tag="div",
+        attr={class="flex justify-end"},
+        content=function()
+          tab_link(false, function()
+            ui.link{module="issue", view="show", id=issue.id, content="Initiatives"}
+          end)
+          tab_link(true, function()
+              ui.tag{ content="Document" }
+          end)
+        end,
+      }
+    end,
+  }
+end))
 
 ui.tag{ tag = "div", attr = { class="container" }, content=function()
   ui.tag{ tag = "div", attr = { id="react-root" }, content="" }

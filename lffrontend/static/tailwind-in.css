@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* It's usually better to just inline tailwind utility classes, and make components
+   to avoid duplication. However there are a few styles that are shared across different
+   languages, so using @apply here to allow a single source of truth about what they look
+   like (e.g. a button). If in doubt, just inline.  */
+
+.rst-btn {
+  @apply appearance-none relative block w-full max-w-xs px-3 py-2 rounded-md border border-gray-300 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm;
+}
+.rst-btn.rst-btn--disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+.rst-btn.rst-btn--primary {
+  @apply bg-blue-700 text-white;
+}
+.rst-btn.rst-btn--primary.rst-btn--disabled {
+  @apply text-gray-300;
+}
