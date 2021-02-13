@@ -51,7 +51,6 @@ export const CompetingInitiativePage = (props: Props) => {
           <Button
             onClick={() => {
               docState.submitDoc(
-                props.UserID,
                 props.DocsvcHostExternal,
                 props.Tk,
               );

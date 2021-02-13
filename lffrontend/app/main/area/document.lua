@@ -86,11 +86,10 @@ local new_initiative_payload = {
   UserID=tostring(app.session.member_id),
   OpenAdmittedSections=json.object{},  -- populated below
   Tk = jwt.encode({
-    RepositoryName={area.unit.external_reference},
-    AreaID={"'" .. area.id .. "'"},
-    UserID={tostring(app.session.member_id)},
-    Op={"messages.CreateDocReq", "messages.GetDocReq"},
-    Svc={"gitsvc"},
+    UserID=app.session.member_id,
+    Op={"docsvc.CreateDocReq", "docsvc.GetDocReq"},
+    SHA=area.current_external_reference,
+    BaseSHA=area.current_external_reference,
   })
 }
 

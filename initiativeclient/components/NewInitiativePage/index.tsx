@@ -52,7 +52,6 @@ export const NewInitiativePage = (props: NewInitiativePageProps) => {
           <Button
             onClick={() => {
               docState.submitDoc(
-                props.UserID,
                 props.DocsvcHostExternal,
                 props.Tk,
               );

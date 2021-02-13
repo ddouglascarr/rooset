@@ -1,9 +1,8 @@
 // tools for parsing rooset docs
 import {useState, useEffect} from 'preact/hooks';
-import {messages} from 'messages';
+import {CreateDocReqBody, GetDocResp} from 'messages';
 
 type ID = string;
-type SHA = string;
 
 export type Section = {
   ID: ID;
@@ -141,20 +140,17 @@ export class DocStateReady extends AbstractDocState<DocState, DocReadyData> {
   };
 
   public submitDoc = async (
-    userID: string,
     docsvcHostExternal: string,
     tk: string,
   ) => {
     this.setState(new DocStateSubmitting(this.setState, this.Data));
-    const reqBody = new messages.CreateDocReq({
-      UserID: userID,
-      BaseSHA: this.Data.SHA,
+    const reqBody: CreateDocReqBody = {
       Content: serializeDoc(this.Data.NewDoc),
-    });
+    };
 
     try {
       const resp = await window.fetch(
-        `${docsvcHostExternal}/rpc/messages.CreateDocReq`,
+        `${docsvcHostExternal}/rpc/docsvc.CreateDocReq`,
         {
           method: 'post',
           mode: 'cors',
@@ -162,7 +158,7 @@ export class DocStateReady extends AbstractDocState<DocState, DocReadyData> {
           headers: {
             Authorization: tk,
           },
-          body: JSON.stringify(messages.CreateDocReq.toObject(reqBody)),
+          body: JSON.stringify(reqBody),
         },
       );
       if (resp.ok) {
@@ -213,12 +209,10 @@ export const useDocState = (
     setState(new DocStateLoading(setState, {}));
 
     const loadDoc = async () => {
-      const reqBody = messages.GetDocReq.fromObject({
-        SHA: baseDocSHA,
-      });
+      const reqBody = {}; 
       try {
         const resp = await window.fetch(
-          `${docsvcHostExternal}/rpc/messages.GetDocReq`,
+          `${docsvcHostExternal}/rpc/docsvc.GetDocReq`,
           {
             method: 'post',
             mode: 'cors',
@@ -226,21 +220,12 @@ export const useDocState = (
             headers: {
               Authorization: tk,
             },
-            body: JSON.stringify(messages.GetDocReq.toObject(reqBody)),
+            body: JSON.stringify(reqBody),
           },
         );
         if (resp.ok) {
-          const body = await resp.json();
-          const reason = messages.GetDocReq.verify(body);
-          if (reason) {
-            setState(
-              new DocStateFailed(setState, {
-                Message: `invalid server response ${reason}`,
-              }),
-            );
-            return;
-          }
-          const docStr = messages.GetDocResp.fromObject(body)?.Content;
+          const body: GetDocResp = await resp.json();
+          const docStr = body.Content;
           const doc = parseDoc(docStr);
           setState(
             new DocStateReady(setState, {

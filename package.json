@@ -7,12 +7,14 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --config ./conf/webpack.config.js",
-		"build-css": "npx tailwindcss-cli@latest build ./lffrontend/static/tailwind-in.css -o ./lffrontend/static/tailwind.css",
+    "build-css": "npx tailwindcss-cli@latest build ./lffrontend/static/tailwind-in.css -o ./lffrontend/static/tailwind.css",
     "start": "webpack-dev-server --config ./conf/webpack.config.js --host 0.0.0.0",
     "watch-docvalidationsvc": "nodemon dist/docvalidationsvc.js",
     "lint": "eslint ./ --ext .ts,.tsx"
   },
   "devDependencies": {
+    "autoprefixer": "^9.8.6",
+    "@tailwindcss/typography": "^0.4.0",
     "@types/express": "^4.17.2",
     "@types/tinymce": "^4.5.24",
     "@typescript-eslint/eslint-plugin": "^2.4.0",
@@ -21,20 +23,16 @@
     "eslint-plugin-react": "^7.17.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
+    "tailwindcss": "^2.0.2",
     "ts-loader": "^6.2.0",
     "typescript": "^3.7.3",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.2"
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@tailwindcss/typography": "^0.4.0",
     "@tinymce/tinymce-react": "^3.5.1",
-    "autoprefixer": "^9.8.6",
-    "express": "^4.17.1",
     "htmldiff-js": "^1.0.5",
-    "preact": "^10.2.1",
-    "protobufjs": "^6.9.0",
-    "tailwindcss": "^2.0.2"
+    "preact": "^10.2.1"
   }
 }

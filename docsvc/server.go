@@ -1,20 +1,16 @@
 package docsvc
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 
 	"github.com/ddouglascarr/rooset/messages"
-	"github.com/gogo/protobuf/jsonpb"
-	"github.com/golang/protobuf/proto"
 	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/xsd"
 	"github.com/pkg/errors"
 )
-
-// bundle the schema in the binary
-//go:generate go run ../cmd/includetext.go docsvc schemaStr ./roosetdoc.xsd ./roosetdoc.go
 
 // TODO: move stuff out of handlers
 // TODO: proper server
@@ -29,17 +25,30 @@ func Run() {
 	}
 	defer schema.Free()
 
-	http.HandleFunc("/rpc/messages.CreateDocReq", withAuthenticatedMessage("messages.CreateDocReq", func(
+	http.HandleFunc("/rpc/docsvc.CreateDocReq", func(
 		w http.ResponseWriter,
 		r *http.Request,
-		msg proto.Message,
 	) {
-		body, ok := msg.(*messages.CreateDocReq)
-		if !ok {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				"rooset: auth system error"))
+		var claims = messages.CreateDocReqClaims{}
+		var body = messages.CreateDocReqBody{}
+
+		setupResponse(w, r)
+		if r.Method == "OPTIONS" {
 			return
+		}
+
+		err := parseAndValidateClaims(r, &claims, "docsvc.CreateDocReq")
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`, err))
+			return
+		}
+
+		err = json.NewDecoder(r.Body).Decode(&body)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
+				errors.Wrap(err, "docsvc: invalid payload")))
 		}
 
 		sHA, doc, err := processHTML(body.Content)
@@ -65,11 +74,11 @@ func Run() {
 			return
 		}
 
-		baseDoc, err := getBlob(body.BaseSHA)
+		baseDoc, err := getBlob(claims.BaseSHA)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "rooset: system error fetching base doc")))
+				errors.Wrap(err, "docsvc: system error fetching base doc")))
 			return
 		}
 
@@ -77,7 +86,7 @@ func Run() {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "rooset: system error comparing docs")))
+				errors.Wrap(err, "docsvc: system error comparing docs")))
 			return
 		}
 
@@ -85,21 +94,20 @@ func Run() {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "rooset: system error saving doc")))
+				errors.Wrap(err, "docsvc: system error saving doc")))
 			return
 		}
 
-		tk, err := BuildDocSHATk(sHA, body.BaseSHA, modifiedSectionIDs)
+		tk, err := BuildDocSHATk(sHA, claims.BaseSHA, modifiedSectionIDs)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
 				err.Error()))
 			return
 		}
-		m := jsonpb.Marshaler{}
-		respBody, err := m.MarshalToString(&messages.CreateDocResp{
+		respBody, err := json.Marshal(&messages.CreateDocResp{
 			SHA:                sHA,
-			BaseSHA:            body.BaseSHA,
+			BaseSHA:            claims.BaseSHA,
 			ModifiedSectionIDs: modifiedSectionIDs,
 			Tk:                 tk,
 		})
@@ -111,22 +119,29 @@ func Run() {
 		}
 		w.WriteHeader(http.StatusOK)
 		io.WriteString(w, string(respBody))
-	}))
+	})
 
-	http.HandleFunc("/rpc/messages.GetDocReq", withAuthenticatedMessage("messages.GetDocReq", func(
+	http.HandleFunc("/rpc/docsvc.GetDocReq", func(
 		w http.ResponseWriter,
 		r *http.Request,
-		msg proto.Message,
 	) {
-		body, ok := msg.(*messages.GetDocReq)
-		if !ok {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				"rooset: auth system error"))
+		var claims = messages.GetDocReqClaims{}
+
+		setupResponse(w, r)
+		if r.Method == "OPTIONS" {
 			return
 		}
 
-		blob, err := getBlob(body.SHA)
+		w.Header().Set("Content-Type", "application/json")
+
+		err := parseAndValidateClaims(r, &claims, "docsvc.CreateDocReq")
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`, err))
+			return
+		}
+
+		blob, err := getBlob(claims.SHA)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
@@ -134,9 +149,8 @@ func Run() {
 			return
 		}
 
-		m := jsonpb.Marshaler{}
-		respBody, err := m.MarshalToString(&messages.GetDocResp{
-			SHA:     body.SHA,
+		respBody, err := json.Marshal(&messages.GetDocResp{
+			SHA:     claims.SHA,
 			Content: string(blob),
 		})
 		if err != nil {
@@ -148,7 +162,14 @@ func Run() {
 
 		w.WriteHeader(http.StatusOK)
 		io.WriteString(w, string(respBody))
-	}))
+	})
 
 	http.ListenAndServe(":8080", nil)
+}
+
+// TODO: tighten this up
+func setupResponse(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
