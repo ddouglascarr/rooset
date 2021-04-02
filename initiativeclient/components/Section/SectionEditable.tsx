@@ -10,6 +10,7 @@ export type SectionEditableProps = {
   HeadSection: Section;
   OnEdit: (sectionID: string) => void;
   Dimmed: boolean;
+  Enabled: boolean;
 };
 
 export const SectionEditable = (props: SectionEditableProps) => (
@@ -17,12 +18,14 @@ export const SectionEditable = (props: SectionEditableProps) => (
 		Dimmed={props.Dimmed}
 	>
     <Tools Grid>
-			<div>
-				<Button onClick={() => props.OnEdit(props.SectionID)}>
+      {props.Enabled ? (
+	  <div>
+		<Button onClick={() => props.OnEdit(props.SectionID)}>
           Edit
         </Button>
-			</div>
-			<div></div>
+	  </div>	
+      ) : (<div></div>)}
+	  <div></div>
     </Tools>
     <SectionBodyContainer>
       <SectionBody

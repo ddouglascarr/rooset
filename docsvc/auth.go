@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ddouglascarr/rooset/conf"
+	"github.com/ddouglascarr/rooset/messages"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
 )
@@ -32,21 +33,23 @@ func parseAndValidateClaims(
 	for i, tk := range r.Header["Authorization"] {
 		tokenHeader = tk
 		if i == 1 {
-			return errors.New("auth: more than one Authorization header")
+			return &docSvcErr{authErr, "more than one Authorization header"}
 		}
 	}
 
 	if tokenHeader == "" {
-		return errors.New("auth: no authorization header")
+		return &docSvcErr{authErr, "no authorization header"}
 	}
 
 	tk, err := jwt.ParseWithClaims(tokenHeader, claims, keyFunc)
 	if err != nil {
-		return errors.Wrap(err, "auth: parsing token failed")
+		return &docSvcErr{
+			authErr,
+			fmt.Sprintf("parsing auth token failed, %s", err)}
 	}
 
 	if !tk.Valid {
-		return errors.New("auth: invalid token")
+		return &docSvcErr{authErr, "invalid auth token"}
 	}
 
 	err = checkOpClaim(claims, opName)
@@ -60,7 +63,8 @@ func parseAndValidateClaims(
 func checkOpClaim(claims Claims, opName string) error {
 	isAuthed := isStringInSlice(claims.Op(), opName)
 	if !isAuthed {
-		return errors.Errorf("auth: claims.Op does not include %s", opName)
+		return &docSvcErr{notAuthorizedErr,
+			fmt.Sprintf("auth: claims.Op does not include %s", opName)}
 	}
 
 	return nil
@@ -69,7 +73,7 @@ func checkOpClaim(claims Claims, opName string) error {
 //BuildDocSHATk builds a jwt token to be passed to lffronted detailing a new
 // document.
 // TODO: statically type claims somehow
-func BuildDocSHATk(sHA string, baseSHA string, modifiedSectionIDs []string) (string, error) {
+func BuildDocSHATk(sHA string, baseSHA string, modifiedSectionIDs []string) (messages.JWTStr, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"SHA":                sHA,
 		"BaseSHA":            baseSHA,
@@ -79,6 +83,19 @@ func BuildDocSHATk(sHA string, baseSHA string, modifiedSectionIDs []string) (str
 	tkStr, err := token.SignedString([]byte(conf.Auth.JWTKey))
 	if err != nil {
 		return "", errors.Wrap(err, "rooset: failed to sign doc SHA")
+	}
+
+	return tkStr, nil
+}
+
+func buildDescRespTk(sHA string) (messages.JWTStr, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"SHA": sHA,
+	})
+
+	tkStr, err := token.SignedString([]byte(conf.Auth.JWTKey))
+	if err != nil {
+		return "", errors.Wrap(err, "rooset: failed to sign desc SHA")
 	}
 
 	return tkStr, nil

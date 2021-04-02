@@ -1,13 +1,12 @@
 package docsvc
 
 import (
+	_ "embed"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
 	"github.com/ddouglascarr/rooset/messages"
-	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/xsd"
 	"github.com/pkg/errors"
 )
@@ -16,116 +15,118 @@ import (
 // TODO: proper server
 // TODO: work out error handling
 
+//go:embed roosetdoc.xsd
+var docSchemaBytes []byte
+
+//go:embed roosetdesc.xsd
+var descSchemaBytes []byte
+
 //Run starts a server on 8080
 func Run() {
-	// try validation:
-	schema, err := xsd.Parse([]byte(schemaStr))
+	docSchema, err := xsd.Parse(docSchemaBytes)
 	if err != nil {
 		panic(err)
 	}
-	defer schema.Free()
+	defer docSchema.Free()
 
-	http.HandleFunc("/rpc/docsvc.CreateDocReq", func(
+	descSchema, err := xsd.Parse(descSchemaBytes)
+	if err != nil {
+		panic(err)
+	}
+	defer descSchema.Free()
+
+	http.HandleFunc("/rpc/docsvc.CreateRev", func(
 		w http.ResponseWriter,
 		r *http.Request,
 	) {
-		var claims = messages.CreateDocReqClaims{}
-		var body = messages.CreateDocReqBody{}
+		var claims = messages.CreateRevReqClaims{}
+		var body = messages.CreateRevReqBody{}
 
 		setupResponse(w, r)
 		if r.Method == "OPTIONS" {
 			return
 		}
 
-		err := parseAndValidateClaims(r, &claims, "docsvc.CreateDocReq")
+		err := parseAndValidateClaims(r, &claims, "docsvc.CreateRev")
 		if err != nil {
-			w.WriteHeader(http.StatusUnauthorized)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`, err))
+			handleHTTPDocSvcError(w, err)
 			return
 		}
 
 		err = json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "docsvc: invalid payload")))
-		}
-
-		sHA, doc, err := processHTML(body.Content)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				"rooset: invalid document"))
+			handleHTTPDocSvcError(w, &docSvcErr{badReq, "invalid payload"})
 			return
 		}
 
-		xmlDoc, err := libxml2.ParseString(doc)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				"rooset: invalid document"))
-			return
-		}
-
-		if err := schema.Validate(xmlDoc); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				"rooset: invalid doc"))
-			return
-		}
-
-		baseDoc, err := getBlob(claims.BaseSHA)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "docsvc: system error fetching base doc")))
-			return
-		}
-
-		modifiedSectionIDs, err := DiffDocs(baseDoc, []byte(doc))
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "docsvc: system error comparing docs")))
-			return
-		}
-
-		err = saveBlob(sHA, doc)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "docsvc: system error saving doc")))
-			return
-		}
-
-		tk, err := BuildDocSHATk(sHA, claims.BaseSHA, modifiedSectionIDs)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				err.Error()))
-			return
-		}
-		respBody, err := json.Marshal(&messages.CreateDocResp{
-			SHA:                sHA,
-			BaseSHA:            claims.BaseSHA,
-			ModifiedSectionIDs: modifiedSectionIDs,
-			Tk:                 tk,
+		resp, err := createRev(docSchema, &messages.CreateRevReq{
+			Content: body.Content,
+			BaseSHA: claims.BaseSHA,
+			UserID:  claims.UserID,
 		})
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "rooset: failed to marshal response").Error()))
+			handleHTTPDocSvcError(w, err)
+			return
+		}
+
+		respBody, err := json.Marshal(resp)
+		if err != nil {
+			handleHTTPDocSvcError(w, errors.Wrap(
+				err, "docsvc: failed to marshall response"))
 			return
 		}
 		w.WriteHeader(http.StatusOK)
 		io.WriteString(w, string(respBody))
 	})
 
-	http.HandleFunc("/rpc/docsvc.GetDocReq", func(
+	http.HandleFunc("/rpc/docsvc.CreateDesc", func(
 		w http.ResponseWriter,
 		r *http.Request,
 	) {
-		var claims = messages.GetDocReqClaims{}
+		var claims = messages.CreateDescReqClaims{}
+		var body = messages.CreateDescReqBody{}
+
+		setupResponse(w, r)
+		if r.Method == "OPTIONS" {
+			return
+		}
+
+		err := parseAndValidateClaims(r, &claims, "docsvc.CreateDesc")
+		if err != nil {
+			handleHTTPDocSvcError(w, err)
+			return
+		}
+
+		err = json.NewDecoder(r.Body).Decode(&body)
+		if err != nil {
+			handleHTTPDocSvcError(w, &docSvcErr{badReq, "invalid payload"})
+			return
+		}
+
+		resp, err := createDesc(descSchema, &messages.CreateDescReq{
+			Content: body.Content,
+		})
+		if err != nil {
+			handleHTTPDocSvcError(w, err)
+			return
+		}
+
+		respBody, err := json.Marshal(resp)
+		if err != nil {
+			handleHTTPDocSvcError(w, errors.Wrap(
+				err, "docsvc: failed to marshall response"))
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		io.WriteString(w, string(respBody))
+	})
+
+	http.HandleFunc("/rpc/docsvc.Get", func(
+		w http.ResponseWriter,
+		r *http.Request,
+	) {
+		var claims = messages.GetReqClaims{}
+		var body = messages.GetReqBody{}
 
 		setupResponse(w, r)
 		if r.Method == "OPTIONS" {
@@ -134,29 +135,30 @@ func Run() {
 
 		w.Header().Set("Content-Type", "application/json")
 
-		err := parseAndValidateClaims(r, &claims, "docsvc.CreateDocReq")
+		err := parseAndValidateClaims(r, &claims, "docsvc.Get")
 		if err != nil {
-			w.WriteHeader(http.StatusUnauthorized)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`, err))
+			handleHTTPDocSvcError(w, err)
 			return
 		}
 
-		blob, err := getBlob(claims.SHA)
+		err = json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "rooset: system error fetching doc")))
+			handleHTTPDocSvcError(w, &docSvcErr{badReq, "invalid payload"})
 			return
 		}
 
-		respBody, err := json.Marshal(&messages.GetDocResp{
-			SHA:     claims.SHA,
+		blob, err := getBlob(body.SHA)
+		if err != nil {
+			handleHTTPDocSvcError(w, errors.Wrap(err, "docsvc: failed to fetch doc"))
+			return
+		}
+
+		respBody, err := json.Marshal(&messages.GetResp{
+			SHA:     body.SHA,
 			Content: string(blob),
 		})
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			io.WriteString(w, fmt.Sprintf(`{"errors": ["%s"]}`,
-				errors.Wrap(err, "rooset: failed to marshal response").Error()))
+			handleHTTPDocSvcError(w, errors.Wrap(err, "docsvc: failed to marshall response"))
 			return
 		}
 

@@ -2,8 +2,7 @@ package docsvc
 
 import (
 	"encoding/xml"
-
-	"github.com/pkg/errors"
+	"fmt"
 )
 
 //DiffDocs parses and compares 2 rooset initiative docs, and outputs a slice of
@@ -18,12 +17,14 @@ func DiffDocs(baseXML []byte, headXML []byte) ([]string, error) {
 
 	err := xml.Unmarshal(baseXML, &baseDoc)
 	if err != nil {
-		return modifiedSections, errors.Wrap(err, "rooset: failed to unmarshal baseXML")
+		return modifiedSections, &docSvcErr{
+			generalErr, fmt.Sprintf("failed to unmarshal baseXML, %s", err)}
 	}
 
 	err = xml.Unmarshal(headXML, &headDoc)
 	if err != nil {
-		return modifiedSections, errors.Wrap(err, "rooset: failed to unmarshal headXML")
+		return modifiedSections, &docSvcErr{
+			generalErr, fmt.Sprintf("failed to unmarshal headXML, %s", err)}
 	}
 
 	for _, baseSection := range baseDoc.Sections {

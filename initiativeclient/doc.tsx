@@ -1,6 +1,6 @@
-// tools for parsing rooset docs
 import {useState, useEffect} from 'preact/hooks';
-import {CreateDocReqBody, GetDocResp} from 'messages';
+import {CreateRevReqBody} from 'messages';
+import {callCreateRev, callGet} from './rpc';
 
 type ID = string;
 
@@ -14,7 +14,7 @@ export type Doc = {
   Order: Array<ID>;
 };
 
-export const parseDoc = (docStr: string) => {
+export const parseDoc = (docStr: string): Doc => {
   const parser = new window.DOMParser();
   const doc = parser.parseFromString(docStr, 'application/xml');
   const article = doc.firstElementChild;
@@ -46,7 +46,7 @@ export const parseDoc = (docStr: string) => {
   return out;
 };
 
-export const serializeDoc = (doc: Doc) => {
+export const serializeDoc = (doc: Doc): string => {
   const articleEl = document.createElement('article');
   for (const sectionID of doc.Order) {
     const section = doc.Sections[sectionID];
@@ -139,49 +139,32 @@ export class DocStateReady extends AbstractDocState<DocState, DocReadyData> {
     });
   };
 
-  public submitDoc = async (
+  public submitDocRev = async (
     docsvcHostExternal: string,
     tk: string,
   ) => {
     this.setState(new DocStateSubmitting(this.setState, this.Data));
-    const reqBody: CreateDocReqBody = {
+    const reqBody: CreateRevReqBody = {
       Content: serializeDoc(this.Data.NewDoc),
     };
 
-    try {
-      const resp = await window.fetch(
-        `${docsvcHostExternal}/rpc/docsvc.CreateDocReq`,
-        {
-          method: 'post',
-          mode: 'cors',
-          cache: 'no-cache',
-          headers: {
-            Authorization: tk,
-          },
-          body: JSON.stringify(reqBody),
-        },
+    const result = await callCreateRev(
+      docsvcHostExternal,
+      reqBody,
+      tk,
+    );
+    if (result.ok) {
+      this.setState(
+        new DocStateComplete(this.setState, {
+          ...this.Data,
+          NewDocTk: result.resp.Tk,
+          NewDocSHA: result.resp.SHA,
+        }),
       );
-      if (resp.ok) {
-        const body = await resp.json();
-        this.setState(
-          new DocStateComplete(this.setState, {
-            ...this.Data,
-            NewDocTk: await body.Tk,
-            NewDocSHA: await body.SHA,
-          }),
-        );
-      } else {
-        this.setState(
-          new DocStateFailed(this.setState, {
-            Message: 'failed to create initiative',
-          }),
-        );
-      }
-    } catch (err) {
+    } else {
       this.setState(
         new DocStateFailed(this.setState, {
-          Message:
-            'Sorry, something went wrong with your network request. Please check your connection and try again',
+          Message: result.msg,
         }),
       );
     }
@@ -209,43 +192,25 @@ export const useDocState = (
     setState(new DocStateLoading(setState, {}));
 
     const loadDoc = async () => {
-      const reqBody = {}; 
-      try {
-        const resp = await window.fetch(
-          `${docsvcHostExternal}/rpc/docsvc.GetDocReq`,
-          {
-            method: 'post',
-            mode: 'cors',
-            cache: 'no-cache',
-            headers: {
-              Authorization: tk,
-            },
-            body: JSON.stringify(reqBody),
-          },
+      const result = await callGet(
+        docsvcHostExternal,
+        { SHA: baseDocSHA},
+        tk,
+      );
+      if (result.ok) {
+        const doc = parseDoc(result.resp.Content);
+        setState(
+          new DocStateReady(setState, {
+            OldDoc: doc,
+            NewDoc: doc,
+            SHA: baseDocSHA,
+          }),
         );
-        if (resp.ok) {
-          const body: GetDocResp = await resp.json();
-          const docStr = body.Content;
-          const doc = parseDoc(docStr);
-          setState(
-            new DocStateReady(setState, {
-              OldDoc: doc,
-              NewDoc: doc,
-              SHA: baseDocSHA,
-            }),
-          );
-          return;
-        } else {
-          setState(
-            new DocStateFailed(setState, {
-              Message: 'failed',
-            }),
-          );
-        }
-      } catch (err) {
+        return;
+      } else {
         setState(
           new DocStateFailed(setState, {
-            Message: 'failed',
+            Message: result.msg,
           }),
         );
       }

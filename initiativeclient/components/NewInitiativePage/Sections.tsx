@@ -12,6 +12,7 @@ type Props = {
   HeadDoc: Doc;
   OnUpdateSection: (sectionID: string, content: string) => void;
   OpenAdmittedSections: {[SectionID: string]: {IssueID: number}};
+  EditingEnabled: boolean;
 };
 type State = {
   EditingSectionID: string | null;
@@ -58,6 +59,7 @@ export const Sections = (props: Props) => {
               setState({EditingSectionID: id});
             }}
             Dimmed={state.EditingSectionID !== null}
+            Enabled={props.EditingEnabled}
           />
         );
       })}

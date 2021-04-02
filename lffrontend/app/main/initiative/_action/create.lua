@@ -1,6 +1,7 @@
 local issue
 local area
-local tkContent = jwt.decode(param.get("tk"))
+local rev_tk_content = jwt.decode(param.get("rev_tk"))
+local desc_tk_content = jwt.decode(param.get("desc_tk"))
 
 local issue_id = param.get("issue_id", atom.integer)
 if issue_id then
@@ -15,7 +16,7 @@ if issue_id then
     slot.put_into("error", _"Current phase is already closed.")
     return false
   end
-  -- TODO: validate that tkContent modified sections == same as issue
+  -- TODO: validate that rev_tk_content modified sections == same as issue
   area = issue.area
 else
   local area_id = param.get("area_id", atom.integer)
@@ -84,6 +85,7 @@ if #name > 140 then
   return false
 end
 
+-- TODO(ddc) remove
 local formatting_engine
 if config.enforce_formatting_engine then
   formatting_engine = config.enforce_formatting_engine
@@ -162,7 +164,7 @@ if not issue then
 
   -- check that there are no conflicting sections
   for k, open_section in ipairs(area.open_admitted_sections) do
-    for k, new_section_id in pairs(tkContent.Claims.ModifiedSectionIDs) do
+    for k, new_section_id in pairs(rev_tk_content.Claims.ModifiedSectionIDs) do
       if new_section_id == open_section.external_reference then
         -- TODO: link to conflicting issue 
         slot.put_into("error", _"This initiative is trying to modify a section that is already under discussion in issue #" .. open_section.issue_id)
@@ -173,7 +175,7 @@ if not issue then
   
   issue:save()
 
-  for k, v in pairs(tkContent.Claims.ModifiedSectionIDs) do
+  for k, v in pairs(rev_tk_content.Claims.ModifiedSectionIDs) do
     local issue_section = IssueSection:new()
     issue_section.issue_id = issue.id
     issue_section.external_reference = v
@@ -191,7 +193,7 @@ if not issue then
   end
 end
 
--- TODO: check that only sections for the issue are in the tkContent.Claims.ModifiedSectionIDs
+-- TODO: check that only sections for the issue are in the rev_tk_content.Claims.ModifiedSectionIDs
 
 if param.get("polling", atom.boolean) and app.session.member:has_polling_right_for_unit_id(area.unit_id) then
   initiative.polling = true
@@ -203,10 +205,11 @@ initiative:save()
 local draft = Draft:new()
 draft.initiative_id = initiative.id
 draft.formatting_engine = formatting_engine
-draft.content = param.get("draft")
+draft.content = ""  -- TODO(ddc) remove
 draft.author_id = app.session.member.id
-draft.external_reference = tkContent.Claims.SHA
-draft.base_external_reference = tkContent.Claims.BaseSHA
+draft.external_reference = rev_tk_content.Claims.SHA
+draft.base_external_reference = rev_tk_content.Claims.BaseSHA
+draft.description_external_reference = desc_tk_content.Claims.SHA
 draft:save()
 
 local initiator = Initiator:new()

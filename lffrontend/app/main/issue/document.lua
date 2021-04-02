@@ -68,16 +68,21 @@ ui.tag{
 
 local competing_initiative_payload = {
   DocsvcHostExternal=config.docsvc_host_external,
+  CSRFSecret=request.get_csrf_secret(),
   AreaID = tostring(area.id),
   IssueID = tostring(issue_id),
-  BaseDocSHA=area.current_external_reference,
+  RevBaseSHA=area.current_external_reference,
+  DescBaseSHA=area.description_template_external_reference,
   UserID=tostring(app.session.member_id),
   IssueSections=json.object{},  -- populated below
-  Tk = jwt.encode({
+  RevTk = jwt.encode({
     UserID=app.session.member_id,
-    Op={"docsvc.CreateDocReq", "docsvc.GetDocReq"},
-    SHA=area.current_external_reference,
-    BaseSHA=area.current_external_reference,
+    Op={"docsvc.CreateRev", "docsvc.Get"},
+    BaseSHA=area.current_external_reference,Req
+  }),
+  DescTk = jwt.encode({
+    UserID=app.session.member_id,
+    Op={"docsvc.CreateDesc", "docsvc.Get"},
   })
 }
 

@@ -37,6 +37,7 @@ module.exports = [
     output: {
       filename: 'newInitiative.js',
       path: path.resolve(__dirname, '..', 'dist'),
+      publicPath: 'http://localhost:8082/',
     },
   },
   {
@@ -45,6 +46,7 @@ module.exports = [
     output: {
       filename: 'competingInitiative.js',
       path: path.resolve(__dirname, '..', 'dist'),
+      publicPath: 'http://localhost:8082/',
     },
   },
 ];

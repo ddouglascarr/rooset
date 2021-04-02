@@ -131,24 +131,24 @@ INSERT INTO "unit" ("id", "parent_id", "name", "external_reference") VALUES
 --  test blob:
 --    <article><section id="33d9a2"><h2>Summary</h2><p>This demonstrates a simple Rooset document</p></section><section id="859d00"><h2>My Section</h2><ul><li>Foo</li><li>Bar</li></ul><h3>But wait, there&#39;s more within the section</h3><p>This is the text</p><p>extra paragraph</p></section></article>
 
-INSERT INTO "area" ("id", "unit_id", "name", "external_reference") VALUES
-  ( 1, 1, 'Statutes of the United Solar System', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),       -- id  1
-  ( 2, 2, 'Statutes of the Earth Moon Federation', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),     -- id  2
-  ( 3, 5, 'Statutes of the United Mars Colonies', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),      -- id  3
-  ( 4, 1, 'Intra solar space travel', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),                  -- id  4
-  ( 5, 1, 'Intra solar system trade and taxation', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),     -- id  5
-  ( 6, 1, 'Comet defense and black holes management', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),  -- id  6
-  ( 7, 1, 'Alien affairs', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),                             -- id  7
-  ( 8, 2, 'Foreign affairs', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),                           -- id  8
-  ( 9, 3, 'Moon affairs', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),                              -- id  9
-  (10, 4, 'Earth affairs', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),                             -- id 10
-  (11, 4, 'Moon tourism', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),                              -- id 11
-  (12, 5, 'Foreign affairs', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),                           -- id 12
-  (13, 2, 'Department of space vehicles', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),              -- id 13
-  (14, 3, 'Environment', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),                               -- id 14
-  (15, 4, 'Energy and oxygen', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),                         -- id 15
-  (16, 5, 'Energy and oxygen', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e'),                         -- id 16
-  (17, 5, 'Mineral resources', '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e');                         -- id 17
+INSERT INTO "area" ("id", "unit_id", "name", "external_reference", "description_template_external_reference") VALUES
+  ( 1,    1,   'Statutes of the United Solar System',        '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id  1
+  ( 2,    2,   'Statutes of the Earth Moon Federation',      '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id  2
+  ( 3,    5,   'Statutes of the United Mars Colonies',       '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id  3
+  ( 4,    1,   'Intra solar space travel',                   '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id  4
+  ( 5,    1,   'Intra solar system trade and taxation',      '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id  5
+  ( 6,    1,   'Comet defense and black holes management',   '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id  6
+  ( 7,    1,   'Alien affairs',                              '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id  7
+  ( 8,    2,   'Foreign affairs',                            '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id  8
+  ( 9,    3,   'Moon affairs',                               '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id  9
+  ( 10,   4,   'Earth affairs',                              '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id 10
+  ( 11,   4,   'Moon tourism',                               '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id 11
+  ( 12,   5,   'Foreign affairs',                            '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id 12
+  ( 13,   2,   'Department of space vehicles',               '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id 13
+  ( 14,   3,   'Environment',                                '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id 14
+  ( 15,   4,   'Energy and oxygen',                          '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id 15
+  ( 16,   5,   'Energy and oxygen',                          '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'),  -- id 16
+  ( 17,   5,   'Mineral resources',                          '11e22e406fd10400f8a56d292a5191a5706bb3f82837d6b15ee58ca2e9ead68e', 'desctemplate'); -- id 17
 
 INSERT INTO "allowed_policy" ("area_id", "policy_id", "default_policy") VALUES
   ( 1, 1, TRUE),

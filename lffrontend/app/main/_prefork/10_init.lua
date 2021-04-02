@@ -137,32 +137,34 @@ request.set_absolute_baseurl(config.absolute_base_url)
 
 listen(listen_options)
 
-listen{
-  {
-    proto = "interval",
-    name  = "send_pending_notifications",
-    delay = 5,
-    handler = function()
-      while true do
-        if not Newsletter:send_next_newsletter() then
-          break
-        end
-      end
-      while true do
-        if not Event:send_next_notification() then
-          break
-        end
-      end
-      while true do
-        if not InitiativeForNotification:notify_next_member() then
-          break
-        end
-      end
-    end
-  },
-  min_fork = 1,
-  max_fork = 1
-}
+-- TODO(ddc): implement notifications
+-- This was disabled due to high cpu load on the db.
+-- listen{
+--   {
+--     proto = "interval",
+--     name  = "send_pending_notifications",
+--     delay = 5,
+--     handler = function()
+--       while true do
+--         if not Newsletter:send_next_newsletter() then
+--           break
+--         end
+--       end
+--       while true do
+--         if not Event:send_next_notification() then
+--           break
+--         end
+--       end
+--       while true do
+--         if not InitiativeForNotification:notify_next_member() then
+--           break
+--         end
+--       end
+--     end
+--   },
+--   min_fork = 1,
+--   max_fork = 1
+-- }
 
 execute.inner()
 

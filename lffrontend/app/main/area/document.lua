@@ -79,17 +79,22 @@ ui.tag{
 }
 
 local new_initiative_payload = {
-  RepositoryName = area.unit.external_reference,
   DocsvcHostExternal=config.docsvc_host_external,
+  CSRFSecret=request.get_csrf_secret(),
   AreaID = tostring(area.id),
-  DocSHA=area.current_external_reference,
+  PolicyID = tostring(area.default_policy.id),
+  RevBaseSHA=area.current_external_reference,
+  DescBaseSHA=area.description_template_external_reference,
   UserID=tostring(app.session.member_id),
   OpenAdmittedSections=json.object{},  -- populated below
-  Tk = jwt.encode({
+  RevTk = jwt.encode({
     UserID=app.session.member_id,
-    Op={"docsvc.CreateDocReq", "docsvc.GetDocReq"},
-    SHA=area.current_external_reference,
+    Op={"docsvc.CreateRev", "docsvc.Get"},
     BaseSHA=area.current_external_reference,
+  }),
+  DescTk = jwt.encode({
+    UserID=app.session.member_id,
+    Op={"docsvc.CreateDesc", "docsvc.Get"},
   })
 }
 
@@ -104,13 +109,13 @@ for k, open_section in ipairs(area.open_admitted_sections)  do
 end
 
 ui.tag{ tag="script", attr = { type="text/javascript" },  content=function() 
-slot.put("/* <![CDATA[ */")
-slot.put([[
-  initNewInitiativePage(Object.assign({
-    RootEl: document.getElementById('initiative-form'),
-  }, ]]  .. encode.json(new_initiative_payload) .. [[)
-  );
-]])
-slot.put("/* ]]> */")
+  slot.put("/* <![CDATA[ */")
+  slot.put([[
+    initNewInitiativePage(
+      document.getElementById('initiative-form'),
+      ]] .. encode.json(new_initiative_payload) .. [[
+    );
+  ]])
+  slot.put("/* ]]> */")
 end
 }

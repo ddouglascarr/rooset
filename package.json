@@ -9,7 +9,6 @@
     "build": "webpack --config ./conf/webpack.config.js",
     "build-css": "npx tailwindcss-cli@latest build ./lffrontend/static/tailwind-in.css -o ./lffrontend/static/tailwind.css",
     "start": "webpack-dev-server --config ./conf/webpack.config.js --host 0.0.0.0",
-    "watch-docvalidationsvc": "nodemon dist/docvalidationsvc.js",
     "lint": "eslint ./ --ext .ts,.tsx"
   },
   "devDependencies": {
@@ -33,6 +32,7 @@
   "dependencies": {
     "@tinymce/tinymce-react": "^3.5.1",
     "htmldiff-js": "^1.0.5",
-    "preact": "^10.2.1"
+    "preact": "^10.5.12",
+    "tinymce": "^5.7.0"
   }
 }

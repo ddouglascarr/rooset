@@ -98,29 +98,7 @@
       </div>
     </div>
   </div>
-  <script>
-    $(".trace_view > .trace_list").hide();
-    $(".trace_head").click(function() {
-      var el = this.nextSibling
-      if (el) $(el).toggle();
-    });
-  </script>
-
-  <script>
-    // toggle the mobile menu
-    document.getElementById("menu-toggle").onclick = function(e) {
-      e.preventDefault();
-      const menuEl = document.getElementById("sidebar");
-      if (menuEl.classList.contains("hide-on-mobile")) {
-        menuEl.classList.remove("hide-on-mobile")
-      } else {
-        menuEl.classList.add("hide-on-mobile")
-      }
-    }
-  </script>
   
-	<!-- TODO: only load this when needed -->
-  <script type="text/javascript" src="/static/js/tinymce/tinymce.min.js"></script>
   <!-- WEBMCP SLOTNODIV script -->
   
 </body>

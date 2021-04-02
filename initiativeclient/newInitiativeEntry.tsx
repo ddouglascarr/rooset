@@ -1,3 +1,5 @@
+import "preact/debug";
+
 import {h, render} from 'preact';
 import {
   NewInitiativePage,
@@ -5,25 +7,13 @@ import {
 } from './components/NewInitiativePage';
 
 declare module global {
-  function initNewInitiativePage(args: InitNewInitiativePageArgs): void;
+  function initNewInitiativePage(rootEl: HTMLElement, args: NewInitiativePageProps): void;
 }
 
-export type InitNewInitiativePageArgs = NewInitiativePageProps & {
-  RootEl: HTMLElement;
-};
-
-export const initNewInitiativePage = (args: InitNewInitiativePageArgs) => {
+export const initNewInitiativePage = (rootEl: HTMLElement, args: NewInitiativePageProps) => {
   render(
-    <NewInitiativePage
-      DocsvcHostExternal={args.DocsvcHostExternal}
-      AreaID={args.AreaID}
-      IssueID={args.IssueID}
-      UserID={args.UserID}
-      DocSHA={args.DocSHA}
-      Tk={args.Tk}
-      OpenAdmittedSections={args.OpenAdmittedSections}
-    />,
-    args.RootEl,
+    <NewInitiativePage {...args} />,
+    rootEl,
   );
 };
 

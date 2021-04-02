@@ -13,8 +13,8 @@ function ui.newfield.text(args)
   attr.name  = args.html_name
 
   local label_attr = table.new(attr)
-  label_attr.class = 'text-sm font-semibold'
-  attr.class = 'appearance-none relative block w-full px-3 py-2 rounded-md border border-gray-300 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
+  label_attr.class = 'rst-label'
+  attr.class = 'rst-text-input'
   attr.type = attr.type or 'text'
 
   ui.tag{

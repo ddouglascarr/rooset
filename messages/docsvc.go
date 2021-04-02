@@ -5,29 +5,31 @@ type JWTStr = string
 type UserID = int64
 
 //
-// CreateDoc
+// CreateRev
 //
 
-type CreateDocReqClaims struct {
+type CreateRevReqClaims struct {
 	XOp     []string `json:"Op"`
 	UserID  UserID   // TODO: use this field for rate limiting
 	BaseSHA SHA
 }
 
-func (c *CreateDocReqClaims) Valid() error { return nil }
-func (c CreateDocReqClaims) Op() []string  { return c.XOp }
+// TODO: validate not empty
+func (c *CreateRevReqClaims) Valid() error { return nil }
+func (c CreateRevReqClaims) Op() []string  { return c.XOp }
 
-type CreateDocReqBody struct {
+// TODO: Valid
+type CreateRevReqBody struct {
 	Content string
 }
 
-type CreateDocReq struct {
+type CreateRevReq struct {
 	UserID  UserID
 	BaseSHA SHA
 	Content string
 }
 
-type CreateDocResp struct {
+type CreateRevResp struct {
 	SHA                SHA
 	BaseSHA            SHA
 	ModifiedSectionIDs []string
@@ -35,19 +37,50 @@ type CreateDocResp struct {
 }
 
 //
-// GetDoc
+// Get
 //
 
-type GetDocReqClaims struct {
+type GetReqClaims struct {
 	XOp    []string `json:"Op"`
 	UserID UserID   // TODO: use for rate limiting
-	SHA    SHA
 }
 
-func (c GetDocReqClaims) Valid() error { return nil }
-func (c GetDocReqClaims) Op() []string { return c.XOp }
+// TODO validate not empty
+func (c GetReqClaims) Valid() error { return nil }
+func (c GetReqClaims) Op() []string { return c.XOp }
 
-type GetDocResp struct {
+// TODO validate not empty
+type GetReqBody struct {
+	SHA SHA
+}
+
+type GetResp struct {
 	SHA     SHA
 	Content string
+}
+
+//
+// CreateDesc
+//
+
+type CreateDescReqClaims struct {
+	XOp    []string `json:"Op"`
+	UserID UserID   // TODO: use for rate limiting
+}
+
+// TODO validate not empty
+func (c CreateDescReqClaims) Valid() error { return nil }
+func (c CreateDescReqClaims) Op() []string { return c.XOp }
+
+type CreateDescReqBody struct {
+	Content string
+}
+
+type CreateDescReq struct {
+	UserID  UserID // TODO: use for rate limiting
+	Content string
+}
+
+type CreateDescResp struct {
+	Tk JWTStr
 }
