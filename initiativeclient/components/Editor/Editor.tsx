@@ -1,11 +1,11 @@
-import {h} from 'preact';
-import 'tinymce/tinymce';
+import { h } from "preact";
+import "tinymce/tinymce";
 
-import 'tinymce/icons/default';
-import 'tinymce/themes/silver';
-import 'tinymce/plugins/lists';
+import "tinymce/icons/default";
+import "tinymce/themes/silver";
+import "tinymce/plugins/lists";
 
-import { Editor as TinyMCEEditor} from '@tinymce/tinymce-react';
+import { Editor as TinyMCEEditor } from "@tinymce/tinymce-react";
 
 export type EditorProps = {
   initialValue: string;
@@ -21,11 +21,11 @@ export const EditorLoaded = (props: EditorProps) => (
       elementpath: false,
       branding: false,
       menubar: false,
-      plugins: 'lists',
-      toolbar: 'undo redo h3 bullist numlist',
-      skin_url: '/static/js/tinymce/skins/ui/oxide/',
+      plugins: "lists",
+      toolbar: "undo redo h3 bullist numlist",
+      skin_url: "/static/js/tinymce/skins/ui/oxide/",
     }}
   />
 );
 
-export { EditorLoaded as default }
+export { EditorLoaded as default };

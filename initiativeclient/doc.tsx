@@ -1,75 +1,75 @@
-import {useState, useEffect} from 'preact/hooks';
-import {CreateRevReqBody} from 'messages';
-import {callCreateRev, callGet} from './rpc';
+import { useState, useEffect } from "preact/hooks";
+import { CreateRevReqBody } from "messages";
+import { callCreateRev, callGet } from "./rpc";
 
 type ID = string;
 
 export type Section = {
-  ID: ID;
-  Content: string;
+  id: ID;
+  content: string;
 };
 
 export type Doc = {
-  Sections: {[key: string]: Section};
-  Order: Array<ID>;
+  sections: { [key: string]: Section };
+  order: Array<ID>;
 };
 
 export const parseDoc = (docStr: string): Doc => {
   const parser = new window.DOMParser();
-  const doc = parser.parseFromString(docStr, 'application/xml');
+  const doc = parser.parseFromString(docStr, "application/xml");
   const article = doc.firstElementChild;
   if (article === null) {
     // TODO: invariant
-    throw new Error('article missing from document');
+    throw new Error("article missing from document");
   }
   const out: Doc = {
-    Sections: {},
-    Order: [],
+    sections: {},
+    order: [],
   };
 
   // and article is always a flat collection of sections
   let section = article.firstElementChild;
   while (section) {
-    const id = section.attributes.getNamedItem('id');
+    const id = section.attributes.getNamedItem("id");
     if (id === null) {
       // TODO: invariant
-      throw new Error('section does not have a id');
+      throw new Error("section does not have a id");
     }
     const content = section.innerHTML;
-    out.Sections[id.value] = {
-      ID: id.value,
-      Content: content,
+    out.sections[id.value] = {
+      id: id.value,
+      content: content,
     };
-    out.Order.push(id.value);
+    out.order.push(id.value);
     section = section.nextElementSibling;
   }
   return out;
 };
 
 export const serializeDoc = (doc: Doc): string => {
-  const articleEl = document.createElement('article');
-  for (const sectionID of doc.Order) {
-    const section = doc.Sections[sectionID];
-    const sectionEl = document.createElement('section');
-    sectionEl.setAttribute('id', section.ID);
-    sectionEl.innerHTML = section.Content;
+  const articleEl = document.createElement("article");
+  for (const sectionID of doc.order) {
+    const section = doc.sections[sectionID];
+    const sectionEl = document.createElement("section");
+    sectionEl.setAttribute("id", section.id);
+    sectionEl.innerHTML = section.content;
     articleEl.append(sectionEl);
   }
-  const wrapper = document.createElement('div');
+  const wrapper = document.createElement("div");
   wrapper.append(articleEl);
   return wrapper.innerHTML;
 };
 
 export const compareDocs = (docA: Doc, docB: Doc) => {
-  if (docA.Order.length !== docB.Order.length) return false;
+  if (docA.order.length !== docB.order.length) return false;
 
-  for (let i = 0; i < docA.Order.length; i++) {
-    if (docA.Order[i] !== docB.Order[i]) return false;
+  for (let i = 0; i < docA.order.length; i++) {
+    if (docA.order[i] !== docB.order[i]) return false;
   }
 
-  for (const sectionID of Object.keys(docA.Sections)) {
+  for (const sectionID of Object.keys(docA.sections)) {
     if (
-      docA.Sections[sectionID].Content !== docB.Sections[sectionID]?.Content
+      docA.sections[sectionID].content !== docB.sections[sectionID]?.content
     ) {
       return false;
     }
@@ -80,11 +80,11 @@ export const compareDocs = (docA: Doc, docB: Doc) => {
 
 abstract class AbstractDocState<TStateUnion, TData> {
   protected readonly setState: (newState: TStateUnion) => void;
-  public readonly Data: TData;
+  public readonly data: TData;
 
   public constructor(setState: (newState: TStateUnion) => void, Data: TData) {
     this.setState = setState;
-    this.Data = Data;
+    this.data = Data;
   }
 }
 
@@ -98,74 +98,67 @@ export class DocStateSubmitting extends AbstractDocState<
 > {}
 
 type DocCompleteData = {
-  NewDocTk: string;
-  NewDocSHA: string;
+  newDocTk: string;
+  newDocSHA: string;
 } & DocReadyData;
 export class DocStateComplete extends AbstractDocState<
   DocState,
   DocCompleteData
 > {}
 
-type DocFailedData = {readonly Message: string};
+type DocFailedData = { readonly message: string };
 export class DocStateFailed extends AbstractDocState<DocState, DocFailedData> {}
 
 type DocReadyData = {
-  readonly SHA: string;
-  readonly OldDoc: Doc;
-  readonly NewDoc: Doc;
+  readonly sha: string;
+  readonly oldDoc: Doc;
+  readonly newDoc: Doc;
 };
 
 export class DocStateReady extends AbstractDocState<DocState, DocReadyData> {
   public updateDoc = (newDoc: Doc) => {
     this.setState(
       new DocStateReady(this.setState, {
-        SHA: this.Data.SHA,
-        OldDoc: this.Data.OldDoc,
-        NewDoc: newDoc,
-      }),
+        sha: this.data.sha,
+        oldDoc: this.data.oldDoc,
+        newDoc: newDoc,
+      })
     );
   };
 
   public updateSection = (sectionID: string, content: string) => {
     this.updateDoc({
-      ...this.Data.NewDoc,
-      Sections: {
-        ...this.Data.NewDoc.Sections,
+      ...this.data.newDoc,
+      sections: {
+        ...this.data.newDoc.sections,
         [sectionID]: {
-          ID: sectionID,
-          Content: content,
+          id: sectionID,
+          content: content,
         },
       },
     });
   };
 
-  public submitDocRev = async (
-    docsvcHostExternal: string,
-    tk: string,
-  ) => {
-    this.setState(new DocStateSubmitting(this.setState, this.Data));
+  public submitDocRev = async (docsvcHostExternal: string, tk: string) => {
+    this.setState(new DocStateSubmitting(this.setState, this.data));
     const reqBody: CreateRevReqBody = {
-      Content: serializeDoc(this.Data.NewDoc),
+      content: serializeDoc(this.data.newDoc),
     };
 
-    const result = await callCreateRev(
-      docsvcHostExternal,
-      reqBody,
-      tk,
-    );
+    const result = await callCreateRev(docsvcHostExternal, reqBody, tk);
     if (result.ok) {
       this.setState(
         new DocStateComplete(this.setState, {
-          ...this.Data,
-          NewDocTk: result.resp.Tk,
-          NewDocSHA: result.resp.SHA,
-        }),
+          ...this.data,
+          newDocTk: result.resp.tk,
+          newDocSHA: result.resp.sha,
+        })
       );
     } else {
       this.setState(
         new DocStateFailed(this.setState, {
-          Message: result.msg,
-        }),
+          message: result.msg,
+        })
       );
     }
   };
@@ -182,36 +175,32 @@ export type DocState =
 export const useDocState = (
   docsvcHostExternal: string,
   tk: string,
-  baseDocSHA: string,
+  baseDocSHA: string
 ): DocState => {
   const [state, setState] = useState(
     // TODO: you can't pass setState yet cos it doesn't exist.
-    new DocStateIdle((newState: DocState) => undefined, {}),
+    new DocStateIdle((newState: DocState) => undefined, {})
   );
   useEffect(() => {
     setState(new DocStateLoading(setState, {}));
 
     const loadDoc = async () => {
-      const result = await callGet(
-        docsvcHostExternal,
-        { SHA: baseDocSHA},
-        tk,
-      );
+      const result = await callGet(docsvcHostExternal, { sha: baseDocSHA }, tk);
       if (result.ok) {
-        const doc = parseDoc(result.resp.Content);
+        const doc = parseDoc(result.resp.content);
         setState(
           new DocStateReady(setState, {
-            OldDoc: doc,
-            NewDoc: doc,
-            SHA: baseDocSHA,
-          }),
+            oldDoc: doc,
+            newDoc: doc,
+            sha: baseDocSHA,
+          })
         );
         return;
       } else {
         setState(
           new DocStateFailed(setState, {
-            Message: result.msg,
-          }),
+            message: result.msg,
+          })
         );
       }
     };

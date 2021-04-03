@@ -1,65 +1,65 @@
-import {h, Fragment} from 'preact';
-import {useState} from 'preact/hooks';
-import {Doc} from '../../doc';
+import { h, Fragment } from "preact";
+import { useState } from "preact/hooks";
+import { Doc } from "../../doc";
 import {
   SectionEditing,
   SectionEditable,
   SectionNotEditableIssueConflict,
-} from '../Section';
+} from "../Section";
 
 type Props = {
-  BaseDoc: Doc;
-  HeadDoc: Doc;
-  OnUpdateSection: (sectionID: string, content: string) => void;
-  OpenAdmittedSections: {[SectionID: string]: {IssueID: number}};
-  EditingEnabled: boolean;
+  baseDoc: Doc;
+  headDoc: Doc;
+  onUpdateSection: (sectionID: string, content: string) => void;
+  openAdmittedSections: { [SectionID: string]: { IssueID: number } };
+  editingEnabled: boolean;
 };
 type State = {
-  EditingSectionID: string | null;
+  editingSectionID: string | null;
 };
 
 export const Sections = (props: Props) => {
-  const [state, setState] = useState<State>({EditingSectionID: null});
+  const [state, setState] = useState<State>({ editingSectionID: null });
   return (
     <Fragment>
-      {props.HeadDoc.Order.map(ID => {
-        if (state.EditingSectionID && ID === state.EditingSectionID) {
+      {props.headDoc.order.map((id) => {
+        if (state.editingSectionID && id === state.editingSectionID) {
           return (
             <SectionEditing
-              key={ID}
-              HeadSection={props.HeadDoc.Sections[ID]}
-              SectionID={ID}
-              OnEditComplete={(sectionID: string, content: string) => {
-                props.OnUpdateSection(sectionID, content);
-                setState({EditingSectionID: null});
+              key={id}
+              headSection={props.headDoc.sections[id]}
+              sectionID={id}
+              onEditComplete={(sectionID: string, content: string) => {
+                props.onUpdateSection(sectionID, content);
+                setState({ editingSectionID: null });
               }}
             />
           );
         }
 
-        if (props.OpenAdmittedSections[ID]) {
+        if (props.openAdmittedSections[id]) {
           return (
             <SectionNotEditableIssueConflict
-              key={ID}
-              SectionID={ID}
-              BaseSection={props.BaseDoc.Sections[ID]}
-              ConflictingIssueID={props.OpenAdmittedSections[ID].IssueID}
-              Dimmed={state.EditingSectionID !== null}
+              key={id}
+              sectionID={id}
+              baseSection={props.baseDoc.sections[id]}
+              conflictingIssueID={props.openAdmittedSections[id].IssueID}
+              dimmed={state.editingSectionID !== null}
             />
           );
         }
 
         return (
           <SectionEditable
-            key={ID}
-            SectionID={ID}
-            BaseSection={props.BaseDoc.Sections[ID]}
-            HeadSection={props.HeadDoc.Sections[ID]}
-            OnEdit={(id: string) => {
-              setState({EditingSectionID: id});
+            key={id}
+            sectionID={id}
+            baseSection={props.baseDoc.sections[id]}
+            headSection={props.headDoc.sections[id]}
+            onEdit={(id: string) => {
+              setState({ editingSectionID: id });
             }}
-            Dimmed={state.EditingSectionID !== null}
-            Enabled={props.EditingEnabled}
+            dimmed={state.editingSectionID !== null}
+            enabled={props.editingEnabled}
           />
         );
       })}

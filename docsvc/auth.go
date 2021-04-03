@@ -75,9 +75,9 @@ func checkOpClaim(claims Claims, opName string) error {
 // TODO: statically type claims somehow
 func BuildDocSHATk(sHA string, baseSHA string, modifiedSectionIDs []string) (messages.JWTStr, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"SHA":                sHA,
-		"BaseSHA":            baseSHA,
-		"ModifiedSectionIDs": modifiedSectionIDs,
+		"sha":                  sHA,
+		"base_sha":             baseSHA,
+		"modified_section_ids": modifiedSectionIDs,
 	})
 
 	tkStr, err := token.SignedString([]byte(conf.Auth.JWTKey))
@@ -88,9 +88,10 @@ func BuildDocSHATk(sHA string, baseSHA string, modifiedSectionIDs []string) (mes
 	return tkStr, nil
 }
 
+// TODO: statically type claims somehow
 func buildDescRespTk(sHA string) (messages.JWTStr, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"SHA": sHA,
+		"sha": sHA,
 	})
 
 	tkStr, err := token.SignedString([]byte(conf.Auth.JWTKey))

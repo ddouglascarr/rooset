@@ -1,33 +1,35 @@
-import {h} from 'preact';
-import {Section} from '../../doc';
-import {SectionBody} from './SectionBody';
-import {SectionContainer, Tools, SectionBodyContainer} from './UI';
-import {Button} from '../UI';
+import { h } from "preact";
+import { Section } from "../../doc";
+import { SectionBody } from "./SectionBody";
+import { SectionContainer, Tools, SectionBodyContainer } from "./UI";
 
 export type SectionNotEditableIssueConflictProps = {
-  SectionID: string;
-  BaseSection: Section;
-  Dimmed: boolean;
-  ConflictingIssueID: number;
+  sectionID: string;
+  baseSection: Section;
+  dimmed: boolean;
+  conflictingIssueID: number;
 };
 
 export const SectionNotEditableIssueConflict = (
-  props: SectionNotEditableIssueConflictProps,
+  props: SectionNotEditableIssueConflictProps
 ) => (
-	<SectionContainer Dimmed={props.Dimmed}>
+  <SectionContainer dimmed={props.dimmed}>
     <Tools>
       <div className="text-xs italic">
-        This section is under deliberation in issue{' '}
-        <a className="underline text-blue-700" href={`/issue/show/${props.ConflictingIssueID}.html`}>
-          #{props.ConflictingIssueID}
+        This section is under deliberation in issue{" "}
+        <a
+          className="underline text-blue-700"
+          href={`/issue/show/${props.conflictingIssueID}.html`}
+        >
+          #{props.conflictingIssueID}
         </a>
       </div>
-		</Tools>
-		<SectionBodyContainer>
+    </Tools>
+    <SectionBodyContainer>
       <SectionBody
-        BaseSection={props.BaseSection}
-        HeadSection={props.BaseSection}
+        baseSection={props.baseSection}
+        headSection={props.baseSection}
       />
-		</SectionBodyContainer>
+    </SectionBodyContainer>
   </SectionContainer>
 );

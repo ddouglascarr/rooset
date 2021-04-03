@@ -1,19 +1,19 @@
-import {h} from 'preact';
-import HTMLDiff from 'htmldiff-js';
+import { h } from "preact";
+import HTMLDiff from "htmldiff-js";
 
-import {Section} from '../../doc';
+import { Section } from "../../doc";
 
 // TODO(ddc) style the diff
 export const SectionBody = (props: {
-  HeadSection: Section;
-  BaseSection: Section;
+  headSection: Section;
+  baseSection: Section;
 }) => {
-  if (props.BaseSection.Content === props.HeadSection.Content) {
+  if (props.baseSection.content === props.headSection.content) {
     return (
       <section
-			  className="prose"
+        className="prose"
         dangerouslySetInnerHTML={{
-          __html: props.HeadSection.Content,
+          __html: props.headSection.content,
         }}
       />
     );
@@ -21,11 +21,11 @@ export const SectionBody = (props: {
 
   return (
     <section
-			className="prose"
+      className="prose"
       dangerouslySetInnerHTML={{
         __html: HTMLDiff.execute(
-          props.BaseSection.Content,
-          props.HeadSection.Content,
+          props.baseSection.content,
+          props.headSection.content
         ),
       }}
     />

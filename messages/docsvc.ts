@@ -3,30 +3,30 @@ export type JWTStr = string;
 export type UserID = string;
 
 export type CreateRevReqClaims = {
-    Op: string[];
-    UserID: UserID;
-    BaseSHA: SHA;
+    ops: string[];
+    user_id: UserID;
+    base_sha: SHA;
 }
-export type CreateRevReqBody = { Content: string }
+export type CreateRevReqBody = { content: string }
 export type CreateRevResp = {
-    SHA: SHA;
-    BaseSHA: SHA;
-    ModifiedSectionIDs: string[];
-    Tk: JWTStr;
+    sha: SHA;
+    base_sha: SHA;
+    modified_section_ids: string[];
+    tk: JWTStr;
 }
 
-export type GetReqBody = { SHA: string }
+export type GetReqBody = { sha: string }
 export type GetResp = {
-    SHA: SHA;
-    Content: string;
+    sha: SHA;
+    content: string;
 }
 
 export type CreateDescReqClaims = {
-    Op: string[];
-    UserID: UserID;
+    ops: string[];
+    user_id: UserID;
 }
-export type CreateDescReqBody = { Content: string }
+export type CreateDescReqBody = { content: string }
 export type CreateDescResp = {
-    Tk: JWTStr;
+    tk: JWTStr;
 }
 

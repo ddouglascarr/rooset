@@ -67,27 +67,27 @@ ui.tag{
 }
 
 local competing_initiative_payload = {
-  DocsvcHostExternal=config.docsvc_host_external,
-  CSRFSecret=request.get_csrf_secret(),
-  AreaID = tostring(area.id),
-  IssueID = tostring(issue_id),
-  RevBaseSHA=area.current_external_reference,
-  DescBaseSHA=area.description_template_external_reference,
-  UserID=tostring(app.session.member_id),
-  IssueSections=json.object{},  -- populated below
-  RevTk = jwt.encode({
-    UserID=app.session.member_id,
-    Op={"docsvc.CreateRev", "docsvc.Get"},
-    BaseSHA=area.current_external_reference,Req
+  docsvc_host_external=config.docsvc_host_external,
+  csrf_secret=request.get_csrf_secret(),
+  area_id = tostring(area.id),
+  issue_id = tostring(issue_id),
+  rev_base_sha=area.current_external_reference,
+  desc_base_sha=area.description_template_external_reference,
+  user_id=tostring(app.session.member_id),
+  issue_sections=json.object{},  -- populated below
+  rev_tk = jwt.encode({
+    user_id=app.session.member_id,
+    ops={"docsvc.CreateRev", "docsvc.Get"},
+    base_sha=area.current_external_reference,Req
   }),
-  DescTk = jwt.encode({
-    UserID=app.session.member_id,
-    Op={"docsvc.CreateDesc", "docsvc.Get"},
+  desc_tk = jwt.encode({
+    user_id=app.session.member_id,
+    ops={"docsvc.CreateDesc", "docsvc.Get"},
   })
 }
 
 for k, section in ipairs(issue.sections)  do
-  competing_initiative_payload['IssueSections'][section.external_reference] = json.object{}
+  competing_initiative_payload['issue_sections'][section.external_reference] = json.object{}
 end
 
 ui.tag{ tag="script", attr = { type="text/javascript" },  content=function() 

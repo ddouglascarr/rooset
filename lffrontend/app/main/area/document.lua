@@ -79,31 +79,31 @@ ui.tag{
 }
 
 local new_initiative_payload = {
-  DocsvcHostExternal=config.docsvc_host_external,
-  CSRFSecret=request.get_csrf_secret(),
-  AreaID = tostring(area.id),
-  PolicyID = tostring(area.default_policy.id),
-  RevBaseSHA=area.current_external_reference,
-  DescBaseSHA=area.description_template_external_reference,
-  UserID=tostring(app.session.member_id),
-  OpenAdmittedSections=json.object{},  -- populated below
-  RevTk = jwt.encode({
-    UserID=app.session.member_id,
-    Op={"docsvc.CreateRev", "docsvc.Get"},
-    BaseSHA=area.current_external_reference,
+  docsvc_host_external=config.docsvc_host_external,
+  csrf_secret=request.get_csrf_secret(),
+  area_id=tostring(area.id),
+  policy_id=tostring(area.default_policy.id),
+  rev_base_sha=area.current_external_reference,
+  desc_base_sha=area.description_template_external_reference,
+  user_id=tostring(app.session.member_id),
+  open_admitted_sections=json.object{},  -- populated below
+  rev_tk=jwt.encode({
+    user_id=app.session.member_id,
+    ops={"docsvc.CreateRev", "docsvc.Get"},
+    base_sha=area.current_external_reference,
   }),
-  DescTk = jwt.encode({
-    UserID=app.session.member_id,
-    Op={"docsvc.CreateDesc", "docsvc.Get"},
+  desc_tk=jwt.encode({
+    user_id=app.session.member_id,
+    ops={"docsvc.CreateDesc", "docsvc.Get"},
   })
 }
 
 if issue_id then
-  new_initiative_payload['IssueID'] = issue_id
+  new_initiative_payload['issue_id'] = issue_id
 end
 
 for k, open_section in ipairs(area.open_admitted_sections)  do
-  new_initiative_payload['OpenAdmittedSections'][open_section.external_reference] = {
+  new_initiative_payload['open_admitted_sections'][open_section.external_reference] = {
     IssueID = open_section.issue_id,
   }
 end

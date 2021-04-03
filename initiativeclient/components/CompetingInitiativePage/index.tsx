@@ -1,4 +1,4 @@
-import {h} from 'preact';
+import { h } from "preact";
 
 import {
   useInitiativePageState,
@@ -10,47 +10,45 @@ import {
   RevReady,
   DescReady,
   Review,
-} from '../../hooks';
-import {
-  compareDocs,
-} from '../../doc';
-import {Sections} from './Sections';
-import {Button, ControlBox} from '../UI'
-import { Editor } from '../Editor';
+} from "../../hooks";
+import { compareDocs } from "../../doc";
+import { Sections } from "./Sections";
+import { Button, ControlBox } from "../UI";
+import { Editor } from "../Editor";
 
 export type Props = {
-  DocsvcHostExternal: string;
-  CSRFSecret: string;
-  AreaID: string;
-  IssueID: string;
-  RevBaseSHA: string;
-  DescBaseSHA: string
-  UserID: string;
-  IssueSections: {[SectionID: string]: {}};
-  RevTk: string;
-  DescTk: string
+  docsvc_host_external: string;
+  csrf_secret: string;
+  area_id: string;
+  issue_id: string;
+  rev_base_sha: string;
+  desc_base_sha: string;
+  user_id: string;
+  issue_sections: { [SectionID: string]: {} };
+  rev_tk: string;
+  desc_tk: string;
 };
 
 const RevViewComp = (props: Props & { pageState: RevView }) => (
   <div>
     <ControlBox message="">
-        <Button
-          onClick={() => {
-            props.pageState.startEdit();
-          }}
-          mode="primary"
-        >
-          Create Proposal 
-        </Button>
+      <Button
+        onClick={() => {
+          props.pageState.startEdit();
+        }}
+        mode="primary"
+      >
+        Create Proposal
+      </Button>
     </ControlBox>
     <Sections
-      BaseDoc={props.pageState.Data.Rev.Data.OldDoc}
-      HeadDoc={props.pageState.Data.Rev.Data.NewDoc}
-      OnUpdateSection={(sectionID: string, content: string) => {
-        props.pageState.Data.Rev.updateSection(sectionID, content)
+      baseDoc={props.pageState.data.rev.data.oldDoc}
+      headDoc={props.pageState.data.rev.data.newDoc}
+      onUpdateSection={(sectionID: string, content: string) => {
+        props.pageState.data.rev.updateSection(sectionID, content);
       }}
-      IssueSections={props.IssueSections}
-      EditingEnabled={false}
+      issueSections={props.issue_sections}
+      editingEnabled={false}
     />
   </div>
 );
@@ -58,27 +56,26 @@ const RevViewComp = (props: Props & { pageState: RevView }) => (
 const RevEditComp = (props: Props & { pageState: RevEdit }) => (
   <div>
     <ControlBox message="Make proposed changes to a section.">
-        <Button
-          onClick={() => { props.pageState.cancel() }}
-        >
-          Cancel
-        </Button>
+      <Button
+        onClick={() => {
+          props.pageState.cancel();
+        }}
+      >
+        Cancel
+      </Button>
 
-        <Button
-          mode="primary"
-          disabled
-        >
-          Next
-        </Button>
+      <Button mode="primary" disabled>
+        Next
+      </Button>
     </ControlBox>
     <Sections
-      BaseDoc={props.pageState.Data.Rev.Data.OldDoc}
-      HeadDoc={props.pageState.Data.Rev.Data.NewDoc}
-      OnUpdateSection={(sectionID: string, content: string) => {
-        props.pageState.Data.Rev.updateSection(sectionID, content)
+      baseDoc={props.pageState.data.rev.data.oldDoc}
+      headDoc={props.pageState.data.rev.data.newDoc}
+      onUpdateSection={(sectionID: string, content: string) => {
+        props.pageState.data.rev.updateSection(sectionID, content);
       }}
-      IssueSections={props.IssueSections}
-      EditingEnabled
+      issueSections={props.issue_sections}
+      editingEnabled
     />
   </div>
 );
@@ -86,35 +83,37 @@ const RevEditComp = (props: Props & { pageState: RevEdit }) => (
 const RevReadyComp = (props: Props & { pageState: RevReady }) => (
   <div>
     <ControlBox message="Next, explain your proposal">
-        <Button 
-          onClick={() => { props.pageState.editMore() }}
-        >
-          Edit Another Section
-        </Button>
-        <Button
-          onClick={() => {
-            props.pageState.Data.Rev.submitDocRev(
-              props.DocsvcHostExternal,
-              props.RevTk,
-            );
-          }}
-          disabled={compareDocs(
-            props.pageState.Data.Rev.Data.OldDoc,
-            props.pageState.Data.Rev.Data.NewDoc,
-          )}
-          mode="primary"
-        >
-          Next
-        </Button>
+      <Button
+        onClick={() => {
+          props.pageState.editMore();
+        }}
+      >
+        Edit Another Section
+      </Button>
+      <Button
+        onClick={() => {
+          props.pageState.data.rev.submitDocRev(
+            props.docsvc_host_external,
+            props.rev_tk
+          );
+        }}
+        disabled={compareDocs(
+          props.pageState.data.rev.data.oldDoc,
+          props.pageState.data.rev.data.newDoc
+        )}
+        mode="primary"
+      >
+        Next
+      </Button>
     </ControlBox>
     <Sections
-      BaseDoc={props.pageState.Data.Rev.Data.OldDoc}
-      HeadDoc={props.pageState.Data.Rev.Data.NewDoc}
-      OnUpdateSection={(sectionID: string, content: string) => {
-        props.pageState.Data.Rev.updateSection(sectionID, content)
+      baseDoc={props.pageState.data.rev.data.oldDoc}
+      headDoc={props.pageState.data.rev.data.newDoc}
+      onUpdateSection={(sectionID: string, content: string) => {
+        props.pageState.data.rev.updateSection(sectionID, content);
       }}
-      IssueSections={props.IssueSections}
-      EditingEnabled={false}
+      issueSections={props.issue_sections}
+      editingEnabled={false}
     />
   </div>
 );
@@ -122,22 +121,35 @@ const RevReadyComp = (props: Props & { pageState: RevReady }) => (
 const DescReadyComp = (props: Props & { pageState: DescReady }) => (
   <div>
     <ControlBox message="Describe your proposal">
-      <Button type="submit" mode="primary" onClick={() => { props.pageState.Data.Desc.submitDesc(props.DocsvcHostExternal, props.DescTk) }} >Review</Button>
+      <Button
+        type="submit"
+        mode="primary"
+        onClick={() => {
+          props.pageState.data.desc.submitDesc(
+            props.docsvc_host_external,
+            props.desc_tk
+          );
+        }}
+      >
+        Review
+      </Button>
     </ControlBox>
     <div>
-      <label className="rst-label" for="name">Title</label>
-      <input 
-        className="rst-text-input" 
+      <label className="rst-label" for="name">
+        Title
+      </label>
+      <input
+        className="rst-text-input"
         name="name"
-        type="text" 
-        value={props.pageState.Data.Title} 
-        onChange={(e) => props.pageState.setTitle(e.currentTarget.value)}   
+        type="text"
+        value={props.pageState.data.title}
+        onChange={(e) => props.pageState.setTitle(e.currentTarget.value)}
       />
 
       <Editor
-        initialValue={props.pageState.Data.Desc.Data.DescTemplate.Content}
+        initialValue={props.pageState.data.desc.data.descTemplate.content}
         onEditorChange={(content: string) => {
-          props.pageState.Data.Desc.updateDescContent(content);
+          props.pageState.data.desc.updateDescContent(content);
         }}
       />
     </div>
@@ -147,34 +159,48 @@ const DescReadyComp = (props: Props & { pageState: DescReady }) => (
 const ReviewComp = (props: Props & { pageState: Review }) => (
   <form method="POST" action="/initiative/create">
     <ControlBox message="Review">
-      <Button type="submit" mode="primary">Submit</Button>
+      <Button type="submit" mode="primary">
+        Submit
+      </Button>
     </ControlBox>
     <div>
-      <h2>{props.pageState.Data.Title}</h2>
+      <h2>{props.pageState.data.title}</h2>
     </div>
-    <input name="_webmcp_routing.default.module" type="hidden" value="initiative" />
+    <input
+      name="_webmcp_routing.default.module"
+      type="hidden"
+      value="initiative"
+    />
     <input name="_webmcp_routing.default.mode" type="hidden" value="forward" />
-    <input name="_webmcp_csrf_secret" type="hidden" value={props.CSRFSecret} />
+    <input name="_webmcp_csrf_secret" type="hidden" value={props.csrf_secret} />
     <input name="_webmcp_routing.default.view" type="hidden" value="new" />
-    <input name="area_id" type="hidden" value={props.AreaID} />
-    <input name="issue_id" type="hidden" value={props.IssueID} />
-    <input name="rev_tk" type="hidden" value={props.pageState.Data.Rev.Data.NewDocTk} />
-    <input name="desc_tk" type="hidden" value={props.pageState.Data.Desc.Data.NewDescTk} />
-    <input name="name" type="hidden" value={props.pageState.Data.Title} />
+    <input name="area_id" type="hidden" value={props.area_id} />
+    <input name="issue_id" type="hidden" value={props.issue_id} />
+    <input
+      name="rev_tk"
+      type="hidden"
+      value={props.pageState.data.rev.data.newDocTk}
+    />
+    <input
+      name="desc_tk"
+      type="hidden"
+      value={props.pageState.data.desc.data.newDescTk}
+    />
+    <input name="name" type="hidden" value={props.pageState.data.title} />
   </form>
 );
 
 export const CompetingInitiativePage = (props: Props) => {
   const pageState = useInitiativePageState(
-    props.DocsvcHostExternal,
-    props.RevTk,
-    props.DescTk,
-    props.RevBaseSHA,
-    props.DescBaseSHA,
+    props.docsvc_host_external,
+    props.rev_tk,
+    props.desc_tk,
+    props.rev_base_sha,
+    props.desc_base_sha
   );
 
   if (pageState instanceof Failed) {
-    return <div>Fetching doc failed: {pageState.Data.Message}</div>;
+    return <div>Fetching doc failed: {pageState.data.message}</div>;
   }
   if (pageState instanceof Idle || pageState instanceof Loading) {
     return <div>Loading...</div>;
@@ -193,12 +219,12 @@ export const CompetingInitiativePage = (props: Props) => {
   }
 
   if (pageState instanceof DescReady) {
-    return <DescReadyComp pageState={pageState} {...props} />
+    return <DescReadyComp pageState={pageState} {...props} />;
   }
 
   if (pageState instanceof Review) {
-    return <ReviewComp pageState={pageState} {...props} />
+    return <ReviewComp pageState={pageState} {...props} />;
   }
 
-  return (<div>{pageState.constructor.name}</div>);
+  return <div>{pageState.constructor.name}</div>;
 };

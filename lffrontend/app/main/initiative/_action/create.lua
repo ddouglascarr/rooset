@@ -164,7 +164,7 @@ if not issue then
 
   -- check that there are no conflicting sections
   for k, open_section in ipairs(area.open_admitted_sections) do
-    for k, new_section_id in pairs(rev_tk_content.Claims.ModifiedSectionIDs) do
+    for k, new_section_id in pairs(rev_tk_content.claims.modified_section_ids) do
       if new_section_id == open_section.external_reference then
         -- TODO: link to conflicting issue 
         slot.put_into("error", _"This initiative is trying to modify a section that is already under discussion in issue #" .. open_section.issue_id)
@@ -175,7 +175,7 @@ if not issue then
   
   issue:save()
 
-  for k, v in pairs(rev_tk_content.Claims.ModifiedSectionIDs) do
+  for k, v in pairs(rev_tk_content.claims.modified_section_ids) do
     local issue_section = IssueSection:new()
     issue_section.issue_id = issue.id
     issue_section.external_reference = v
@@ -207,9 +207,9 @@ draft.initiative_id = initiative.id
 draft.formatting_engine = formatting_engine
 draft.content = ""  -- TODO(ddc) remove
 draft.author_id = app.session.member.id
-draft.external_reference = rev_tk_content.Claims.SHA
-draft.base_external_reference = rev_tk_content.Claims.BaseSHA
-draft.description_external_reference = desc_tk_content.Claims.SHA
+draft.external_reference = rev_tk_content.claims.sha
+draft.base_external_reference = rev_tk_content.claims.base_sha
+draft.description_external_reference = desc_tk_content.claims.sha
 draft:save()
 
 local initiator = Initiator:new()

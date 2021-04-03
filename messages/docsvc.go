@@ -9,9 +9,9 @@ type UserID = int64
 //
 
 type CreateRevReqClaims struct {
-	XOp     []string `json:"Op"`
-	UserID  UserID   // TODO: use this field for rate limiting
-	BaseSHA SHA
+	XOp     []string `json:"ops"`
+	UserID  UserID   `json:"user_id"` // TODO: use this field for rate limiting
+	BaseSHA SHA      `json:"base_sha"`
 }
 
 // TODO: validate not empty
@@ -20,20 +20,20 @@ func (c CreateRevReqClaims) Op() []string  { return c.XOp }
 
 // TODO: Valid
 type CreateRevReqBody struct {
-	Content string
+	Content string `json:"content"`
 }
 
 type CreateRevReq struct {
-	UserID  UserID
-	BaseSHA SHA
-	Content string
+	UserID  UserID `json:"user_id"`
+	BaseSHA SHA    `json:"base_sha"`
+	Content string `json:"content"`
 }
 
 type CreateRevResp struct {
-	SHA                SHA
-	BaseSHA            SHA
-	ModifiedSectionIDs []string
-	Tk                 JWTStr
+	SHA                SHA      `json:"sha"`
+	BaseSHA            SHA      `json:"base_sha"`
+	ModifiedSectionIDs []string `json:"modified_section_ids"`
+	Tk                 JWTStr   `json:"tk"`
 }
 
 //
@@ -41,8 +41,8 @@ type CreateRevResp struct {
 //
 
 type GetReqClaims struct {
-	XOp    []string `json:"Op"`
-	UserID UserID   // TODO: use for rate limiting
+	XOp    []string `json:"ops"`
+	UserID UserID   `json:"user_id"` // TODO: use for rate limiting
 }
 
 // TODO validate not empty
@@ -51,12 +51,12 @@ func (c GetReqClaims) Op() []string { return c.XOp }
 
 // TODO validate not empty
 type GetReqBody struct {
-	SHA SHA
+	SHA SHA `json:"sha"`
 }
 
 type GetResp struct {
-	SHA     SHA
-	Content string
+	SHA     SHA    `json:"sha"`
+	Content string `json:"content"`
 }
 
 //
@@ -64,8 +64,8 @@ type GetResp struct {
 //
 
 type CreateDescReqClaims struct {
-	XOp    []string `json:"Op"`
-	UserID UserID   // TODO: use for rate limiting
+	XOp    []string `json:"ops"`
+	UserID UserID   `json:"user_id"` // TODO: use for rate limiting
 }
 
 // TODO validate not empty
@@ -73,14 +73,14 @@ func (c CreateDescReqClaims) Valid() error { return nil }
 func (c CreateDescReqClaims) Op() []string { return c.XOp }
 
 type CreateDescReqBody struct {
-	Content string
+	Content string `json:"content"`
 }
 
 type CreateDescReq struct {
-	UserID  UserID // TODO: use for rate limiting
-	Content string
+	UserID  UserID `json:"user_id"` // TODO: use for rate limiting
+	Content string `json:"content"`
 }
 
 type CreateDescResp struct {
-	Tk JWTStr
+	Tk JWTStr `json:"tk"`
 }

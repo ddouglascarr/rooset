@@ -1,44 +1,38 @@
-import {useState, useEffect} from 'preact/hooks';
-import {callCreateDesc, callGet} from './rpc';
+import { useState, useEffect } from "preact/hooks";
+import { callCreateDesc, callGet } from "./rpc";
 
 export type Desc = {
-  Content: string;
+  content: string;
 };
 
 abstract class AbstractDescState<TStateUnion, TData> {
   protected readonly setState: (newState: TStateUnion) => void;
-  public readonly Data: TData;
+  public readonly data: TData;
 
-  public constructor(setState: (newState: TStateUnion) => void, Data: TData) {
+  public constructor(setState: (newState: TStateUnion) => void, data: TData) {
     this.setState = setState;
-    this.Data = Data;
+    this.data = data;
   }
 }
 
 export class DescStateIdle extends AbstractDescState<DescState, {}> {
   public async loadDescTemplate(
     setState: (newState: DescState) => void,
-    docsvcHostExternal: string, 
+    docsvcHostExternal: string,
     tk: string,
-    sHA: string, 
+    sHA: string
   ) {
     setState(new DescStateLoading(setState, {}));
-    const result = await callGet(
-      docsvcHostExternal,
-      { SHA: sHA },
-      tk,
-    );
+    const result = await callGet(docsvcHostExternal, { sha: sHA }, tk);
     if (result.ok) {
       setState(
         new DescStateReady(setState, {
-          Desc: result.resp,
-          DescTemplate: result.resp,
+          desc: result.resp,
+          descTemplate: result.resp,
         })
       );
     } else {
-      setState(
-        new DescStateFailed(setState, { Message: result.msg })
-      );
+      setState(new DescStateFailed(setState, { message: result.msg }));
     }
   }
 }
@@ -52,54 +46,57 @@ export class DescStateSubmitting extends AbstractDescState<
 > {}
 
 type DocCompleteData = {
-  NewDescTk: string;
-} & DescReadyData ;
+  newDescTk: string;
+} & DescReadyData;
 export class DescStateComplete extends AbstractDescState<
   DescState,
   DocCompleteData
 > {}
 
-type DescFailedData = {readonly Message: string};
-export class DescStateFailed extends AbstractDescState<DescState, DescFailedData> {}
+type DescFailedData = { readonly message: string };
+export class DescStateFailed extends AbstractDescState<
+  DescState,
+  DescFailedData
+> {}
 
 type DescReadyData = {
-  readonly DescTemplate: Desc;
-  readonly Desc: Desc;
+  readonly descTemplate: Desc;
+  readonly desc: Desc;
 };
 
-export class DescStateReady extends AbstractDescState<DescState, DescReadyData> {
+export class DescStateReady extends AbstractDescState<
+  DescState,
+  DescReadyData
+> {
   public updateDescContent = (content: string) => {
     this.setState(
       new DescStateReady(this.setState, {
-        ...this.Data,
-        Desc: { Content: content },
-      }),
+        ...this.data,
+        desc: { content: content },
+      })
     );
   };
 
-  public submitDesc = async (
-    docsvcHostExternal: string,
-    tk: string,
-  ) => {
-    this.setState(new DescStateSubmitting(this.setState, this.Data));
+  public submitDesc = async (docsvcHostExternal: string, tk: string) => {
+    this.setState(new DescStateSubmitting(this.setState, this.data));
 
     const result = await callCreateDesc(
       docsvcHostExternal,
-      { Content: this.Data.Desc.Content },
-      tk,
+      { content: this.data.desc.content },
+      tk
     );
     if (result.ok) {
       this.setState(
         new DescStateComplete(this.setState, {
-          ...this.Data,
-          NewDescTk: result.resp.Tk,
-        }),
+          ...this.data,
+          newDescTk: result.resp.tk,
+        })
       );
     } else {
       this.setState(
         new DescStateFailed(this.setState, {
-          Message: result.msg,
-        }),
+          message: result.msg,
+        })
       );
     }
   };
@@ -116,11 +113,11 @@ export type DescState =
 export const useDescState = (
   docsvcHostExternal: string,
   tk: string,
-  descTemplateSHA: string,
+  descTemplateSHA: string
 ): DescState => {
   const [state, setState] = useState<DescState>(
     // TODO: you can't pass setState yet cos it doesn't exist.
-    new DescStateIdle((newState: DescState) => undefined, {}),
+    new DescStateIdle((newState: DescState) => undefined, {})
   );
 
   useEffect(() => {

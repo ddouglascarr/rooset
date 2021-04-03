@@ -1,9 +1,9 @@
-import {h, render} from 'preact';
+import { h, render } from "preact";
 
 import {
   Props,
   CompetingInitiativePage,
-} from './components/CompetingInitiativePage';
+} from "./components/CompetingInitiativePage";
 
 declare module global {
   function initCompetingInitiativePage(rootEl: HTMLElement, props: Props): void;

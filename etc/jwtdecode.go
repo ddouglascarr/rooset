@@ -31,7 +31,7 @@ func main() {
 	}
 
 	result, err := json.Marshal(struct {
-		Claims interface{}
+		Claims interface{} `json:"claims"`
 	}{Claims: token.Claims})
 	if err != nil {
 		panic(errors.Wrap(err, "rooset: failed to marshal validated token"))
