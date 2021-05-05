@@ -13,8 +13,15 @@ Rooset is a democratic structured decision system. Work in progress
 
 ```
   $ docker-compose up -d
+
   $ docker-exec lfcore bash
-  # init-dev-db
+  # bmake
+  # cd /opt/rooset/etc
+  # ./init-dev-db
+
+  $ docker-compose exec lffrontend
+  # cd /opt/rooset/lfframework
+  # bmake
 ```
 
 Re-running `init-dev-db` will drop all data and reset the database to the
@@ -35,7 +42,7 @@ Start the core services. These will run every 5 seconds.
 
 ```
   $ docker-compose exec lfcore bash
-  # core-services
+  # ./core-services
 ```
 
 Start the frontend server. There is no autorestart.
@@ -43,7 +50,7 @@ It is available on the host at `http://localhost:8081'.
 
 ```
   $ docker-compose exec lffrontend bash
-  # frontend-server
+  # ./frontend-server
 ```
 
 Webpack dev server will start automatically
