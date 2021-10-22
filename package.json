@@ -33,6 +33,6 @@
     "@tinymce/tinymce-react": "^3.5.1",
     "htmldiff-js": "^1.0.5",
     "preact": "^10.5.12",
-    "tinymce": "^5.7.0"
+    "tinymce": "^5.9.0"
   }
 }
